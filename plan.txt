@@ -1,0 +1,184 @@
+repair torch
+btr-90 ifv
+mortar
+
+//you don't keep your heats/mp upgrades on death.  or you lose half.
+-switches, crates
+-NPCS --basic two waypoint/random wander AI, text
+-sand
+-water?
+-poison tiles
+laser site for launcher?
+-MENUS
+-PARTICLES
+-make smedly move, attack
+-level links
+-cieling tiles?
+-sword/tool swing/collision, breakable blocks
+-things that need to be time based 
+	-gothurt
+	-any future animations.
+Bugs:
+	-jumping -once you hit the apex you can't move left/right anymore.
+	-bombing edges
+	-sword goes through walls.
+	-collision detection: checkhit
+	-radar: bcolors, wcolors?
+	-smedly doesn't activate proxy bombs
+sounds
+ -jump sound, landing sound,launch sound
+ 
+Edit mode
+ -fill option?
+ -fuck...the user!
+
+
+Items
+	-superbombs
+	-ed's shovel
+	-hammer
+	-hookshot
+	-jesus boots
+	-crossbow!
+	  -optional upgrades! (tri-bolt,speed, ammo capacity, etc)
+	  
+	
+Bosses 
+	pig smedly - throws fireballs
+		-walk left till wall, walk right till wall.
+		if player right left of you, attack left
+		if player right right of you attack right
+		randomly, jump.
+	fingers - snake -EoW
+	Elephant - who never forgets to kill - ram attack, gorge with tusks 
+	Badger - with a troubled past -tunnels under, pops up, claws
+	Negaroo - Hops up and down on you.
+	Bird - 
+
+Spells 
+    Heal
+	Jump
+	orb of light
+	sheild
+	force push
+	
+	
+	----------------------
+	
+	-it is said that across the sea lives an elephant who never forgets....TO KILL!
+	-if you see that frog don't give him any money.  I just gave him $3.50 last week.
+	-guy selling cutting boards that do not hold DNA evidence
+	-ed: "have you seen my shovel?" / "THATS MY SHOVEL" "Ed stabbed you, that was totally uncalled for!"
+	
+	Pulling teeth from the pimps of yore
+	"you found Ed's Shovel! you don't know who Ed is, but now you can remove sand!"
+	
+	Begining: Bears father exploads, he sells all his possesions, say goodbye to a piece of asparagus and sets out for...REVENGE
+	Ending: Bear is beloved by all and they want to make him their king, the bear gracefully declines to rule, instead putting his must trusted friend in charge.  Oh also his friend is asparagus.
+	
+	[19:41] heylookoverthere: there's won't be any cutscenes I don't think
+[19:41] heylookoverthere: just npc and boss dialogue 
+[19:42] heylookoverthere: and the bear should never speak until the end when he gives up the throne
+[19:42] heylookoverthere: he'll have dialogue boxes pop up with his face and all
+[19:43] heylookoverthere: but he can't talk like all the evil animals and presumably his dad could
+[19:43] heylookoverthere: he just says raaaaaaaaaar or whatever noise bears make
+[19:44] greebsnarf: LOL YES
+[19:44] heylookoverthere: and then at the end he's very well spoken when giving up the throne
+
+
+[22:33] heylookoverthere: ok at the last boss, or second to last
+[22:33] heylookoverthere: ok right before the last boss, all the old bosses are revived
+[22:34] heylookoverthere: and you are lead to belive you have to fight them all again AT ONCE
+[22:34] heylookoverthere: but then just like in FFIV, all the people you've helped appear and aid you
+[22:34] heylookoverthere: and if you have picked up the RUM HAM he sacrafices himself for the mortal blow
+[22:34] heylookoverthere: but Ed, who'se shovel you found and he took back
+[22:35] heylookoverthere: Ed just shows up and stabs you
+22:32] heylookoverthere: "Ed stabbed you! That was totally uncalled for!"
+[22:35] heylookoverthere: and then it continues to the next person
+[22:35] heylookoverthere: Ed: A dick.
+
+
+0-40-tiles
+0=grass
+1=stone
+2=mud
+3=crystal
+4-mossy cobble
+5=stone brick (wall?)
+6= wood plank
+7=cobble
+8=dirt
+9=clay
+10=glowstone
+11=pedastal
+41+ =walls
+41=no walls.
+42=water
+43=lava
+44=bush
+45-55=doors
+56 = brick
+57=wood
+58= obsidian
+
+When the moon is in the Seventh House	
+And Jupiter aligns with Mars	
+Then peace will guide the planets	
+And love will steer the stars	
+
+This is the dawning of the Age of Asparagus	
+The Age of Asparagus	
+Asparagus! Asparagus!	
+
+Harmony and understanding	
+Sympathy and trust abounding	
+No more falsehoods or derisions	
+Golden living dreams of visions	
+Mystic crystal revelation	
+And the mind's true liberation	
+Asparagus! Asparagus!	
+
+When the moon is in the Seventh House	
+And Jupiter aligns with Mars	
+Then peace will guide the planets	
+And love will steer the stars	
+
+This is the dawning of the Age of Asparagus	
+The Age of Asparagus	
+Asparagus! Asparagus!
+
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in 
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in
+Let the sun shine, Let the sun shine in
+The sun shine in 
+	
+influances:
+-launcher- RE
+-bombs -monster hunter!
+-hookshot, water, fall feather - terraria
+-textures -minecraft
+-flippers, hammer - LTTP
+-general design - zelda II
+-decoy - zombies ate my neighboors
+-spawners, orb of light -soulblazer
+-roof tiles -dragon warrior
+-
+ 
