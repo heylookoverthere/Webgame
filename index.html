@@ -83,7 +83,7 @@ var soundsplaying ="";
 var timestamp = new Date(); 
 var milliseconds = timestamp.getTime();
 var lasttime=0;
-var battlespeed=99;
+var battlespeed=50;
 var paused=false;
 var mappause=false;
 
@@ -136,7 +136,7 @@ function unit()
 	this.luck=5;
 	this.ali=50;
 	this.class=Math.floor(Math.random()*3);
-
+	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.exp=0;
 	this.level=1;
@@ -152,18 +152,38 @@ function unit()
 		this.hp-=dmg;
 		if (this.hp<0) {this.hp=0; this.alive=false;}//playSound("udeath");}
 	}; 
-	this.update = function (){
+	this.update = function (usqd,esqd){
 		if (this.atb>battlespeed) {
 			//gambits, attack
+			var targe=null;
+			if (usqd.battleAI==0) //weakest
+			{
+				targe=esqd.getWeakest();
+			}else if (usqd.battleAI==1) //Strongest
+			{
+				targe=esqd.getStrongest();
+			}
+			if((esqd!=null) && (esqd.alive)){
+				if(targe==null) { esqd.checkSurvivors(); return;}
+				targe.hurt(this.attack); 
+			}else {isBattle=false;}
 			this.atb=0;
 		}
+		if((this.alive) &&(this.hp<1)) {
+			this.hp=0; 
+			this.alive=false;
+			usqd.checkSurvivors();
+		}
+		
+		
+		
 		this.atb++;
 	};
 	this.setClass=function() {
 		var cla=this.class;
 		if(cla==0) { //bear
 			this.maxhp=50
-			this.attack=20
+			this.attack=15
 			this.maxhp=40;
 			this.maxmp=40;
 			this.speed=1;
@@ -176,8 +196,8 @@ function unit()
 			this.canlead=true;
 			this.sprite = Sprite("bear1");
 		}else if(cla==3) { //frog
-			this.maxhp=50
-			this.attack=20
+			this.maxhp=60
+			this.attack=15
 			this.maxhp=40;
 			this.maxmp=40;
 			this.speed=1;
@@ -205,7 +225,7 @@ function unit()
 			this.canlead=true;
 		}else if(cla==1) { //shoe
 			this.maxhp=50
-			this.attack=20
+			this.attack=5
 			this.maxhp=40;
 			this.maxmp=40;
 			this.speed=1;
@@ -408,8 +428,8 @@ function squad() {
 
 	   targ=this.checkcollision();
 	   //if(this.battling) {this.battle(targ);}
-	   if(isBattle) {return;}
-	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true;return; };
+	   //if(isBattle) {return;}
+	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; return; };
        if( !this.nextMove ) {
 	     this.updateNextMove();
 	   }
@@ -571,6 +591,7 @@ var loadkey=new akey("l");
 var randomwalk=false;
 
 var pausekey=new akey("space");
+var escapekey=new akey("q");
 var serversavekey=new akey("i");
 var serverloadkey=new akey("k");
 var upkey=new akey("up");
@@ -906,8 +927,11 @@ document.getElementById("myAudio").addEventListener('ended', function() { //loop
 
 function battleDraw()
 {
-	combatants[0]=squid[0];
-	combatants[1]=squid[1];
+	//combatants[0]=squid[0];
+	//combatants[1]=squid[1];
+	
+	canvas.fillStyle = "#483D8B ";
+    canvas.fillRect(40,110,820,370);
 	canvas.font = "14pt Calibri";
 	canvas.textAlign = "left";
 	canvas.textBaseline = "middle";
@@ -920,12 +944,14 @@ function battleDraw()
 		if(combatants[0].units[i].class==1) {closs="Shoe";}
 		if(combatants[0].units[i].class==2) {closs="Wizard";}
 		if(combatants[0].units[i].class==3) {closs="Frog";}
-		canvas.fillText("HP:", 760, 94+i*45);
-		canvas.fillText(combatants[0].units[i].hp, 840, 94+i*2*45);
-		canvas.fillText("alive?:", 760, 109+i*2*45);
-		canvas.fillText(combatants[0].units[i].atb, 840, 109+i*2*45);
-		canvas.fillText(closs, 760, 122+i*2*45);
-	
+		var xp=600+combatants[0].units[i].row*40;
+		canvas.fillText("HP:", xp, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].hp, xp+80, 130+i*2*45);
+		canvas.fillText("ATB:", xp, 145+i*2*45);
+		canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
+		canvas.fillText(closs, xp, 158+i*2*45);
+		combatants[0].units[i].sprite.draw(canvas, xp-40, 135+i*2*45);
+		combatants[0].units[i].update(combatants[0],combatants[1]);
 	}
 	
 		canvas.fillStyle = "red";
@@ -937,12 +963,14 @@ function battleDraw()
 		if(combatants[1].units[i].class==1) {closs="Shoe";}
 		if(combatants[1].units[i].class==2) {closs="Wizard";}
 		if(combatants[1].units[i].class==3) {closs="Frog";}
-		canvas.fillText("HP:", 60, 94+i*45);
-		canvas.fillText(combatants[1].units[i].hp, 140, 94+i*2*45);
-		canvas.fillText("alive?:", 60, 109+i*2*45);
-		canvas.fillText(combatants[1].units[i].atb, 140, 109+i*2*45);
-		canvas.fillText(closs, 60, 122+i*2*45);
-	
+		var xp=100-combatants[1].units[i].row*40;
+		canvas.fillText("HP:", xp, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].hp, xp+80, 130+i*2*45);
+		canvas.fillText("ATB:", xp, 145+i*2*45);
+		canvas.fillText(combatants[1].units[i].atb, xp+80, 145+i*2*45);
+		canvas.fillText(closs, xp, 158+i*2*45);
+		combatants[1].units[i].sprite.draw(canvas, xp+120, 135+i*2*45);
+		combatants[1].units[i].update(combatants[1],combatants[0]);
 	}
 }
 
@@ -1014,7 +1042,7 @@ function update() {
 	//squadInfo(squid[SELECTED]);
 	if(isBattle) {
 		battleDraw();
-		
+		if (escapekey.check()) {isBattle=false;}
 	}
 }
 
