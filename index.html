@@ -614,6 +614,7 @@ function mouseClick(e) {  //represents the mouse
           tx=Math.floor(mX/16) * maps[0].zoom;
 	  ty=Math.floor(mY/16) * maps[0].zoom;
 
+console.log("click", tx, ty);
 	  onSomething=null;
 	  for(var i=0;i<TEAM_SIZE;i++)
 	  {
@@ -621,9 +622,8 @@ function mouseClick(e) {  //represents the mouse
 		if((mX>(squid[i].x-camera.x)*16) && (mX<(squid[i].x-camera.x)*16+squid[i].width) &&(mY>(squid[i].y-camera.y)*16) &&(mY<(squid[i].y-camera.y)*16+squid[i].height)) {console.log("fuck"); onSomething=squid[i];SELECTED=i;}
 	  }
 	  if (onSomething==null){
-		  console.log(mX,mY);
 		  if( squid[SELECTED].path ) { squid[SELECTED].path = null; return; }
-		  squid[SELECTED].setDestination(tx- camera.x,ty- camera.y,maps[0]); 
+		  squid[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
 	  }
 
 };
