@@ -382,12 +382,14 @@ function squad() {
 
 	this.draw = function(cam) {
 		  if (!this.alive) {return;} //also check visual range for enemies
-		  this.sprite.draw(canvas, (this.x * 16 + (this.bx - 8) - cam.x * 16), (this.y * 16 + (this.by - 8) - cam.y * 16));
+		  this.sprite.draw(canvas,
+                                   (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
+                                   (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
         };
 
 	this.drawdest = function(cam) {
 		  if (!this.alive) {return;} 
-		  flagsprite.draw(canvas, (this.dx * 16 - cam.x * 16)+8, (this.dy * 16 - cam.y * 16)+8);
+		  flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / maps[0].zoom, ((this.dy * 16 - cam.y * 16)+8) / maps[0].zoom);
         };
 	this.battle= function(target) {
 		if(!this.battling) {return;}
@@ -460,6 +462,9 @@ function squad() {
 	   var terrain = map.tiles[this.nextTile.x][this.nextTile.y].data;
 	   var speed = (terrain == 4 ? 2 : 4);
 	   if((terrain==4) &&(this.units[0].class==3)) {speed=4};
+
+           speed = speed / map.zoom;
+
 	   if( this.nextMove.x > this.x ) {
 	     this.bx += speed;
 	   } else if( this.nextMove.x < this.x ) {
@@ -470,7 +475,8 @@ function squad() {
 	   } else if( this.nextMove.y < this.y ) {
 	     this.by -= speed;
 	   }
-	   if( !this.inNextTile && ( this.bx == 0 || this.bx == 16 || this.by == 0 || this.by == 16 )) {
+
+	   if( !this.inNextTile && ( this.bx <= 0 || this.bx >= 16 || this.by <= 0 || this.by >= 16 )) {
 	   	 this.nextTile = {};
 		 this.nextTile.x = this.nextMove.x;
 		 this.nextTile.y = this.nextMove.y;
@@ -478,7 +484,7 @@ function squad() {
 //		 if( this.by == 0 ) { this.by = 16 } else if( this.by == 16 ) { this.by = 0; }		
 		 this.inNextTile = true;
 	   }
-	   if(( this.bx == 24 || this.bx == -8 ) || ( this.by == -8 || this.by == 24 )) {
+	   if(( this.bx >= 24 || this.bx <= -8 ) || ( this.by <= -8 || this.by >= 24 )) {
 		 this.bx = this.by = 8;
 		 this.inNextTile = false;
 		 this.x = this.nextMove.x;
@@ -605,8 +611,9 @@ function mouseClick(e) {  //represents the mouse
   	  mX = e.pageX - canvasElement.get(0).offsetLeft;
 	  mY = e.pageY - canvasElement.get(0).offsetTop;	
 
-      tx=Math.floor(mX/16);
-	  ty=Math.floor(mY/16);
+          tx=Math.floor(mX/16) * maps[0].zoom;
+	  ty=Math.floor(mY/16) * maps[0].zoom;
+
 	  onSomething=null;
 	  for(var i=0;i<TEAM_SIZE;i++)
 	  {
@@ -786,6 +793,12 @@ function Map(I) { //map object
    }
  };
     I.zoom = 1;
+
+    I.setZoom = function(zoom) {
+        I.zoom = zoom;
+        
+    };
+
     I.draw = function(cam) {
 	cam.check();
 	for (i=cam.x;i<cam.x+cam.width*I.zoom; i+=I.zoom){
@@ -1056,7 +1069,7 @@ function update() {
 		if ((i==SELECTED)&&(squid[i].path!=null)) {squid[i].drawdest(camera);}
 	}
 
-	selector.draw(canvas, (squid[SELECTED].x * 16 + (squid[SELECTED].bx - 8) - camera.x * 16), (squid[SELECTED].y * 16 + (squid[SELECTED].by - 8) - camera.y * 16));
+	selector.draw(canvas, (squid[SELECTED].x * 16 + (Math.round(squid[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (squid[SELECTED].y * 16 + (Math.round(squid[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
 	//camera controlls
     if(keydown.left) {
 	camera.x -= 1;
