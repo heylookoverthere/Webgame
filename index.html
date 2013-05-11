@@ -10,15 +10,15 @@
     <source src="songu.mp3" type="audio/mpeg" />
 	Your browser does not support the audio element.
    	</audio>
-		
+
 	<audio id="death" preload="auto">
     <source src="sounds/dying.wav" type="audio/wav" />
     </audio>
-	
+
 	<audio id="udeath" preload="auto">
     <source src="sounds/Enemy_Hit.wav" type="audio/wav" />
     </audio>
-	
+
     <h1>Hit H for controls. </h1>
 
 	    <script type='text/javascript' src="graph.js"></script>
@@ -50,7 +50,10 @@ var SELECTED=0;
 var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
+var battlelength=6
 var combatants=new Array(2);
+var battledelay=10;
+var battletick=0;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 
 var darkgrasssprite = Sprite("darkgrass"); //begin loading images.  Eventually I should put them all on one .png file
@@ -129,6 +132,7 @@ function akey(k) {  //represents a keyboard button
 function unit()
 {
 	this.hp=40;
+	this.name="Miles";
 	this.mp=0;
 	this.maxhp=40;
 	this.maxmp=40;
@@ -144,7 +148,8 @@ function unit()
 	this.mdef=1;
 	this.attack=10;
 	this.alive=true;
-    this.atb=0;
+	this.attacking=0;
+    	this.atb=0;
 	this.canlead = true;
 	this.cost = 10;
 	this.gambits = null;
@@ -153,6 +158,7 @@ function unit()
 		if (this.hp<0) {this.hp=0; this.alive=false;}//playSound("udeath");}
 	}; 
 	this.update = function (usqd,esqd){
+		if (this.attacking>0) {this.attacking--; return;}
 		if (this.atb>battlespeed) {
 			//gambits, attack
 			var targe=null;
@@ -166,7 +172,10 @@ function unit()
 			if((esqd!=null) && (esqd.alive)){
 				if(targe==null) { esqd.checkSurvivors(); return;}
 				targe.hurt(this.attack); 
-			}else {isBattle=false;}
+				this.attacking=20;
+				usqd.turns++;
+				usqd.damaged+=this.attack;
+			}else {endBattle(usqd,esqd);}
 			this.atb=0;
 		}
 		if((this.alive) &&(this.hp<1)) {
@@ -174,19 +183,19 @@ function unit()
 			this.alive=false;
 			usqd.checkSurvivors();
 		}
-		
-		
-		
-		this.atb++;
+
+
+
+		this.atb+=this.speed;
 	};
 	this.setClass=function() {
 		var cla=this.class;
 		if(cla==0) { //bear
 			this.maxhp=50
-			this.attack=15
+			this.attack=7
 			this.maxhp=40;
 			this.maxmp=40;
-			this.speed=1;
+			this.speed=2;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
@@ -197,7 +206,7 @@ function unit()
 			this.sprite = Sprite("bear1");
 		}else if(cla==3) { //frog
 			this.maxhp=60
-			this.attack=15
+			this.attack=3
 			this.maxhp=40;
 			this.maxmp=40;
 			this.speed=1;
@@ -211,10 +220,10 @@ function unit()
 			this.sprite = Sprite("frogman1");
 		}else if(cla==2) { //wizard
 			this.maxhp=50
-			this.attack=20
+			this.attack=4
 			this.maxhp=40;
 			this.maxmp=40;
-			this.speed=1;
+			this.speed=2;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
@@ -228,7 +237,7 @@ function unit()
 			this.attack=5
 			this.maxhp=40;
 			this.maxmp=40;
-			this.speed=1;
+			this.speed=3;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
@@ -240,6 +249,8 @@ function unit()
 		}
 	};
 		this.setClass();
+		this.hp=this.maxhp;
+		this.mp=this.maxmp;
 }
 
 function numSquads(team){
@@ -273,7 +284,7 @@ function numUnits(team){
 						if(frogs[i].units[j].alive) {count++;}
 					}
 				}
-		
+
 		}
 	}
 	return count;
@@ -291,7 +302,7 @@ function squad() {
 	//waypoints?
 	this.x = 0;
 	this.y = 0;
-	this.battleAI=0;
+	this.battleAI=1;
 	this.alive=true;
     this.numUnits=3;
 	this.battling=false;
@@ -310,12 +321,21 @@ function squad() {
 	this.dx = 0;
 	this.dy = 0;
 	this.team=0;
+	this.damaged=0;
+	this.turns=0;
 	this.sprite = this.leader.sprite;
 	this.path = null;
 	this.nextMove = null;
 	this.nextTile = {x: this.x, y: this.y};
 	this.inNextTile = false;
-	
+	this.pickNewLeader=function() {
+		for(var i=0;i<this.numUnits;i++)
+		{	
+			if((this.units[i].alive) && (this.units[i].canlead)) {return this.units[i];}
+		}
+		this.alive=false;
+		return null;
+	};
 	this.numSquadUnits=function() {
 	var count=0;
 	if(this.alive) 
@@ -327,8 +347,8 @@ function squad() {
 	}
 	return count;
    };
-	
-	this.getSrongest=function(){
+
+	this.getStrongest=function(){
 		var strongest=null;
 		var h=0;
 		for(var i=0;i<this.numUnits;i++){
@@ -345,9 +365,9 @@ function squad() {
 		{
 			if(this.units[j].alive) {anylife=true;}
 		}
-		if (anylife==false) {; this.alive=false;}//playSound("death")}
+		if (anylife==false) { this.alive=false;}//playSound("death")}
 	};
-	
+
 	this.getWeakest=function() {
 		var weakest=null;
 		var h=999;
@@ -359,12 +379,12 @@ function squad() {
 		}
 		return weakest;
 	};
-	
+
 	this.draw = function(cam) {
 		  if (!this.alive) {return;} //also check visual range for enemies
 		  this.sprite.draw(canvas, (this.x * 16 + (this.bx - 8) - cam.x * 16), (this.y * 16 + (this.by - 8) - cam.y * 16));
         };
-		
+
 	this.drawdest = function(cam) {
 		  if (!this.alive) {return;} 
 		  flagsprite.draw(canvas, (this.dx * 16 - cam.x * 16)+8, (this.dy * 16 - cam.y * 16)+8);
@@ -418,7 +438,7 @@ function squad() {
 				if ((this.alive)&&(frogs[i].x+2>this.x) && (frogs[i].x-2<this.x) && (frogs[i].y+2>this.y) && (frogs[i].y-2<=this.y)) {return frogs[i];}
 			}else if(this.team==1) {
 				if ((this.alive)&&(squid[i].x+2>this.x) && (squid[i].x-2<this.x) && (squid[i].y+2>this.y) && (squid[i].y-2<=this.y)) {return squid[i];}
-			
+
 			}
 		}
 		return null;
@@ -429,6 +449,7 @@ function squad() {
 	   targ=this.checkcollision();
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
+	   if(this.team==1) {targ=null;}
 	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; return; };
        if( !this.nextMove ) {
 	     this.updateNextMove();
@@ -463,7 +484,7 @@ function squad() {
 		 this.x = this.nextMove.x;
 		 this.y = this.nextMove.y;
 	  	 this.nextTile = {x: this.x, y: this.y};
-		 
+
 		 this.nextMove = null;
 
 	   }
@@ -487,6 +508,25 @@ function squad() {
 	};
 }
 
+function endBattle(usqd,esqd){
+	isBattle=false;
+	if(usqd.damaged>=esqd.damaged) //win
+	{
+		esqd.x-=3;
+		esqd.path=null;
+		console.log("loss");
+	}else{//lose
+		usqd.x-=3;
+		usqd.path=null;
+		console.log("win @", usqd.x,usqd.y)
+	}
+//check for dead squads?
+	usqd.turns=0;
+	usqd.damaged=0;
+	esqd.turns=0;
+	esqd.damaged=0;
+	paused=true;
+};
 
 function textbox(msg) {  //draws a text box
     canvas.save();
@@ -519,7 +559,7 @@ function armyInfo(sq){
 	canvas.fillText(numUnits(0), 840, 38);
 	canvas.fillText("UpS:", 760, 56);
 	canvas.fillText(squid[SELECTED].numSquadUnits(), 840, 56);
-	
+
 };
 
 function squadInfo(sq){
@@ -542,7 +582,7 @@ function squadInfo(sq){
 
 	}*/
 };
-		
+
 function drawmousetext(targ,cam) { //draws unit status info
     canvas.font = "14pt Calibri";
     canvas.textAlign = "center";
@@ -614,14 +654,14 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 	if (ty<0) {ty=0;}
 	if (tx>MAP_WIDTH-this.width) {tx=MAP_WIDTH-this.width;}
 	if (ty>MAP_HEIGHT-this.height) {ty=MAP_HEIGHT-this.height;}
-	
+
 	this.x=tx;
 	this.y=ty;
     },
     check: function() {
 	this.x.clamp(0, MAP_WIDTH-60);
 	this.y.clamp(0, MAP_HEIGHT-40);
-	
+
     },
     rX: function(fx) {
 	return fx-this.x;
@@ -642,7 +682,7 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
 	height: 16,
 	x: 0,
 	y: 0,
-	
+
 	ani:0,
 	color: "#FFC020",
 	data: 0,
@@ -661,7 +701,7 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
 		stonebricksprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
 	    }else if(this.data==6){
 		plankssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-	    
+
 	    }else if(this.data==42){
 		watersprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
 	    }else{  //if strange data, draw a solid color
@@ -799,11 +839,11 @@ function Map(I) { //map object
 	}
     };
    
-	
+
     I.setTile = function (x,y,data) {
 	I.tiles[x][y].data = data;
     };
-	
+
     return I;
 }
 
@@ -886,7 +926,7 @@ for(var i=0;i<15;i++){
 	//maps[0].setTile(20+i,50,1);
 	//maps[0].setTile(20,20+i,1);
 	}
-	
+
 for(var i=0;i<15;i++){
 	for(var k=0;k<70;k++)
 	{
@@ -895,7 +935,7 @@ for(var i=0;i<15;i++){
 		maps[0].setTile(20+i,0+k,4);
 	}
 	}
-	
+
 var squid= new Array(TEAM_SIZE);
 var frogs= new Array(TEAM_SIZE);
 
@@ -914,12 +954,12 @@ for (var i=0;i<TEAM_SIZE;i++){
 	frogs[i].y=70;
 }
 setInterval(function() {
-	
+
 	update();
     }, 1000/FPS);
 
 
-		
+
 document.getElementById("myAudio").addEventListener('ended', function() { //loops music
 	this.currentTime = 0;
 	this.play();
@@ -929,7 +969,7 @@ function battleDraw()
 {
 	//combatants[0]=squid[0];
 	//combatants[1]=squid[1];
-	
+	battletick++;
 	canvas.fillStyle = "#483D8B ";
     canvas.fillRect(40,110,820,370);
 	canvas.font = "14pt Calibri";
@@ -950,10 +990,13 @@ function battleDraw()
 		canvas.fillText("ATB:", xp, 145+i*2*45);
 		canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
 		canvas.fillText(closs, xp, 158+i*2*45);
-		combatants[0].units[i].sprite.draw(canvas, xp-40, 135+i*2*45);
-		combatants[0].units[i].update(combatants[0],combatants[1]);
+		if((combatants[0].units[i].attacking<1) || (combatants[0].units[i].attacking%2==0)) {
+			combatants[0].units[i].sprite.draw(canvas, xp-40, 135+i*2*45);
+		}
+		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
+		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
 	}
-	
+
 		canvas.fillStyle = "red";
 		for(var i=0;i<combatants[1].numUnits;i++)
 	{
@@ -969,9 +1012,14 @@ function battleDraw()
 		canvas.fillText("ATB:", xp, 145+i*2*45);
 		canvas.fillText(combatants[1].units[i].atb, xp+80, 145+i*2*45);
 		canvas.fillText(closs, xp, 158+i*2*45);
-		combatants[1].units[i].sprite.draw(canvas, xp+120, 135+i*2*45);
-		combatants[1].units[i].update(combatants[1],combatants[0]);
+		if((combatants[1].units[i].attacking<1) || (combatants[1].units[i].attacking%2==0)) {
+			combatants[1].units[i].sprite.draw(canvas, xp+120, 135+i*2*45);
+		}
+			if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
+			if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
 	}
+	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
+	if(battletick>battledelay) {battletick=0;}
 }
 
 //document.getElementById("myAudio").play(); //starts music
@@ -989,7 +1037,7 @@ function update() {
 	maps[0].draw(camera);
 	if ((tick>gamespeed) && (!isBattle)){
 		tick=0;
-		
+
 		for (var i=0;i<TEAM_SIZE;i++) {
 			//squid[i].draw(camera);
 			squid[i].update(maps[0]);
@@ -1001,13 +1049,13 @@ function update() {
 				frogs[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
 		}
 	}
-	
+
 	for (var i=0;i<TEAM_SIZE;i++) {
 		squid[i].draw(camera);
 		frogs[i].draw(camera);
 		if ((i==SELECTED)&&(squid[i].path!=null)) {squid[i].drawdest(camera);}
 	}
-	
+
 	selector.draw(canvas, (squid[SELECTED].x * 16 + (squid[SELECTED].bx - 8) - camera.x * 16), (squid[SELECTED].y * 16 + (squid[SELECTED].by - 8) - camera.y * 16));
 	//camera controlls
     if(keydown.left) {
@@ -1030,20 +1078,21 @@ function update() {
 	if (camera.y>(MAP_HEIGHT-camera.height)) {camera.y=MAP_HEIGHT-camera.height;}
 	}
 	if (ksavekey.check()) {randomwalk=!randomwalk;}
-	
+
 	if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(squid[SELECTED]);}camera.center(squid[SELECTED]);}
 
 	if ((squid[SELECTED]) && (!squid[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(squid[SELECTED]);} camera.center(squid[SELECTED]);}
     //if(Mouse.clicked)
    // console.log(numSquads(0),numUnits(0),SELECTED);
 	if(pausekey.check()) {paused=!paused;}
-	
+
 	armyInfo();
 	//squadInfo(squid[SELECTED]);
 	if(isBattle) {
 		battleDraw();
 		if (escapekey.check()) {isBattle=false;}
 	}
+	if(paused) {canvas.fillText("P A U S E D", 450, 370);}
 }
 
 
@@ -1052,4 +1101,3 @@ function update() {
 
   </body>
 </html>
-
