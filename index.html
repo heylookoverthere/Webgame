@@ -31,6 +31,7 @@ $(document).bind("contextmenu",function(e){
     }); 
 
 var textPause=false;
+var won="";
 var textText="";
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
@@ -99,6 +100,7 @@ var lasttime=0;
 var battlespeed=50;
 var paused=false;
 var mappause=false;
+var battleReport=false;
 
 
 function playSound(name){
@@ -183,8 +185,9 @@ function unit()
 	}; 
 	this.update = function (usqd,esqd){
 		if(paused) {return;}
-		if(paused) {return;}
+		if(battleReport) {return;}
 		if (this.attacking>0) {this.attacking--; return;}
+		if (this.hurting>0) {this.hurting--; return;}
 		if (this.atb>battlespeed) {
 			//gambits, attack
 			var targe=null;
@@ -381,7 +384,7 @@ function squad() {
 		var h=0;
 		for(var i=0;i<this.numUnits;i++){
 			if(this.units[i].hp>h) {
-				h=this.hp;
+				h=this.units[i].hp;
 				strongest=this.units[i];
 			}
 		}
@@ -401,7 +404,7 @@ function squad() {
 		var h=999;
 		for(var i=0;i<this.numUnits;i++){
 			if((this.units[i].hp<h) && (this.units[i].hp>0)) {
-				h=this.hp;
+				h=this.units[1].hp;
 				weakest=this.units[i];
 			}
 		}
@@ -419,49 +422,7 @@ function squad() {
 		  if (!this.alive) {return;} 
 		  flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / maps[0].zoom, ((this.dy * 16 - cam.y * 16)+8) / maps[0].zoom);
         };
-	this.battle= function(target) {
-		if(!this.battling) {return;}
-		if(target==null) {return;}
-		for(var i=0;i<this.numUnits;i++){
-			if((this.units[i].alive) &&(this.units[i].hp<1)) {
-				this.units[i].hp=0; 
-				this.units[i].alive=false;
-				//playSound("udeath");
-				this.checkSurvivors();
-			}
-			if((!this.alive) || (!this.units[i].alive)) {break;}
-			this.units[i].atb++;
-			if(this.units[i].atb>battlespeed) {
-				this.units[i].atb=0;
-				//find a target and attack.
-				var targe=null;
-				if (this.battleAI==0) //weakest
-				{
-					targe=target.getWeakest();
-				}else if (this.battleAI==1) //Strongest
-				{
-					targe=target.getStrongest();
-				}
-				if((target!=null) && (target.alive)){
-				if(targe==null) {this.battling=false; target.checkSurvivors(); return;}
-				targe.hurt(this.units[i].attack); //defense/random/evade
-				target.checkSurvivors();
-				}else { this.battling=false; }
-			}
-		}/*
-		if (target.leader.hp<1) {
-			this.battling=false;
-			target.alive=false;
-			target.leader.hp=0;
-		}
-		this.leader.atb++;
-		if (this.leader.atb>battlespeed) {
-			//attack target.leader;
-			//gambits, AI
-			target.leader.hp-=10;
-			this.leader.atb=0;
-		}*/
-	};
+ 
 	this.checkcollision= function() {
 		for(var i=0;i<TEAM_SIZE;i++){
 			if (this.team==0) {
@@ -474,7 +435,7 @@ function squad() {
 		return null;
 	};
 	this.update = function(map) {
-		if ((paused) || (!this.alive)) {return;}
+		if ((paused) || (!this.alive) || (battleReport)) {return;}
 
 	   targ=this.checkcollision();
 	   //if(this.battling) {this.battle(targ);}
@@ -544,15 +505,18 @@ function squad() {
 
 function endBattle(usqd,esqd){
 	isBattle=false;
+	battleReport=true;
 	if(usqd.damaged>=esqd.damaged) //win
 	{
 		esqd.x-=3;
 		esqd.path=null;
 		console.log("loss");
+		won="Defeat!";
 	}else{//lose
 		usqd.x-=3;
 		usqd.path=null;
 		console.log("win @", usqd.x,usqd.y)
+		won="Victory!"
 	}
 //check for dead squads?
 	usqd.turns=0;
@@ -1164,15 +1128,16 @@ function update() {
 	if ((squid[SELECTED]) && (!squid[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(squid[SELECTED]);} camera.center(squid[SELECTED]);}
     //if(Mouse.clicked)
    // console.log(numSquads(0),numUnits(0),SELECTED);
-	if(pausekey.check()) {paused=!paused;}
+	if(pausekey.check()) {paused=!paused; battleReport=false;}
 
 	armyInfo();
 	//squadInfo(squid[SELECTED]);
-	if(isBattle) {
+	if((isBattle) || (battleReport)) {
 		battleDraw();
 		if (escapekey.check()) {isBattle=false;}
 	}
-	if(paused) {canvas.fillText("P A U S E D", 450, 370);}
+	if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
+	if(battleReport) {canvas.fillText(won, 450, 370);}
 }
 
 
