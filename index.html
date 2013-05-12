@@ -938,8 +938,8 @@ maps[0].setTile(30,26,1);
 
 for (var p=0;p<300;p++)
 {
-	var i=Math.floor(Math.random()*115);
-	var k=Math.floor(Math.random()*76);
+	var i=Math.floor(Math.random()*100)+4;
+	var k=Math.floor(Math.random()*70)+4;
 	maps[0].setTile(24,24,1);
 	maps[0].setTile(i,k,1);
 	maps[0].setTile(i+1,k+1,1);
@@ -1004,8 +1004,8 @@ for (var i=0;i<TEAM_SIZE;i++){
 	frogs[i].leader.setClass();
 	frogs[i].sprite=frogs[i].leader.sprite;
 	frogs[i].team=1;
-	frogs[i].x=100;
-	frogs[i].y=70;
+	frogs[i].x=110;
+	frogs[i].y=76;
 }
 setInterval(function() {
 
