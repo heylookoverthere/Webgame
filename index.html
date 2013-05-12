@@ -50,11 +50,21 @@ var SELECTED=0;
 var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
-var battlelength=6
+var battlelength=10;
 var combatants=new Array(2);
 var battledelay=10;
 var battletick=0;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
+var names= new Array (2);
+names[0]=new Array(67);
+names[1]=new Array(67);
+
+names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Doldous Ed","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett"];
+names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shea","Meera","Mina","Gilly","Yiggret","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Rosilin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenery","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz"];
+var namesused=new Array(2);
+namesused[0]=new Array(67);
+namesused[1]=new Array(67);
+for(i=0;i<67;i++){namesused[0][i]=false;namesused[1][i]=false;}
 
 var darkgrasssprite = Sprite("darkgrass"); //begin loading images.  Eventually I should put them all on one .png file
 var grasssprite = Sprite("grass");
@@ -132,6 +142,7 @@ function akey(k) {  //represents a keyboard button
 function unit()
 {
 	this.hp=40;
+	this.gender=Math.floor(Math.random()*2);
 	this.name="Miles";
 	this.mp=0;
 	this.maxhp=40;
@@ -149,15 +160,30 @@ function unit()
 	this.attack=10;
 	this.alive=true;
 	this.attacking=0;
-    	this.atb=0;
+	this.hurting=0;
+    this.atb=0;
 	this.canlead = true;
 	this.cost = 10;
 	this.gambits = null;
+	var nami=Math.floor(Math.random()*65);
+	//this.name=names[this.gender][nami]
+	
+	while(true) {
+		if(namesused[this.gender][nami]) 
+		{
+			nami=Math.floor(Math.random()*20);
+		}else {break;}
+	}
+	this.name=names[this.gender][nami];
+	//this.namesused[this.gender][nami]=true;
+	
 	this.hurt = function(dmg){
 		this.hp-=dmg;
 		if (this.hp<0) {this.hp=0; this.alive=false;}//playSound("udeath");}
 	}; 
 	this.update = function (usqd,esqd){
+		if(paused) {return;}
+		if(paused) {return;}
 		if (this.attacking>0) {this.attacking--; return;}
 		if (this.atb>battlespeed) {
 			//gambits, attack
@@ -172,7 +198,8 @@ function unit()
 			if((esqd!=null) && (esqd.alive)){
 				if(targe==null) { esqd.checkSurvivors(); return;}
 				targe.hurt(this.attack); 
-				this.attacking=20;
+				this.attacking=10;
+				targe.hurting=20;
 				usqd.turns++;
 				usqd.damaged+=this.attack;
 			}else {endBattle(usqd,esqd);}
@@ -251,6 +278,7 @@ function unit()
 		this.setClass();
 		this.hp=this.maxhp;
 		this.mp=this.maxmp;
+		if (this.gender==2) {this.name="Nancy";}
 }
 
 function numSquads(team){
@@ -304,7 +332,7 @@ function squad() {
 	this.y = 0;
 	this.battleAI=1;
 	this.alive=true;
-    this.numUnits=3;
+    this.numUnits=Math.floor(Math.random()*3)+3;//3;
 	this.battling=false;
 	this.units = new Array (5);
 	this.units[0]= new unit();
@@ -452,7 +480,7 @@ function squad() {
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
 	   if(this.team==1) {targ=null;}
-	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; return; };
+	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); return; };
        if( !this.nextMove ) {
 	     this.updateNextMove();
 	   }
@@ -531,6 +559,19 @@ function endBattle(usqd,esqd){
 	usqd.damaged=0;
 	esqd.turns=0;
 	esqd.damaged=0;
+	for(var i=0;i<usqd.numUnits;i++)
+	{
+		usqd.units[i].atb=0;
+		usqd.units[i].attacking=0;
+		usqd.units[i].hurting=0;
+	}
+	for(var i=0;i<esqd.numUnits;i++)
+	{
+		esqd.units[i].atb=0;
+		esqd.units[i].attacking=0;
+		esqd.units[i].hurting=0;
+	}
+	
 	paused=true;
 };
 
@@ -983,11 +1024,14 @@ function battleDraw()
 	//combatants[0]=squid[0];
 	//combatants[1]=squid[1];
 	battletick++;
+	canvas.fillStyle =  "#DCDCDC";
+    canvas.fillRect(25,95,820,500);
 	canvas.fillStyle = "#483D8B ";
-    canvas.fillRect(40,110,820,370);
+    canvas.fillRect(40,110,790,470);
 	canvas.font = "14pt Calibri";
 	canvas.textAlign = "left";
 	canvas.textBaseline = "middle";
+
 	canvas.fillStyle = "blue";
 	for(var i=0;i<combatants[0].numUnits;i++)
 	{
@@ -1001,13 +1045,25 @@ function battleDraw()
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[0].units[i].hp, xp+80, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 145+i*2*45);
-		canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
+		//canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
+		canvas.fillStyle =  "#DCDCDC";
+		canvas.fillRect(xp+80,145+(i*45*2),battlespeed+3,15);
+		canvas.fillStyle =  "yellow";
+		canvas.fillRect(xp+80+1,146+(i*45*2),combatants[0].units[i].atb,13);
+
+		canvas.fillStyle = "blue";
+		canvas.fillText("Name:", xp, 170+i*2*45);
+		canvas.fillText(combatants[0].units[i].name, xp+80, 170+i*2*45);
 		canvas.fillText(closs, xp, 158+i*2*45);
-		if((combatants[0].units[i].attacking<1) || (combatants[0].units[i].attacking%2==0)) {
-			combatants[0].units[i].sprite.draw(canvas, xp-40, 135+i*2*45);
+
+		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		
+		if((combatants[0].units[i].hurting>1) || (combatants[0].units[i].attacking%2==0)) {
+			combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
 		}
 		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
 		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
+		if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
 	}
 
 		canvas.fillStyle = "red";
@@ -1019,17 +1075,28 @@ function battleDraw()
 		if(combatants[1].units[i].class==1) {closs="Shoe";}
 		if(combatants[1].units[i].class==2) {closs="Wizard";}
 		if(combatants[1].units[i].class==3) {closs="Frog";}
-		var xp=100-combatants[1].units[i].row*40;
+		var xp=120-combatants[1].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[1].units[i].hp, xp+80, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 145+i*2*45);
-		canvas.fillText(combatants[1].units[i].atb, xp+80, 145+i*2*45);
+		canvas.fillStyle =  "#DCDCDC";
+		canvas.fillRect(xp+40,145+(i*45*2),battlespeed+3,15);
+		canvas.fillStyle =  "yellow";
+		canvas.fillRect(xp+40+1,146+(i*45*2),combatants[1].units[i].atb,13);
+
+		canvas.fillStyle = "red";
 		canvas.fillText(closs, xp, 158+i*2*45);
-		if((combatants[1].units[i].attacking<1) || (combatants[1].units[i].attacking%2==0)) {
-			combatants[1].units[i].sprite.draw(canvas, xp+120, 135+i*2*45);
+		canvas.fillText("Name:", xp, 170+i*2*45);
+		canvas.fillText(combatants[1].units[i].name, xp+80, 170+i*2*45);
+
+		if(combatants[1].units[i].attacking>0) {combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);}
+		
+		if((combatants[1].units[i].hurting>1) || (combatants[1].units[i].attacking%2==0)) {
+			combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[0].units[i].attacking/2, 135+i*2*45);
 		}
 			if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
 			if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
+			if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
 	}
 	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
 	if(battletick>battledelay) {battletick=0;}
