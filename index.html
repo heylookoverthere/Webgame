@@ -506,16 +506,17 @@ function squad() {
 function endBattle(usqd,esqd){
 	isBattle=false;
 	battleReport=true;
+	console.log(usqd.damaged,esqd.damaged);
 	if(usqd.damaged>=esqd.damaged) //win
 	{
 		esqd.x-=3;
 		esqd.path=null;
-		console.log("loss");
-		won="Defeat!";
+		console.log("win @", usqd.x,usqd.y)
+		won="Win!";
 	}else{//lose
 		usqd.x-=3;
 		usqd.path=null;
-		console.log("win @", usqd.x,usqd.y)
+		console.log("loss");
 		won="Victory!"
 	}
 //check for dead squads?
