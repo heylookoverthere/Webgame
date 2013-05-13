@@ -246,6 +246,7 @@ function unit()
 			this.cost=10;
 			this.canlead=true;
 			this.sprite = Sprite("bear1");
+			if (this.gender==1) {this.sprite = Sprite("beargirl");}
 		}else if(cla==3) { //frog
 			this.maxhp=60;
 			this.hp=60;
@@ -260,6 +261,7 @@ function unit()
 			this.cost=10;
 			this.canlead=true;
 			this.sprite = Sprite("frogman1");
+			if (this.gender==1) {this.sprite = Sprite("froggirl");}
 		}else if(cla==2) { //wizard
 			this.maxhp=40;
 			this.hp=50;
@@ -270,6 +272,7 @@ function unit()
 			this.ali=50;
 			this.viewrange=5;
 			this.sprite = Sprite("wizard");
+			if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
 			this.def=5;
 			this.mdef=5;
 			this.cost=10;
@@ -288,6 +291,7 @@ function unit()
 			this.cost=10;
 			this.canlead=true;
 			this.sprite = Sprite("shoe");
+			if (this.gender==1) {this.sprite = Sprite("shoegirl");}
 		}
 	};
 		this.setClass();
