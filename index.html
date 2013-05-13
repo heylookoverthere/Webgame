@@ -368,10 +368,7 @@ function numArmyUnits(team){
 		{
 			if(squid[i].alive) 
 			{
-				for(var j=0;j<squid[i].numUnits;j++){
-					if(squid[i].units[j].alive) {count++;} //TODO:use function
-					
-				}
+				count+=squid[i].numSquadUnits();
 			}
 		}
 	}else if (team==1) {
@@ -1157,9 +1154,11 @@ function battleDraw()
 		if(combatants[0].units[i].class==3) {closs="Frog";}
 		var xp=600+combatants[0].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
-		canvas.fillText(combatants[0].units[i].hp, xp+70, 130+i*2*45);
-		canvas.fillText("/", xp+90, 130+i*2*45);
-		canvas.fillText(combatants[0].units[i].maxhp, xp+100, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].hp, xp+30, 130+i*2*45);
+		canvas.fillText("/", xp+60, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].maxhp, xp+70, 130+i*2*45);
+		canvas.fillText("Lvl:", xp+100, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].level, xp+130, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 145+i*2*45);
 		//canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
 		canvas.fillStyle =  "#DCDCDC";
@@ -1193,9 +1192,11 @@ function battleDraw()
 		if(combatants[1].units[i].class==3) {closs="Frog";}
 		var xp=135-combatants[1].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
-		canvas.fillText(combatants[1].units[i].hp, xp+80, 130+i*2*45);
-		canvas.fillText("/", xp+110, 130+i*2*45);
-		canvas.fillText(combatants[1].units[i].maxhp, xp+120, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].hp, xp+30, 130+i*2*45);
+		canvas.fillText("/", xp+60, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].maxhp, xp+70, 130+i*2*45);
+		canvas.fillText("Lvl:", xp+100, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].level, xp+130, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 143+i*2*45);
 		canvas.fillStyle =  "#DCDCDC";
 		canvas.fillRect(xp+80,143+(i*45*2),battlespeed+3,15);
