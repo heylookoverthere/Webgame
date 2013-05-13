@@ -193,13 +193,13 @@ function unit()
 	this.gambits = null;
 	this.exp=0;
 	this.level=1;
-	var nami=Math.floor(Math.random()*65);
+	var nami=Math.floor(Math.random()*99);
 	//this.name=names[this.gender][nami]
 	
 	while(true) {
 		if(namesused[this.gender][nami]) 
 		{
-			nami=Math.floor(Math.random()*20);
+			nami=Math.floor(Math.random()*99);
 		}else {break;}
 	}
 	this.name=names[this.gender][nami];
