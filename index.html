@@ -1153,8 +1153,9 @@ function battleDraw()
 			if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
 	}
 	canvas.fillStyle = "white";
-	canvas.fillText("Turns passed:", 350, 132);
-	canvas.fillText(combatants[0].turns+combatants[1].turns, 460, 132);
+	var texticle= "Turns passed:    " +combatants[0].turns+combatants[1].turns + "/"+battlelength;
+	canvas.fillText(texticle, 350, 132);
+	//canvas.fillText(combatants[0].turns+combatants[1].turns, 460, 132);
 	//canvas.fillText(combatants[0].damaged, 660, 132);
 	//canvas.fillText(combatants[1].damaged, 260, 132);
 	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
