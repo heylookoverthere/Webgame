@@ -490,8 +490,8 @@ function squad() {
 	   targ=this.checkcollision();
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
-	   if(this.team==1) {targ=null;}
-	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ;map.setZoom(1); camera.center(this); SELECTED=this.ID;return;};
+	   if(this.team==1) {targ=null;} //map.setZoom(2);
+	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;return;};
        if( !this.nextMove ) {
 	     this.updateNextMove();
 	   }
