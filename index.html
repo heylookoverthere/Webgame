@@ -365,6 +365,7 @@ function squad() {
 	this.dy = 0;
 	this.team=0;
 	this.damaged=0;
+	this.ID=89;
 	this.turns=0;
 	this.sprite = this.leader.sprite;
 	this.path = null;
@@ -480,7 +481,7 @@ function squad() {
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
 	   if(this.team==1) {targ=null;}
-	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); return; };
+	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;return;};
        if( !this.nextMove ) {
 	     this.updateNextMove();
 	   }
@@ -551,15 +552,19 @@ function endBattle(usqd,esqd){
 	{
 		if(usqd.x>esqd.x) {
 			esqd.x-=25;
+			if(esqd.x<1) {esqd.x=0;}
 		}else
 		{
 			esqd.x+=25;
+			if(esqd.x>MAP_WIDTH) {esqd.x=MAP_WIDTH-1;}
 		}
 		if(usqd.y>esqd.y) {
 			esqd.y-=25;
+			if(esqd.y<1) {esqd.y=0;}
 		}else
 		{
 			esqd.y+=25;
+			if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
 		}
 		esqd.path=null;
 		console.log("win @", usqd.x,usqd.y)
@@ -567,15 +572,19 @@ function endBattle(usqd,esqd){
 	}else{//lose
 		if(esqd.x>usqd.x) {
 			usqd.x-=5;
+			if(usqd.x<1) {usqd.x=1;}
 		}else
 		{
 			usqd.x+=5;
+			if(usqd.x>MAP_WIDTH) {usqd.x=MAP_WIDTH-1;}
 		}
 		if(esqd.y>usqd.y) {
 			usqd.y-=5;
+			if(usqd.y<0) {usqd.y=0;}
 		}else
 		{
 			usqd.y+=5;
+			if(usqd.y>MAP_HEIGHT) {usqd.y=MAP_HEIGHT-1;}
 		}
 		usqd.path=null;
 		console.log("loss");
@@ -1032,7 +1041,9 @@ var frogs= new Array(TEAM_SIZE);
 for( var i=0;i<TEAM_SIZE;i++)
 {
 	squid[i]=new squad();
+	squid[i].ID=i;
 	frogs[i]=new squad();
+	frogs[i].ID=i;
 }
 
 for (var i=0;i<TEAM_SIZE;i++){
