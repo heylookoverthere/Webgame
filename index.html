@@ -55,12 +55,14 @@ var battlelength=10;
 var combatants=new Array(2);
 var battledelay=10;
 var battletick=0;
+var battleenddelay=10;
+var battleendtick=0;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 var names= new Array (2);
 names[0]=new Array(67);
 names[1]=new Array(67);
-var mX=12;
-var mY=12;
+var mX=120;
+var mY=320;
 
 names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett"];
 names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shea","Meera","Mina","Gilly","Yiggret","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Rosilin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenery","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz"];
@@ -543,15 +545,38 @@ function squad() {
 function endBattle(usqd,esqd){
 	isBattle=false;
 	battleReport=true;
+	battleendtick=100;
 	console.log(usqd.damaged,esqd.damaged);
 	if(usqd.damaged>=esqd.damaged) //win
 	{
-		esqd.x-=3;
+		if(usqd.x>esqd.x) {
+			esqd.x-=25;
+		}else
+		{
+			esqd.x+=25;
+		}
+		if(usqd.y>esqd.y) {
+			esqd.y-=25;
+		}else
+		{
+			esqd.y+=25;
+		}
 		esqd.path=null;
 		console.log("win @", usqd.x,usqd.y)
 		won="Victory!";
 	}else{//lose
-		usqd.x-=3;
+		if(esqd.x>usqd.x) {
+			usqd.x-=5;
+		}else
+		{
+			usqd.x+=5;
+		}
+		if(esqd.y>usqd.y) {
+			usqd.y-=5;
+		}else
+		{
+			usqd.y+=5;
+		}
 		usqd.path=null;
 		console.log("loss");
 		won="Defeat!"
@@ -1035,10 +1060,13 @@ function battleDraw()
 	//combatants[0]=squid[0];
 	//combatants[1]=squid[1];
 	battletick++;
+	canvas.save();
+    canvas.globalAlpha=0.60;
 	canvas.fillStyle =  "#DCDCDC";
     canvas.fillRect(25,95,820,500);
 	canvas.fillStyle = "#483D8B ";
     canvas.fillRect(40,110,790,470);
+	canvas.restore();
 	canvas.font = "14pt Calibri";
 	canvas.textAlign = "left";
 	canvas.textBaseline = "middle";
@@ -1066,7 +1094,7 @@ function battleDraw()
 
 		canvas.fillStyle = "blue";
 		canvas.fillText("Name:", xp, 172+i*2*45);
-		canvas.fillText(combatants[0].units[i].name, xp+50, 172+i*2*45);
+		canvas.fillText(combatants[0].units[i].name, xp+52, 172+i*2*45);
 		canvas.fillText(closs, xp, 158+i*2*45);
 
 		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
@@ -1088,7 +1116,7 @@ function battleDraw()
 		if(combatants[1].units[i].class==1) {closs="Shoe";}
 		if(combatants[1].units[i].class==2) {closs="Wizard";}
 		if(combatants[1].units[i].class==3) {closs="Frog";}
-		var xp=120-combatants[1].units[i].row*40;
+		var xp=135-combatants[1].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[1].units[i].hp, xp+80, 130+i*2*45);
 		canvas.fillText("/", xp+110, 130+i*2*45);
@@ -1116,8 +1144,8 @@ function battleDraw()
 	canvas.fillStyle = "white";
 	canvas.fillText("Turns passed:", 350, 132);
 	canvas.fillText(combatants[0].turns+combatants[1].turns, 460, 132);
-	canvas.fillText(combatants[0].damaged, 660, 132);
-	canvas.fillText(combatants[1].damaged, 260, 132);
+	//canvas.fillText(combatants[0].damaged, 660, 132);
+	//canvas.fillText(combatants[1].damaged, 260, 132);
 	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
 	if(battletick>battledelay) {battletick=0;}
 }
@@ -1136,7 +1164,14 @@ function update() {
 	maps[0].draw(camera);
 	if ((tick>gamespeed) && (!isBattle)){
 		tick=0;
-
+		if(battleReport) {
+			battleendtick++; 
+			if (battleendtick>200){
+				battleReport=false;
+				paused=false;
+				battleendtick=0;
+				}
+			}
 		for (var i=0;i<TEAM_SIZE;i++) {
 			//squid[i].draw(camera);
 			squid[i].update(maps[0]);
