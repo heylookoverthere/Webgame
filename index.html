@@ -188,7 +188,12 @@ function unit()
 	//this.namesused[this.gender][nami]=true;
 	
 	this.getAttack= function(trg){
+	//if status==beserek attack harder
 		return this.attack;
+	};
+	
+	this.getDef= function(attacker){
+		return attacker.getAttack(this)-this.def;
 	};
 	
 	this.hurt = function(dmg){
@@ -242,7 +247,7 @@ function unit()
 			this.ali=50;
 			this.viewrange=5;
 			this.def=5;
-			this.mdef=5;
+			this.mdef=3;
 			this.cost=10;
 			this.canlead=true;
 			this.sprite = Sprite("bear1");
@@ -256,7 +261,7 @@ function unit()
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
-			this.def=5;
+			this.def=2;
 			this.mdef=5;
 			this.cost=10;
 			this.canlead=true;
@@ -273,7 +278,7 @@ function unit()
 			this.viewrange=5;
 			this.sprite = Sprite("wizard");
 			if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
-			this.def=5;
+			this.def=2;
 			this.mdef=5;
 			this.cost=10;
 			this.canlead=true;
@@ -486,7 +491,7 @@ function squad() {
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
 	   if(this.team==1) {targ=null;}
-	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;return;};
+	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ;map.setZoom(1); camera.center(this); SELECTED=this.ID;return;};
        if( !this.nextMove ) {
 	     this.updateNextMove();
 	   }
@@ -747,6 +752,7 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 	zoom: 1,
 
     center: function(targ) {
+	if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
 	tx=targ.x-26;
 	ty=targ.y-20;
 	if (tx<0) {tx=0;}
@@ -760,7 +766,7 @@ var camera = {  //represents the camera, aka what part of the map is on screen
     check: function() {
 	this.x.clamp(0, MAP_WIDTH-60);
 	this.y.clamp(0, MAP_HEIGHT-40);
-
+	if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
     },
     rX: function(fx) {
 	return fx-this.x;
@@ -887,14 +893,14 @@ function Map(I) { //map object
     I.zoom = 1;
 
     I.setZoom = function(cam) {
-        
 		if (I.zoom == 1) {I.zoom=2} else {I.zoom=1};
         cam.x=0;
 		cam.y=0;
-		console.log (I.zoom);
+		cam.zoom=I.zoom;
     };
 
     I.draw = function(cam) {
+	cam.zoom=I.zoom;
 	cam.check();
 	for (i=cam.x;i<cam.x+cam.width*I.zoom; i+=I.zoom){
 	    for (j=cam.y;j<cam.y+cam.height*I.zoom; j+=I.zoom){
@@ -1077,14 +1083,13 @@ document.getElementById("myAudio").addEventListener('ended', function() { //loop
 
 function battleDraw()
 {
-	//combatants[0]=squid[0];
-	//combatants[1]=squid[1];
+
 	battletick++;
 	canvas.save();
     canvas.globalAlpha=0.60;
 	canvas.fillStyle =  "#DCDCDC";
     canvas.fillRect(25,95,820,500);
-	canvas.fillStyle = "#483D8B ";
+	canvas.fillStyle =bColors[3];//Math.floor(Math.random()*5)];// "#483D8B ";
     canvas.fillRect(40,110,790,470);
 	canvas.restore();
 	canvas.font = "14pt Calibri";
@@ -1183,7 +1188,7 @@ function update() {
 	//console.log(milliseconds-lasttime,gamespeed);
 	tick++;
 	if(zoomkey.check()) {
-		if(maps[0].zoom<2) {console.log ("one"); maps[0].setZoom(0,camera)} else { maps[0].setZoom(2,camera);}
+		maps[0].setZoom(camera);
 	}
 	maps[0].draw(camera);
 	if ((tick>gamespeed) && (!isBattle)){
