@@ -310,7 +310,7 @@ function numSquads(team){
 	return count;
 };
 
-function numUnits(team){
+function numArmyUnits(team){
 	var count=0;
 	if(team==0){
 		for(var i=0;i<TEAM_SIZE;i++) 
@@ -318,7 +318,8 @@ function numUnits(team){
 			if(squid[i].alive) 
 			{
 				for(var j=0;j<squid[i].numUnits;j++){
-					if(squid[i].units[j].alive) {count++;}
+					if(squid[i].units[j].alive) {count++;} //TODO:use function
+					
 				}
 			}
 		}
@@ -643,7 +644,7 @@ function armyInfo(sq){
 	canvas.fillText("Squads:", 760, 24);
 	canvas.fillText(numSquads(0), 840, 24);
 	canvas.fillText("Units:", 760, 38);
-	canvas.fillText(numUnits(0), 840, 38);
+	canvas.fillText(numArmyUnits(0), 840, 38);
 	canvas.fillText("UpS:", 760, 56);
 	canvas.fillText(squid[SELECTED].numSquadUnits(), 840, 56);
 
@@ -694,10 +695,10 @@ function mouseClick(e) {  //represents the mouse
   	  mX = e.pageX - canvasElement.get(0).offsetLeft;
 	  mY = e.pageY - canvasElement.get(0).offsetTop;	
 
-          tx=Math.floor(mX/16) * maps[0].zoom;
+      tx=Math.floor(mX/16) * maps[0].zoom;
 	  ty=Math.floor(mY/16) * maps[0].zoom;
 
-console.log("click", tx, ty);
+//console.log("click", tx, ty);
 	  onSomething=null;
 	  for(var i=0;i<TEAM_SIZE;i++)
 	  {
@@ -736,7 +737,7 @@ var rightkey=new akey("right");
 var downkey=new akey("down");
 var leftkey=new akey("left");
 var tabkey=new akey("shift");
-
+var zoomkey=new akey("z");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -744,6 +745,7 @@ var camera = {  //represents the camera, aka what part of the map is on screen
     width: 60,
     height: 40,
 	zoom: 1,
+
     center: function(targ) {
 	tx=targ.x-26;
 	ty=targ.y-20;
@@ -884,9 +886,12 @@ function Map(I) { //map object
  };
     I.zoom = 1;
 
-    I.setZoom = function(zoom) {
-        I.zoom = zoom;
+    I.setZoom = function(cam) {
         
+		if (I.zoom == 1) {I.zoom=2} else {I.zoom=1};
+        cam.x=0;
+		cam.y=0;
+		console.log (I.zoom);
     };
 
     I.draw = function(cam) {
@@ -1177,6 +1182,9 @@ function update() {
     milliseconds = timestamp.getTime();
 	//console.log(milliseconds-lasttime,gamespeed);
 	tick++;
+	if(zoomkey.check()) {
+		if(maps[0].zoom<2) {console.log ("one"); maps[0].setZoom(0,camera)} else { maps[0].setZoom(2,camera);}
+	}
 	maps[0].draw(camera);
 	if ((tick>gamespeed) && (!isBattle)){
 		tick=0;
@@ -1212,24 +1220,26 @@ function update() {
 
 	selector.draw(canvas, (squid[SELECTED].x * 16 + (Math.round(squid[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (squid[SELECTED].y * 16 + (Math.round(squid[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
 	//camera controlls
-    if(keydown.left) {
-	camera.x -= 1;
-	if (camera.x<0) {camera.x=0;}
-    }
-    
-    if(keydown.right) {
-	camera.x += 1;
-	if (camera.x>(MAP_WIDTH-camera.width)) {camera.x=MAP_WIDTH-camera.width;}
-    }
-    
-    if(keydown.up) {
-	camera.y -= 1;
-	if (camera.y<0) {camera.y=0;}
-    }
-    
-    if(keydown.down) {
-	camera.y += 1;
-	if (camera.y>(MAP_HEIGHT-camera.height)) {camera.y=MAP_HEIGHT-camera.height;}
+	if(maps[0].zoom<2){
+		if(keydown.left) {
+		camera.x -= 1;
+		if (camera.x<0) {camera.x=0;}
+		}
+		
+		if(keydown.right) {
+		camera.x += 1;
+		if (camera.x>(MAP_WIDTH-camera.width)) {camera.x=MAP_WIDTH-camera.width;}
+		}
+		
+		if(keydown.up) {
+		camera.y -= 1;
+		if (camera.y<0) {camera.y=0;}
+		}
+		
+		if(keydown.down) {
+		camera.y += 1;
+		if (camera.y>(MAP_HEIGHT-camera.height)) {camera.y=MAP_HEIGHT-camera.height;}
+		}
 	}
 	if (ksavekey.check()) {randomwalk=!randomwalk;}
 
@@ -1239,6 +1249,10 @@ function update() {
     //if(Mouse.clicked)
    // console.log(numSquads(0),numUnits(0),SELECTED);
 	if(pausekey.check()) {paused=!paused; battleReport=false;}
+	
+	if(zoomkey.check()) {
+		 maps[0].setZoom(camera);
+	}
 
 	armyInfo();
 	//squadInfo(squid[SELECTED]);
