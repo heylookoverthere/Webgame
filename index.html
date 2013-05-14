@@ -288,13 +288,13 @@ function unit()
 	
 	this.getAttack= function(trg){
 	//if status==beserek attack harder
-		if( this.attackType == AttackTypes.Physical ) {
+		if( this.getAttackType() == AttackTypes.Physical ) {
 			return (this.attack-this.row)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
-		}else if( this.attackType == AttackTypes.Ranged ) { //no row penalty
+		}else if( this.getAttackType() == AttackTypes.Ranged ) { //no row penalty
 			return (this.attack)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
-		}else if( this.attackType == AttackTypes.Magical ) {  //no row penalty
+		}else if( this.getAttackType() == AttackTypes.Magical ) {  //no row penalty
 			return (this.mag)+this.equipment[0].mag+(this.level*.5)+Math.floor(Math.random()*3);
-		}else if( this.attackType == AttackTypes.Heal ) {
+		}else if( this.getAttackType() == AttackTypes.Heal ) {
 			return 0-this.mag;
 		}
 	};
@@ -310,9 +310,9 @@ function unit()
 	this.levelUp=function(){
 		this.level++;
 		this.maxhp+=4;
-		this.hp=maxhp;
+		this.hp=this.maxhp;
 		this.maxmp+=4;
-		this.mp=maxmp;
+		this.mp=this.maxmp;
 		this.speed+=1;
 		this.evade+=1;
 		this.def+=1;
@@ -327,13 +327,15 @@ function unit()
 	
 	this.getDef= function(attacker){
 //		loop through all equip and total def and mdef.
-		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
+		/*if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
 			return this.def+this.equipment[1].def;
 			
 		}else
 		{
 			return this.mdef+this.equipment[1].mdef;
 		}
+		*/
+		return 0;//todo
 	};
 	this.hasStatus=function(stats){
 		//switch(stats)
@@ -362,6 +364,7 @@ function unit()
 			if((esqd!=null) && (esqd.alive)){
 				if(targe==null) { esqd.checkSurvivors(); return;}
 				var delt=Math.floor(this.getAttack()-targe.getDef(this));
+				if (delt<0) {delt=1;};
 				if(Math.floor(Math.random()*10) > targe.evade) {
 					this.giveExp(delt);
 					targe.hurt(delt); 
