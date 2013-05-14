@@ -177,7 +177,7 @@ function status()
 
 function equipment()
 {
-	this.name="";
+	this.name="none";
 	this.slot=0;
 	this.value=0;
 	this.attack=0;
@@ -337,12 +337,46 @@ function unit()
 		texticles= "Exp: " + this.exp ;
 		canvas.fillText(texticles, 60, 192);
 		
+		if(this.class==0) {var texticles= "Class: Bear"; }
+		if(this.class==1) {var texticles= "Class: Shoe"; }
+		if(this.class==2) {var texticles= "Class: Wizard"; }
+		if(this.class==3) {var texticles= "Class: Frog"; }
+		if(this.class==4) {var texticles= "Class: Archer"; }
+		canvas.fillText(texticles, 180, 122);
+		
+		texticles= "Speed: " + this.speed;
+		canvas.fillText(texticles, 180, 135);
+		
+		texticles= "Attack " + this.attack + "+"+this.equipment[0].attack;
+		canvas.fillText(texticles, 180, 152);
+		
+		texticles= "Def: " + this.def + "+"+this.equipment[1].def;
+		canvas.fillText(texticles, 180, 172);
+		
+		texticles= "M.Def: " + this.mdef + "+"+this.equipment[1].mdef ;
+		canvas.fillText(texticles, 180, 192);
+		
+		texticles= "Magic: " + this.mag ;
+		canvas.fillText(texticles, 280, 135);
+		
+		texticles= "Luck: " + this.luck ;
+		canvas.fillText(texticles, 280, 152);
+		
+		texticles= "Evade: " + this.evade ;
+		canvas.fillText(texticles, 280, 172);
+		
+		texticles= "Ali: " + this.ali ;
+		canvas.fillText(texticles, 280, 192);
+		
 		if(this.getAttackType()==0) {texticles= "Attack Type: Physical"} ;
 		if(this.getAttackType()==1) {texticles= "Attack Type: Ranged"} ;
 		if(this.getAttackType()==2) {texticles= "Attack Type: Magic"} ;
 		if(this.getAttackType()==3) {texticles= "Attack Type: Heal"} ;
 		if(this.getAttackType()==4) {texticles= "Attack Type: Inflict Status"} ;
 		canvas.fillText(texticles, 60, 212);
+		
+		texticles= "Can be leader: " + this.canlead ;
+		canvas.fillText(texticles, 60, 232);
 		
 		texticles= "Weapon: " + this.equipment[0].name;
 		canvas.fillText(texticles, 60, 272);
@@ -753,8 +787,7 @@ function squad() {
 		return null;
 	};
 	this.update = function(map) {
-		if ((paused) || (!this.alive) || (battleReport)) {return;}
-
+		if ((paused) || (!this.alive) || (battleReport) || (isBattle)) {return;}
 	   targ=this.checkcollision();
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
