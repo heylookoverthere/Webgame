@@ -60,17 +60,17 @@ var battleenddelay=10;
 var battleendtick=0;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 var names= new Array (2);
-names[0]=new Array(99);
-names[1]=new Array(99);
+names[0]=new Array(120);
+names[1]=new Array(120);
 var mX=120;
 var mY=320;
 
-names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn"];
-names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei"];
+names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn","Howland","Daario","Xhondo","Yellow Dick","Zachery","Zekko","Zollo","Will","Willbert","Wendel","Wendamyr","The Weeper","Wat","Walton","Vardis","Urrigon","Ulmer","Tobho","Timett","Syrio","Styr"];
+names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei","Old Nan","Yna","Ysilla","Victaria","Visenya","Val","The Waif","Tya","Tysane","Tansey","Talla","Taela","Squirrel","Shiera","Sharna","Scolera","Sarra","Sallei","S'vrone","Rhea","Rhialta"];
 var namesused=new Array(2);
-namesused[0]=new Array(99);
-namesused[1]=new Array(99);
-for(i=0;i<99;i++){namesused[0][i]=false;namesused[1][i]=false;}
+namesused[0]=new Array(120);
+namesused[1]=new Array(120);
+for(i=0;i<120;i++){namesused[0][i]=false;namesused[1][i]=false;}
 
 var darkgrasssprite = Sprite("darkgrass"); //begin loading images.  Eventually I should put them all on one .png file
 var grasssprite = Sprite("grass");
@@ -255,7 +255,7 @@ function unit()
 	this.attackType=new Array(2);
 	this.attackType[0]=AttackTypes.Physical;
 	this.attackType[1]=AttackTypes.Physical;
-	this.class=Math.floor(Math.random()*5);
+	this.class=Math.floor(Math.random()*6);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.level=1;
@@ -276,17 +276,18 @@ function unit()
 	this.equipment[0]=unarmed;
 	this.equipment[1]=noarmor;
 	this.equipment[2]=noaccessory;
-	var nami=Math.floor(Math.random()*99);
+	var nami=Math.floor(Math.random()*120);
 	//this.name=names[this.gender][nami]
 	
 	while(true) {
 		if(namesused[this.gender][nami]) 
 		{
-			nami=Math.floor(Math.random()*99);
+			nami=Math.floor(Math.random()*120);
+			//console.log(names[this.gender][nami]);
 		}else {break;}
 	}
 	this.name=names[this.gender][nami];
-	//this.namesused[this.gender][nami]=true;
+	namesused[this.gender][nami]=true;
 	
 	this.getAttack= function(trg){
 	//if status==beserek attack harder
@@ -469,10 +470,10 @@ function unit()
 				targe=esqd.leader;
 			}
 			if((esqd!=null) && (esqd.alive)){
-				if(targe==null) { esqd.checkSurvivors(); return;}
+				if(targe==null) { return;}//esqd.checkSurvivors(); return;}
 				var delt=Math.floor(this.getAttack()-targe.getDef(this));
 				if (delt<0) {delt=1;};
-				if(Math.floor(Math.random()*10) > targe.evade) {
+				if(Math.floor(Math.random()*20) > targe.evade) {
 				//TODO critcals!
 					this.giveExp(delt);
 					targe.hurt(delt); 
@@ -496,7 +497,7 @@ function unit()
 			this.alive=false;
 			var tmpstr=this.name + " died.";
 			console.log(tmpstr);//todo MONSOLE
-			usqd.checkSurvivors();
+			//usqd.checkSurvivors();
 		}
 
 
@@ -597,6 +598,25 @@ function unit()
 			this.attackType[0]=AttackTypes.Ranged;
 			this.attackType[1]=AttackTypes.Ranged;
 			if (this.gender==1) {this.sprite = Sprite("archergirl");}
+		}else if(cla==5) { //healer
+			this.maxhp=30;
+			this.hp=30;
+			this.attack=5;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=2;
+			this.mdef=5;
+			this.mag=15;
+			this.cost=10;
+			this.equipment[1]=robe;
+			this.canlead=true;
+			this.sprite = Sprite("healer");
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Heal;
+			if (this.gender==1) {this.sprite = Sprite("healergirl");}
 		}
 	};
 		this.setClass();
