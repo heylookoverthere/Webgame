@@ -119,8 +119,16 @@ function playSound(name){
 };
 
     
+AttackTypes = {};
+AttackTypes.Physical = 0; 
+AttackTypes.Ranged = 1;
+AttackTypes.Magical = 2;
+AttackTypes.Heal = 3;
+AttackTypes.InflictStatus = 4;
+AttackTypes.HealStatus = 5; 
+AttackTypes.someweirdshitthatignoresdefensemaybe =6;
 
-    
+
 
 function akey(k) {  //represents a keyboard button
     k = k || "space";
@@ -164,6 +172,71 @@ function status()
 	this.HIV=false;
 
 };
+
+function equipment()
+{
+	this.name="";
+	this.slot=0;
+	this.value=0;
+	this.attack=0;
+	this.def=0;
+	this.mdef=0;
+	this.evade=0;
+	this.speed=0;
+	this.mag=0;
+	this.prefix="Shitty ";
+	this.sprite=null;
+	this.haste=false;
+	this.slow=false;
+	this.beserk=false;
+	this.posion=false;
+	this.mute=false;
+	this.reflect=false;
+	this.protect=false;
+	this.regen=false;
+	this.imp=false;
+	this.HIV=false;
+	this.tooltip = "WTF are you doing with a shotgun?";
+
+};
+
+unarmed = new equipment();
+noarmor = new equipment();
+noarmor.slot=1;
+noaccessory = new equipment();
+noaccessory.slot=2;
+swords=new Array(2);
+swords[0]= new equipment();
+swords[0].name="Wooden Sword";
+swords[0].attack=3;
+swords[0].value=10;
+swords[0].tooltip = "It is dangerous to go alone."
+
+swords[1]= new equipment();
+swords[1].attack=10;
+swords[1].name="Valyrian Sword";
+swords[1].value=100;
+swords[1].tooltip = "Forged in the fires of Valyria, New Jersey."
+
+robe= new equipment();
+robe.slot=1;
+robe.name="Shirt";
+robe.def=1;
+robe.mdef=5;
+robe.value=20;
+robe.tooltip = "Should conceal your erection."
+
+breastplate= new equipment();
+breastplate.slot=1;
+breastplate.name="Breastplate";
+breastplate.def=6;
+breastplate.mdef=1;
+breastplate.value=50;
+breastplate.tooltip = "Why are there nipples on it?"
+
+
+
+
 function unit()
 {
 	this.hp=40;
@@ -177,6 +250,9 @@ function unit()
 	this.evade=1;
 	this.luck=5;
 	this.ali=50;
+	this.attackType=new Array(2);
+	this.attackType[0]=AttackTypes.Physical;
+	this.attackType[1]=AttackTypes.Physical;
 	this.class=Math.floor(Math.random()*3);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
@@ -185,6 +261,7 @@ function unit()
 	this.def=1;
 	this.mdef=1;
 	this.attack=10;
+	this.mag=5;
 	this.alive=true;
 	this.attacking=0;
 	this.hurting=0;
@@ -194,6 +271,10 @@ function unit()
 	this.gambits = null;
 	this.exp=0;
 	this.level=1;
+	this.equipment=new Array(3);
+	this.equipment[0]=unarmed;
+	this.equipment[1]=noarmor;
+	this.equipment[2]=noaccessory;
 	var nami=Math.floor(Math.random()*99);
 	//this.name=names[this.gender][nami]
 	
@@ -208,7 +289,15 @@ function unit()
 	
 	this.getAttack= function(trg){
 	//if status==beserek attack harder
-		return this.attack+(this.level*.5)+Math.floor(Math.random()*3);
+		if( this.attackType == AttackTypes.Physical ) {
+			return (this.attack-this.row)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
+		}else if( this.attackType == AttackTypes.Ranged ) { //no row penalty
+			return (this.attack)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
+		}else if( this.attackType == AttackTypes.Magical ) {  //no row penalty
+			return (this.mag)+this.equipment[0].mag+(this.level*.5)+Math.floor(Math.random()*3);
+		}else if( this.attackType == AttackTypes.Heal ) {
+			return 0-this.mag;
+		}
 	};
 	
 	this.giveExp= function(val){
@@ -231,9 +320,16 @@ function unit()
 		//playSound("level");
 	};
 	
+	this.getAttackType=function(){
+		return this.attackType[this.row];
+	};
+	
 	this.getDef= function(attacker){
-
-		return attacker.getAttack(this)-this.def;
+		//loop through all equip and total def and mdef.
+		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged))
+			return this.def+this.equipment[1].def;
+		else
+			return this.mdef+this.equipment[1].mdef;
 	};
 	this.hasStatus=function(stats){
 		//switch(stats)
@@ -260,7 +356,7 @@ function unit()
 			}
 			if((esqd!=null) && (esqd.alive)){
 				if(targe==null) { esqd.checkSurvivors(); return;}
-				var delt=Math.floor(this.getAttack());
+				var delt=Math.floor(this.getAttack()-targe.getDef(this));
 				if(Math.floor(Math.random()*10) > targe.evade) {
 					this.giveExp(delt);
 					targe.hurt(delt); 
@@ -297,6 +393,8 @@ function unit()
 			this.mdef=3;
 			this.cost=10;
 			this.canlead=true;
+			this.equipment[0]=swords[0];
+			this.equipment[1]=breastplate;
 			this.sprite = Sprite("bear1");
 			if (this.gender==1) {this.sprite = Sprite("beargirl");}
 		}else if(cla==3) { //frog
@@ -312,6 +410,8 @@ function unit()
 			this.mdef=5;
 			this.cost=10;
 			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Ranged;
 			this.sprite = Sprite("frogman1");
 			if (this.gender==1) {this.sprite = Sprite("froggirl");}
 		}else if(cla==2) { //wizard
@@ -324,11 +424,15 @@ function unit()
 			this.ali=50;
 			this.viewrange=5;
 			this.sprite = Sprite("wizard");
+			this.equipment[1]=robe;
 			if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
 			this.def=2;
 			this.mdef=5;
+			this.mag=10;
 			this.cost=10;
 			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Magical;
 		}else if(cla==1) { //shoe
 			this.maxhp=30;
 			this.hp=30;
@@ -343,6 +447,8 @@ function unit()
 			this.cost=10;
 			this.canlead=true;
 			this.sprite = Sprite("shoe");
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Physical;
 			if (this.gender==1) {this.sprite = Sprite("shoegirl");}
 		}
 	};
@@ -426,6 +532,13 @@ function squad() {
 	this.nextMove = null;
 	this.nextTile = {x: this.x, y: this.y};
 	this.inNextTile = false;
+	this.row=function(){
+		for (var i=0;i<this.numUnits;i++)
+		{
+				if (this.units[i].row==0) { this.units[i].row=1;}
+				else if (this.units[i].row==1) { this.units[i].row=0;}
+		}
+	};
 	this.getHP=function(){
 		var herbert=0;
 		for (var i=0;i<this.numUnits;i++) {
@@ -791,6 +904,7 @@ var zoomkey=new akey("z");
 var helpkey=new akey("h");
 var speedkey=new akey("x");
 var statuskey=new akey("s");
+var rowkey=new akey("r");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -1323,6 +1437,10 @@ function update() {
 	
 	if(zoomkey.check()) {
 		 maps[0].setZoom(camera);
+	}
+	
+	if(rowkey.check()) {
+		 squid[SELECTED].row();
 	}
 
 	armyInfo();
