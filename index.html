@@ -312,7 +312,9 @@ function unit()
 	this.levelUp=function(){
 		this.level++;
 		this.maxhp+=4;
+		this.hp=maxhp;
 		this.maxmp+=4;
+		this.mp=maxmp;
 		this.speed+=1;
 		this.evade+=1;
 		this.def+=1;
@@ -387,7 +389,7 @@ function unit()
 		var cla=this.class;
 		if(cla==0) { //bear
 			this.maxhp=60;
-			this.hp=50;
+			this.hp=60;
 			this.attack=7
 			this.maxmp=40;
 			this.speed=2;
@@ -398,6 +400,8 @@ function unit()
 			this.mdef=3;
 			this.cost=10;
 			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Physical;
 			this.equipment[0]=swords[0];
 			this.equipment[1]=breastplate;
 			this.sprite = Sprite("bear1");
@@ -420,7 +424,7 @@ function unit()
 			this.sprite = Sprite("frogman1");
 			if (this.gender==1) {this.sprite = Sprite("froggirl");}
 		}else if(cla==2) { //wizard
-			this.maxhp=40;
+			this.maxhp=50;
 			this.hp=50;
 			this.attack=4;
 			this.maxmp=40;
