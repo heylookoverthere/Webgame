@@ -475,12 +475,7 @@ function unit()
 				if (delt<0) {delt=1;};
 				if(Math.floor(Math.random()*20) > targe.evade) {
 				//TODO critcals!
-					this.giveExp(delt);
-					targe.hurt(delt); 
-					this.attacking=10;
-					targe.hurting=20;
-					usqd.turns++;
-					usqd.damaged+=delt;
+					
 					var tmpstr=this.name + " hit " +targe.name+ " for " +delt+ " damage.";
 					if(usqd.team==0) {
 						console.log(tmpstr);//todo MONSOLE
@@ -488,6 +483,13 @@ function unit()
 					{
 						console.warn(tmpstr);
 					}
+					this.giveExp(delt);
+					targe.hurt(delt); 
+					if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
+					this.attacking=10;
+					targe.hurting=20;
+					usqd.turns++;
+					usqd.damaged+=delt;
 				}else {this.attacking=10; usqd.turns++;this.attacking=10; tmpstr = this.name + " missed "+ targe.name; console.log(tmpstr);} //miss
 			}else {endBattle(usqd,esqd);}
 			
@@ -672,7 +674,7 @@ function squad() {
 	//waypoints?
 	this.x = 0;
 	this.y = 0;
-	this.battleAI=1;
+	this.battleAI=2;
 	this.alive=true;
     this.numUnits=Math.floor(Math.random()*3)+3;//3;
 	this.battling=false;
@@ -747,12 +749,18 @@ function squad() {
 		return herbert;
 	};
 	this.pickNewLeader=function() {
+		var oldlead=this.leader;
 		for(var i=0;i<this.numUnits;i++)
 		{	
-			if((this.units[i].alive) && (this.units[i].canlead)) {return this.units[i];}
+			if((this.units[i].alive) && (this.units[i].canlead)) {
+			this.leader=this.units[i];
+			console.log(this.leader.name + " took over " + oldlead.name+"'s squad" );
+				return;
+			}
 		}
 		this.alive=false;
-		return null;
+		//this.leaderless=true? path=base?
+		return ;
 	};
 	this.numSquadUnits=function() {
 	var count=0;
