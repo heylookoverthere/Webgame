@@ -327,22 +327,23 @@ function unit()
 	
 	this.getDef= function(attacker){
 //		loop through all equip and total def and mdef.
-		/*if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
+		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
 			return this.def+this.equipment[1].def;
 			
 		}else
 		{
 			return this.mdef+this.equipment[1].mdef;
 		}
-		*/
-		return 0;//todo
+		
 	};
 	this.hasStatus=function(stats){
 		//switch(stats)
 	};
 	this.hurt = function(dmg){
 		this.hp-=dmg;
-		if (this.hp<0) {this.hp=0; this.alive=false;}//playSound("udeath");}
+		if (this.hp<0) {this.hp=0; this.alive=false; 			var tmpstr=this.name + " died.";
+			console.log(tmpstr);//todo MONSOLE}//playSound("udeath");
+			}
 	}; 
 	this.update = function (usqd,esqd){
 		if(paused) {return;}
@@ -372,6 +373,8 @@ function unit()
 					targe.hurting=20;
 					usqd.turns++;
 					usqd.damaged+=delt;
+					var tmpstr=this.name + " hit " +targe.name+ " for " +delt+ " damage.";
+					console.log(tmpstr);//todo MONSOLE
 				}else {this.attacking=10; usqd.turns++;this.attacking=10;} //miss
 			}else {endBattle(usqd,esqd);}
 			
@@ -379,6 +382,8 @@ function unit()
 		if((this.alive) &&(this.hp<1)) {
 			this.hp=0; 
 			this.alive=false;
+			var tmpstr=this.name + " died.";
+			console.log(tmpstr);//todo MONSOLE
 			usqd.checkSurvivors();
 		}
 
@@ -551,6 +556,11 @@ function squad() {
 				else if (this.units[i].row==1) { this.units[i].row=0;}
 		}
 	};
+	
+	this.flee= function()
+	{
+		alert("soon!");
+	};
 	this.getHP=function(){
 		var herbert=0;
 		for (var i=0;i<this.numUnits;i++) {
@@ -615,7 +625,9 @@ function squad() {
 		{
 			if(this.units[j].alive) {anylife=true;}
 		}
-		if (anylife==false) { this.alive=false; return false;}//playSound("death")}
+		if (anylife==false) { this.alive=false; return false; var tmpstr=this.leader.name + "'s squad was eliminated.";
+					console.log(tmpstr);//todo MONSOLE}//playSound("death")
+			}
 		return true;
 	};
 
@@ -661,7 +673,11 @@ function squad() {
 	   //if(this.battling) {this.battle(targ);}
 	   //if(isBattle) {return;}
 	   if(this.team==1) {targ=null;} //map.setZoom(2);
-	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;return;};
+	   if ((targ!=null) && (targ.alive)) {
+			mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
+			var tmpstr=this.leader.name + "'s unit encountered an enemy @ " +this.x + " , " +this.y;
+					console.log(tmpstr);//todo MONSOLEreturn;
+		};
        if( !this.nextMove ) {
 	     this.updateNextMove();
 	   }
@@ -727,7 +743,7 @@ function endBattle(usqd,esqd){
 	isBattle=false;
 	battleReport=true;
 	battleendtick=100;
-	console.log(usqd.damaged,esqd.damaged);
+	//console.log(usqd.damaged,esqd.damaged);
 	if(usqd.damaged>=esqd.damaged) //win
 	{
 		if(usqd.x>esqd.x) {
@@ -918,6 +934,7 @@ var helpkey=new akey("h");
 var speedkey=new akey("x");
 var statuskey=new akey("s");
 var rowkey=new akey("r");
+var fleekey=new akey("f");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -1454,6 +1471,10 @@ function update() {
 	
 	if(rowkey.check()) {
 		 squid[SELECTED].row();
+	}
+	
+	if(fleekey.check()) {
+		 squid[SELECTED].flee();
 	}
 
 	armyInfo();
