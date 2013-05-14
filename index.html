@@ -48,6 +48,7 @@ var SPAWN_Y=19;
 var GRAVITY_RATE=5;
 var TEAM_SIZE = 12;
 var SELECTED=0;
+var BSELECTED=0;
 var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
@@ -106,6 +107,7 @@ var paused=false;
 var mappause=false;
 var battleReport=false;
 var battlePause=false;
+var unitinfo=false;
 
 
 function playSound(name){
@@ -220,7 +222,7 @@ swords[1].tooltip = "Forged in the fires of Valyria, New Jersey."
 
 robe= new equipment();
 robe.slot=1;
-robe.name="Shirt";
+robe.name="Robe";
 robe.def=1;
 robe.mdef=5;
 robe.value=20;
@@ -253,7 +255,7 @@ function unit()
 	this.attackType=new Array(2);
 	this.attackType[0]=AttackTypes.Physical;
 	this.attackType[1]=AttackTypes.Physical;
-	this.class=Math.floor(Math.random()*3);
+	this.class=Math.floor(Math.random()*5);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.level=1;
@@ -307,12 +309,58 @@ function unit()
 		}
 	};
 	
+	this.drawInfo=function(){
+		canvas.save();
+		canvas.globalAlpha=0.60;
+		canvas.fillStyle =  "#DCDCDC";
+		canvas.fillRect(25,95,820,500);
+		canvas.fillStyle =bColors[3];//Math.floor(Math.random()*5)];// "#483D8B ";
+		canvas.fillRect(40,110,790,470);
+		canvas.restore();
+		canvas.font = "14pt Calibri";
+		canvas.textAlign = "left";
+		canvas.textBaseline = "middle";
+
+		canvas.fillStyle = "green";
+		var texticles= "Name: " + this.name;
+		canvas.fillText(texticles, 60, 122);
+		
+		texticles= "HP: " + this.hp + " / " +this.maxhp;
+		canvas.fillText(texticles, 60, 135);
+		
+		texticles= "MP: " + this.mp + " / " +this.maxmp;
+		canvas.fillText(texticles, 60, 152);
+		
+		texticles= "Level: " + this.level;
+		canvas.fillText(texticles, 60, 172);
+		
+		texticles= "Exp: " + this.exp ;
+		canvas.fillText(texticles, 60, 192);
+		
+		if(this.getAttackType()==0) {texticles= "Attack Type: Physical"} ;
+		if(this.getAttackType()==1) {texticles= "Attack Type: Ranged"} ;
+		if(this.getAttackType()==2) {texticles= "Attack Type: Magic"} ;
+		if(this.getAttackType()==3) {texticles= "Attack Type: Heal"} ;
+		if(this.getAttackType()==4) {texticles= "Attack Type: Inflict Status"} ;
+		canvas.fillText(texticles, 60, 212);
+		
+		texticles= "Weapon: " + this.equipment[0].name;
+		canvas.fillText(texticles, 60, 272);
+		
+		texticles= "Armor: " + this.equipment[1].name;
+		canvas.fillText(texticles, 60, 292);
+		
+		texticles= "Accessory: " + this.equipment[2].name;
+		canvas.fillText(texticles, 60, 312);
+		
+	};
+	
 	this.levelUp=function(){
 		this.level++;
 		this.maxhp+=4;
-		this.hp=this.maxhp;
+		this.hp+=4;
 		this.maxmp+=4;
-		this.mp=this.maxmp;
+		this.mp+=4;
 		this.speed+=.2;
 		this.evade+=1;
 		this.def+=1;
@@ -363,6 +411,9 @@ function unit()
 			}else if (usqd.battleAI==1) //Strongest
 			{
 				targe=esqd.getStrongest();
+			}else if (usqd.battleAI==2) //leader
+			{
+				targe=esqd.leader;
 			}
 			if((esqd!=null) && (esqd.alive)){
 				if(targe==null) { esqd.checkSurvivors(); return;}
@@ -376,7 +427,12 @@ function unit()
 					usqd.turns++;
 					usqd.damaged+=delt;
 					var tmpstr=this.name + " hit " +targe.name+ " for " +delt+ " damage.";
-					console.log(tmpstr);//todo MONSOLE
+					if(usqd.team==0) {
+						console.log(tmpstr);//todo MONSOLE
+					}else
+					{
+						console.warn(tmpstr);
+					}
 				}else {this.attacking=10; usqd.turns++;this.attacking=10;} //miss
 			}else {endBattle(usqd,esqd);}
 			
@@ -429,6 +485,7 @@ function unit()
 			this.canlead=true;
 			this.attackType[0]=AttackTypes.Physical;
 			this.attackType[1]=AttackTypes.Ranged;
+			this.equipment[1]=breastplate;
 			this.sprite = Sprite("frogman1");
 			if (this.gender==1) {this.sprite = Sprite("froggirl");}
 		}else if(cla==2) { //wizard
@@ -467,6 +524,24 @@ function unit()
 			this.attackType[0]=AttackTypes.Physical;
 			this.attackType[1]=AttackTypes.Physical;
 			if (this.gender==1) {this.sprite = Sprite("shoegirl");}
+		}else if(cla==4) { //archer
+			this.maxhp=40;
+			this.hp=40;
+			this.attack=5;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=2;
+			this.mdef=5;
+			this.cost=10;
+			this.equipment[1]=breastplate;
+			this.canlead=true;
+			this.sprite = Sprite("archer");
+			this.attackType[0]=AttackTypes.Ranged;
+			this.attackType[1]=AttackTypes.Ranged;
+			if (this.gender==1) {this.sprite = Sprite("archergirl");}
 		}
 	};
 		this.setClass();
@@ -797,7 +872,7 @@ function endBattle(usqd,esqd){
 		console.log("loss");
 		won="Defeat!"
 		if(usqd.turns==20) {won = "Ran away";}
-		paused=true; //TODO
+		//paused=true; //TODO
 	}
 //check for dead squads?
 	usqd.turns=0;
@@ -947,6 +1022,8 @@ var speedkey=new akey("x");
 var statuskey=new akey("s");
 var rowkey=new akey("r");
 var fleekey=new akey("f");
+var aikey=new akey("a");
+var unitinfokey=new akey("u");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -1301,6 +1378,11 @@ function battleDraw()
 	canvas.textBaseline = "middle";
 
 	canvas.fillStyle = "blue";
+	var texticles= "";
+	if (combatants[0].battleAI==0) {texticles="Weakest";}
+	if (combatants[0].battleAI==1) {texticles="Strongest";}
+	if (combatants[0].battleAI==2) {texticles="Leader";}
+	canvas.fillText(texticles, 515, 132);
 	for(var i=0;i<combatants[0].numUnits;i++)
 	{
 		if(!combatants[0].units[i].alive) {continue;}
@@ -1329,6 +1411,7 @@ function battleDraw()
 		canvas.fillText(closs, xp, 158+i*2*45);
 
 		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		if(i==BSELECTED) {selector.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		
 		if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
 			combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
@@ -1338,7 +1421,11 @@ function battleDraw()
 		if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
 	}
 
-		canvas.fillStyle = "red";
+	canvas.fillStyle = "red";
+	if (combatants[1].battleAI==0) {texticles="Weakest";}
+	if (combatants[1].battleAI==1) {texticles="Strongest";}
+	if (combatants[1].battleAI==2) {texticles="Leader";}
+	canvas.fillText(texticles, 275, 132);
 		for(var i=0;i<combatants[1].numUnits;i++)
 	{
 		var closs="";
@@ -1462,7 +1549,11 @@ function update() {
 	}
 	if (ksavekey.check()) {randomwalk=!randomwalk;}
 
-	if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(squid[SELECTED]);}camera.center(squid[SELECTED]);}
+	if(isBattle){
+		if (tabkey.check()) {BSELECTED++; if(BSELECTED>squid[SELECTED].numUnits-1) {BSELECTED=0;}}
+	}else{
+		if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(squid[SELECTED]);}camera.center(squid[SELECTED]);}
+	}
 
 	if ((squid[SELECTED]) && (!squid[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(squid[SELECTED]);} camera.center(squid[SELECTED]);}
     //if(Mouse.clicked)
@@ -1477,8 +1568,14 @@ function update() {
 		}
 	}
 	
+	
 	if(zoomkey.check()) {
 		 maps[0].setZoom(camera);
+	}
+	
+	if(aikey.check()) {
+		 squid[SELECTED].battleAI++;
+		 if (squid[SELECTED].battleAI>2) {squid[SELECTED].battleAI=0;}
 	}
 	
 	if(rowkey.check()) {
@@ -1496,11 +1593,15 @@ function update() {
 		if (escapekey.check()) {isBattle=false;}
 	}
 	if(helpkey.check()){
-	    alert("Arrow keys=move camera, Z=zoom, X=cycle gamespeed,O=toggle ally AI,S=get squad status,shift=cycle units, space = pause");
+	    alert("Arrow keys=move camera, Z=zoom, X=cycle gamespeed,O=toggle ally AI,S=get squad status,shift=cycle units, space = pause, R=row,A=change AI,F=Flee");
 	}
 	if(speedkey.check()){
 		gamespeed++;
 		if (gamespeed>2) {gamespeed=0;}
+	}
+	
+	if(unitinfokey.check()){
+		unitinfo=!unitinfo;
 	}
 	if(statuskey.check()){
 		var texticle = "Units:" + squid[SELECTED].numSquadUnits() + " / " + squid[SELECTED].numUnits;
@@ -1508,6 +1609,13 @@ function update() {
 	}
 	if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
 	if(battleReport) {canvas.fillText(won, 430, 370);}
+	if(unitinfo) {
+		if((isBattle) || (battleReport)){
+			squid[SELECTED].units[BSELECTED].drawInfo();
+		}else {
+			squid[SELECTED].leader.drawInfo();
+		}
+	}
 }
 
 
