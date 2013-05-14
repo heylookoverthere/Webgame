@@ -256,7 +256,6 @@ function unit()
 	this.class=Math.floor(Math.random()*3);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
-	this.exp=0;
 	this.level=1;
 	this.def=1;
 	this.mdef=1;
@@ -289,7 +288,6 @@ function unit()
 	
 	this.getAttack= function(trg){
 	//if status==beserek attack harder
-	return 4;
 		if( this.attackType == AttackTypes.Physical ) {
 			return (this.attack-this.row)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
 		}else if( this.attackType == AttackTypes.Ranged ) { //no row penalty
@@ -396,7 +394,7 @@ function unit()
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
-			this.def=5;
+			this.def=2;
 			this.mdef=3;
 			this.cost=10;
 			this.canlead=true;
@@ -451,7 +449,7 @@ function unit()
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
-			this.def=5;
+			this.def=2;
 			this.mdef=5;
 			this.cost=10;
 			this.canlead=true;
@@ -768,6 +766,7 @@ function endBattle(usqd,esqd){
 		usqd.path=null;
 		console.log("loss");
 		won="Defeat!"
+		paused=true;
 	}
 //check for dead squads?
 	usqd.turns=0;
@@ -787,7 +786,7 @@ function endBattle(usqd,esqd){
 		esqd.units[i].hurting=0;
 	}
 	
-	paused=true;
+	
 };
 
 function textbox(msg) {  //draws a text box
@@ -1353,8 +1352,8 @@ function battleDraw()
 	if(battlePause) {//in battle menu
 		canvas.fillText("battle pause!", 350, 432);
 	}
-	if(!combatants[0].checkSurvivors) { combatants[0].damaged=0;endBattle(combatants[0],combatants[1]) };
-	if(!combatants[1].checkSurvivors) { combatants[1].damaged=0;endBattle(combatants[0],combatants[1]) };
+	if(!combatants[0].checkSurvivors) { combatants[0].damaged=0;combatants[1].damaged=10;endBattle(combatants[0],combatants[1]) };
+	if(!combatants[1].checkSurvivors) { combatants[1].damaged=0;combatants[0].damaged=10;endBattle(combatants[0],combatants[1]) };
 	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
 	if(battletick>battledelay) {battletick=0;}
 }
@@ -1380,7 +1379,7 @@ function update() {
 			battleendtick++; 
 			if (battleendtick>200){
 				battleReport=false;
-				paused=false;
+				//paused=true;
 				battleendtick=0;
 				}
 			}
