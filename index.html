@@ -313,11 +313,13 @@ function unit()
 		this.hp=this.maxhp;
 		this.maxmp+=4;
 		this.mp=this.maxmp;
-		this.speed+=1;
+		this.speed+=.2;
 		this.evade+=1;
 		this.def+=1;
 		this.mdef+=1;
 		this.attack+=1;
+		var tmpstr=this.name+ " gained a level!";
+		console.log(tmpstr);
 		//playSound("level");
 	};
 	
@@ -559,7 +561,13 @@ function squad() {
 	
 	this.flee= function()
 	{
-		alert("soon!");
+		if(Math.floor(Math.random()*30) > 15) {
+			this.turns=20;
+			this.damaged=-1;
+		}else
+		{
+			console.log("Couldn't escape!");
+		}
 	};
 	this.getHP=function(){
 		var herbert=0;
@@ -625,9 +633,12 @@ function squad() {
 		{
 			if(this.units[j].alive) {anylife=true;}
 		}
-		if (anylife==false) { this.alive=false; return false; var tmpstr=this.leader.name + "'s squad was eliminated.";
+		if (anylife==false) { 
+					this.alive=false;
+					var tmpstr=this.leader.name + "'s squad was eliminated.";
 					console.log(tmpstr);//todo MONSOLE}//playSound("death")
-			}
+					return false;
+		}
 		return true;
 	};
 
@@ -675,7 +686,7 @@ function squad() {
 	   if(this.team==1) {targ=null;} //map.setZoom(2);
 	   if ((targ!=null) && (targ.alive)) {
 			mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
-			var tmpstr=this.leader.name + "'s unit encountered an enemy @ " +this.x + " , " +this.y;
+			var tmpstr=this.leader.name + "'s squad encountered an enemy @ " +this.x + " , " +this.y;
 					console.log(tmpstr);//todo MONSOLEreturn;
 		};
        if( !this.nextMove ) {
@@ -772,20 +783,21 @@ function endBattle(usqd,esqd){
 		}else
 		{
 			usqd.x+=esqd.knockback;
-			if(usqd.x>MAP_WIDTH) {usqd.x=MAP_WIDTH-1;}
+			if(usqd.x>MAP_WIDTH-1) {usqd.x=MAP_WIDTH-1;}
 		}
 		if(esqd.y>usqd.y) {
 			usqd.y-=esqd.knockback;
-			if(usqd.y<0) {usqd.y=0;}
+			if(usqd.y<1) {usqd.y=1;}
 		}else
 		{
 			usqd.y+=esqd.knockback;
-			if(usqd.y>MAP_HEIGHT) {usqd.y=MAP_HEIGHT-1;}
+			if(usqd.y>MAP_HEIGHT-1) {usqd.y=MAP_HEIGHT-1;}
 		}
 		usqd.path=null;
 		console.log("loss");
 		won="Defeat!"
-		paused=true;
+		if(usqd.turns==20) {won = "Ran away";}
+		paused=true; //TODO
 	}
 //check for dead squads?
 	usqd.turns=0;
