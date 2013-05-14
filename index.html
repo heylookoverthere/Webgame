@@ -66,7 +66,7 @@ var mX=120;
 var mY=320;
 
 names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn"];
-names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","jiqui","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei"];
+names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei"];
 var namesused=new Array(2);
 namesused[0]=new Array(99);
 namesused[1]=new Array(99);
@@ -291,11 +291,11 @@ function unit()
 	this.getAttack= function(trg){
 	//if status==beserek attack harder
 		if( this.getAttackType() == AttackTypes.Physical ) {
-			return (this.attack-this.row)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
+			return (this.attack-this.row)+this.equipAttack()+(this.level*.5)+Math.floor(Math.random()*3);
 		}else if( this.getAttackType() == AttackTypes.Ranged ) { //no row penalty
-			return (this.attack)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
+			return (this.attack)+this.equipAttack()+(this.level*.5)+Math.floor(Math.random()*3);
 		}else if( this.getAttackType() == AttackTypes.Magical ) {  //no row penalty
-			return (this.mag)+this.equipment[0].mag+(this.level*.5)+Math.floor(Math.random()*3);
+			return (this.mag)+this.equipMag()+(this.level*.5)+Math.floor(Math.random()*3);
 		}else if( this.getAttackType() == AttackTypes.Heal ) {
 			return 0-this.mag;
 		}
@@ -334,7 +334,7 @@ function unit()
 		texticles= "Level: " + this.level;
 		canvas.fillText(texticles, 60, 172);
 		
-		texticles= "Exp: " + this.exp ;
+		texticles= "Exp: " + this.exp +"/"+this.nextLevel;
 		canvas.fillText(texticles, 60, 192);
 		
 		if(this.class==0) {var texticles= "Class: Bear"; }
@@ -391,6 +391,7 @@ function unit()
 	
 	this.levelUp=function(){
 		this.level++;
+		this.nextLevel=20+(5*this.level);
 		this.maxhp+=4;
 		this.hp+=4;
 		this.maxmp+=4;
@@ -409,14 +410,32 @@ function unit()
 		return this.attackType[this.row];
 	};
 	
+	this.equipDef=function(){
+		return this.equipment[0].def+this.equipment[1].def+this.equipment[2].def;
+	};
+	this.equipMDef=function(){	
+		return this.equipment[0].mdef+this.equipment[1].mdef+this.equipment[2].mdef;
+	};
+	this.equipMag=function(){
+		return this.equipment[0].mag+this.equipment[1].mag+this.equipment[2].mag;
+	};
+	this.equipSpeed=function(){
+		return this.equipment[0].speed+this.equipment[1].speed+this.equipment[2].speed;
+	};
+	this.equipAttack=function(){
+		return this.equipment[0].attack+this.equipment[1].attack+this.equipment[2].attack;
+	};
+	this.equipEvade=function(){
+		return this.equipment[0].evade+this.equipment[1].evade+this.equipment[2].evade;
+	};
+	
 	this.getDef= function(attacker){
-//		loop through all equip and total def and mdef.
 		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
-			return this.def+this.equipment[1].def;
+			return this.def+this.equipDef();
 			
 		}else
 		{
-			return this.mdef+this.equipment[1].mdef;
+			return this.mdef+this.equipMDef();
 		}
 		
 	};
@@ -454,6 +473,7 @@ function unit()
 				var delt=Math.floor(this.getAttack()-targe.getDef(this));
 				if (delt<0) {delt=1;};
 				if(Math.floor(Math.random()*10) > targe.evade) {
+				//TODO critcals!
 					this.giveExp(delt);
 					targe.hurt(delt); 
 					this.attacking=10;
@@ -467,7 +487,7 @@ function unit()
 					{
 						console.warn(tmpstr);
 					}
-				}else {this.attacking=10; usqd.turns++;this.attacking=10;} //miss
+				}else {this.attacking=10; usqd.turns++;this.attacking=10; tmpstr = this.name + " missed "+ targe.name; console.log(tmpstr);} //miss
 			}else {endBattle(usqd,esqd);}
 			
 		}
@@ -488,7 +508,7 @@ function unit()
 		if(cla==0) { //bear
 			this.maxhp=60;
 			this.hp=60;
-			this.attack=7
+			this.attack=14
 			this.maxmp=40;
 			this.speed=2;
 			this.luck=5;
@@ -507,7 +527,7 @@ function unit()
 		}else if(cla==3) { //frog
 			this.maxhp=60;
 			this.hp=60;
-			this.attack=9;
+			this.attack=11;
 			this.maxmp=40;
 			this.speed=1;
 			this.luck=5;
@@ -525,7 +545,7 @@ function unit()
 		}else if(cla==2) { //wizard
 			this.maxhp=50;
 			this.hp=50;
-			this.attack=4;
+			this.attack=5;
 			this.maxmp=40;
 			this.speed=1;
 			this.luck=5;
@@ -536,7 +556,7 @@ function unit()
 			if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
 			this.def=2;
 			this.mdef=5;
-			this.mag=10;
+			this.mag=20;
 			this.cost=10;
 			this.canlead=true;
 			this.attackType[0]=AttackTypes.Physical;
@@ -544,9 +564,10 @@ function unit()
 		}else if(cla==1) { //shoe
 			this.maxhp=30;
 			this.hp=30;
-			this.attack=5;
+			this.attack=9;
 			this.maxmp=40;
 			this.speed=2;
+			this.evade=4;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
@@ -744,8 +765,6 @@ function squad() {
 		}
 		if (anylife==false) { 
 					this.alive=false;
-					var tmpstr=this.leader.name + "'s squad was eliminated.";
-					console.log(tmpstr);//todo MONSOLE}//playSound("death")
 					return false;
 		}
 		return true;
@@ -1504,8 +1523,21 @@ function battleDraw()
 	if(battlePause) {//in battle menu
 		canvas.fillText("battle pause!", 350, 432);
 	}
-	if(!combatants[0].checkSurvivors) { combatants[0].damaged=0;combatants[1].damaged=10;endBattle(combatants[0],combatants[1]) };
-	if(!combatants[1].checkSurvivors) { combatants[1].damaged=0;combatants[0].damaged=10;endBattle(combatants[0],combatants[1]) };
+	if((combatants[0].alive)&& (!combatants[0].checkSurvivors()))   { 
+		var tmpstr=combatants[0].leader.name + "'s squad was eliminated.";
+		console.log(tmpstr); 
+		combatants[0].damaged=0;
+		combatants[1].damaged=10;
+		endBattle(combatants[0],combatants[1]);
+	}
+	if((combatants[1].alive)&& (!combatants[1].checkSurvivors()))   
+	{ 
+		var tmpstr=combatants[1].leader.name + "'s squad was eliminated.";
+		console.log(tmpstr); 
+		combatants[1].damaged=0;
+		combatants[0].damaged=10;
+		endBattle(combatants[0],combatants[1]);
+	}
 	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
 	if(battletick>battledelay) {battletick=0;}
 }
