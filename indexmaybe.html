@@ -1,0 +1,1477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Ogre Battle!</title>
+    <link href="/stylesheets/screen.css" media="all" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script><script language="javascript" src="javascripts/jquery.hotkeys.js" type="text/javascript"></script><script language="javascript" src="javascripts/key_status.js" type="text/javascript"></script><script language="javascript" src="javascripts/util.js" type="text/javascript"></script><script language="javascript" src="javascripts/sprite.js" type="text/javascript"></script><script language="javascript" src="javascripts/sound.js" type="text/javascript"></script>
+  </head>
+  <body>
+	<audio id="myAudio" preload="auto">
+    <source src="songu.mp3" type="audio/mpeg" />
+	Your browser does not support the audio element.
+   	</audio>
+
+	<audio id="death" preload="auto">
+    <source src="sounds/dying.wav" type="audio/wav" />
+    </audio>
+
+	<audio id="udeath" preload="auto">
+    <source src="sounds/Enemy_Hit.wav" type="audio/wav" />
+    </audio>
+
+    <h1>Hit H for controls. </h1>
+
+	    <script type='text/javascript' src="graph.js"></script>
+	    <script type='text/javascript' src="astar.js"></script>
+		<script type='text/javascript'>
+      //<![CDATA[
+
+$(document).bind("contextmenu",function(e){
+	return false;
+    }); 
+
+var textPause=false;
+var won="";
+var textText="";
+var CANVAS_WIDTH = 900;
+var CANVAS_HEIGHT = 640;
+var MAP_WIDTH = 120;
+var MAP_HEIGHT = 80;
+var FPS = 30;
+var LAVA_RATE=2000;
+var WATER_RATE=1000;
+var BURN_RATE=100;
+var CHARANI_RATE= 200;
+var FALL_DMG=900;
+var SPAWN_X=22;
+var SPAWN_Y=19;
+var GRAVITY_RATE=5;
+var TEAM_SIZE = 12;
+var SELECTED=0;
+var tick=0;
+var gamespeed=0;//2;
+var isBattle=false;
+var battlelength=10;
+var combatants=new Array(2);
+var battledelay=10;
+var battletick=0;
+var battleenddelay=10;
+var battleendtick=0;
+//var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
+var names= new Array (2);
+names[0]=new Array(99);
+names[1]=new Array(99);
+var mX=120;
+var mY=320;
+
+names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn"];
+names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","jiqui","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei"];
+var namesused=new Array(2);
+namesused[0]=new Array(99);
+namesused[1]=new Array(99);
+for(i=0;i<99;i++){namesused[0][i]=false;namesused[1][i]=false;}
+
+var darkgrasssprite = Sprite("darkgrass"); //begin loading images.  Eventually I should put them all on one .png file
+var grasssprite = Sprite("grass");
+var watersprite = Sprite("water");
+var stonesprite = Sprite("stone");
+var mossysprite = Sprite("mossy");
+var selector = Sprite("cursor");
+var flagsprite = Sprite("ironsword");
+var explosionsprite=new Array(4);
+explosionsprite[0] =Sprite("explosion0");
+explosionsprite[1] =Sprite("explosion1");
+explosionsprite[2] =Sprite("explosion2");
+explosionsprite[3] =Sprite("explosion3");
+
+
+
+var canvasElement = $("<canvas width='" + CANVAS_WIDTH + 
+		      "' height='" + CANVAS_HEIGHT + "'></canvas");
+var canvas = canvasElement.get(0).getContext("2d");
+canvasElement.appendTo('body');
+//todo:  find some way to put this in map or tile?
+var tileani=0;
+var anicount=0;
+var anirate=1000;
+var lastani=0;
+var gotall=false;
+var numsounds=0;
+var soundsplaying ="";
+var timestamp = new Date(); 
+var milliseconds = timestamp.getTime();
+var lasttime=0;
+var battlespeed=50;
+var paused=false;
+var mappause=false;
+var battleReport=false;
+var battlePause=false;
+
+
+function playSound(name){
+    
+    nerp=document.getElementById(name);
+    if(nerp.ended == true || nerp.currentTime == 0){
+	nerp.play()
+	    numsounds++;
+    }
+    
+};
+
+    
+AttackTypes = {};
+AttackTypes.Physical = 0; 
+AttackTypes.Ranged = 1;
+AttackTypes.Magical = 2;
+AttackTypes.Heal = 3;
+AttackTypes.InflictStatus = 4;
+AttackTypes.HealStatus = 5; 
+AttackTypes.someweirdshitthatignoresdefensemaybe =6;
+
+
+
+function akey(k) {  //represents a keyboard button
+    k = k || "space";
+    this.key =k;
+    this.aflag=false;
+	this.dflag=false;
+    this.check= function(){
+	if (keydown[this.key]) { 
+	    this.aflag=true;
+	    return false;
+	}
+	if((!keydown[this.key]) && (this.aflag==true)){
+	    this.aflag=false;
+	    return true;
+	}
+    };
+	this.checkDown= function(){
+	if ((keydown[this.key] )  && (!this.dflag)) { 
+	    this.dflag=true;
+	    return true;
+	}
+	if(!keydown[this.key]){
+	    this.dflag=false;
+	    return false;
+	}
+    };
+    return this;
+}
+
+function status()
+{
+	this.haste=false;
+	this.slow=false;
+	this.beserk=false;
+	this.posion=false;
+	this.mute=false;
+	this.reflect=false;
+	this.protect=false;
+	this.regen=false;
+	this.imp=false;
+	this.HIV=false;
+
+};
+
+function equipment()
+{
+	this.name="";
+	this.slot=0;
+	this.value=0;
+	this.attack=0;
+	this.def=0;
+	this.mdef=0;
+	this.evade=0;
+	this.speed=0;
+	this.mag=0;
+	this.prefix="Shitty ";
+	this.sprite=null;
+	this.haste=false;
+	this.slow=false;
+	this.beserk=false;
+	this.posion=false;
+	this.mute=false;
+	this.reflect=false;
+	this.protect=false;
+	this.regen=false;
+	this.imp=false;
+	this.HIV=false;
+	this.tooltip = "WTF are you doing with a shotgun?";
+
+};
+
+unarmed = new equipment();
+noarmor = new equipment();
+noarmor.slot=1;
+noaccessory = new equipment();
+noaccessory.slot=2;
+swords=new Array(2);
+swords[0]= new equipment();
+swords[0].name="Wooden Sword";
+swords[0].attack=3;
+swords[0].value=10;
+swords[0].tooltip = "It is dangerous to go alone."
+
+swords[1]= new equipment();
+swords[1].attack=10;
+swords[1].name="Valyrian Sword";
+swords[1].value=100;
+swords[1].tooltip = "Forged in the fires of Valyria, New Jersey."
+
+robe= new equipment();
+robe.slot=1;
+robe.name="Shirt";
+robe.def=1;
+robe.mdef=5;
+robe.value=20;
+robe.tooltip = "Should conceal your erection."
+
+breastplate= new equipment();
+breastplate.slot=1;
+breastplate.name="Breastplate";
+breastplate.def=6;
+breastplate.mdef=1;
+breastplate.value=50;
+breastplate.tooltip = "Why are there nipples on it?"
+
+
+
+
+function unit()
+{
+	this.hp=40;
+	this.gender=Math.floor(Math.random()*2);
+	this.name="Miles";
+	this.mp=0;
+	this.maxhp=40;
+	this.maxmp=40;
+	this.nextLevel=20;
+	this.speed=1;
+	this.evade=1;
+	this.luck=5;
+	this.ali=50;
+	this.attackType=new Array(2);
+	this.attackType[0]=AttackTypes.Physical;
+	this.attackType[1]=AttackTypes.Physical;
+	this.class=Math.floor(Math.random()*3);
+	this.row=Math.floor(Math.random()*2);
+	this.viewrange=5;
+	this.exp=0;
+	this.level=1;
+	this.def=1;
+	this.mdef=1;
+	this.attack=10;
+	this.mag=5;
+	this.alive=true;
+	this.attacking=0;
+	this.hurting=0;
+    this.atb=0;
+	this.canlead = true;
+	this.cost = 10;
+	this.gambits = null;
+	this.exp=0;
+	this.level=1;
+	this.equipment=new Array(3);
+	this.equipment[0]=unarmed;
+	this.equipment[1]=noarmor;
+	this.equipment[2]=noaccessory;
+	var nami=Math.floor(Math.random()*99);
+	//this.name=names[this.gender][nami]
+	
+	while(true) {
+		if(namesused[this.gender][nami]) 
+		{
+			nami=Math.floor(Math.random()*99);
+		}else {break;}
+	}
+	this.name=names[this.gender][nami];
+	//this.namesused[this.gender][nami]=true;
+	
+	this.getAttack= function(trg){
+	//if status==beserek attack harder
+		if( this.attackType == AttackTypes.Physical ) {
+			return (this.attack-this.row)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
+		}else if( this.attackType == AttackTypes.Ranged ) { //no row penalty
+			return (this.attack)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
+		}else if( this.attackType == AttackTypes.Magical ) {  //no row penalty
+			return (this.mag)+this.equipment[0].mag+(this.level*.5)+Math.floor(Math.random()*3);
+		}else if( this.attackType == AttackTypes.Heal ) {
+			return 0-this.mag;
+		}
+	};
+	
+	this.giveExp= function(val){
+		this.exp+=val;
+		if (this.exp>this.nextLevel) {
+			this.exp=0;
+			this.levelUp();
+		}
+	};
+	
+	this.levelUp=function(){
+		this.level++;
+		this.maxhp+=4;
+		this.maxmp+=4;
+		this.speed+=1;
+		this.evade+=1;
+		this.def+=1;
+		this.mdef+=1;
+		this.attack+=1;
+		//playSound("level");
+	};
+	
+	this.getAttackType=function(){
+		return this.attackType[this.row];
+	};
+	
+	this.getDef= function(attacker){
+//		loop through all equip and total def and mdef.
+		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
+			return this.def+this.equipment[1].def;
+			
+		}else
+		{
+			return this.mdef+this.equipment[1].mdef;
+		}
+	};
+	this.hasStatus=function(stats){
+		//switch(stats)
+	};
+	this.hurt = function(dmg){
+		this.hp-=dmg;
+		if (this.hp<0) {this.hp=0; this.alive=false;}//playSound("udeath");}
+	}; 
+	this.update = function (usqd,esqd){
+		if(paused) {return;}
+		if(battleReport) {return;}
+		if(battlePause) {return;}
+		if (this.attacking>0) {this.attacking--; return;}
+		if (this.hurting>0) {this.hurting--; return;}
+		if (this.atb>battlespeed) {
+			//gambits, attack
+			this.atb=0;
+			var targe=null;
+			if (usqd.battleAI==0) //weakest
+			{
+				targe=esqd.getWeakest();
+			}else if (usqd.battleAI==1) //Strongest
+			{
+				targe=esqd.getStrongest();
+			}
+			if((esqd!=null) && (esqd.alive)){
+				if(targe==null) { esqd.checkSurvivors(); return;}
+				var delt=Math.floor(this.getAttack()-targe.getDef(this));
+				if(Math.floor(Math.random()*10) > targe.evade) {
+					this.giveExp(delt);
+					targe.hurt(delt); 
+					this.attacking=10;
+					targe.hurting=20;
+					usqd.turns++;
+					usqd.damaged+=delt;
+				}else {this.attacking=10; usqd.turns++;this.attacking=10;} //miss
+			}else {endBattle(usqd,esqd);}
+			
+		}
+		if((this.alive) &&(this.hp<1)) {
+			this.hp=0; 
+			this.alive=false;
+			usqd.checkSurvivors();
+		}
+
+
+
+		this.atb+=this.speed;
+	};
+	this.setClass=function() {
+		var cla=this.class;
+		if(cla==0) { //bear
+			this.maxhp=60;
+			this.hp=50;
+			this.attack=7
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=5;
+			this.mdef=3;
+			this.cost=10;
+			this.canlead=true;
+			this.equipment[0]=swords[0];
+			this.equipment[1]=breastplate;
+			this.sprite = Sprite("bear1");
+			if (this.gender==1) {this.sprite = Sprite("beargirl");}
+		}else if(cla==3) { //frog
+			this.maxhp=60;
+			this.hp=60;
+			this.attack=9;
+			this.maxmp=40;
+			this.speed=1;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=2;
+			this.mdef=5;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Ranged;
+			this.sprite = Sprite("frogman1");
+			if (this.gender==1) {this.sprite = Sprite("froggirl");}
+		}else if(cla==2) { //wizard
+			this.maxhp=40;
+			this.hp=50;
+			this.attack=4;
+			this.maxmp=40;
+			this.speed=1;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.sprite = Sprite("wizard");
+			this.equipment[1]=robe;
+			if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
+			this.def=2;
+			this.mdef=5;
+			this.mag=10;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Magical;
+		}else if(cla==1) { //shoe
+			this.maxhp=30;
+			this.hp=30;
+			this.attack=5;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=5;
+			this.mdef=5;
+			this.cost=10;
+			this.canlead=true;
+			this.sprite = Sprite("shoe");
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Physical;
+			if (this.gender==1) {this.sprite = Sprite("shoegirl");}
+		}
+	};
+		this.setClass();
+		this.hp=this.maxhp;
+		this.mp=this.maxmp;
+		if (this.gender==2) {this.name="Nancy";}
+}
+
+function numSquads(team){
+	var count=0;
+	for(var i=0;i<TEAM_SIZE;i++) 
+	{
+		if(team==0) {if(squid[i].alive) {count++;} }
+		if(team==1) {if(frogs[i].alive) {count++;} }
+	}
+	return count;
+};
+
+function numArmyUnits(team){
+	var count=0;
+	if(team==0){
+		for(var i=0;i<TEAM_SIZE;i++) 
+		{
+			if(squid[i].alive) 
+			{
+				count+=squid[i].numSquadUnits();
+			}
+		}
+	}else if (team==1) {
+		 for(var i=0;i<TEAM_SIZE;i++) 
+		 {
+			 if(frogs[i].alive) 
+				{
+					for(var j=0;j<frogs[i].numUnits;j++){
+						if(frogs[i].units[j].alive) {count++;}
+					}
+				}
+
+		}
+	}
+	return count;
+};
+
+
+
+function squad() {
+	//list of units
+	//list of items
+	//list of blokemon
+	//leader
+	//AI 
+	//target
+	//waypoints?
+	this.x = 0;
+	this.y = 0;
+	this.battleAI=1;
+	this.alive=true;
+    this.numUnits=Math.floor(Math.random()*3)+3;//3;
+	this.battling=false;
+	this.units = new Array (5);
+	this.units[0]= new unit();
+	this.units[1]= new unit();
+	this.units[2]= new unit();
+	this.units[3]= new unit();
+	this.units[4]= new unit();
+	this.k
+	//for(var i=0;i<this.numUnits;i++) { this.units[i].alive=true;}
+	this.leader = this.units[0];
+	this.width=32;
+	this.height=32;
+	this.bx = 8;
+	this.by = 8;
+	this.dx = 0;
+	this.dy = 0;
+	this.team=0;
+	this.damaged=0;
+	this.ID=89;
+	this.turns=0;
+	this.sprite = this.leader.sprite;
+	this.path = null;
+	this.nextMove = null;
+	this.nextTile = {x: this.x, y: this.y};
+	this.inNextTile = false;
+	this.row=function(){
+		for (var i=0;i<this.numUnits;i++)
+		{
+				if (this.units[i].row==0) { this.units[i].row=1;}
+				else if (this.units[i].row==1) { this.units[i].row=0;}
+		}
+	};
+	this.getHP=function(){
+		var herbert=0;
+		for (var i=0;i<this.numUnits;i++) {
+			if(this.units[i].alive) {
+				herbert=herbert+this.units[i].hp;
+			}
+		}
+		return herbert;
+	};
+	this.getMaxHP=function(){
+		var herbert=0;
+		for (var i=0;i<this.numUnits;i++) {
+			if(this.units[i].alive) {
+				herbert=herbert+this.units[i].maxhp;
+			}
+		}
+		return herbert;
+	};
+	this.getMP=function(){
+		var herbert=0;
+		for (var i=0;i<this.numUnits;i++) {
+			if(this.units[i].alive) {
+				herbert=herbert+this.units[i].mp;
+			}
+		}
+		return herbert;
+	};
+	this.pickNewLeader=function() {
+		for(var i=0;i<this.numUnits;i++)
+		{	
+			if((this.units[i].alive) && (this.units[i].canlead)) {return this.units[i];}
+		}
+		this.alive=false;
+		return null;
+	};
+	this.numSquadUnits=function() {
+	var count=0;
+	if(this.alive) 
+	{
+		for(var j=0;j<this.numUnits;j++)
+		{
+			if(this.units[j].alive) {count++;}
+		}
+	}
+	return count;
+   };
+
+	this.getStrongest=function(){
+		var strongest=null;
+		var h=0;
+		for(var i=0;i<this.numUnits;i++){
+			if(this.units[i].hp>h) {
+				h=this.units[i].hp;
+				strongest=this.units[i];
+			}
+		}
+		return strongest;
+	};
+	this.checkSurvivors=function() { 	//check for any living units if not kill squad.
+		var anylife=false;
+		for(var j=0;j<this.numUnits;j++)
+		{
+			if(this.units[j].alive) {anylife=true;}
+		}
+		if (anylife==false) { this.alive=false; return false;}//playSound("death")}
+		return true;
+	};
+
+	this.getWeakest=function() {
+		var weakest=null;
+		var h=999;
+		for(var i=0;i<this.numUnits;i++){
+			if((this.units[i].hp<h) && (this.units[i].hp>0)) {
+				h=this.units[1].hp;
+				weakest=this.units[i];
+			}
+		}
+		return weakest;
+	};
+
+	this.draw = function(cam) {
+		  if (!this.alive) {return;} //also check visual range for enemies
+		  this.sprite.draw(canvas,
+                                   (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
+                                   (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
+        };
+
+	this.drawdest = function(cam) {
+		  if (!this.alive) {return;} 
+		  flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / maps[0].zoom, ((this.dy * 16 - cam.y * 16)+8) / maps[0].zoom);
+        };
+ 
+	this.checkcollision= function() {
+		for(var i=0;i<TEAM_SIZE;i++){
+			if (this.team==0) {
+				if ((this.alive)&&(frogs[i].x+2>this.x) && (frogs[i].x-2<this.x) && (frogs[i].y+2>this.y) && (frogs[i].y-2<=this.y)) {return frogs[i];} //TODO:START BATTLE
+			}else if(this.team==1) {
+				if ((this.alive)&&(squid[i].x+2>this.x) && (squid[i].x-2<this.x) && (squid[i].y+2>this.y) && (squid[i].y-2<=this.y)) {return squid[i];}
+
+			}
+		}
+		return null;
+	};
+	this.update = function(map) {
+		if ((paused) || (!this.alive) || (battleReport)) {return;}
+
+	   targ=this.checkcollision();
+	   //if(this.battling) {this.battle(targ);}
+	   //if(isBattle) {return;}
+	   if(this.team==1) {targ=null;} //map.setZoom(2);
+	   if ((targ!=null) && (targ.alive)) { mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;return;};
+       if( !this.nextMove ) {
+	     this.updateNextMove();
+	   }
+	   if( !this.nextMove ) {
+	     return;
+	   }
+	   var terrain = map.tiles[this.nextTile.x][this.nextTile.y].data;
+	   var speed = (terrain == 4 ? 2 : 4);
+	   if((terrain==4) &&(this.units[0].class==3)) {speed=4};
+
+           speed = speed / map.zoom;
+
+	   if( this.nextMove.x > this.x ) {
+	     this.bx += speed;
+	   } else if( this.nextMove.x < this.x ) {
+	     this.bx -= speed;
+	   }
+	   if( this.nextMove.y > this.y ) {
+	     this.by += speed;
+	   } else if( this.nextMove.y < this.y ) {
+	     this.by -= speed;
+	   }
+
+	   if( !this.inNextTile && ( this.bx <= 0 || this.bx >= 16 || this.by <= 0 || this.by >= 16 )) {
+	   	 this.nextTile = {};
+		 this.nextTile.x = this.nextMove.x;
+		 this.nextTile.y = this.nextMove.y;
+//		 if( this.bx == 0 ) { this.bx = 16 } else if( this.bx == 16 ) { this.bx = 0; } 
+//		 if( this.by == 0 ) { this.by = 16 } else if( this.by == 16 ) { this.by = 0; }		
+		 this.inNextTile = true;
+	   }
+	   if(( this.bx >= 24 || this.bx <= -8 ) || ( this.by <= -8 || this.by >= 24 )) {
+		 this.bx = this.by = 8;
+		 this.inNextTile = false;
+		 this.x = this.nextMove.x;
+		 this.y = this.nextMove.y;
+	  	 this.nextTile = {x: this.x, y: this.y};
+
+		 this.nextMove = null;
+
+	   }
+	}
+	this.updateNextMove = function() {
+	  if( !this.path ) {
+	    return;
+	  }
+	  this.nextMove = this.path.shift();
+	  if( !this.nextMove ) {
+	    this.path = null; return;
+	  }
+	};
+	this.isWalking = function() {
+	  return this.path != null;
+	};
+	this.setDestination = function(x, y, map) {
+	  this.path = map.getPath(this.x, this.y, x, y,this);
+	  this.dx=x;
+	  this.dy=y;
+	};
+}
+
+function endBattle(usqd,esqd){
+	isBattle=false;
+	battleReport=true;
+	battleendtick=100;
+	console.log(usqd.damaged,esqd.damaged);
+	if(usqd.damaged>=esqd.damaged) //win
+	{
+		if(usqd.x>esqd.x) {
+			esqd.x-=usqd.knockback;
+			if(esqd.x<1) {esqd.x=0;}
+		}else
+		{
+			esqd.x+=usqd.knockback
+			if(esqd.x>MAP_WIDTH) {esqd.x=MAP_WIDTH-1;}
+		}
+		if(usqd.y>esqd.y) {
+			esqd.y-=usqd.knockback;
+			if(esqd.y<1) {esqd.y=0;}
+		}else
+		{
+			esqd.y+=usqd.knockback;
+			if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
+		}
+		esqd.path=null;
+		console.log("win @", usqd.x,usqd.y)
+		won="Victory!";
+	}else{//lose
+		if(esqd.x>usqd.x) {
+			usqd.x-=esqd.knockback;
+			if(usqd.x<1) {usqd.x=1;}
+		}else
+		{
+			usqd.x+=esqd.knockback;
+			if(usqd.x>MAP_WIDTH) {usqd.x=MAP_WIDTH-1;}
+		}
+		if(esqd.y>usqd.y) {
+			usqd.y-=esqd.knockback;
+			if(usqd.y<0) {usqd.y=0;}
+		}else
+		{
+			usqd.y+=esqd.knockback;
+			if(usqd.y>MAP_HEIGHT) {usqd.y=MAP_HEIGHT-1;}
+		}
+		usqd.path=null;
+		console.log("loss");
+		won="Defeat!"
+	}
+//check for dead squads?
+	usqd.turns=0;
+	usqd.damaged=0;
+	esqd.turns=0;
+	esqd.damaged=0;
+	for(var i=0;i<usqd.numUnits;i++)
+	{
+		usqd.units[i].atb=0;
+		usqd.units[i].attacking=0;
+		usqd.units[i].hurting=0;
+	}
+	for(var i=0;i<esqd.numUnits;i++)
+	{
+		esqd.units[i].atb=0;
+		esqd.units[i].attacking=0;
+		esqd.units[i].hurting=0;
+	}
+	
+	paused=true;
+};
+
+function textbox(msg) {  //draws a text box
+    canvas.save();
+    canvas.globalAlpha=0.80;
+    canvas.fillStyle = "#DCDCDC";
+    canvas.fillRect(30,400,840,210);
+    
+    canvas.fillStyle = "#483D8B ";
+    canvas.fillRect(40,410,820,190);
+    
+    canvas.font = "16pt Calibri";
+    canvas.textAlign = "left";
+    canvas.textBaseline = "middle";
+    canvas.fillStyle = "white";
+    canvas.fillText(msg, 60,410+15);
+    
+    canvas.restore();
+};
+
+function armyInfo(sq){
+	canvas.font = "14pt Calibri";
+	canvas.textAlign = "left";
+	canvas.textBaseline = "middle";
+	canvas.fillStyle = "white";
+	canvas.fillText("Selected:", 760, 8);
+	canvas.fillText(SELECTED, 840, 8);
+	canvas.fillText("Squads:", 760, 24);
+	canvas.fillText(numSquads(0), 840, 24);
+	canvas.fillText("Units:", 760, 38);
+	canvas.fillText(numArmyUnits(0), 840, 38);
+	canvas.fillText("UpS:", 760, 56);
+	canvas.fillText(squid[SELECTED].numSquadUnits(), 840, 56);
+
+};
+
+function squadInfo(sq){
+	canvas.font = "14pt Calibri";
+	canvas.textAlign = "left";
+	canvas.textBaseline = "middle";
+	canvas.fillStyle = "white";
+	/*for(var i=0;i<sq.numUnits;i++)
+	{
+		var closs="";
+		if(sq.units[i].class==0) {closs="bear";}
+		if(sq.units[i].class==1) {closs="Shoe";}
+		if(sq.units[i].class==2) {closs="Wizard";}
+		if(sq.units[i].class==3) {closs="Frog";}
+		canvas.fillText("HP:", 760, 94+i*45);
+		canvas.fillText(sq.units[i].hp, 840, 94+i*45);
+		canvas.fillText("alive?:", 760, 109+i*45);
+		canvas.fillText(sq.units[i].alive, 840, 109+i*45);
+		canvas.fillText(closs, 760, 122+i*45);
+
+	}*/
+};
+
+function drawmousetext(targ,cam) { //draws unit status info
+    canvas.font = "14pt Calibri";
+    canvas.textAlign = "center";
+    canvas.textBaseline = "middle";
+	canvas.fillStyle = "blue";
+	if(targ.team==1) {	canvas.fillStyle = "red";}
+
+    tempstr = targ.leader.name+": "+targ.getHP()+ " / " +targ.getMaxHP();
+    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[0].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[0].zoom+targ.height+8);
+    
+    canvas.fillStyle = "#5F9EA0";
+};
+
+    isOver= function(targ,cam){ //is the mouse over the player//object //todo:not right!!
+	if((mX>(targ.x-cam.x)*16/maps[0].zoom) && (mX<((targ.x-cam.x)*16+targ.width*maps[0].zoom)/maps[0].zoom) &&(mY>((targ.y-cam.y)*16)/maps[0].zoom) &&(mY<((targ.y-cam.y)*16+targ.height)/maps[0].zoom)) {return true;}
+	return false;
+    };
+
+function mouseClick(e) {  //represents the mouse
+
+	  e.preventDefault();    
+  	  mX = e.pageX - canvasElement.get(0).offsetLeft;
+	  mY = e.pageY - canvasElement.get(0).offsetTop;	
+
+      tx=Math.floor(mX/16) * maps[0].zoom;
+	  ty=Math.floor(mY/16) * maps[0].zoom;
+
+//console.log("click", tx, ty);
+	  onSomething=null;
+	  for(var i=0;i<TEAM_SIZE;i++)
+	  {
+		if (isOver(squid[i],camera)) {onSomething=squid[i];SELECTED=i;}
+		//if((mX>(squid[i].x-camera.x)*16/maps[0].zoom) && (mX<(squid[i].x-camera.x)*16+squid[i].width/maps[0].zoom) &&(mY>(squid[i].y-camera.y)*16/maps[0].zoom) &&(mY<(squid[i].y-camera.y)*16+(squid[i].height*maps[0].zoom)/maps[0].zoom)) { onSomething=squid[i];SELECTED=i;}
+	  }
+	  if (onSomething==null){
+		  if( squid[SELECTED].path ) { squid[SELECTED].path = null; return; }
+		  squid[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
+	  }
+
+};
+
+mouseXY= function(e) {
+	if (!e) var e = event;
+	mX = e.pageX - canvasElement.get(0).offsetLeft;
+	mY = e.pageY - canvasElement.get(0).offsetTop;
+			
+    };
+
+
+
+document.body.addEventListener("click", mouseClick, false);
+
+var ksavekey=new akey("o"); //define the different keys
+var loadkey=new akey("l");
+
+var randomwalk=false;
+
+var pausekey=new akey("space");
+var escapekey=new akey("q");
+var serversavekey=new akey("i");
+var serverloadkey=new akey("k");
+var upkey=new akey("up");
+var rightkey=new akey("right");
+var downkey=new akey("down");
+var leftkey=new akey("left");
+var tabkey=new akey("shift");
+var zoomkey=new akey("z");
+var helpkey=new akey("h");
+var speedkey=new akey("x");
+var statuskey=new akey("s");
+var rowkey=new akey("r");
+
+var camera = {  //represents the camera, aka what part of the map is on screen
+    x: 0,
+    y: 0,
+    width: 60,
+    height: 40,
+	zoom: 1,
+
+    center: function(targ) {
+	if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
+	tx=targ.x-26;
+	ty=targ.y-20;
+	if (tx<0) {tx=0;}
+	if (ty<0) {ty=0;}
+	if (tx>MAP_WIDTH-this.width) {tx=MAP_WIDTH-this.width;}
+	if (ty>MAP_HEIGHT-this.height) {ty=MAP_HEIGHT-this.height;}
+
+	this.x=tx;
+	this.y=ty;
+    },
+    check: function() {
+	this.x.clamp(0, MAP_WIDTH-60);
+	this.y.clamp(0, MAP_HEIGHT-40);
+	if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
+    },
+    rX: function(fx) {
+	return fx-this.x;
+    },
+    rY: function(fy) {
+	return fy-this.y;
+    }
+};
+
+
+
+
+var bColors = ["#008000","#006400", "#FF4500", "#000080", "#696969", "#800080", "#808000", "#A52A2A", "#8B4513", "#FFDEAD", "#FFFF40","#000080" , "#FFFF80"]; //list of colors for radar/a few other things
+
+function makeNewTile() { //the Map is made of a 2D array of tiles.
+    var tile = {
+	width: 16,
+	height: 16,
+	x: 0,
+	y: 0,
+
+	ani:0,
+	color: "#FFC020",
+	data: 0,
+	draw: function(cam) { 
+	    if(this.data==0){
+		grasssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }else if(this.data==1){
+		stonesprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }else if(this.data==2){
+		mudsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }else if(this.data==3){
+		crystalsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
+	    }else if(this.data==4){
+		mossysprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }else if(this.data==5){
+		stonebricksprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }else if(this.data==6){
+		plankssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+
+	    }else if(this.data==42){
+		watersprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }else{  //if strange data, draw a solid color
+		canvas.fillStyle = bColors[0]; 
+		canvas.fillRect((this.x-cam.x)*this.width, (this.y-cam.y)*this.height, this.width, this.height);
+	    }
+	    if(this.cracked==1){
+		crackedsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }
+		if(this.platform==1){
+		platformsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+	    }
+            
+	}
+    };
+    
+    return tile;
+};
+
+function tileToCost(data, sqd) {
+  if((data==4) &&(sqd.leader.class==3)) {return 4};
+  if( data == 1 ) return 0;
+  if( data == 4 ) return 4;
+  return 1;
+};
+
+function mapToGraph(map, sqd) { 
+  var tilesArray = [];
+  for( var i=0; i<MAP_WIDTH; ++i ) {
+    var rowArray = [];
+    for( var j=0; j<MAP_HEIGHT; ++j ) {
+	  var tile = map.tiles[i][j];
+	  var data = tileToCost(tile.data, sqd);
+	  for( var ii=-1; ii<2; ++ii ) {
+	    for( var jj=-1; jj<2; ++jj) {
+		  if( i+ii < 0 || i+ii >= MAP_WIDTH || j+jj < 0 || j+jj >= MAP_WIDTH ) {
+		    continue;
+		  }
+		  var adjTile = map.tiles[i+ii][j+jj];
+		  if( !adjTile ) continue;
+		  adjData = tileToCost(adjTile.data,sqd);
+		  if( data == 0 || adjData == 0 ) { data = 0; } else {
+  		    data = Math.max(data, adjData);
+	      }
+		}
+	  }
+	  rowArray.push(data);
+    }
+    tilesArray.push(rowArray);
+  }
+  return new Graph(tilesArray);
+}
+
+
+function Map(I) { //map object
+    I = I || {};
+    var i = 0;
+    var j = 0;
+    I.active = true;
+    I.color = "#00A";
+    I.tiles = new Array(MAP_WIDTH);
+    for( i=0; i<MAP_WIDTH; i++ ) { I.tiles[i] = new Array(MAP_HEIGHT);  }
+    for (i=0;i<MAP_WIDTH; i++){
+	for (j=0;j<MAP_HEIGHT; j++){
+	    I.tiles[i][j]= makeNewTile();
+	    I.tiles[i][j].x=i;
+	    I.tiles[i][j].y=j;
+	}
+    }
+    I.width = MAP_WIDTH;
+    I.height = MAP_HEIGHT;
+
+	I.getPath = function(startX, startY, endX, endY,sqd) {
+      var graph = mapToGraph(I,sqd);
+	  return astar.search(graph.nodes, graph.nodes[startX][startY], graph.nodes[endX][endY]);
+    };
+ 
+ I.drawPath = function(x,y,xx,yy) {
+   var path = I.getPath(x, y, xx, yy);
+   for( var i=0; i<path.length; ++i ) {
+     I.setTile(path[i].x, path[i].y, 1);
+   }
+ };
+    I.zoom = 1;
+
+    I.setZoom = function(cam) {
+		if (I.zoom == 1) {I.zoom=2} else {I.zoom=1};
+        cam.x=0;
+		cam.y=0;
+		cam.zoom=I.zoom;
+    };
+
+    I.draw = function(cam) {
+	cam.zoom=I.zoom;
+	cam.check();
+	for (i=cam.x;i<cam.x+cam.width*I.zoom; i+=I.zoom){
+	    for (j=cam.y;j<cam.y+cam.height*I.zoom; j+=I.zoom){
+		    var tileTypes = {};
+			for( var ii=0; ii<I.zoom; ii+=1 ) {
+				if ((i+ii>=MAP_WIDTH)) { continue;}
+			  for( var jj=0; jj<I.zoom; jj+=1 ) {
+				if ((j+jj>=MAP_HEIGHT)) {continue;}
+			    var data = I.tiles[i+ii][j+jj];
+				if( data ) {
+				  if( !tileTypes[data.data] ) { tileTypes[data.data] = 1; }
+				  else{ tileTypes[data.data] += 1; }
+				}
+			  }
+			}
+			var dominantType = {type: null, occurs: 0};
+			for( var type in tileTypes ) {
+			  if( tileTypes[type] && tileTypes[type] > dominantType.occurs ) {
+			    dominantType.occurs = tileTypes[type];
+				dominantType.type = type;
+			  }
+			}
+			if(dominantType.type && dominantType.type <41) {
+				//I.tiles[i][j].draw(cam);
+				if(dominantType.type==0){
+				grasssprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}else if(dominantType.type==1){
+				stonesprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}else if(dominantType.type==2){
+				mudsprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}else if(dominantType.type==3){
+				crystalsprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1)); 
+				}else if(dominantType.type==4){
+				mossysprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}else{  //if strange data, draw a solid color
+				canvas.fillStyle = bColors[0]; 
+				canvas.fillRect((this.x-cam.x)*this.width, (this.y-cam.y)*this.height, this.width, this.height);
+				}	
+			}
+		}
+		}
+    };
+    I.clear =function(){
+	for (i=0;i<MAP_WIDTH; i++){
+	    for (j=0;j<MAP_HEIGHT; j++){
+		I.tiles[i][j]= makeNewTile();
+		I.tiles[i][j].x=i;
+		I.tiles[i][j].y=j;
+	    }
+	}
+    };
+   
+
+    I.setTile = function (x,y,data) {
+	I.tiles[x][y].data = data;
+    };
+
+    return I;
+}
+
+maps = [];
+maps.push(Map());
+
+
+maps[0].clear();
+maps[0].setTile(24,24,1);
+maps[0].setTile(23,24,1);
+maps[0].setTile(22,24,1);
+maps[0].setTile(24,25,1);
+maps[0].setTile(23,25,1);
+maps[0].setTile(22,25,1);
+maps[0].setTile(24,26,1);
+maps[0].setTile(23,26,1);
+maps[0].setTile(22,26,1);
+
+maps[0].setTile(27,24,1);
+maps[0].setTile(26,24,1);
+maps[0].setTile(25,24,1);
+maps[0].setTile(27,25,1);
+maps[0].setTile(26,25,1);
+maps[0].setTile(25,25,1);
+maps[0].setTile(27,26,1);
+maps[0].setTile(26,26,1);
+maps[0].setTile(25,26,1);
+
+maps[0].setTile(28,24,1);
+maps[0].setTile(29,24,1);
+maps[0].setTile(30,24,1);
+maps[0].setTile(28,25,1);
+maps[0].setTile(29,25,1);
+maps[0].setTile(30,25,1);
+maps[0].setTile(28,26,1);
+maps[0].setTile(29,26,1);
+maps[0].setTile(30,26,1);
+
+for (var p=0;p<300;p++)
+{
+	var i=Math.floor(Math.random()*100)+4;
+	var k=Math.floor(Math.random()*70)+4;
+	maps[0].setTile(24,24,1);
+	maps[0].setTile(i,k,1);
+	maps[0].setTile(i+1,k+1,1);
+    maps[0].setTile(i+1,k,1);
+	maps[0].setTile(i,k+1,1);
+	//maps[0].setTile(i+1,k+2,1);
+	//maps[0].setTile(i+2,k+2,1);
+
+	//maps[0].setTile(i+2,k+1,1);
+	//maps[0].setTile(2+i,k,1);
+	//maps[0].setTile(i,k+2,1);
+	maps[0].setTile(i+1,k+1,1);
+
+  
+}
+
+
+/*for (var p=0;p<10;p++)
+{
+	var i=Math.floor(Math.random()*80);
+	var k=Math.floor(Math.random()*70);
+	maps[0].setTile(24,24,4);
+	maps[0].setTile(i,k,4);
+	maps[0].setTile(i+1,k+1,4);
+	maps[0].setTile(i+2,k+2,4);
+    maps[0].setTile(i+1,k,4);
+	maps[0].setTile(i,k+1,4);
+	maps[0].setTile(i+1,k+2,4);
+	maps[0].setTile(i+2,k+1,4);
+	maps[0].setTile(2+i,k,4);
+	maps[0].setTile(i,k+2,4);
+	maps[0].setTile(i+1,k+1,4);
+
+  
+}*/
+for(var i=0;i<15;i++){
+	//maps[0].setTile(20+i,20,1);
+	//maps[0].setTile(20+i,50,1);
+	//maps[0].setTile(20,20+i,1);
+	}
+
+for(var i=0;i<15;i++){
+	for(var k=0;k<70;k++)
+	{
+		maps[0].setTile(20+i,0+k,4);
+		maps[0].setTile(20+i,0+k,4);
+		maps[0].setTile(20+i,0+k,4);
+	}
+	}
+
+var squid= new Array(TEAM_SIZE);
+var frogs= new Array(TEAM_SIZE);
+
+for( var i=0;i<TEAM_SIZE;i++)
+{
+	squid[i]=new squad();
+	squid[i].ID=i;
+	frogs[i]=new squad();
+	frogs[i].ID=i;
+}
+
+for (var i=0;i<TEAM_SIZE;i++){
+	frogs[i].leader.class=3;
+	frogs[i].leader.setClass();
+	frogs[i].sprite=frogs[i].leader.sprite;
+	frogs[i].team=1;
+	frogs[i].x=110;
+	frogs[i].y=76;
+}
+setInterval(function() {
+
+	update();
+    }, 1000/FPS);
+
+
+canvasElement.get(0).addEventListener("mousemove", mouseXY, false);
+document.getElementById("myAudio").addEventListener('ended', function() { //loops music
+	this.currentTime = 0;
+	this.play();
+    }, false);
+
+function battleDraw()
+{
+
+	battletick++;
+	canvas.save();
+    canvas.globalAlpha=0.60;
+	canvas.fillStyle =  "#DCDCDC";
+    canvas.fillRect(25,95,820,500);
+	canvas.fillStyle =bColors[3];//Math.floor(Math.random()*5)];// "#483D8B ";
+    canvas.fillRect(40,110,790,470);
+	canvas.restore();
+	canvas.font = "14pt Calibri";
+	canvas.textAlign = "left";
+	canvas.textBaseline = "middle";
+
+	canvas.fillStyle = "blue";
+	for(var i=0;i<combatants[0].numUnits;i++)
+	{
+		if(!combatants[0].units[i].alive) {continue;}
+		var closs="";
+		if(combatants[0].units[i].class==0) {closs="bear";}
+		if(combatants[0].units[i].class==1) {closs="Shoe";}
+		if(combatants[0].units[i].class==2) {closs="Wizard";}
+		if(combatants[0].units[i].class==3) {closs="Frog";}
+		var xp=600+combatants[0].units[i].row*40;
+		canvas.fillText("HP:", xp, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].hp, xp+30, 130+i*2*45);
+		canvas.fillText("/", xp+60, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].maxhp, xp+70, 130+i*2*45);
+		canvas.fillText("Lvl:", xp+100, 130+i*2*45);
+		canvas.fillText(combatants[0].units[i].level, xp+130, 130+i*2*45);
+		canvas.fillText("ATB:", xp, 145+i*2*45);
+		//canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
+		canvas.fillStyle =  "#DCDCDC";
+		canvas.fillRect(xp+80,143+(i*45*2),battlespeed+3,15);
+		canvas.fillStyle =  "yellow";
+		canvas.fillRect(xp+80+1,144+(i*45*2),combatants[0].units[i].atb,13);
+
+		canvas.fillStyle = "blue";
+		canvas.fillText("Name:", xp, 172+i*2*45);
+		canvas.fillText(combatants[0].units[i].name, xp+52, 172+i*2*45);
+		canvas.fillText(closs, xp, 158+i*2*45);
+
+		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		
+		if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
+			combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
+		}
+		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
+		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
+		if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
+	}
+
+		canvas.fillStyle = "red";
+		for(var i=0;i<combatants[1].numUnits;i++)
+	{
+		var closs="";
+		if(!combatants[1].units[i].alive) {continue;}
+		if(combatants[1].units[i].class==0) {closs="bear";}
+		if(combatants[1].units[i].class==1) {closs="Shoe";}
+		if(combatants[1].units[i].class==2) {closs="Wizard";}
+		if(combatants[1].units[i].class==3) {closs="Frog";}
+		var xp=135-combatants[1].units[i].row*40;
+		canvas.fillText("HP:", xp, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].hp, xp+30, 130+i*2*45);
+		canvas.fillText("/", xp+60, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].maxhp, xp+70, 130+i*2*45);
+		canvas.fillText("Lvl:", xp+100, 130+i*2*45);
+		canvas.fillText(combatants[1].units[i].level, xp+130, 130+i*2*45);
+		canvas.fillText("ATB:", xp, 143+i*2*45);
+		canvas.fillStyle =  "#DCDCDC";
+		canvas.fillRect(xp+80,143+(i*45*2),battlespeed+3,15);
+		canvas.fillStyle =  "yellow";
+		canvas.fillRect(xp+80+1,144+(i*45*2),combatants[1].units[i].atb,13);
+
+		canvas.fillStyle = "red";
+		canvas.fillText(closs, xp, 158+i*2*45);
+		canvas.fillText("Name:", xp, 172+i*2*45);
+		canvas.fillText(combatants[1].units[i].name, xp+80, 172+i*2*45);
+
+		if((combatants[1].units[i].attacking>0) && (combatants[1].units[i].hurting<1)) {combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);}
+		
+		if((combatants[1].units[i].hurting<1) || (combatants[1].units[i].hurting%2==0)) {
+			combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
+		}
+			if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
+			if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
+			if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
+	}
+	canvas.fillStyle = "white";
+	var texticle= "Turns passed:    " +(combatants[0].turns+combatants[1].turns) + "/"+battlelength;
+	//console.log(combatants[0].turns+combatants[1].turns);
+	canvas.fillText(texticle, 350, 132);
+	//canvas.fillText(combatants[0].turns+combatants[1].turns, 460, 132);
+	//canvas.fillText(combatants[0].damaged, 660, 132);
+	//canvas.fillText(combatants[1].damaged, 260, 132);
+	if(battlePause) {//in battle menu
+		canvas.fillText("battle pause!", 350, 432);
+	}
+	if(!combatants[0].checkSurvivors) { combatants[0].damaged=0;endBattle(combatants[0],combatants[1]) };
+	if(!combatants[1].checkSurvivors) { combatants[1].damaged=0;endBattle(combatants[0],combatants[1]) };
+	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
+	if(battletick>battledelay) {battletick=0;}
+}
+
+//document.getElementById("myAudio").play(); //starts music
+
+//------------MAIN LOOP-----------------------------------------
+//fix zoom
+//fix battles with more than one unit in squad
+function update() {
+    lasttime=milliseconds;
+    timestamp = new Date();
+    milliseconds = timestamp.getTime();
+	//console.log(milliseconds-lasttime,gamespeed);
+	tick++;
+	if(zoomkey.check()) {
+		maps[0].setZoom(camera);
+	}
+	maps[0].draw(camera);
+	if ((tick>gamespeed) && (!isBattle)){
+		tick=0;
+		if(battleReport) {
+			battleendtick++; 
+			if (battleendtick>200){
+				battleReport=false;
+				paused=false;
+				battleendtick=0;
+				}
+			}
+		for (var i=0;i<TEAM_SIZE;i++) {
+			//squid[i].draw(camera);
+			squid[i].update(maps[0]);
+			if( (!squid[i].path) && (randomwalk) && i != SELECTED ) {
+				squid[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			//frogs[i].draw(camera);
+			frogs[i].update(maps[0]);
+			if( (!frogs[i].path) && (true) ){//&& i != 1 ) {
+				frogs[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+		}
+	}
+
+	for (var i=0;i<TEAM_SIZE;i++) {//save and load canvas.
+		squid[i].draw(camera);
+		frogs[i].draw(camera);
+
+		if(isOver(squid[i],camera)) { drawmousetext(squid[i],camera); };
+
+		if(isOver(frogs[i],camera)) { drawmousetext(frogs[i],camera); };
+		if ((i==SELECTED)&&(squid[i].path!=null)) {squid[i].drawdest(camera);}
+	}
+
+	selector.draw(canvas, (squid[SELECTED].x * 16 + (Math.round(squid[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (squid[SELECTED].y * 16 + (Math.round(squid[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
+	//camera controlls
+	if(maps[0].zoom<2){
+		if(keydown.left) {
+		camera.x -= 1;
+		if (camera.x<0) {camera.x=0;}
+		}
+		
+		if(keydown.right) {
+		camera.x += 1;
+		if (camera.x>(MAP_WIDTH-camera.width)) {camera.x=MAP_WIDTH-camera.width;}
+		}
+		
+		if(keydown.up) {
+		camera.y -= 1;
+		if (camera.y<0) {camera.y=0;}
+		}
+		
+		if(keydown.down) {
+		camera.y += 1;
+		if (camera.y>(MAP_HEIGHT-camera.height)) {camera.y=MAP_HEIGHT-camera.height;}
+		}
+	}
+	if (ksavekey.check()) {randomwalk=!randomwalk;}
+
+	if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(squid[SELECTED]);}camera.center(squid[SELECTED]);}
+
+	if ((squid[SELECTED]) && (!squid[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(squid[SELECTED]);} camera.center(squid[SELECTED]);}
+    //if(Mouse.clicked)
+   // console.log(numSquads(0),numUnits(0),SELECTED);
+	if(pausekey.check()) {
+		if(isBattle){
+			battlePause=!battlePause;
+		}else
+		{
+			paused=!paused; 
+			battleReport=false;	
+		}
+	}
+	
+	if(zoomkey.check()) {
+		 maps[0].setZoom(camera);
+	}
+	
+	if(rowkey.check()) {
+		 squid[SELECTED].row();
+	}
+
+	armyInfo();
+	//squadInfo(squid[SELECTED]);
+	if((isBattle) || (battleReport)) {
+		battleDraw();
+		if (escapekey.check()) {isBattle=false;}
+	}
+	if(helpkey.check()){
+	    alert("Arrow keys=move camera, Z=zoom, X=cycle gamespeed,O=toggle ally AI,S=get squad status,shift=cycle units, space = pause");
+	}
+	if(speedkey.check()){
+		gamespeed++;
+		if (gamespeed>2) {gamespeed=0;}
+	}
+	if(statuskey.check()){
+		var texticle = "Units:" + squid[SELECTED].numSquadUnits() + " / " + squid[SELECTED].numUnits;
+		alert(texticle);
+	}
+	if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
+	if(battleReport) {canvas.fillText(won, 430, 370);}
+}
+
+
+      //]]>
+    </script>
+
+  </body>
+</html>

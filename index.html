@@ -289,6 +289,7 @@ function unit()
 	
 	this.getAttack= function(trg){
 	//if status==beserek attack harder
+	return 4;
 		if( this.attackType == AttackTypes.Physical ) {
 			return (this.attack-this.row)+this.equipment[0].attack+(this.level*.5)+Math.floor(Math.random()*3);
 		}else if( this.attackType == AttackTypes.Ranged ) { //no row penalty
@@ -325,11 +326,14 @@ function unit()
 	};
 	
 	this.getDef= function(attacker){
-		//loop through all equip and total def and mdef.
-		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged))
+//		loop through all equip and total def and mdef.
+		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
 			return this.def+this.equipment[1].def;
-		else
+			
+		}else
+		{
 			return this.mdef+this.equipment[1].mdef;
+		}
 	};
 	this.hasStatus=function(stats){
 		//switch(stats)
@@ -346,6 +350,7 @@ function unit()
 		if (this.hurting>0) {this.hurting--; return;}
 		if (this.atb>battlespeed) {
 			//gambits, attack
+			this.atb=0;
 			var targe=null;
 			if (usqd.battleAI==0) //weakest
 			{
@@ -364,9 +369,9 @@ function unit()
 					targe.hurting=20;
 					usqd.turns++;
 					usqd.damaged+=delt;
-				}else {this.attacking=10; usqd.turns++;} //miss
+				}else {this.attacking=10; usqd.turns++;this.attacking=10;} //miss
 			}else {endBattle(usqd,esqd);}
-			this.atb=0;
+			
 		}
 		if((this.alive) &&(this.hp<1)) {
 			this.hp=0; 
@@ -515,8 +520,10 @@ function squad() {
 	this.units[2]= new unit();
 	this.units[3]= new unit();
 	this.units[4]= new unit();
+	this.k
 	//for(var i=0;i<this.numUnits;i++) { this.units[i].alive=true;}
 	this.leader = this.units[0];
+	this.knockback=5;
 	this.width=32;
 	this.height=32;
 	this.bx = 8;
@@ -634,7 +641,7 @@ function squad() {
 	this.checkcollision= function() {
 		for(var i=0;i<TEAM_SIZE;i++){
 			if (this.team==0) {
-				if ((this.alive)&&(frogs[i].x+2>this.x) && (frogs[i].x-2<this.x) && (frogs[i].y+2>this.y) && (frogs[i].y-2<=this.y)) {return frogs[i];}
+				if ((this.alive)&&(frogs[i].x+2>this.x) && (frogs[i].x-2<this.x) && (frogs[i].y+2>this.y) && (frogs[i].y-2<=this.y)) {return frogs[i];} //TODO:START BATTLE
 			}else if(this.team==1) {
 				if ((this.alive)&&(squid[i].x+2>this.x) && (squid[i].x-2<this.x) && (squid[i].y+2>this.y) && (squid[i].y-2<=this.y)) {return squid[i];}
 
@@ -719,39 +726,39 @@ function endBattle(usqd,esqd){
 	if(usqd.damaged>=esqd.damaged) //win
 	{
 		if(usqd.x>esqd.x) {
-			esqd.x-=25;
+			esqd.x-=usqd.knockback;
 			if(esqd.x<1) {esqd.x=0;}
 		}else
 		{
-			esqd.x+=25;
+			esqd.x+=usqd.knockback
 			if(esqd.x>MAP_WIDTH) {esqd.x=MAP_WIDTH-1;}
 		}
 		if(usqd.y>esqd.y) {
-			esqd.y-=25;
+			esqd.y-=usqd.knockback;
 			if(esqd.y<1) {esqd.y=0;}
 		}else
 		{
-			esqd.y+=25;
+			esqd.y+=usqd.knockback;
 			if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
 		}
 		esqd.path=null;
-		console.log("win @", usqd.x,usqd.y)
+//		console.log("win @", usqd.x,usqd.y) problem?
 		won="Victory!";
 	}else{//lose
 		if(esqd.x>usqd.x) {
-			usqd.x-=5;
+			usqd.x-=esqd.knockback;
 			if(usqd.x<1) {usqd.x=1;}
 		}else
 		{
-			usqd.x+=5;
+			usqd.x+=esqd.knockback;
 			if(usqd.x>MAP_WIDTH) {usqd.x=MAP_WIDTH-1;}
 		}
 		if(esqd.y>usqd.y) {
-			usqd.y-=5;
+			usqd.y-=esqd.knockback;
 			if(usqd.y<0) {usqd.y=0;}
 		}else
 		{
-			usqd.y+=5;
+			usqd.y+=esqd.knockback;
 			if(usqd.y>MAP_HEIGHT) {usqd.y=MAP_HEIGHT-1;}
 		}
 		usqd.path=null;
@@ -1334,7 +1341,7 @@ function battleDraw()
 	}
 	canvas.fillStyle = "white";
 	var texticle= "Turns passed:    " +(combatants[0].turns+combatants[1].turns) + "/"+battlelength;
-	console.log(combatants[0].turns+combatants[1].turns);
+	//console.log(combatants[0].turns+combatants[1].turns);
 	canvas.fillText(texticle, 350, 132);
 	//canvas.fillText(combatants[0].turns+combatants[1].turns, 460, 132);
 	//canvas.fillText(combatants[0].damaged, 660, 132);
