@@ -727,8 +727,8 @@ function numSquads(team){
 	var count=0;
 	for(var i=0;i<TEAM_SIZE;i++) 
 	{
-		if(team==0) {if(squid[i].alive) {count++;} }
-		if(team==1) {if(frogs[i].alive) {count++;} }
+		if(team==0) {if(armies[0].squads[i].alive) {count++;} }
+		if(team==1) {if(armies[1].squads[i].alive) {count++;} }
 	}
 	return count;
 };
@@ -738,18 +738,18 @@ function numArmyUnits(team){
 	if(team==0){
 		for(var i=0;i<TEAM_SIZE;i++) 
 		{
-			if(squid[i].alive) 
+			if(armies[0].squads[i].alive) 
 			{
-				count+=squid[i].numSquadUnits();
+				count+=armies[0].squads[i].numSquadUnits();
 			}
 		}
 	}else if (team==1) {
 		 for(var i=0;i<TEAM_SIZE;i++) 
 		 {
-			 if(frogs[i].alive) 
+			 if(armies[1].squads[i].alive) 
 				{
-					for(var j=0;j<frogs[i].numUnits;j++){
-						if(frogs[i].units[j].alive) {count++;}
+					for(var j=0;j<armies[1].squads[i].numUnits;j++){
+						if(armies[1].squads[i].units[j].alive) {count++;}
 					}
 				}
 
@@ -880,27 +880,31 @@ function army() {
 	this.gold=4000;
 	this.name="Fighting Mongooses"
 	this.squads=new Array (TEAM_SIZE);
-
-	this.leader=this.squads[0].leader;
-	this.leader.hp+=100
-	this.leader.eqipment[1]=breastplate;
+	this.wins=0;
+	this.losses=0;
+	
 	this.init=function(side){
 		this.numSquads=TEAM_SIZE;
 		this.team=side;
 		this.gold=4000;
 		this.name="Fighting Mongooses"
-		for(var i=0;i<this.numSquads;i++)
-			this.squads[i]=new unit();
+		for(var i=0;i<this.numSquads;i++){
+			this.squads[i]=new squad();
+			this.squads[i].ID=i;
 		}
 		this.leader=this.squads[0].leader;
 		if (side==1) {
 				this.leader=this.squads[0].leader;
 				this.leader.hp+=100
-				this.leader.eqipment[1]=breastplate;
+				this.leader.equipment[1]=breastplate;
 		}
 	
 	};
+}
 
+var armies=new Array (2);
+armies[0]=new army();
+armies[1]=new army();
 function squad() {
 	//list of units
 	//list of items
@@ -1107,9 +1111,9 @@ function squad() {
 	this.checkcollision= function() {
 		for(var i=0;i<TEAM_SIZE;i++){
 			if (this.team==0) {
-				if ((this.alive)&&(frogs[i].x+2>this.x) && (frogs[i].x-2<this.x) && (frogs[i].y+2>this.y) && (frogs[i].y-2<=this.y)) {return frogs[i];} //TODO:START BATTLE
+				if ((this.alive)&&(armies[1].squads[i].x+2>this.x) && (armies[1].squads[i].x-2<this.x) && (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<=this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
 			}else if(this.team==1) {
-				if ((this.alive)&&(squid[i].x+2>this.x) && (squid[i].x-2<this.x) && (squid[i].y+2>this.y) && (squid[i].y-2<=this.y)) {return squid[i];}
+				if ((this.alive)&&(armies[0].squads[i].x+2>this.x) && (armies[0].squads[i].x-2<this.x) && (armies[0].squads[i].y+2>this.y) && (armies[0].squads[i].y-2<=this.y)) {return armies[0].squads[i];}
 
 			}
 		}
@@ -1227,6 +1231,8 @@ function endBattle(usqd,esqd){
 		esqd.setDestination(usqd.x,usqd.y,maps[0]);
 		console.log("win @", usqd.x,usqd.y) 
 		won="Victory!";
+		armies[1].losses++;
+		armies[0].wins++;
 		for(var i=0;i<esqd.numUnits;i++)
 		{
 			esqd.units[i].battleslost++;
@@ -1255,6 +1261,8 @@ function endBattle(usqd,esqd){
 		usqd.setDestination(usqd.x,usqd.y,maps[0]);
 		console.log("loss");
 		won="Defeat!"
+		armies[0].losses++;
+		armies[1].wins++;
 		for(var i=0;i<esqd.numUnits;i++)
 		{
 			esqd.units[i].battleswon++;
@@ -1310,13 +1318,18 @@ function armyInfo(sq){
 	canvas.textAlign = "left";
 	canvas.textBaseline = "middle";
 	canvas.fillStyle = "white";
+	canvas.fillText(armies[0].name, 360, 8);
+	canvas.fillText("Gold: "+armies[0].gold, 560, 8);
+
+	canvas.fillText("Wins/losses: " +armies[0].wins+ " / " + armies[0].losses, 560, 24);
+
 	canvas.fillText("Selected:", 760, 8);
 	canvas.fillText(SELECTED, 840, 8);
 	canvas.fillText("Squads:", 760, 24);
 	canvas.fillText(numSquads(0), 840, 24);
 	canvas.fillText("Units:", 760, 38);
 	canvas.fillText(numArmyUnits(0), 840, 38);
-	canvas.fillText(squid[SELECTED].leader.name + "'s unit", 760, 56);
+	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 760, 56);
 
 };
 
@@ -1384,11 +1397,11 @@ function mouseClick(e) {  //represents the mouse
 	  onSomething=null;
 	  for(var i=0;i<TEAM_SIZE;i++)
 	  {
-		if (isOver(squid[i],camera)) {onSomething=squid[i];SELECTED=i;}
+		if (isOver(armies[0].squads[i],camera)) {onSomething=armies[0].squads[i];SELECTED=i;}
 	  }
 	  if (onSomething==null){
-		  if( squid[SELECTED].path ) { squid[SELECTED].path = null; return; }
-		  squid[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
+		  if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].path = null; return; }
+		  armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
 	  }
 
 };
@@ -1703,26 +1716,29 @@ for(var i=0;i<15;i++){
 	}
 	}
 
-var squid= new Array(TEAM_SIZE);
+/*var squid= new Array(TEAM_SIZE);
 var frogs= new Array(TEAM_SIZE);
 
-for( var i=0;i<TEAM_SIZE;i++)
+/*for( var i=0;i<TEAM_SIZE;i++)
 {
-	squid[i]=new squad();
-	squid[i].ID=i;
-	frogs[i]=new squad();
-	frogs[i].ID=i;
-}
-
+	armies[0].squads[i]=new squad();
+	armies[0].squads[i].ID=i;
+	armies[1].squads[i]=new squad();
+	armies[1].squads[i].ID=i;
+}*/
+armies[0].init(0);
+armies[1].init(1);
+//armies[0].name = "Lannisters";
+armies[1].name = "Dornishmen";
 for (var i=0;i<TEAM_SIZE;i++){
-	frogs[i].leader.class=3;
-	frogs[i].basex=110;
-	frogs[i].basey=76;
-	frogs[i].leader.setClass();
-	frogs[i].sprite=frogs[i].leader.sprite;
-	frogs[i].team=1;
-	frogs[i].x=110;
-	frogs[i].y=76;
+	armies[1].squads[i].leader.class=3;
+	armies[1].squads[i].basex=110;
+	armies[1].squads[i].basey=76;
+	armies[1].squads[i].leader.setClass();
+	armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
+	armies[1].squads[i].team=1;
+	armies[1].squads[i].x=110;
+	armies[1].squads[i].y=76;
 }
 setInterval(function() {
 
@@ -1890,30 +1906,30 @@ function update() {
 				}
 			}
 		for (var i=0;i<TEAM_SIZE;i++) {
-			squid[i].update(maps[0]);
-			if( (!squid[i].path) && (randomwalk) && i != SELECTED ) {
-				squid[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
-			frogs[i].update(maps[0]);
-			if( (!frogs[i].path) && (true) ){//&& i != 1 ) {
-				frogs[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			armies[0].squads[i].update(maps[0]);
+			if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
+				armies[0].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			armies[1].squads[i].update(maps[0]);
+			if( (!armies[1].squads[i].path) && (true) ){//&& i != 1 ) {
+				armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
 		}
 	}
 
 	for (var i=0;i<TEAM_SIZE;i++) {//save and load canvas.
-		squid[i].draw(camera);
-		frogs[i].draw(camera);
+		armies[0].squads[i].draw(camera);
+		armies[1].squads[i].draw(camera);
 
-		if(isOver(squid[i],camera)) { drawmousetext(squid[i],camera); };
+		if(isOver(armies[0].squads[i],camera)) { drawmousetext(armies[0].squads[i],camera); };
 
-		if(isOver(frogs[i],camera)) { drawmousetext(frogs[i],camera); };
-		if ((i==SELECTED)&&(squid[i].path!=null)) {squid[i].drawdest(camera);}
+		if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
+		if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
 	}
 	
 	for (var i=0;i<numTowns;i++) {
 		if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
 	}
 
-	selector.draw(canvas, (squid[SELECTED].x * 16 + (Math.round(squid[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (squid[SELECTED].y * 16 + (Math.round(squid[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
+	selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
 	//camera controls
 	//if(maps[0].zoom<3){
 		if(keydown.left) {
@@ -1939,12 +1955,12 @@ function update() {
 	if (ksavekey.check()) {randomwalk=!randomwalk;}
 
 	if(isBattle){
-		if (tabkey.check()) {BSELECTED++; if(BSELECTED>squid[SELECTED].numUnits-1) {BSELECTED=0;}}
+		if (tabkey.check()) {BSELECTED++; if(BSELECTED>armies[0].squads[SELECTED].numUnits-1) {BSELECTED=0;}}
 	}else{
-		if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(squid[SELECTED]);}camera.center(squid[SELECTED]);}
+		if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(armies[0].squads[SELECTED]);}camera.center(armies[0].squads[SELECTED]);}
 	}
 
-	if ((squid[SELECTED]) && (!squid[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(squid[SELECTED]);} camera.center(squid[SELECTED]);}
+	if ((armies[0].squads[SELECTED]) && (!armies[0].squads[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
 
 	if(pausekey.check()) {
 		if(isBattle){
@@ -1962,16 +1978,16 @@ function update() {
 	}
 	
 	if(aikey.check()) {
-		 squid[SELECTED].battleAI++;
-		 if (squid[SELECTED].battleAI>2) {squid[SELECTED].battleAI=0;}
+		 armies[0].squads[SELECTED].battleAI++;
+		 if (armies[0].squads[SELECTED].battleAI>2) {armies[0].squads[SELECTED].battleAI=0;}
 	}
 	
 	if(rowkey.check()) {
-		 squid[SELECTED].row();
+		 armies[0].squads[SELECTED].row();
 	}
 	
 	if(fleekey.check()) {
-		 squid[SELECTED].flee();
+		 armies[0].squads[SELECTED].flee();
 	}
 
 	armyInfo();
@@ -1992,16 +2008,16 @@ function update() {
 		unitinfo=!unitinfo;
 	}
 	if(statuskey.check()){
-		var texticle = "Units:" + squid[SELECTED].numSquadUnits() + " / " + squid[SELECTED].numUnits;
+		var texticle = "Units:" + armies[0].squads[SELECTED].numSquadUnits() + " / " + armies[0].squads[SELECTED].numUnits;
 		alert(texticle);
 	}
 	if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
 	if(battleReport) {canvas.fillText(won, 430, 370);}
 	if(unitinfo) {
 		if((isBattle) || (battleReport)){
-			squid[SELECTED].units[BSELECTED].drawInfo();
+			armies[0].squads[SELECTED].units[BSELECTED].drawInfo();
 		}else {
-			squid[SELECTED].leader.drawInfo();
+			armies[0].squads[SELECTED].leader.drawInfo();
 		}
 	}
 	endgame();
