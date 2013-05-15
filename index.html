@@ -115,6 +115,7 @@ var unitinfo=false;
 var healcount=0;
 var healrate=40;
 var numTowns=5;
+var CSELECTED=0;
 
 function playSound(name){
     
@@ -136,7 +137,50 @@ AttackTypes.InflictStatus = 4;
 AttackTypes.HealStatus = 5; 
 AttackTypes.someweirdshitthatignoresdefensemaybe =6;
 
-
+function card(){
+	this.name = "Flaccid Dolphin";
+	this.type = 0;
+	this.use=function(usqd,esqd)
+	{
+		//console.log("Played the " + this.name+ " card!");
+		if (this.type==0){
+			console.log("Played the Priestess card!");
+			for(var i=0;i<usqd.numUnits;i++){
+				if (usqd.units[i].alive) {
+					usqd.units[i].hp+=25;
+					if (usqd.units[i].hp>usqd.units[i].maxhp) {usqd.units[i].hp=usqd.units[i].maxhp;}
+				}
+			}
+		}else if(this.type==1)
+		{
+			console.log("Played the Devil card!");
+			for(var i=0;i<esqd.numUnits;i++){
+				if (esqd.units[i].alive) {
+					esqd.units[i].hurt(15);
+				}
+			}
+		}else if(this.type==2)
+		{
+			console.log("Played the Fool card!");
+			esqd.turns=20;
+			esqd.damaged=-1; //flee
+		}else if(this.type==3)
+		{
+			console.log("Played the...swappy card!");
+			esqd.row();
+		}else if(this.type==4)
+		{
+			console.log("Played the Angel card!");
+			for(var i=0;i<usqd.numUnits;i++){
+				if (!usqd.units[i].alive) {
+					usqd.units[i].hp+=25;
+					usqd.units[i].alive=true;
+					if (usqd.units[i].hp>usqd.units[i].maxhp) {usqd.units[i].hp=usqd.units[i].maxhp;}
+				}
+			}
+		}
+	}
+};
 
 function akey(k) {  //represents a keyboard button
     k = k || "space";
@@ -497,8 +541,11 @@ function unit()
 	
 	this.getDef= function(attacker){
 		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
-			return this.def+this.equipDef();
-			
+			if(this.row==0){
+				return this.def+this.equipDef();
+			}else{
+				return this.def+5+this.equipDef();
+			}
 		}else
 		{
 			return this.mdef+this.equipMDef();
@@ -882,6 +929,8 @@ function endgame(){
 function army() {
 	this.numSquads=TEAM_SIZE;
 	this.team=0;
+	this.cards=new Array(5);
+	this.cards[0]=new card();
 	this.gold=4000;
 	this.name="Fighting Mongooses"
 	this.squads=new Array (TEAM_SIZE);
@@ -978,9 +1027,9 @@ function squad() {
 			}
 		}
 	}
-	this.flee= function()
+	this.flee= function(c)
 	{
-		if(Math.floor(Math.random()*30) > 15) {
+		if(Math.floor(Math.random()*30) > (15)) {
 			this.turns=20;
 			this.damaged=-1;
 		}else
@@ -1032,6 +1081,20 @@ function squad() {
 			//this.setDestination(this.basex,this.basey,maps[0]);
 		}
 		return ;
+	};
+	
+	this.smartRow=function()
+	{
+		for(var j=0;j<this.numUnits;j++)
+		{
+			if(this.units[j].alive) {
+				this.units[j].row=0;
+				if ((this.units[j].class==5) || (this.units[j].class==4)||(this.units[j].class==2))
+				{
+					this.units[j].row=1;
+				}
+			}
+		}
 	};
 	
 	this.numSquadUnits=function() {
@@ -1089,7 +1152,7 @@ function squad() {
 		var h=999;
 		for(var i=0;i<this.numUnits;i++){
 			if((this.units[i].hp<h) && (this.units[i].hp>0) && (this.units[i].hp<this.units[i].maxhp)) {
-				h=this.units[1].hp;
+				h=this.units[i].hp;
 				weakest=this.units[i];
 			}
 		}
@@ -1444,6 +1507,7 @@ var rowkey=new akey("r");
 var fleekey=new akey("f");
 var aikey=new akey("a");
 var unitinfokey=new akey("u");
+var cardkey=new akey("c");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -1745,6 +1809,7 @@ for (var i=0;i<TEAM_SIZE;i++){
 	armies[1].squads[i].team=1;
 	armies[1].squads[i].x=110;
 	armies[1].squads[i].y=76;
+	armies[1].squads[i].smartRow();
 }
 armies[1].leader.name="Roose";
 armies[1].leader.maxhp+=100;
@@ -1999,6 +2064,14 @@ function update() {
 			armies[0].squads[SELECTED].row();
 		 }else
 		 armies[0].squads[SELECTED].units[BSELECTED].rowswap();
+	}
+	
+	if(cardkey.check()) {
+		 if(isBattle)
+		 {
+			armies[0].cards[0].type=CSELECTED;
+			armies[0].cards[0].use(combatants[0],combatants[1]);
+		 }
 	}
 	
 	if(fleekey.check()) {
