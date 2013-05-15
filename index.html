@@ -37,6 +37,7 @@ var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
 var MAP_WIDTH = 120;
 var MAP_HEIGHT = 80;
+var CRIT_CHANCE=100;
 var FPS = 30;
 var LAVA_RATE=2000;
 var WATER_RATE=1000;
@@ -66,7 +67,7 @@ names[1]=new Array(120);
 var mX=120;
 var mY=320;
 var townnames=new Array(40);
-townnames= ["Qarth","Meereen","Myr","Pentos","Ashford","Ashemark","Gulltown","Pyke","Lordsport","Lannisport","Lys","Tyrosh","Iben","New Ghis","Astapor","Yunkai","Qohor","Lorath","Volantis","Braazos","Vaes Dothrak","White Harbor","Maidenpool","Oldstones","Harrenhal","Riverrun","Seaguard","Winterfell","Saltpans","Castamere","Oxcross","Crakehall","The Crag","Duskendale","Dragonstone","Rosby","Highgarden","Oldtown","Grimston","Hardhome"];
+townnames= ["Qarth","Meereen","Myr","Pentos","Ashford","Ashemark","Gulltown","Pyke","Lordsport","Lannisport","Lys","Tyrosh","Iben","New Ghis","Astapor","Yunkai","Qohor","Lorath","Volantis","Braavos","Vaes Dothrak","White Harbor","Maidenpool","Oldstones","Harrenhal","Riverrun","Seaguard","Winterfell","Saltpans","Castamere","Oxcross","Crakehall","The Crag","Duskendale","Dragonstone","Rosby","Highgarden","Oldtown","Grimston","Hardhome"];
 
 names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn","Howland","Daario","Xhondo","Yellow Dick","Zachery","Zekko","Zollo","Will","Willbert","Wendel","Wendamyr","The Weeper","Wat","Walton","Vardis","Urrigon","Ulmer","Tobho","Timett","Syrio","Styr"];
 names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei","Old Nan","Yna","Ysilla","Victaria","Visenya","Val","The Waif","Tya","Tysane","Tansey","Talla","Taela","Squirrel","Shiera","Sharna","Scolera","Sarra","Sallei","S'vrone","Rhea","Rhialta"];
@@ -113,7 +114,7 @@ var battlePause=false;
 var unitinfo=false;
 var healcount=0;
 var healrate=40;
-var numTowns=4;
+var numTowns=5;
 
 function playSound(name){
     
@@ -290,13 +291,10 @@ function unit()
 	this.equipment[1]=noarmor;
 	this.equipment[2]=noaccessory;
 	var nami=Math.floor(Math.random()*120);
-	//this.name=names[this.gender][nami]
-	
 	while(true) {
 		if(namesused[this.gender][nami]) 
 		{
 			nami=Math.floor(Math.random()*120);
-			//console.log(names[this.gender][nami]);
 		}else {break;}
 	}
 	this.name=names[this.gender][nami];
@@ -459,9 +457,17 @@ function unit()
 	this.hurt = function(dmg){
 		this.hp-=dmg;
 		if (this.hp<0) {this.hp=0; this.alive=false; 			var tmpstr=this.name + " died.";
-			console.log(tmpstr);//todo MONSOLE}//playSound("udeath");
+			console.log(tmpstr);//todo MONSOLE
 			}
 	}; 
+	
+	this.heal=function(val){
+		if (this.alive) {
+			this.hp+=val;
+			if (this.hp>this.maxhp) {this.hp=this.maxhp;}
+		}
+	};
+	
 	this.update = function (usqd,esqd){
 		if(paused) {return;}
 		if(battleReport) {return;}
@@ -472,39 +478,52 @@ function unit()
 			//gambits, attack
 			this.atb=0;
 			var targe=null;
-			if (usqd.battleAI==0) //weakest
+			if(this.getAttackType()==AttackTypes.Heal)
 			{
-				targe=esqd.getWeakest();
-			}else if (usqd.battleAI==1) //Strongest
+				targe=usqd.getWeakest();
+				targe.heal(this.mag);
+				esqd.damaged-=this.mag;
+				this.giveExp(this.mag);
+				var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
+				console.log(tmpstr);
+			}else
 			{
-				targe=esqd.getStrongest();
-			}else if (usqd.battleAI==2) //leader
-			{
-				targe=esqd.leader;
+				if (usqd.battleAI==0) //weakest
+				{
+					targe=esqd.getWeakest();
+				}else if (usqd.battleAI==1) //Strongest
+				{
+					targe=esqd.getStrongest();
+				}else if (usqd.battleAI==2) //leader
+				{
+					targe=esqd.leader;
+					if(!targe.alive) {targe=esqd.getWeakest(); }
+				}
+				if((esqd!=null) && (esqd.alive)){
+					if(targe==null) { return;}//esqd.checkSurvivors(); return;}
+					var delt=Math.floor(this.getAttack()-targe.getDef(this));
+					if (delt<0) {delt=1;};
+					if(Math.floor(Math.random()*20) > targe.evade) {
+					var temper="";
+					if(Math.floor(Math.random()*CRIT_CHANCE) < this.luck) { delt=delt+(delt/2); temper=" critical";} //critical hit
+						
+						var tmpstr=this.name + temper+" hit " +targe.name+ " for " +delt+ " damage.";
+						if(usqd.team==0) {
+							console.log(tmpstr);//todo MONSOLE
+						}else
+						{
+							console.warn(tmpstr);
+						}
+						this.giveExp(delt);
+						targe.hurt(delt); 
+						if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
+						this.attacking=10;
+						targe.hurting=20;
+						usqd.turns++;
+						usqd.damaged+=delt;
+					}else {this.attacking=10; usqd.turns++;this.attacking=10; tmpstr = this.name + " missed "+ targe.name; console.log(tmpstr);} //miss
+				}else {endBattle(usqd,esqd);}
 			}
-			if((esqd!=null) && (esqd.alive)){
-				if(targe==null) { return;}//esqd.checkSurvivors(); return;}
-				var delt=Math.floor(this.getAttack()-targe.getDef(this));
-				if (delt<0) {delt=1;};
-				if(Math.floor(Math.random()*20) > targe.evade) {
-				//TODO critcals!
-					
-					var tmpstr=this.name + " hit " +targe.name+ " for " +delt+ " damage.";
-					if(usqd.team==0) {
-						console.log(tmpstr);//todo MONSOLE
-					}else
-					{
-						console.warn(tmpstr);
-					}
-					this.giveExp(delt);
-					targe.hurt(delt); 
-					if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
-					this.attacking=10;
-					targe.hurting=20;
-					usqd.turns++;
-					usqd.damaged+=delt;
-				}else {this.attacking=10; usqd.turns++;this.attacking=10; tmpstr = this.name + " missed "+ targe.name; console.log(tmpstr);} //miss
-			}else {endBattle(usqd,esqd);}
 			
 		}
 		if((this.alive) &&(this.hp<1)) {
@@ -712,30 +731,42 @@ function town() {
 	};
 };
 
-towns=new Array(numTowns);
-for(var i=0;i<numTowns;i++)
-{
-	towns[i] =new town();
-	var thx=Math.floor(Math.random()*90);
-	var thy=Math.floor(Math.random()*75);
-	towns[i].x=thx;
-	towns[i].y=thy;
-	maps[0].tiles[thx][thy]=0;
-	maps[0].tiles[thx+1][thy+1]=0;
-	maps[0].tiles[thx][thy+1]=0;
-	maps[0].tiles[thx+1][thy]=0;
-	towns[i].name=townnames[Math.floor(Math.random()*40)];
+towns=new Array(numTowns+1);
+function initTowns(){
+
+	for(var i=0;i<numTowns;i++)
+	{
+		towns[i] =new town();
+		var thx=Math.floor(Math.random()*90);
+		var thy=Math.floor(Math.random()*75);
+		towns[i].x=thx;
+		towns[i].y=thy;
+		maps[0].tiles[thx][thy].data=0;
+		maps[0].tiles[thx+1][thy+1].data=0;
+		maps[0].tiles[thx][thy+1].data=0;
+		maps[0].tiles[thx+1][thy].data=0;
+		maps[0].tiles[thx+1][thy].data=0;
+		maps[0].tiles[thx+2][thy+1].data=0;
+		maps[0].tiles[thx+1][thy+1].data=0;
+		maps[0].tiles[thx+2][thy].data=0;
+		maps[0].tiles[thx][thy+1].data=0;
+		maps[0].tiles[thx+1][thy+2].data=0;
+		maps[0].tiles[thx][thy+2].data=0;
+		maps[0].tiles[thx+1][thy+1].data=0;
+		maps[0].tiles[thx+2][thy+2].data=0;
+		towns[i].name=townnames[Math.floor(Math.random()*40)];
+	}
+
+	towns[0].x=2;
+	towns[0].y=2;
+	towns[0].team=0;
+	towns[0].name="King's Landing";
+
+	towns[1].x=110;
+	towns[1].y=76;
+	towns[1].team=1;
+	towns[1].name="Sunspear";
 }
-
-towns[0].x=2;
-towns[0].y=2;
-towns[0].team=0;
-towns[0].name="King's Landing";
-
-towns[1].x=110;
-towns[1].y=76;
-towns[1].team=1;
-towns[1].name="Sunspear";
 
 function endgame(){
 	if(winmode==0)
@@ -854,7 +885,8 @@ function squad() {
 		}
 		return herbert;
 	};
-	this.pickNewLeader=function() {
+	
+	this.pickNewLeader=function() { 
 		var oldlead=this.leader;
 		for(var i=0;i<this.numUnits;i++)
 		{	
@@ -871,6 +903,7 @@ function squad() {
 		}
 		return ;
 	};
+	
 	this.numSquadUnits=function() {
 	var count=0;
 	if(this.alive) 
@@ -894,6 +927,7 @@ function squad() {
 		}
 		return strongest;
 	};
+	
 	this.checkSurvivors=function() { 	//check for any living units if not kill squad.
 		var anylife=false;
 		for(var j=0;j<this.numUnits;j++)
@@ -920,7 +954,7 @@ function squad() {
 	};
 
 	this.draw = function(cam) {
-		  if (!this.alive) {return;} //also check visual range for enemies
+		  if (!this.alive) {return;} //TODO: also check visual range for enemies
 		  this.sprite.draw(canvas,
                                    (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
                                    (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
@@ -945,9 +979,7 @@ function squad() {
 	this.update = function(map) {
 		if ((paused) || (!this.alive) || (battleReport) || (isBattle)) {return;}
 	   targ=this.checkcollision();
-	   //if(this.battling) {this.battle(targ);}
-	   //if(isBattle) {return;}
-	   if(this.team==1) {targ=null;} //map.setZoom(2);
+	   if(this.team==1) {targ=null;} 
 	   if ((targ!=null) && (targ.alive)) {
 			mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
 			var tmpstr=this.leader.name + "'s squad encountered an enemy @ " +this.x + " , " +this.y;
@@ -1030,7 +1062,7 @@ function endBattle(usqd,esqd){
 	isBattle=false;
 	battleReport=true;
 	battleendtick=100;
-	//console.log(usqd.damaged,esqd.damaged);
+
 	if(usqd.damaged>=esqd.damaged) //win
 	{
 		if(usqd.x>esqd.x) {
@@ -1050,7 +1082,7 @@ function endBattle(usqd,esqd){
 			if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
 		}
 		esqd.path=null;
-		console.log("win @", usqd.x,usqd.y) //problem?
+		console.log("win @", usqd.x,usqd.y) 
 		won="Victory!";
 	}else{//lose
 		if(esqd.x>usqd.x) {
@@ -1075,7 +1107,7 @@ function endBattle(usqd,esqd){
 		if(usqd.turns==20) {won = "Ran away";}
 		//paused=true; //TODO
 	}
-//check for dead squads?
+
 	usqd.turns=0;
 	usqd.damaged=0;
 	esqd.turns=0;
@@ -1164,7 +1196,7 @@ function drawmousetext(targ,cam) { //draws unit status info
     canvas.fillStyle = "#5F9EA0";
 };
 
-function drawtowntext(targ,cam) { //draws unit status info
+function drawtowntext(targ,cam) { //draws town name
     canvas.font = "14pt Calibri";
     canvas.textAlign = "center";
     canvas.textBaseline = "middle";
@@ -1177,7 +1209,7 @@ function drawtowntext(targ,cam) { //draws unit status info
     canvas.fillStyle = "#5F9EA0";
 };
 
-    isOver= function(targ,cam){ //is the mouse over the player//object //todo:not right!!
+    isOver= function(targ,cam){ //is the mouse over the player/object 
 	if((mX>(targ.x-cam.x)*16/maps[0].zoom) && (mX<((targ.x-cam.x)*16+targ.width*maps[0].zoom)/maps[0].zoom) &&(mY>((targ.y-cam.y)*16)/maps[0].zoom) &&(mY<((targ.y-cam.y)*16+targ.height)/maps[0].zoom)) {return true;}
 	return false;
     };
@@ -1191,12 +1223,10 @@ function mouseClick(e) {  //represents the mouse
       tx=Math.floor(mX/16) * maps[0].zoom;
 	  ty=Math.floor(mY/16) * maps[0].zoom;
 
-//console.log("click", tx, ty);
 	  onSomething=null;
 	  for(var i=0;i<TEAM_SIZE;i++)
 	  {
 		if (isOver(squid[i],camera)) {onSomething=squid[i];SELECTED=i;}
-		//if((mX>(squid[i].x-camera.x)*16/maps[0].zoom) && (mX<(squid[i].x-camera.x)*16+squid[i].width/maps[0].zoom) &&(mY>(squid[i].y-camera.y)*16/maps[0].zoom) &&(mY<(squid[i].y-camera.y)*16+(squid[i].height*maps[0].zoom)/maps[0].zoom)) { onSomething=squid[i];SELECTED=i;}
 	  }
 	  if (onSomething==null){
 		  if( squid[SELECTED].path ) { squid[SELECTED].path = null; return; }
@@ -1419,7 +1449,6 @@ function Map(I) { //map object
 			  }
 			}
 			if(dominantType.type && dominantType.type <41) {
-				//I.tiles[i][j].draw(cam);
 				if(dominantType.type==0){
 				grasssprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}else if(dominantType.type==1){
@@ -1500,41 +1529,12 @@ for (var p=0;p<300;p++)
 	maps[0].setTile(i+1,k+1,1);
     maps[0].setTile(i+1,k,1);
 	maps[0].setTile(i,k+1,1);
-	//maps[0].setTile(i+1,k+2,1);
-	//maps[0].setTile(i+2,k+2,1);
-
-	//maps[0].setTile(i+2,k+1,1);
-	//maps[0].setTile(2+i,k,1);
-	//maps[0].setTile(i,k+2,1);
 	maps[0].setTile(i+1,k+1,1);
 
   
 }
 
 
-/*for (var p=0;p<10;p++)
-{
-	var i=Math.floor(Math.random()*80);
-	var k=Math.floor(Math.random()*70);
-	maps[0].setTile(24,24,4);
-	maps[0].setTile(i,k,4);
-	maps[0].setTile(i+1,k+1,4);
-	maps[0].setTile(i+2,k+2,4);
-    maps[0].setTile(i+1,k,4);
-	maps[0].setTile(i,k+1,4);
-	maps[0].setTile(i+1,k+2,4);
-	maps[0].setTile(i+2,k+1,4);
-	maps[0].setTile(2+i,k,4);
-	maps[0].setTile(i,k+2,4);
-	maps[0].setTile(i+1,k+1,4);
-
-  
-}*/
-for(var i=0;i<15;i++){
-	//maps[0].setTile(20+i,20,1);
-	//maps[0].setTile(20+i,50,1);
-	//maps[0].setTile(20,20+i,1);
-	}
 
 for(var i=0;i<15;i++){
 	for(var k=0;k<70;k++)
@@ -1615,7 +1615,6 @@ function battleDraw()
 		canvas.fillText("Lvl:", xp+100, 130+i*2*45);
 		canvas.fillText(combatants[0].units[i].level, xp+130, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 145+i*2*45);
-		//canvas.fillText(combatants[0].units[i].atb, xp+80, 145+i*2*45);
 		canvas.fillStyle =  "#DCDCDC";
 		canvas.fillRect(xp+80,143+(i*45*2),battlespeed+3,15);
 		canvas.fillStyle =  "yellow";
@@ -1678,12 +1677,8 @@ function battleDraw()
 			if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
 	}
 	canvas.fillStyle = "white";
-	var texticle= "Turns passed:    " +(combatants[0].turns+combatants[1].turns) + "/"+battlelength;
-	//console.log(combatants[0].turns+combatants[1].turns);
-	canvas.fillText(texticle, 350, 132);
-	//canvas.fillText(combatants[0].turns+combatants[1].turns, 460, 132);
-	//canvas.fillText(combatants[0].damaged, 660, 132);
-	//canvas.fillText(combatants[1].damaged, 260, 132);
+	var texticle= "Turns:" +(combatants[0].turns+combatants[1].turns) + "/"+battlelength;
+	canvas.fillText(texticle, 360, 132);
 	if(battlePause) {//in battle menu
 		canvas.fillText("battle pause!", 350, 432);
 	}
@@ -1702,20 +1697,17 @@ function battleDraw()
 		combatants[0].damaged=10;
 		endBattle(combatants[0],combatants[1]);
 	}
-	if(combatants[0].turns+combatants[1].turns>battlelength) {endBattle(combatants[0],combatants[1])};
+	if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1])};
 	if(battletick>battledelay) {battletick=0;}
 }
 
 //document.getElementById("myAudio").play(); //starts music
-
+initTowns();
 //------------MAIN LOOP-----------------------------------------
-//fix zoom
-//fix battles with more than one unit in squad
 function update() {
     lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
-	//console.log(milliseconds-lasttime,gamespeed);
 	tick++;
 	if(zoomkey.check()) {
 		maps[0].setZoom(camera);
@@ -1736,11 +1728,9 @@ function update() {
 				}
 			}
 		for (var i=0;i<TEAM_SIZE;i++) {
-			//squid[i].draw(camera);
 			squid[i].update(maps[0]);
 			if( (!squid[i].path) && (randomwalk) && i != SELECTED ) {
 				squid[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
-			//frogs[i].draw(camera);
 			frogs[i].update(maps[0]);
 			if( (!frogs[i].path) && (true) ){//&& i != 1 ) {
 				frogs[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
@@ -1762,7 +1752,7 @@ function update() {
 	}
 
 	selector.draw(canvas, (squid[SELECTED].x * 16 + (Math.round(squid[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (squid[SELECTED].y * 16 + (Math.round(squid[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
-	//camera controlls
+	//camera controls
 	if(maps[0].zoom<2){
 		if(keydown.left) {
 		camera.x -= 1;
@@ -1793,8 +1783,7 @@ function update() {
 	}
 
 	if ((squid[SELECTED]) && (!squid[SELECTED].alive)) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(squid[SELECTED]);} camera.center(squid[SELECTED]);}
-    //if(Mouse.clicked)
-   // console.log(numSquads(0),numUnits(0),SELECTED);
+
 	if(pausekey.check()) {
 		if(isBattle){
 			battlePause=!battlePause;
@@ -1824,7 +1813,7 @@ function update() {
 	}
 
 	armyInfo();
-	//squadInfo(squid[SELECTED]);
+
 	if((isBattle) || (battleReport)) {
 		battleDraw();
 		if (escapekey.check()) {isBattle=false;}
