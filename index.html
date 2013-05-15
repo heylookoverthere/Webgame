@@ -83,7 +83,7 @@ var stonesprite = Sprite("stone");
 var mossysprite = Sprite("mossy");
 var selector = Sprite("cursor");
 var noleader= Sprite("noleader");
-var flagsprite = Sprite("ironsword");
+var flagsprite = Sprite("flag");
 var explosionsprite=new Array(4);
 explosionsprite[0] =Sprite("explosion0");
 explosionsprite[1] =Sprite("explosion1");
@@ -345,7 +345,7 @@ function unit()
 	this.attackType=new Array(2);
 	this.attackType[0]=AttackTypes.Physical;
 	this.attackType[1]=AttackTypes.Physical;
-	this.class=Math.floor(Math.random()*6);
+	this.class=Math.floor(Math.random()*8);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.level=1;
@@ -742,7 +742,7 @@ function unit()
 			this.mdef=5;
 			this.cost=10;
 			this.equipment[0]=bow;
-			this.equipment[1]=breastplate;
+			this.equipment[1]=shirt;
 			this.canlead=true;
 			this.sprite = Sprite("archer");
 			this.attackType[0]=AttackTypes.Ranged;
@@ -767,7 +767,47 @@ function unit()
 			this.attackType[0]=AttackTypes.Physical;
 			this.attackType[1]=AttackTypes.Heal;
 			if (this.gender==1) {this.sprite = Sprite("healergirl");}
+		}else if(cla==6) { //ninja
+			this.maxhp=30;
+			this.hp=30;
+			this.attack=5;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=2;
+			this.evade=9;
+			this.mdef=5;
+			this.mag=15;
+			this.cost=10;
+			this.equipment[1]=robe;
+			this.canlead=true;
+			this.sprite = Sprite("ninja");
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Ranged;
+			if (this.gender==1) {this.sprite = Sprite("ninjagirl");}
+		}else if(cla==7) { //winger
+			this.maxhp=40;
+			this.hp=40;
+			this.attack=8;
+			this.maxmp=40;
+			this.speed=3;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=2;
+			this.mdef=5;
+			this.mag=15;
+			this.cost=10;
+			this.equipment[1]=robe;
+			this.canlead=true;
+			this.sprite = Sprite("winger");
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Physical;
+			if (this.gender==1) {this.sprite = Sprite("wingergirl");}
 		}
+		
 	};
 		this.setClass();
 		this.hp=this.maxhp;
@@ -900,7 +940,7 @@ function initTowns(){
 	towns[1].x=110;
 	towns[1].y=76;
 	towns[1].team=1;
-	towns[1].name="Sunspear";
+	towns[1].name="The Dreadfort";
 }
 
 function endgame(){
