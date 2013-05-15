@@ -771,26 +771,45 @@ function town() {
 	this.width=32;
 	this.height=32;
 	this.sprite = Sprite("town");
-	this.bsprite = Sprite("townblue");
-	this.rsprite = Sprite("townred");
+	this.bsprite=new Array(2);
+	this.bsprite[0] = Sprite("townblue");
+	this.bsprite[1] = Sprite("townblues");
+	this.rsprite=new Array(2);
+	this.rsprite[0] = Sprite("townred");
+	this.rsprite[1] = Sprite("townreds");
 	this.checkCollision=function(squd){
 		return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+4) && (squd.y>this.y-1) && (squd.y<this.y+4)); 
 	};
 	this.draw=function(cam)
 	{
-		this.sprite.draw(canvas,
-            (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-            (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
-		if(this.team==0)
+		if(maps[0].zoom<2) {
+			this.sprite.draw(canvas,
+				(this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
+				(this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+			if(this.team==0)
+			{
+				this.bsprite[0].draw(canvas,
+				(this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
+				(this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+			}else if(this.team==1)
+			{
+				this.rsprite[0].draw(canvas,
+				(this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
+				(this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+			}
+		}else
 		{
-			this.bsprite.draw(canvas,
-            (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-            (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
-		}else if(this.team==1)
-		{
-			this.rsprite.draw(canvas,
-            (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-            (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+			if(this.team==0)
+			{
+				this.bsprite[1].draw(canvas,
+				(this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
+				(this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+			}else if(this.team==1)
+			{
+				this.rsprite[1].draw(canvas,
+				(this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
+				(this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+			}
 		}
 	};
 };
@@ -1257,8 +1276,7 @@ function armyInfo(sq){
 	canvas.fillText(numSquads(0), 840, 24);
 	canvas.fillText("Units:", 760, 38);
 	canvas.fillText(numArmyUnits(0), 840, 38);
-	canvas.fillText("UpS:", 760, 56);
-	canvas.fillText(squid[SELECTED].numSquadUnits(), 840, 56);
+	canvas.fillText(squid[SELECTED].leader.name + "'s unit", 760, 56);
 
 };
 
