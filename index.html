@@ -92,8 +92,7 @@ explosionsprite[3] =Sprite("explosion3");
 
 
 
-var canvasElement = $("<canvas width='" + CANVAS_WIDTH + 
-		      "' height='" + CANVAS_HEIGHT + "'></canvas");
+var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var canvas = canvasElement.get(0).getContext("2d");
 canvasElement.appendTo('body');
 //todo:  find some way to put this in map or tile?
@@ -121,8 +120,8 @@ function playSound(name){
     
     nerp=document.getElementById(name);
     if(nerp.ended == true || nerp.currentTime == 0){
-	nerp.play()
-	    numsounds++;
+		nerp.play();
+		numsounds++;
     }
     
 };
@@ -146,8 +145,8 @@ function akey(k) {  //represents a keyboard button
 	this.dflag=false;
     this.check= function(){
 	if (keydown[this.key]) { 
-	    this.aflag=true;
-	    return false;
+		this.aflag=true;
+		return false;
 	}
 	if((!keydown[this.key]) && (this.aflag==true)){
 	    this.aflag=false;
@@ -219,13 +218,13 @@ swords[0]= new equipment();
 swords[0].name="Wooden Sword";
 swords[0].attack=3;
 swords[0].value=10;
-swords[0].tooltip = "It is dangerous to go alone."
+swords[0].tooltip = "It is dangerous to go alone.";
 
 swords[1]= new equipment();
 swords[1].attack=10;
 swords[1].name="Valyrian Sword";
 swords[1].value=100;
-swords[1].tooltip = "Forged in the fires of Valyria, New Jersey."
+swords[1].tooltip = "Forged in the fires of Valyria, New Jersey.";
 
 bow= new equipment();
 bow.slot=0;
@@ -233,7 +232,7 @@ bow.name="Wooden Bow";
 bow.evade=1;
 bow.attack=15;
 bow.value=20;
-bow.tooltip = "Finally, the power to slay your social betters."
+bow.tooltip = "Finally, the power to slay your social betters.";
 
 crossbow= new equipment();
 crossbow.slot=0;
@@ -242,7 +241,7 @@ crossbow.evade=12;
 crossbow.speed=1;
 crossbow.attack=15;
 crossbow.value=20;
-crossbow.tooltip = "Banned by the catholic church!"
+crossbow.tooltip = "Banned by the catholic church!";
 
 rod= new equipment();
 rod.slot=1;
@@ -250,7 +249,7 @@ rod.name="Rod";
 rod.mag=5;
 rod.mdef=5;
 rod.value=20;
-rod.tooltip = "Good for magic!"
+rod.tooltip = "Good for magic!";
 
 
 robe= new equipment();
@@ -259,7 +258,7 @@ robe.name="Robe";
 robe.def=1;
 robe.mdef=5;
 robe.value=20;
-robe.tooltip = "Should conceal your erection."
+robe.tooltip = "Should conceal your erection.";
 
 shirt= new equipment();
 shirt.slot=1;
@@ -267,7 +266,7 @@ shirt.name="Shirt";
 shirt.def=2;
 shirt.mdef=1;
 shirt.value=20;
-shirt.tooltip = "It's got stripes!."
+shirt.tooltip = "It's got stripes!.";
 
 breastplate= new equipment();
 breastplate.slot=1;
@@ -275,7 +274,7 @@ breastplate.name="Breastplate";
 breastplate.def=6;
 breastplate.mdef=1;
 breastplate.value=50;
-breastplate.tooltip = "Why are there nipples on it?"
+breastplate.tooltip = "Why are there nipples on it?";
 
 cape= new equipment();
 cape.slot=2;
@@ -283,7 +282,7 @@ cape.name="Wooden Bow";
 cape.evade=5;
 cape.attack=0;
 cape.value=20;
-cape.tooltip = "You're batman."
+cape.tooltip = "You're batman.";
 
 
 function unit()
@@ -419,11 +418,11 @@ function unit()
 		texticles= "Ali: " + this.ali ;
 		canvas.fillText(texticles, 280, 192);
 		
-		if(this.getAttackType()==0) {texticles= "Attack Type: Physical"} ;
-		if(this.getAttackType()==1) {texticles= "Attack Type: Ranged"} ;
-		if(this.getAttackType()==2) {texticles= "Attack Type: Magic"} ;
-		if(this.getAttackType()==3) {texticles= "Attack Type: Heal"} ;
-		if(this.getAttackType()==4) {texticles= "Attack Type: Inflict Status"} ;
+		if(this.getAttackType()==0) {texticles= "Attack Type: Physical";} 
+		if(this.getAttackType()==1) {texticles= "Attack Type: Ranged";} 
+		if(this.getAttackType()==2) {texticles= "Attack Type: Magic";} 
+		if(this.getAttackType()==3) {texticles= "Attack Type: Heal";} 
+		if(this.getAttackType()==4) {texticles= "Attack Type: Inflict Status";} 
 		canvas.fillText(texticles, 60, 212);
 		
 		texticles= "Can be leader: " + this.canlead ;
@@ -600,6 +599,12 @@ function unit()
 
 		this.atb+=this.speed;
 	};
+	
+	this.rowswap=function(){
+		if (this.row==0) { this.row=1;}
+		else if (this.row==1) { this.row=0;}
+	};
+	
 	this.setClass=function() {
 		var cla=this.class;
 		if(cla==0) { //bear
@@ -1730,6 +1735,7 @@ armies[0].init(0);
 armies[1].init(1);
 //armies[0].name = "Lannisters";
 armies[1].name = "Dornishmen";
+armies[1].leader.name="Roose";
 for (var i=0;i<TEAM_SIZE;i++){
 	armies[1].squads[i].leader.class=3;
 	armies[1].squads[i].basex=110;
@@ -1740,6 +1746,11 @@ for (var i=0;i<TEAM_SIZE;i++){
 	armies[1].squads[i].x=110;
 	armies[1].squads[i].y=76;
 }
+armies[1].leader.name="Roose";
+armies[1].leader.maxhp+=100;
+armies[1].leader.hp+=100;
+armies[1].leader.equipment[1]=breastplate;
+armies[1].leader.equipment[2]=cape;
 setInterval(function() {
 
 	update();
@@ -1910,7 +1921,7 @@ function update() {
 			if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
 				armies[0].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
 			armies[1].squads[i].update(maps[0]);
-			if( (!armies[1].squads[i].path) && (true) ){//&& i != 1 ) {
+			if( (!armies[1].squads[i].path) && (i != 0 )) {
 				armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
 		}
 	}
@@ -1983,7 +1994,11 @@ function update() {
 	}
 	
 	if(rowkey.check()) {
-		 armies[0].squads[SELECTED].row();
+		 if(!isBattle)
+		 {
+			armies[0].squads[SELECTED].row();
+		 }else
+		 armies[0].squads[SELECTED].units[BSELECTED].rowswap();
 	}
 	
 	if(fleekey.check()) {
