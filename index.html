@@ -873,6 +873,34 @@ function endgame(){
 		if(toaster) {console.log("YOU LOSE");}
 	}
 };
+
+function army() {
+	this.numSquads=TEAM_SIZE;
+	this.team=0;
+	this.gold=4000;
+	this.name="Fighting Mongooses"
+	this.squads=new Array (TEAM_SIZE);
+
+	this.leader=this.squads[0].leader;
+	this.leader.hp+=100
+	this.leader.eqipment[1]=breastplate;
+	this.init=function(side){
+		this.numSquads=TEAM_SIZE;
+		this.team=side;
+		this.gold=4000;
+		this.name="Fighting Mongooses"
+		for(var i=0;i<this.numSquads;i++)
+			this.squads[i]=new unit();
+		}
+		this.leader=this.squads[0].leader;
+		if (side==1) {
+				this.leader=this.squads[0].leader;
+				this.leader.hp+=100
+				this.leader.eqipment[1]=breastplate;
+		}
+	
+	};
+
 function squad() {
 	//list of units
 	//list of items
@@ -883,6 +911,7 @@ function squad() {
 	//waypoints?
 	this.x = 2;
 	this.y = 2;
+	this.army=0;
 	this.basex=2;
 	this.basey=2;
 	this.battleAI=0;
@@ -898,6 +927,7 @@ function squad() {
 	//for(var i=0;i<this.numUnits;i++) { this.units[i].alive=true;}
 	this.leader = this.units[0];
 	this.knockback=7;
+	this.deployed=true;
 	this.width=32;
 	this.height=32;
 	this.bx = 8;
@@ -914,6 +944,14 @@ function squad() {
 	this.nextMove = null;
 	this.nextTile = {x: this.x, y: this.y};
 	this.inNextTile = false;
+	this.deploy=function()
+	{
+		var cst = this.getCost();
+		if (armies[this.team].gold<cst) { return; console.log("Not enough gold to deploy"+ this.leader.name+ "'s unit.");}
+			armies[this.team].gold-=cst;
+		//revive and heal all just in case.
+		this.deployed=true;
+	}
 	this.row=function(){
 		for (var i=0;i<this.numUnits;i++)
 		{
@@ -1108,7 +1146,7 @@ function squad() {
 	   }
 	   var terrain = map.tiles[this.nextTile.x][this.nextTile.y].data;
 	   var speed = (terrain == 4 ? 2 : 4);
-	   if (this.leaderless) {speed=1;} //PROBLEM
+	   if (this.leaderless) {speed=3;} //PROBLEM?
 	   if((terrain==4) &&(this.units[0].class==3)) {speed=4};
 
            speed = speed / map.zoom;
