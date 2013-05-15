@@ -47,7 +47,7 @@ var FALL_DMG=900;
 var SPAWN_X=22;
 var SPAWN_Y=19;
 var GRAVITY_RATE=5;
-var TEAM_SIZE = 12;
+var TEAM_SIZE = 8;
 var SELECTED=0;
 var BSELECTED=0;
 var tick=0;
@@ -562,7 +562,7 @@ function unit()
 				if((esqd!=null) && (esqd.alive)){
 					if(targe==null) { return;}//esqd.checkSurvivors(); return;}
 					var delt=Math.floor(this.getAttack()-targe.getDef(this));
-					if (delt<0) {delt=1;};
+					if (delt<1) {delt=1;};
 					if(Math.floor(Math.random()*20) > targe.evade) {
 					var temper="";
 					if(Math.floor(Math.random()*CRIT_CHANCE) < this.luck) { delt=delt+(delt/2); temper=" critical";} //critical hit
@@ -866,7 +866,7 @@ function squad() {
 	this.y = 2;
 	this.basex=2;
 	this.basey=2;
-	this.battleAI=2;
+	this.battleAI=0;
 	this.alive=true;
     this.numUnits=Math.floor(Math.random()*3)+3;//3;
 	this.battling=false;
@@ -1857,7 +1857,7 @@ function update() {
 
 	selector.draw(canvas, (squid[SELECTED].x * 16 + (Math.round(squid[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (squid[SELECTED].y * 16 + (Math.round(squid[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
 	//camera controls
-	if(maps[0].zoom<2){
+	//if(maps[0].zoom<3){
 		if(keydown.left) {
 		camera.x -= 1;
 		if (camera.x<0) {camera.x=0;}
@@ -1865,7 +1865,7 @@ function update() {
 		
 		if(keydown.right) {
 		camera.x += 1;
-		if (camera.x>(MAP_WIDTH-camera.width)) {camera.x=MAP_WIDTH-camera.width;}
+		if (camera.x>(MAP_WIDTH/maps[0].zoom-camera.width)) {camera.x=MAP_WIDTH/maps[0].zoom-camera.width;}
 		}
 		
 		if(keydown.up) {
@@ -1875,9 +1875,9 @@ function update() {
 		
 		if(keydown.down) {
 		camera.y += 1;
-		if (camera.y>(MAP_HEIGHT-camera.height)) {camera.y=MAP_HEIGHT-camera.height;}
+		if (camera.y>(MAP_HEIGHT/maps[0].zoom-camera.height)) {(camera.y=MAP_HEIGHT/maps[0].zoom-camera.height);}
 		}
-	}
+	//}
 	if (ksavekey.check()) {randomwalk=!randomwalk;}
 
 	if(isBattle){
