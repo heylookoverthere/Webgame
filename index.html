@@ -982,7 +982,7 @@ function squad() {
 		if(this.alive==true){
 			console.log(this.leader.name + "'s squad has no qualified leader! returning to base!" );
 			this.leaderless=true;
-			this.setDestination(this.basex,this.basey,maps[0]);
+			//this.setDestination(this.basex,this.basey,maps[0]);
 		}
 		return ;
 	};
@@ -1086,6 +1086,8 @@ function squad() {
 			var tmpstr=this.leader.name + "'s squad encountered an enemy @ " +this.x + " , " +this.y;
 					console.log(tmpstr);//todo MONSOLEreturn;
 		};
+		if((this.leaderless==true) && (this.path==null)){
+			this.setDestination(this.basex,this.basey,maps[0])}
 		for(var i=0;i<numTowns;i++)
 		{
 			if(towns[i].checkCollision(this)) 
