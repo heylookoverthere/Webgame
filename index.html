@@ -59,7 +59,7 @@ var battledelay=10;
 var battletick=0;
 var battleenddelay=10;
 var battleendtick=0;
-var winmode=0;
+var winmode=1;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 var names= new Array (2);
 names[0]=new Array(120);
@@ -82,6 +82,7 @@ var watersprite = Sprite("water");
 var stonesprite = Sprite("stone");
 var mossysprite = Sprite("mossy");
 var selector = Sprite("cursor");
+var noleader= Sprite("noleader");
 var flagsprite = Sprite("ironsword");
 var explosionsprite=new Array(4);
 explosionsprite[0] =Sprite("explosion0");
@@ -106,7 +107,7 @@ var soundsplaying ="";
 var timestamp = new Date(); 
 var milliseconds = timestamp.getTime();
 var lasttime=0;
-var battlespeed=50;
+var battlespeed=100;
 var paused=false;
 var mappause=false;
 var battleReport=false;
@@ -204,7 +205,7 @@ function equipment()
 	this.regen=false;
 	this.imp=false;
 	this.HIV=false;
-	this.tooltip = "WTF are you doing with a shotgun?";
+	this.tooltip = "";
 
 };
 
@@ -225,6 +226,32 @@ swords[1].attack=10;
 swords[1].name="Valyrian Sword";
 swords[1].value=100;
 swords[1].tooltip = "Forged in the fires of Valyria, New Jersey."
+
+bow= new equipment();
+bow.slot=0;
+bow.name="Wooden Bow";
+bow.evade=1;
+bow.attack=15;
+bow.value=20;
+bow.tooltip = "Finally, the power to slay your social betters."
+
+crossbow= new equipment();
+crossbow.slot=0;
+crossbow.name="X-Bow";
+crossbow.evade=12;
+crossbow.speed=1;
+crossbow.attack=15;
+crossbow.value=20;
+crossbow.tooltip = "Banned by the catholic church!"
+
+rod= new equipment();
+rod.slot=1;
+rod.name="Rod";
+rod.mag=5;
+rod.mdef=5;
+rod.value=20;
+rod.tooltip = "Good for magic!"
+
 
 robe= new equipment();
 robe.slot=1;
@@ -250,7 +277,13 @@ breastplate.mdef=1;
 breastplate.value=50;
 breastplate.tooltip = "Why are there nipples on it?"
 
-
+cape= new equipment();
+cape.slot=2;
+cape.name="Wooden Bow";
+cape.evade=5;
+cape.attack=0;
+cape.value=20;
+cape.tooltip = "You're batman."
 
 
 function unit()
@@ -362,7 +395,7 @@ function unit()
 		if(this.class==4) {var texticles= "Class: Archer"; }
 		canvas.fillText(texticles, 180, 122);
 		
-		texticles= "Speed: " + this.speed;
+		texticles= "Speed: " + this.speed+ "+"+this.equipment[1].speed ;
 		canvas.fillText(texticles, 180, 135);
 		
 		texticles= "Attack " + this.attack + "+"+this.equipment[0].attack;
@@ -374,13 +407,13 @@ function unit()
 		texticles= "M.Def: " + this.mdef + "+"+this.equipment[1].mdef ;
 		canvas.fillText(texticles, 180, 192);
 		
-		texticles= "Magic: " + this.mag ;
+		texticles= "Magic: " + this.mag + "+"+this.equipment[1].mdef ;
 		canvas.fillText(texticles, 280, 135);
 		
-		texticles= "Luck: " + this.luck ;
+		texticles= "Luck: " + this.luck + "+"+this.equipment[1].luck ;
 		canvas.fillText(texticles, 280, 152);
 		
-		texticles= "Evade: " + this.evade ;
+		texticles= "Evade: " + this.evade + "+"+this.equipment[1].evade ;
 		canvas.fillText(texticles, 280, 172);
 		
 		texticles= "Ali: " + this.ali ;
@@ -491,6 +524,10 @@ function unit()
 		}
 	};
 	
+	this.hasStatus=function(stats){
+		return false;
+	}
+	
 	this.update = function (usqd,esqd){
 		if(paused) {return;}
 		if(battleReport) {return;}
@@ -589,7 +626,7 @@ function unit()
 			this.hp=60;
 			this.attack=11;
 			this.maxmp=40;
-			this.speed=1;
+			this.speed=3;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
@@ -607,11 +644,12 @@ function unit()
 			this.hp=50;
 			this.attack=5;
 			this.maxmp=40;
-			this.speed=1;
+			this.speed=2;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
 			this.sprite = Sprite("wizard");
+			this.equipment[0]=rod;
 			this.equipment[1]=robe;
 			if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
 			this.def=2;
@@ -626,7 +664,7 @@ function unit()
 			this.hp=60;
 			this.attack=9;
 			this.maxmp=40;
-			this.speed=2;
+			this.speed=4;
 			this.evade=4;
 			this.luck=5;
 			this.ali=50;
@@ -644,13 +682,14 @@ function unit()
 			this.hp=40;
 			this.attack=5;
 			this.maxmp=40;
-			this.speed=2;
+			this.speed=3;
 			this.luck=5;
 			this.ali=50;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
 			this.cost=10;
+			this.equipment[0]=bow;
 			this.equipment[1]=breastplate;
 			this.canlead=true;
 			this.sprite = Sprite("archer");
@@ -827,7 +866,7 @@ function squad() {
 	this.y = 2;
 	this.basex=2;
 	this.basey=2;
-	this.battleAI=1;
+	this.battleAI=2;
 	this.alive=true;
     this.numUnits=Math.floor(Math.random()*3)+3;//3;
 	this.battling=false;
@@ -839,7 +878,7 @@ function squad() {
 	this.units[4]= new unit();
 	//for(var i=0;i<this.numUnits;i++) { this.units[i].alive=true;}
 	this.leader = this.units[0];
-	this.knockback=5;
+	this.knockback=7;
 	this.width=32;
 	this.height=32;
 	this.bx = 8;
@@ -996,6 +1035,11 @@ function squad() {
 		  this.sprite.draw(canvas,
                                    (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
                                    (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
+		  if (this.leaderless){
+		  noleader.draw(canvas,
+                                   (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
+                                   (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
+		}
         };
 
 	this.drawdest = function(cam) {
@@ -1043,6 +1087,7 @@ function squad() {
 	   }
 	   var terrain = map.tiles[this.nextTile.x][this.nextTile.y].data;
 	   var speed = (terrain == 4 ? 2 : 4);
+	   if (this.leaderless) {speed=1;} //PROBLEM
 	   if((terrain==4) &&(this.units[0].class==3)) {speed=4};
 
            speed = speed / map.zoom;
@@ -1119,7 +1164,8 @@ function endBattle(usqd,esqd){
 			esqd.y+=usqd.knockback;
 			if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
 		}
-		esqd.path=null;
+		//esqd.path=null;
+		esqd.setDestination(usqd.x,usqd.y,maps[0]);
 		console.log("win @", usqd.x,usqd.y) 
 		won="Victory!";
 		for(var i=0;i<esqd.numUnits;i++)
@@ -1147,7 +1193,7 @@ function endBattle(usqd,esqd){
 			usqd.y+=esqd.knockback;
 			if(usqd.y>MAP_HEIGHT-1) {usqd.y=MAP_HEIGHT-1;}
 		}
-		usqd.path=null;
+		usqd.setDestination(usqd.x,usqd.y,maps[0]);
 		console.log("loss");
 		won="Defeat!"
 		for(var i=0;i<esqd.numUnits;i++)
@@ -1661,6 +1707,8 @@ function battleDraw()
 		if(combatants[0].units[i].class==1) {closs="Shoe";}
 		if(combatants[0].units[i].class==2) {closs="Wizard";}
 		if(combatants[0].units[i].class==3) {closs="Frog";}
+		if(combatants[0].units[i].class==4) {closs="Archer";}
+		if(combatants[0].units[i].class==5) {closs="Healer";}
 		var xp=600+combatants[0].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[0].units[i].hp, xp+30, 130+i*2*45);
@@ -1670,9 +1718,9 @@ function battleDraw()
 		canvas.fillText(combatants[0].units[i].level, xp+130, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 145+i*2*45);
 		canvas.fillStyle =  "#DCDCDC";
-		canvas.fillRect(xp+80,143+(i*45*2),battlespeed+3,15);
+		canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
 		canvas.fillStyle =  "yellow";
-		canvas.fillRect(xp+80+1,144+(i*45*2),combatants[0].units[i].atb,13);
+		canvas.fillRect(xp+60+1,144+(i*45*2),combatants[0].units[i].atb,13);
 
 		canvas.fillStyle = "blue";
 		canvas.fillText("Name:", xp, 172+i*2*45);
@@ -1703,6 +1751,8 @@ function battleDraw()
 		if(combatants[1].units[i].class==1) {closs="Shoe";}
 		if(combatants[1].units[i].class==2) {closs="Wizard";}
 		if(combatants[1].units[i].class==3) {closs="Frog";}
+		if(combatants[1].units[i].class==4) {closs="Archer";}
+		if(combatants[1].units[i].class==5) {closs="Healer";}
 		var xp=135-combatants[1].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[1].units[i].hp, xp+30, 130+i*2*45);
@@ -1712,9 +1762,9 @@ function battleDraw()
 		canvas.fillText(combatants[1].units[i].level, xp+130, 130+i*2*45);
 		canvas.fillText("ATB:", xp, 143+i*2*45);
 		canvas.fillStyle =  "#DCDCDC";
-		canvas.fillRect(xp+80,143+(i*45*2),battlespeed+3,15);
+		canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
 		canvas.fillStyle =  "yellow";
-		canvas.fillRect(xp+80+1,144+(i*45*2),combatants[1].units[i].atb,13);
+		canvas.fillRect(xp+60+1,144+(i*45*2),combatants[1].units[i].atb,13);
 
 		canvas.fillStyle = "red";
 		canvas.fillText(closs, xp, 158+i*2*45);
