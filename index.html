@@ -290,6 +290,12 @@ function unit()
 	this.equipment[0]=unarmed;
 	this.equipment[1]=noarmor;
 	this.equipment[2]=noaccessory;
+	this.kills=0;
+	this.damagetaken=0;
+	this.damagedelt=0;
+	this.battlesfought=0;
+	this.battleswon=0;
+	this.battleslost=0;
 	var nami=Math.floor(Math.random()*120);
 	while(true) {
 		if(namesused[this.gender][nami]) 
@@ -399,6 +405,22 @@ function unit()
 		texticles= "Accessory: " + this.equipment[2].name;
 		canvas.fillText(texticles, 60, 312);
 		
+				
+		texticles= "Battles Won: " + this.battleswon ;
+		canvas.fillText(texticles, 380, 232);
+		
+		texticles= "Battles Lost: " + this.battleslost;
+		canvas.fillText(texticles, 380, 252);
+		
+		texticles= "Units Killed: " + this.kills;
+		canvas.fillText(texticles, 380, 272);
+		
+		texticles= "Damage Delt: " + this.damagedelt;
+		canvas.fillText(texticles, 380, 292);
+		
+		texticles= "Damage Taken: " + this.damagetaken;
+		canvas.fillText(texticles, 380, 312);
+		
 	};
 	
 	this.levelUp=function(){
@@ -456,6 +478,7 @@ function unit()
 	};
 	this.hurt = function(dmg){
 		this.hp-=dmg;
+		this.damagetaken+=dmg;
 		if (this.hp<0) {this.hp=0; this.alive=false; 			var tmpstr=this.name + " died.";
 			console.log(tmpstr);//todo MONSOLE
 			}
@@ -480,7 +503,7 @@ function unit()
 			var targe=null;
 			if(this.getAttackType()==AttackTypes.Heal)
 			{
-				targe=usqd.getWeakest();
+				targe=usqd.getWeakestHeal();
 				targe.heal(this.mag);
 				esqd.damaged-=this.mag;
 				this.giveExp(this.mag);
@@ -515,7 +538,9 @@ function unit()
 							console.warn(tmpstr);
 						}
 						this.giveExp(delt);
+						this.damagedelt+=delt;
 						targe.hurt(delt); 
+						if(!targe.alive) { this.kills++;}
 						if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
 						this.attacking=10;
 						targe.hurting=20;
@@ -802,7 +827,7 @@ function squad() {
 	this.y = 2;
 	this.basex=2;
 	this.basey=2;
-	this.battleAI=2;
+	this.battleAI=1;
 	this.alive=true;
     this.numUnits=Math.floor(Math.random()*3)+3;//3;
 	this.battling=false;
@@ -952,6 +977,19 @@ function squad() {
 		}
 		return weakest;
 	};
+	
+	
+	this.getWeakestHeal=function() {
+		var weakest=this.leader;
+		var h=999;
+		for(var i=0;i<this.numUnits;i++){
+			if((this.units[i].hp<h) && (this.units[i].hp>0) && (this.units[i].hp<this.units[i].maxhp)) {
+				h=this.units[1].hp;
+				weakest=this.units[i];
+			}
+		}
+		return weakest;
+	};
 
 	this.draw = function(cam) {
 		  if (!this.alive) {return;} //TODO: also check visual range for enemies
@@ -1084,6 +1122,14 @@ function endBattle(usqd,esqd){
 		esqd.path=null;
 		console.log("win @", usqd.x,usqd.y) 
 		won="Victory!";
+		for(var i=0;i<esqd.numUnits;i++)
+		{
+			esqd.units[i].battleslost++;
+		}
+		for(var i=0;i<usqd.numUnits;i++)
+		{
+			usqd.units[i].battleswon++;
+		}
 	}else{//lose
 		if(esqd.x>usqd.x) {
 			usqd.x-=esqd.knockback;
@@ -1104,6 +1150,14 @@ function endBattle(usqd,esqd){
 		usqd.path=null;
 		console.log("loss");
 		won="Defeat!"
+		for(var i=0;i<esqd.numUnits;i++)
+		{
+			esqd.units[i].battleswon++;
+		}
+		for(var i=0;i<usqd.numUnits;i++)
+		{
+			usqd.units[i].battleslost++;
+		}
 		if(usqd.turns==20) {won = "Ran away";}
 		//paused=true; //TODO
 	}
@@ -1697,7 +1751,7 @@ function battleDraw()
 		combatants[0].damaged=10;
 		endBattle(combatants[0],combatants[1]);
 	}
-	if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1])};
+	if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
 	if(battletick>battledelay) {battletick=0;}
 }
 
