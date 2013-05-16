@@ -766,7 +766,7 @@ function unit()
 				{
 					if (esqd.units[i].alive)
 					{
-						targe=esqd.units[1];
+						targe=esqd.units[i];
 						var delt=Math.floor(this.getAttack()-targe.getDef(this));
 						if (delt<1) {delt=1;};
 						if(Math.floor(Math.random()*20) > targe.evade) {
@@ -1429,6 +1429,7 @@ function squad() {
 		if(this.alive==true){
 			console.log(this.leader.name + "'s squad has no qualified leader! returning to base!" );
 			this.leaderless=true;
+			this.clearDestination();
 			//this.setDestination(this.basex,this.basey,maps[0]);
 		}
 		return ;
@@ -1616,6 +1617,9 @@ function squad() {
 	this.isWalking = function() {
 	  return this.path != null;
 	};
+	this.clearDestination=function(){
+		this.path=null; this.dx = 0; this.dy = 0; this.nextMove = null;
+	};
 	this.setDestination = function(x, y, map) {
 	  this.path = map.getPath(this.x, this.y, x, y,this);
 	  this.dx=x;
@@ -1677,7 +1681,8 @@ function endBattle(usqd,esqd){
 			usqd.y+=esqd.knockback;
 			if(usqd.y>MAP_HEIGHT-1) {usqd.y=MAP_HEIGHT-1;}
 		}
-		usqd.setDestination(usqd.x,usqd.y,maps[0]);
+		//usqd.setDestination(usqd.x,usqd.y,maps[0]);
+		usqd.clearDestination();
 		console.log("loss");
 		won="Defeat!"
 		armies[0].losses++;
@@ -1819,7 +1824,7 @@ function mouseClick(e) {  //represents the mouse
 		if (isOver(armies[0].squads[i],camera)) {onSomething=armies[0].squads[i];SELECTED=i;}
 	  }
 	  if (onSomething==null){
-		  if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].path = null; return; }
+		  if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
 		  armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
 	  }
 
