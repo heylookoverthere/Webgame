@@ -684,12 +684,40 @@ function unit()
 			var targe=null;
 			if(this.getAttackType()==AttackTypes.Heal)
 			{
-				targe=usqd.getWeakestHeal();
-				targe.heal(this.mag);
-				esqd.damaged-=this.mag;
-				this.giveExp(this.mag);
-				var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
-				console.log(tmpstr);
+				if(this.class==9){
+					var deadguy=null;
+					for(var i=0;i<usqd.numUnits;i++){
+						if (!usqd.units[i].alive){
+							deadguy=usqd.units[i];
+							continue;
+						}
+					}
+					if(deadguy!=null)
+					{
+						deadguy.alive=true;
+						deadguy.heal(this.mag);
+						//esqd.damaged-=this.mag;
+						this.giveExp(this.mag);
+						var tmpstr=this.name + " revived " +deadguy.name;
+						console.log(tmpstr);
+					}else 
+					{
+						targe=usqd.getWeakestHeal();
+						targe.heal(this.mag);
+						esqd.damaged-=this.mag;
+						this.giveExp(this.mag);
+						var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
+						console.log(tmpstr);
+					}
+				}else 
+				{
+					targe=usqd.getWeakestHeal();
+					targe.heal(this.mag);
+					esqd.damaged-=this.mag;
+					this.giveExp(this.mag);
+					var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
+					console.log(tmpstr);
+				}
 			}else
 			{
 				if (usqd.battleAI==0) //weakest
