@@ -50,6 +50,7 @@ var GRAVITY_RATE=5;
 var TEAM_SIZE = 8;
 var SELECTED=0;
 var BSELECTED=0;
+var NUM_STATUS=5;
 var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
@@ -148,7 +149,13 @@ AttackTypes.someweirdshitthatignoresdefensemaybe =6;
 
 function card(){
 	this.name = "Flaccid Dolphin";
-	this.type = 0;
+	this.type = Math.floor(Math.random()*5);
+	this.sprite = Sprite("card0");
+	if(this.type==1){	this.sprite = Sprite("card1");}
+	if(this.type==2){	this.sprite = Sprite("card2");}
+	if(this.type==3){	this.sprite = Sprite("card3");}
+	if(this.type==4){	this.sprite = Sprite("card4");}
+
 	this.use=function(usqd,esqd)
 	{
 		//console.log("Played the " + this.name+ " card!");
@@ -475,6 +482,12 @@ function unit()
 		}
 	};
 	
+	this.esuna=function(){
+		for(var i=0;i<NUM_STATUS;i++){
+			this.status[i]=false;
+		}
+	};
+	
 	this.drawInfo=function(){
 		canvas.save();
 		canvas.globalAlpha=0.60;
@@ -642,6 +655,15 @@ function unit()
 		}
 	};
 	
+	this.giveStatus=function(stats){
+		this.status[stats]=true;
+	}
+	
+	this.removeStatus=function(stats){
+		this.status[stats]=false;
+	}
+	
+	
 	this.hasStatus=function(stats){
 		if(this.status[stats]) {return true;}
 		return false;
@@ -655,6 +677,9 @@ function unit()
 		if (this.hurting>0) {this.hurting--; return;}
 		if (this.atb>battlespeed) {
 			//gambits, attack
+			if(this.hasStatus(Status.Poison)){
+					this.hurt(3);
+			}
 			this.atb=0;
 			var targe=null;
 			if(this.getAttackType()==AttackTypes.Heal)
@@ -717,7 +742,13 @@ function unit()
 
 
 
-		this.atb+=this.speed;
+		if(this.hasStatus(Status.Haste)){
+				this.atb+=(this.speed*2);
+		}else if(this.hasStatus(Status.Slow)){
+				this.atb+=(this.speed/2);
+		}else {
+			this.atb+=this.speed;
+		}
 	};
 	
 	this.rowswap=function(){
@@ -1028,14 +1059,14 @@ function endgame(){
 		{
 			if(towns[i].team!=0) {toaster=false;}
 		}
-		if(toaster) {console.log("A WINNER IS YOU");}
+		//if(toaster) {console.log("A WINNER IS YOU");}
 		
 		toaster=true;
 		for(var i=0;i<numTowns;i++)
 		{
 			if(towns[i].team!=1) {toaster=false;}
 		}
-		if(toaster) {console.log("YOU LOSE");}
+		//if(toaster) {console.log("YOU LOSE");}
 	}
 };
 
@@ -1044,6 +1075,10 @@ function army() {
 	this.team=0;
 	this.cards=new Array(5);
 	this.cards[0]=new card();
+	this.cards[1]=new card();
+	this.cards[2]=new card();
+	this.cards[3]=new card();
+	this.cards[4]=new card();
 	this.gold=4000;
 	this.name="Fighting Mongooses"
 	this.squads=new Array (TEAM_SIZE);
@@ -1123,6 +1158,24 @@ function squad() {
 		//revive and heal all just in case.
 		this.deployed=true;
 	}
+	
+	this.healStatus=function(){
+		for(var i=0;i<numUnits;i++){
+			this.units[i].esuna();
+		}
+	};
+	
+	this.refresh=function(){
+		for(var i=0;i<numUnits;i++){
+			this.units[i].alive=true;
+			this.units[i].hp=this.units[i].maxhp;
+			this.units[i].mp=this.units[i].maxmp;
+			this.units[i].atb=0;
+			//reset stats?
+		}
+		this.healStatus();
+	}
+	
 	this.row=function(){
 		for (var i=0;i<this.numUnits;i++)
 		{
@@ -1989,7 +2042,14 @@ function battleDraw()
 		canvas.fillText("ATB:", xp, 145+i*2*45);
 		canvas.fillStyle =  "#DCDCDC";
 		canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
-		canvas.fillStyle =  "yellow";
+		if(combatants[0].units[i].hasStatus(Status.Haste)){
+			canvas.fillStyle =  "green";
+		}else if(combatants[0].units[i].hasStatus(Status.Slow)){
+			canvas.fillStyle =  "red";
+		}else
+		{
+			canvas.fillStyle =  "yellow";
+		}
 		canvas.fillRect(xp+60+1,144+(i*45*2),combatants[0].units[i].atb,13);
 
 		canvas.fillStyle = "blue";
@@ -2194,12 +2254,15 @@ function update() {
 		 }else
 		 armies[0].squads[SELECTED].units[BSELECTED].rowswap();
 	}
-	
+
 	if(cardkey.check()) {
 		 if(isBattle)
 		 {
-			armies[0].cards[0].type=CSELECTED;
+			//armies[0].cards[0].type=CSELECTED;
 			armies[0].cards[0].use(combatants[0],combatants[1]);
+		 }else {
+			CSELECTED++;
+			if(CSELECTED>4) { CSELECTED=0;}
 		 }
 	}
 	
@@ -2208,6 +2271,8 @@ function update() {
 	}
 
 	armyInfo();
+	
+	armies[0].cards[CSELECTED].sprite.draw(canvas,300, 5);
 
 	if((isBattle) || (battleReport)) {
 		battleDraw();
