@@ -670,8 +670,8 @@ function unit()
 		return this.equipment[0].evade+this.equipment[1].evade+this.equipment[2].evade;
 	};
 	
-	this.getDef= function(attacker){
-		if((attacker.getAttackType()==AttackTypes.Physical) || (attacker.getAttackType()==AttackTypes.Ranged)){
+	this.getDef= function(attacktype){
+		if((attacktype==AttackTypes.Physical) || (attacktype==AttackTypes.Ranged)){
 			if(this.row==0){
 				return this.def+this.equipDef();
 			}else{
@@ -782,7 +782,7 @@ function unit()
 					if (esqd.units[i].alive)
 					{
 						targe=esqd.units[i];
-						var delt=Math.floor(this.getAttack()-targe.getDef(this));
+						var delt=Math.floor(this.getAttack()-targe.getDef(this.getAttackType()));
 						if (delt<1) {delt=1;};
 						if(Math.floor(Math.random()*20) > targe.evade) {
 						var temper="";
@@ -822,7 +822,7 @@ function unit()
 				}
 				if((esqd!=null) && (esqd.alive)){
 					if(targe==null) { return;}//esqd.checkSurvivors(); return;}
-					var delt=Math.floor(this.getAttack()-targe.getDef(this));
+					var delt=Math.floor(this.getAttack()-targe.getDef(this.getAttackType()));
 					if (delt<1) {delt=1;};
 					if(Math.floor(Math.random()*20) > targe.evade) {
 					var temper="";
