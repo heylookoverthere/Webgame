@@ -424,7 +424,7 @@ function unit()
 	this.status[4]=false;
 	this.status[5]=false;
 	this.status[6]=false;
-	this.class=Math.floor(Math.random()*8);
+	this.class=Math.floor(Math.random()*10);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.level=1;
@@ -910,6 +910,44 @@ function unit()
 			this.attackType[0]=AttackTypes.Physical;
 			this.attackType[1]=AttackTypes.Physical;
 			if (this.gender==1) {this.sprite = Sprite("wingergirl");}
+		}else if(cla==8) { //knight
+			this.maxhp=40;
+			this.hp=40;
+			this.attack=12;
+			this.maxmp=40;
+			this.speed=3;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=12;
+			this.mdef=5;
+			this.mag=15;
+			this.cost=10;
+			this.equipment[1]=chainmail;
+			this.canlead=true;
+			this.sprite = Sprite("knight");
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Physical;
+			if (this.gender==1) {this.sprite = Sprite("knightgirl");}
+		}else if(cla==9) { //cleric
+			this.maxhp=50;
+			this.hp=40;
+			this.attack=8;
+			this.maxmp=40;
+			this.speed=3;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.def=2;
+			this.mdef=5;
+			this.mag=30;
+			this.cost=10;
+			this.equipment[1]=robe;
+			this.canlead=true;
+			this.sprite = Sprite("cleric");
+			this.attackType[0]=AttackTypes.Magical;
+			this.attackType[1]=AttackTypes.Heal;
+			if (this.gender==1) {this.sprite = Sprite("clericgirl");}
 		}
 		
 	};
@@ -1478,7 +1516,7 @@ function endBattle(usqd,esqd){
 		{
 			usqd.units[i].battleswon++;
 		}
-	}else{//lose
+	}else if(usqd.damaged<esqd.damaged) {//lose
 		if(esqd.x>usqd.x) {
 			usqd.x-=esqd.knockback;
 			if(usqd.x<1) {usqd.x=1;}
