@@ -2038,7 +2038,7 @@ function Map(I) { //map object
     I.zoom = 1;
 
     I.setZoom = function(cam) {
-		if (I.zoom == 1) {I.zoom=2} else {I.zoom=1};
+		if (I.zoom == 1) {I.zoom=2;} else /*if (I.zoom==2) {I.zoom=4;} else*/ {I.zoom=1;}
         cam.x=0;
 		cam.y=0;
 		cam.zoom=I.zoom;
@@ -2406,22 +2406,22 @@ function update() {
 	//camera controls
 	//if(maps[0].zoom<3){
 		if(keydown.left) {
-		camera.x -= 1;
+		camera.x -= 1*maps[0].zoom;
 		if (camera.x<0) {camera.x=0;}
 		}
 		
 		if(keydown.right) {
-		camera.x += 1;
+		camera.x += 1*maps[0].zoom;
 		if (camera.x>(MAP_WIDTH-(camera.width*maps[0].zoom))) {camera.x=MAP_WIDTH-(camera.width*maps[0].zoom);}
 		}
 		
 		if(keydown.up) {
-		camera.y -= 1;
+		camera.y -= 1*maps[0].zoom;
 		if (camera.y<0) {camera.y=0;}
 		}
 		
 		if(keydown.down) {
-		camera.y += 1;
+		camera.y += 1*maps[0].zoom;
 		console.log(camera.x,camera.y);
 		if (camera.y>(MAP_HEIGHT-(camera.height*maps[0].zoom))) {(camera.y=MAP_HEIGHT-(camera.height*maps[0].zoom));}
 		}
