@@ -46,6 +46,7 @@ knockback both on tie
 -town greeting first time, boss greeting
 
 -amry inventory:how many of each item
+army looseunits.
 -tab through squads, tab through units, get status, equip items, swap units.
 -angel ring?
 
@@ -68,4 +69,8 @@ The Kingsguard
 The Windblown
 The Long Lances
 Stormcrows
+
+Theon
+Fletcher Dick
+Beardless Dick is a man of the Riverlands.
 

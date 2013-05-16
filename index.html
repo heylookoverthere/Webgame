@@ -35,8 +35,8 @@ var won="";
 var textText="";
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
-var MAP_WIDTH = 120;
-var MAP_HEIGHT = 80;
+var MAP_WIDTH = 220;
+var MAP_HEIGHT = 280;
 var CRIT_CHANCE=100;
 var FPS = 30;
 var LAVA_RATE=2000;
@@ -70,7 +70,7 @@ var mY=320;
 var townnames=new Array(40);
 townnames= ["Qarth","Meereen","Myr","Pentos","Ashford","Ashemark","Gulltown","Pyke","Lordsport","Lannisport","Lys","Tyrosh","Iben","New Ghis","Astapor","Yunkai","Qohor","Lorath","Volantis","Braavos","Vaes Dothrak","White Harbor","Maidenpool","Oldstones","Harrenhal","Riverrun","Seaguard","Winterfell","Saltpans","Castamere","Oxcross","Crakehall","The Crag","Duskendale","Dragonstone","Rosby","Highgarden","Oldtown","Grimston","Hardhome"];
 
-names[0]= ["Eddard", "Jim","Ethan", "Jason", "Dave", "Travis", "Greg", "Matthew", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn","Howland","Daario","Xhondo","Yellow Dick","Zachery","Zekko","Zollo","Will","Willbert","Wendel","Wendamyr","The Weeper","Wat","Walton","Vardis","Urrigon","Ulmer","Tobho","Timett","Syrio","Styr"];
+names[0]= ["Eddard", "Theon","Ethan", "Jason", "Dave", "Travis", "Fletcher Dick", "Beardless Dick", "Mike", "Justin", "John", "Jon", "Chris", "Alex", "Russel", "Josh","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn","Howland","Daario","Xhondo","Yellow Dick","Zachery","Zekko","Zollo","Will","Willbert","Wendel","Wendamyr","The Weeper","Wat","Walton","Vardis","Urrigon","Ulmer","Tobho","Timett","Syrio","Styr"];
 names[1]= ["Kim", "Danielle", "Alyssa", "Ronza", "Molly", "Kyra", "Tracey", "Elizibeth", "Sandy", "Roxanne", "Alexis", "Rachel", "Amy", "Melissa","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei","Old Nan","Yna","Ysilla","Victaria","Visenya","Val","The Waif","Tya","Tysane","Tansey","Talla","Taela","Squirrel","Shiera","Sharna","Scolera","Sarra","Sallei","S'vrone","Rhea","Rhialta"];
 var namesused=new Array(2);
 namesused[0]=new Array(120);
@@ -1216,8 +1216,8 @@ function initTowns(){
 	for(var i=0;i<numTowns;i++)
 	{
 		towns[i] =new town();
-		var thx=Math.floor(Math.random()*90);
-		var thy=Math.floor(Math.random()*75);
+		var thx=Math.floor(Math.random()*190);
+		var thy=Math.floor(Math.random()*145);
 		towns[i].x=thx;
 		towns[i].y=thy;
 		maps[0].tiles[thx][thy].data=0;
@@ -1241,8 +1241,8 @@ function initTowns(){
 	towns[0].team=0;
 	towns[0].name="King's Landing";
 
-	towns[1].x=110;
-	towns[1].y=76;
+	towns[1].x=180;
+	towns[1].y=156;
 	towns[1].team=1;
 	towns[1].name="The Dreadfort";
 }
@@ -1911,7 +1911,7 @@ var camera = {  //represents the camera, aka what part of the map is on screen
     check: function() {
 	this.x.clamp(0, MAP_WIDTH-60);
 	this.y.clamp(0, MAP_HEIGHT-40);
-	if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
+	//if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
     },
     rX: function(fx) {
 	return fx-this.x;
@@ -2142,8 +2142,8 @@ maps[0].setTile(30,26,1);
 
 for (var p=0;p<300;p++)
 {
-	var i=Math.floor(Math.random()*100)+4;
-	var k=Math.floor(Math.random()*70)+4;
+	var i=Math.floor(Math.random()*200)+4;
+	var k=Math.floor(Math.random()*160)+4;
 	maps[0].setTile(24,24,1);
 	maps[0].setTile(i,k,1);
 	maps[0].setTile(i+1,k+1,1);
@@ -2183,13 +2183,13 @@ armies[1].name = "Dornishmen";
 armies[1].leader.name="Roose";
 for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].leader.class=3;
-	armies[1].squads[i].basex=110;
-	armies[1].squads[i].basey=76;
+	armies[1].squads[i].basex=180;
+	armies[1].squads[i].basey=156;
 	armies[1].squads[i].leader.setClass();
 	armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
 	armies[1].squads[i].team=1;
-	armies[1].squads[i].x=110;
-	armies[1].squads[i].y=76;
+	armies[1].squads[i].x=180;
+	armies[1].squads[i].y=156;
 	armies[1].squads[i].smartRow();
 	armies[1].squads[i].deploy();//TODO delay between deployment 
 	armies[1].lastDeployed++;
