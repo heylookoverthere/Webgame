@@ -244,6 +244,7 @@ function status()
 function equipment()
 {
 	this.name="none";
+	this.hitAll=false;
 	this.slot=0;
 	this.value=0;
 	this.attack=0;
@@ -342,7 +343,7 @@ rod.mdef=5;
 rod.value=20;
 rod.tooltip = "Good for magic!";
 
-icemagic=new Array(2);
+icemagic=new Array(4);
 icemagic[0]= new equipment();
 icemagic[0].slot=0;
 icemagic[0].name="Ice";
@@ -354,10 +355,28 @@ icemagic[0].tooltip = "Basic ice attack";
 icemagic[1]= new equipment();
 icemagic[1].slot=0;
 icemagic[1].name="Ice 2";
-icemagic[1].evade=2;
+icemagic[1].evade=0;
 icemagic[1].mag=25;
 icemagic[1].value=200;
 icemagic[1].tooltip = "It's...Slightly colder!";
+
+icemagic[2]= new equipment();
+icemagic[2].slot=0;
+icemagic[2].name="Blizzard 1";
+icemagic[2].hitAll=true;
+icemagic[2].evade=0;
+icemagic[2].mag=10;
+icemagic[2].value=2000;
+icemagic[2].tooltip = "Hits all enemies";
+
+icemagic[3]= new equipment();
+icemagic[3].slot=0;
+icemagic[3].hitAll=true;
+icemagic[3].name="Blizzard 2";
+icemagic[3].evade=0;
+icemagic[3].mag=25;
+icemagic[3].value=2000;
+icemagic[3].tooltip = "Hits all enemies harder";
 
 robe= new equipment();
 robe.slot=1;
@@ -424,7 +443,7 @@ function unit()
 	this.status[4]=false;
 	this.status[5]=false;
 	this.status[6]=false;
-	this.class=Math.floor(Math.random()*10);
+	this.class=Math.floor(Math.random()*12);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.level=1;
@@ -684,7 +703,7 @@ function unit()
 			var targe=null;
 			if(this.getAttackType()==AttackTypes.Heal)
 			{
-				if(this.class==9){
+				if((this.class==9) || (this.class==11)){
 					var deadguy=null;
 					for(var i=0;i<usqd.numUnits;i++){
 						if (!usqd.units[i].alive){
@@ -700,7 +719,17 @@ function unit()
 						this.giveExp(this.mag);
 						var tmpstr=this.name + " revived " +deadguy.name;
 						console.log(tmpstr);
-					}else 
+					}else  if (this.class==11) 
+					{
+						var tmpstr=this.name + " healed the party" ;
+						console.log(tmpstr);
+						for(var i=0;i<usqd.numUnits;i++){
+							if (usqd.units[i].alive) {
+								usqd.units[i].heal(20);
+							}
+						}
+	
+					}else
 					{
 						targe=usqd.getWeakestHeal();
 						targe.heal(this.mag);
@@ -718,6 +747,39 @@ function unit()
 					var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
 					console.log(tmpstr);
 				}
+			}else
+			{
+			if(this.equipment[0].hitAll){
+				for(var i=0;i<esqd.numUnits;i++)
+				{
+					if (esqd.units[i].alive)
+					{
+						targe=esqd.units[1];
+						var delt=Math.floor(this.getAttack()-targe.getDef(this));
+						if (delt<1) {delt=1;};
+						if(Math.floor(Math.random()*20) > targe.evade) {
+						var temper="";
+						if(Math.floor(Math.random()*CRIT_CHANCE) < this.luck) { delt=delt+(delt/2); temper=" critical";} //critical hit
+							
+						var tmpstr=this.name + temper+" hit " +targe.name+ " for " +delt+ " damage.";
+						if(usqd.team==0) {
+							console.log(tmpstr);//todo MONSOLE
+						}else
+						{
+							console.warn(tmpstr);
+						}
+						this.giveExp(delt);
+						this.damagedelt+=delt;
+						targe.hurt(delt); 
+						if(!targe.alive) { this.kills++;}
+						if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
+						this.attacking=10;
+						targe.hurting=20;
+						usqd.turns++;
+						usqd.damaged+=delt;
+					}
+				}
+			}
 			}else
 			{
 				if (usqd.battleAI==0) //weakest
@@ -757,6 +819,7 @@ function unit()
 						usqd.damaged+=delt;
 					}else {this.attacking=10; usqd.turns++;this.attacking=10; tmpstr = this.name + " missed "+ targe.name; console.log(tmpstr);} //miss
 				}else {endBattle(usqd,esqd);}
+			}
 			}
 			
 		}
@@ -976,6 +1039,46 @@ function unit()
 			this.attackType[0]=AttackTypes.Magical;
 			this.attackType[1]=AttackTypes.Heal;
 			if (this.gender==1) {this.sprite = Sprite("clericgirl");}
+		}else if(cla==10) { //sage
+			this.maxhp=60;
+			this.hp=50;
+			this.attack=5;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.sprite = Sprite("sage");
+			this.equipment[0]=icemagic[2];
+			this.equipment[1]=robe;
+			if (this.gender==1) {this.sprite = Sprite("sagegirl");}
+			this.def=2;
+			this.mdef=5;
+			this.mag=20;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Magical;
+		}else if(cla==11) { //angel
+			this.maxhp=60;
+			this.hp=50;
+			this.attack=5;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=50;
+			this.viewrange=5;
+			this.sprite = Sprite("angel");
+			this.equipment[0]=icemagic[1];
+			this.equipment[1]=robe;
+			if (this.gender==1) {this.sprite = Sprite("angelgirl");}
+			this.def=2;
+			this.mdef=15;
+			this.mag=30;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Magical;
+			this.attackType[1]=AttackTypes.Heal;
 		}
 		
 	};
@@ -1259,6 +1362,7 @@ function squad() {
 			}
 		}
 	}
+	
 	this.getCost=function(){
 		return 100;
 	};
