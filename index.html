@@ -81,6 +81,7 @@ var grasssprite = Sprite("grass");
 var watersprite = Sprite("water");
 var stonesprite = Sprite("stone");
 var mossysprite = Sprite("mossy");
+var poisonsprite = Sprite("poison");
 var selector = Sprite("cursor");
 var noleader= Sprite("noleader");
 var flagsprite = Sprite("flag");
@@ -126,6 +127,14 @@ function playSound(name){
     }
     
 };
+
+Status = {};
+Status.Poison = 0; 
+Status.Haste = 1;
+Status.Slow = 2;
+Status.Mute = 3;
+Status.Imp = 4;
+Status.Reflect = 5; 
 
     
 AttackTypes = {};
@@ -270,6 +279,19 @@ swords[1].name="Valyrian Sword";
 swords[1].value=100;
 swords[1].tooltip = "Forged in the fires of Valyria, New Jersey.";
 
+katana=new Array(2);
+katana[0]= new equipment();
+katana[0].name="Wooden Katana";
+katana[0].attack=9;
+katana[0].value=10;
+katana[0].tooltip = "Who makes a wooden Katana?";
+
+katana[1]= new equipment();
+katana[1].attack=30;
+katana[1].name="Muramasa";
+katana[1].value=100;
+katana[1].tooltip = "OGOPOGO!";
+
 bow= new equipment();
 bow.slot=0;
 bow.name="Wooden Bow";
@@ -277,6 +299,23 @@ bow.evade=1;
 bow.attack=15;
 bow.value=20;
 bow.tooltip = "Finally, the power to slay your social betters.";
+
+spear=new Array(2);
+spear[0]= new equipment();
+spear[0].slot=0;
+spear[0].name="Wooden spear";
+spear[0].evade=4;
+spear[0].attack=15;
+spear[0].value=20;
+spear[0].tooltip = "Poke 'em mon!";
+
+spear[1]= new equipment();
+spear[1].slot=0;
+spear[1].name="Zodiac spear";
+spear[1].evade=12;
+spear[1].attack=25;
+spear[1].value=200;
+spear[1].tooltip = "You cheated.";
 
 crossbow= new equipment();
 crossbow.slot=0;
@@ -290,11 +329,28 @@ crossbow.tooltip = "Banned by the catholic church!";
 rod= new equipment();
 rod.slot=1;
 rod.name="Rod";
+rod.attack=2;
 rod.mag=5;
 rod.mdef=5;
 rod.value=20;
 rod.tooltip = "Good for magic!";
 
+icemagic=new Array(2);
+icemagic[0]= new equipment();
+icemagic[0].slot=0;
+icemagic[0].name="Ice";
+icemagic[0].evade=2;
+icemagic[0].mag=15;
+icemagic[0].value=20;
+icemagic[0].tooltip = "Basic ice attack";
+
+icemagic[1]= new equipment();
+icemagic[1].slot=0;
+icemagic[1].name="Ice 2";
+icemagic[1].evade=2;
+icemagic[1].mag=25;
+icemagic[1].value=200;
+icemagic[1].tooltip = "It's...Slightly colder!";
 
 robe= new equipment();
 robe.slot=1;
@@ -319,6 +375,14 @@ breastplate.def=6;
 breastplate.mdef=1;
 breastplate.value=50;
 breastplate.tooltip = "Why are there nipples on it?";
+
+chainmail= new equipment();
+chainmail.slot=1;
+chainmail.name="chainmail";
+chainmail.def=10;
+chainmail.mdef=1;
+chainmail.value=150;
+chainmail.tooltip = "you can pretend you're a fence!";
 
 cape= new equipment();
 cape.slot=2;
@@ -345,6 +409,14 @@ function unit()
 	this.attackType=new Array(2);
 	this.attackType[0]=AttackTypes.Physical;
 	this.attackType[1]=AttackTypes.Physical;
+	this.status=new Array(7);
+	this.status[0]=false;
+	this.status[1]=false;
+	this.status[2]=false;
+	this.status[3]=false;
+	this.status[4]=false;
+	this.status[5]=false;
+	this.status[6]=false;
 	this.class=Math.floor(Math.random()*8);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
@@ -571,6 +643,7 @@ function unit()
 	};
 	
 	this.hasStatus=function(stats){
+		if(this.status[stats]) {return true;}
 		return false;
 	}
 	
@@ -1926,11 +1999,13 @@ function battleDraw()
 
 		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		if(i==BSELECTED) {selector.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		
 		if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
 			combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
 		}
 		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
+		if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
 		if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
 	}
@@ -1974,6 +2049,7 @@ function battleDraw()
 			combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
 		}
 			if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
+			if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 			if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
 			if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
 	}
