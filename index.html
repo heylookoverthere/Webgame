@@ -2412,7 +2412,7 @@ function update() {
 		
 		if(keydown.right) {
 		camera.x += 1;
-		if (camera.x>(MAP_WIDTH/maps[0].zoom-camera.width)) {camera.x=MAP_WIDTH/maps[0].zoom-camera.width;}
+		if (camera.x>(MAP_WIDTH-(camera.width*maps[0].zoom))) {camera.x=MAP_WIDTH-(camera.width*maps[0].zoom);}
 		}
 		
 		if(keydown.up) {
@@ -2422,7 +2422,8 @@ function update() {
 		
 		if(keydown.down) {
 		camera.y += 1;
-		if (camera.y>(MAP_HEIGHT/maps[0].zoom-camera.height)) {(camera.y=MAP_HEIGHT/maps[0].zoom-camera.height);}
+		console.log(camera.x,camera.y);
+		if (camera.y>(MAP_HEIGHT-(camera.height*maps[0].zoom))) {(camera.y=MAP_HEIGHT-(camera.height*maps[0].zoom));}
 		}
 	//}
 	if (ksavekey.check()) {randomwalk=!randomwalk;}
