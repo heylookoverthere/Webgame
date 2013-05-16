@@ -47,7 +47,7 @@ var FALL_DMG=900;
 var SPAWN_X=22;
 var SPAWN_Y=19;
 var GRAVITY_RATE=5;
-var TEAM_SIZE = 8;
+var TEAM_SIZE = 12;
 var SELECTED=0;
 var BSELECTED=0;
 var NUM_STATUS=5;
@@ -312,13 +312,22 @@ katana[1].name="Muramasa";
 katana[1].value=100;
 katana[1].tooltip = "OGOPOGO!";
 
-bow= new equipment();
-bow.slot=0;
-bow.name="Wooden Bow";
-bow.evade=1;
-bow.attack=15;
-bow.value=20;
-bow.tooltip = "Finally, the power to slay your social betters.";
+bow=new Array(2);
+bow[0]= new equipment();
+bow[0].slot=0;
+bow[0].name="Wooden Bow";
+bow[0].evade=1;
+bow[0].attack=15;
+bow[0].value=20;
+bow[0].tooltip = "Finally, the power to slay your social betters.";
+
+bow[1]= new equipment();
+bow[1].slot=0;
+bow[1].name="Weirwood Bow";
+bow[1].evade=7;
+bow[1].attack=35;
+bow[1].value=300;
+bow[1].tooltip = "Better bow!";
 
 spear=new Array(2);
 spear[0]= new equipment();
@@ -337,14 +346,16 @@ spear[1].attack=25;
 spear[1].value=200;
 spear[1].tooltip = "You cheated.";
 
-crossbow= new equipment();
-crossbow.slot=0;
-crossbow.name="X-Bow";
-crossbow.evade=12;
-crossbow.speed=1;
-crossbow.attack=15;
-crossbow.value=20;
-crossbow.tooltip = "Banned by the catholic church!";
+
+crossbow=new Array(2);
+crossbow[0]= new equipment();
+crossbow[0].slot=0;
+crossbow[0].name="X-Bow";
+crossbow[0].evade=12;
+crossbow[0].speed=1;
+crossbow[0].attack=15;
+crossbow[0].value=20;
+crossbow[0].tooltip = "Banned by the catholic church!";
 
 rod= new equipment();
 rod.slot=1;
@@ -492,17 +503,20 @@ function unit()
 	this.name=names[this.gender][nami];
 	namesused[this.gender][nami]=true;
 	
-	this.getAttack= function(trg){
+	this.getAttack= function(){
 	//if status==beserek attack harder
-		if( this.getAttackType() == AttackTypes.Physical ) {
-			return (this.attack-this.row)+this.equipAttack()+(this.level*.5)+Math.floor(Math.random()*3);
+		if(this.getAttackType() == AttackTypes.Physical ) {
+			return (this.attack-this.row)+this.equipAttack()+(this.level*1.5)+Math.floor(Math.random()*3);
 		}else if( this.getAttackType() == AttackTypes.Ranged ) { //no row penalty
-			return (this.attack)+this.equipAttack()+(this.level*.5)+Math.floor(Math.random()*3);
+			return (this.attack)+this.equipAttack()+(this.level*1.5)+Math.floor(Math.random()*3);
 		}else if( this.getAttackType() == AttackTypes.Magical ) {  //no row penalty
-			return (this.mag)+this.equipMag()+(this.level*.5)+Math.floor(Math.random()*3);
+			return (this.mag)+this.equipMag()+(this.level*1.5)+Math.floor(Math.random()*3);
 		}else if( this.getAttackType() == AttackTypes.Heal ) {
-			return 0-this.mag;
+			return 0-this.mag;//todo problem?
 		}
+		//if(this.getAttackType() == AttackTypes.Physical ) {
+		console.log(this.name+" "+this.class+" "+this.row);
+			return (this.attack-this.row)+this.equipAttack()+(this.level*.5)+Math.floor(Math.random()*3);
 	};
 	
 	this.giveExp= function(val){
@@ -649,7 +663,8 @@ function unit()
 		return this.equipment[0].speed+this.equipment[1].speed+this.equipment[2].speed;
 	};
 	this.equipAttack=function(){
-		return this.equipment[0].attack+this.equipment[1].attack+this.equipment[2].attack;
+		return 1;
+		//return this.equipment[0].attack+this.equipment[1].attack+this.equipment[2].attack;
 	};
 	this.equipEvade=function(){
 		return this.equipment[0].evade+this.equipment[1].evade+this.equipment[2].evade;
@@ -1102,10 +1117,13 @@ function unit()
 
 function numSquads(team){
 	var count=0;
-	for(var i=0;i<TEAM_SIZE;i++) 
+	for(var i=0;i<armies[0].numSquads;i++) 
 	{
-		if(team==0) {if(armies[0].squads[i].alive) {count++;} }
-		if(team==1) {if(armies[1].squads[i].alive) {count++;} }
+		if(team==0) {if((armies[0].squads[i].alive) &&(armies[0].squads[i].deployed)) {count++;} }
+	}	
+	for(var i=0;i<armies[1].numSquads;i++) 
+	{
+		if(team==1) {if((armies[1].squads[i].alive) &&(armies[1].squads[i].deployed)){count++;} }
 	}
 	return count;
 };
@@ -1113,7 +1131,7 @@ function numSquads(team){
 function numArmyUnits(team){
 	var count=0;
 	if(team==0){
-		for(var i=0;i<TEAM_SIZE;i++) 
+		for(var i=0;i<armies[0].numSquads;i++) 
 		{
 			if(armies[0].squads[i].alive) 
 			{
@@ -1121,7 +1139,7 @@ function numArmyUnits(team){
 			}
 		}
 	}else if (team==1) {
-		 for(var i=0;i<TEAM_SIZE;i++) 
+		 for(var i=0;i<armies[1].numSquads;i++) 
 		 {
 			 if(armies[1].squads[i].alive) 
 				{
@@ -1252,7 +1270,7 @@ function endgame(){
 };
 
 function army() {
-	this.numSquads=TEAM_SIZE;
+	this.numSquads=8;
 	this.team=0;
 	this.cards=new Array(5);
 	this.cards[0]=new card();
@@ -1267,7 +1285,7 @@ function army() {
 	this.losses=0;
 	this.lastDeployed=1;
 	this.init=function(side){
-		this.numSquads=TEAM_SIZE;
+		this.numSquads=8;
 		this.team=side;
 		this.gold=4000;
 		this.name="Fighting Mongooses"
@@ -1529,14 +1547,17 @@ function squad() {
         };
  
 	this.checkcollision= function() {
-		for(var i=0;i<TEAM_SIZE;i++){
-			if (this.team==0) {
-				if ((this.alive)&&(armies[1].squads[i].x+2>this.x) && (armies[1].squads[i].x-2<this.x) && (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<=this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
-			}else if(this.team==1) {
-				if ((this.alive)&&(armies[0].squads[i].x+2>this.x) && (armies[0].squads[i].x-2<this.x) && (armies[0].squads[i].y+2>this.y) && (armies[0].squads[i].y-2<=this.y)) {return armies[0].squads[i];}
 
+			if (this.team==0) {
+				for(var i=0;i<armies[1].numSquads;i++){
+					if ((this.alive)&&(armies[1].squads[i].x+2>this.x) && (armies[1].squads[i].x-2<this.x) && (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<=this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
+				}
+			}else if(this.team==1) {
+				for(var i=0;i<armies[0].numSquads;i++){
+					if ((this.alive)&&(armies[0].squads[i].x+2>this.x) && (armies[0].squads[i].x-2<this.x) && (armies[0].squads[i].y+2>this.y) && (armies[0].squads[i].y-2<=this.y)) {return armies[0].squads[i];}
+				}
 			}
-		}
+
 		return null;
 	};
 	this.update = function(map) {
@@ -1746,11 +1767,11 @@ function armyInfo(sq){
 	canvas.fillText("Gold: "+armies[0].gold, 560, 8);
 
 	canvas.fillText("Wins/losses: " +armies[0].wins+ " / " + armies[0].losses, 560, 24);
-
+	canvas.fillText("Deployed: "+armies[0].lastDeployed, 560, 36);
 	canvas.fillText("Selected:", 760, 8);
 	canvas.fillText(SELECTED, 840, 8);
 	canvas.fillText("Squads:", 760, 24);
-	canvas.fillText(numSquads(0), 840, 24);
+	canvas.fillText(armies[0].numSquads, 840, 24);
 	canvas.fillText("Units:", 760, 38);
 	canvas.fillText(numArmyUnits(0), 840, 38);
 	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 760, 56);
@@ -1819,7 +1840,7 @@ function mouseClick(e) {  //represents the mouse
 	  ty=Math.floor(mY/16) * maps[0].zoom;
 
 	  onSomething=null;
-	  for(var i=0;i<TEAM_SIZE;i++)
+	  for(var i=0;i<armies[0].numSquads;i++)
 	  {
 		if (isOver(armies[0].squads[i],camera)) {onSomething=armies[0].squads[i];SELECTED=i;}
 	  }
@@ -1865,6 +1886,7 @@ var aikey=new akey("a");
 var unitinfokey=new akey("u");
 var cardkey=new akey("c");
 var deploykey=new akey("d");
+var createkey=new akey("j");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -2158,7 +2180,7 @@ armies[0].squads[0].deploy();
 //armies[0].name = "Lannisters";
 armies[1].name = "Dornishmen";
 armies[1].leader.name="Roose";
-for (var i=0;i<TEAM_SIZE;i++){
+for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].leader.class=3;
 	armies[1].squads[i].basex=110;
 	armies[1].squads[i].basey=76;
@@ -2351,24 +2373,28 @@ function update() {
 				battleendtick=0;
 				}
 			}
-		for (var i=0;i<TEAM_SIZE;i++) {
+		for (var i=0;i<armies[0].numSquads;i++) {
 			armies[0].squads[i].update(maps[0]);
 			if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
 				armies[0].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+		}
+		
+		for(var i=0;i<armies[1].numSquads;i++){	
 			armies[1].squads[i].update(maps[0]);
 			if( (!armies[1].squads[i].path) && (i != 0 )) {
 				armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
 		}
 	}
 
-	for (var i=0;i<TEAM_SIZE;i++) {//save and load canvas.
+	for (var i=0;i<armies[0].numSquads;i++) {//save and load canvas.
 		armies[0].squads[i].draw(camera);
-		armies[1].squads[i].draw(camera);
-
 		if(isOver(armies[0].squads[i],camera)) { drawmousetext(armies[0].squads[i],camera); };
-
-		if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
 		if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
+	}
+	for (var i=0;i<armies[1].numSquads;i++) {
+		armies[1].squads[i].draw(camera);
+		if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
+		
 	}
 	
 	for (var i=0;i<numTowns;i++) {
@@ -2403,10 +2429,10 @@ function update() {
 	if(isBattle){
 		if (tabkey.check()) {BSELECTED++; if(BSELECTED>armies[0].squads[SELECTED].numUnits-1) {BSELECTED=0;}}
 	}else{
-		if (tabkey.check()) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0; camera.center(armies[0].squads[SELECTED]);}camera.center(armies[0].squads[SELECTED]);}
+		if (tabkey.check()) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0; camera.center(armies[0].squads[SELECTED]);}camera.center(armies[0].squads[SELECTED]);}
 	}
 
-	if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {SELECTED++; if(SELECTED>TEAM_SIZE-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
+	if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
 
 	if(pausekey.check()) {
 		if(isBattle){
@@ -2418,10 +2444,37 @@ function update() {
 		}
 	}
 	
+	if(createkey.check()){
+		if (armies[0].numSquads>TEAM_SIZE-1) {
+			//return;
+		}else
+		{
+			armies[0].numSquads++;
+			armies[0].squads[armies[0].numSquads-1]=new squad();
+			armies[0].squads[armies[0].numSquads-1].team=0;
+			armies[0].squads[armies[0].numSquads-1].ID=armies[0].numSquads-1;
+			armies[0].squads[armies[0].numSquads-1].deployed=false;
+		}
+	}
 	if(deploykey.check()){
-		if (armies[0].lastDeployed>armies[0].numSquads-1) {return;}
-		armies[0].squads[armies[0].lastDeployed].deploy();
-		armies[0].lastDeployed++; 
+		if (armies[0].lastDeployed>armies[0].numSquads-1) {
+				//return;
+		}else
+		{
+			armies[0].squads[armies[0].lastDeployed].deploy();
+			armies[0].lastDeployed++; 
+		}
+	/*	if (armies[0].lastDeployed>armies[0].numSquads-1) {
+			if (armies[0].numSquads>TEAM_SIZE-1) {
+		
+				return;
+			}	
+			armies[0].numSquads++;
+		}else
+		{
+			armies[0].squads[armies[0].lastDeployed].deploy();
+			armies[0].lastDeployed++; 
+		}*/
 	}
 	
 	
