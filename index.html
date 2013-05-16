@@ -2258,8 +2258,8 @@ function update() {
 	if(cardkey.check()) {
 		 if(isBattle)
 		 {
-			//armies[0].cards[0].type=CSELECTED;
-			armies[0].cards[0].use(combatants[0],combatants[1]);
+			armies[0].cards[CSELECTED].type=CSELECTED;
+			armies[0].cards[CSELECTED].use(combatants[0],combatants[1]);
 		 }else {
 			CSELECTED++;
 			if(CSELECTED>4) { CSELECTED=0;}
