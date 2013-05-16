@@ -51,11 +51,14 @@ var SPAWN_Y=19;
 var GRAVITY_RATE=5;
 var TEAM_SIZE = 12;
 var SELECTED=0;
+var MSELECTED=0;
+var MUSELECTED=0;
 var BSELECTED=0;
 var NUM_STATUS=5;
 var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
+var isMenu=0;
 var battlelength=10;
 var combatants=new Array(2);
 var battledelay=10;
@@ -541,6 +544,7 @@ function unit()
 	};
 	
 	this.drawInfo=function(){
+	
 		canvas.save();
 		canvas.globalAlpha=0.60;
 		canvas.fillStyle =  "#DCDCDC";
@@ -670,8 +674,7 @@ function unit()
 		return this.equipment[0].speed+this.equipment[1].speed+this.equipment[2].speed;
 	};
 	this.equipAttack=function(){
-		return 1;
-		//return this.equipment[0].attack+this.equipment[1].attack+this.equipment[2].attack;
+		return this.equipment[0].attack+this.equipment[1].attack+this.equipment[2].attack;
 	};
 	this.equipEvade=function(){
 		return this.equipment[0].evade+this.equipment[1].evade+this.equipment[2].evade;
@@ -1891,6 +1894,8 @@ var helpkey=new akey("h");
 var speedkey=new akey("x");
 var statuskey=new akey("s");
 var rowkey=new akey("r");
+var enterkey=new akey("space");
+var menukey=new akey("m");
 var fleekey=new akey("f");
 var aikey=new akey("a");
 var unitinfokey=new akey("u");
@@ -2259,6 +2264,23 @@ document.getElementById("myAudio").addEventListener('ended', function() { //loop
 	this.play();
     }, false);
 
+function menuDraw()
+{
+
+	battletick++;
+	canvas.save();
+    canvas.globalAlpha=0.80;
+	canvas.fillStyle =  "#DCDCDC";
+    canvas.fillRect(25,95,820,500);
+	canvas.fillStyle =bColors[6];//Math.floor(Math.random()*5)];// "#483D8B ";
+    canvas.fillRect(40,110,790,470);
+	canvas.restore();
+	canvas.font = "14pt Calibri";
+	canvas.textAlign = "left";
+	canvas.textBaseline = "middle";
+	
+}
+	
 function battleDraw()
 {
 
@@ -2405,6 +2427,92 @@ function update() {
     timestamp = new Date();
     milliseconds = timestamp.getTime();
 	tick++;
+	if(menukey.check()) {
+		 if(!isBattle)
+		 {
+			if(isMenu==1) 
+			{	
+				isMenu=2;
+			}else if(isMenu==2)
+			{
+				isMenu=0;
+			}else
+			{
+				isMenu=1;
+			}
+			
+		 }
+	}
+	if(isMenu==1) 
+	{
+		menuDraw();
+		//draw out squad
+		canvas.fillStyle = "white";
+		canvas.fillRect(284,110,16,470);
+		for(var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
+		{
+			if(!armies[0].squads[MSELECTED].units[i].alive) {continue;}
+			var closs="";
+			if(armies[0].squads[MSELECTED].units[i].class==0) {closs="bear";}
+			if(armies[0].squads[MSELECTED].units[i].class==1) {closs="Shoe";}
+			if(armies[0].squads[MSELECTED].units[i].class==2) {closs="Wizard";}
+			if(armies[0].squads[MSELECTED].units[i].class==3) {closs="Frog";}
+			if(armies[0].squads[MSELECTED].units[i].class==4) {closs="Archer";}
+			if(armies[0].squads[MSELECTED].units[i].class==5) {closs="Healer";}
+			var xp=100+armies[0].squads[MSELECTED].units[i].row*40;
+			canvas.fillText("HP:", xp, 130+i*2*45);
+			canvas.fillText(armies[0].squads[MSELECTED].units[i].hp, xp+30, 130+i*2*45);
+			canvas.fillText("/", xp+60, 130+i*2*45);
+			canvas.fillText(armies[0].squads[MSELECTED].units[i].maxhp, xp+70, 130+i*2*45);
+			canvas.fillText("Lvl:", xp+100, 130+i*2*45);
+			canvas.fillText(armies[0].squads[MSELECTED].units[i].level, xp+130, 130+i*2*45);
+
+
+			canvas.fillStyle = "blue";
+			canvas.fillText("Name:", xp, 172+i*2*45);
+			canvas.fillText(armies[0].squads[MSELECTED].units[i].name, xp+52, 172+i*2*45);
+			canvas.fillText(closs, xp, 158+i*2*45);
+
+			armies[0].squads[MSELECTED].units[i].sprite.draw(canvas, xp-40, 135+i*2*45);
+			if(i==MSELECTED) {selector.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
+			if(armies[0].squads[MSELECTED].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
+			if(armies[0].squads[MSELECTED].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
+
+		}
+		if(tabkey.check())
+		{
+			MSELECTED++;
+			if(MSELECTED>armies[0].numSquads-1)
+			{
+				MSELECTED=0;
+			}
+			
+		}
+		if(enterkey.check())
+		{
+			isMenu=2;
+		}
+		return;
+	}else if (isMenu==2)
+	{
+		//menuDraw();
+		armies[0].squads[MSELECTED].units[MUSELECTED].drawInfo();
+		
+		if(tabkey.check())
+		{
+			MUSELECTED++;
+			if(MUSELECTED>armies[0].squads[MSELECTED].numUnits)
+			{
+				MUSELECTED=0;
+			}
+			
+		}
+		if(enterkey.check())
+		{
+			isMenu=1;
+		}
+		return;
+	}
 	if(zoomkey.check()) {
 		maps[0].setZoom(camera);
 	}

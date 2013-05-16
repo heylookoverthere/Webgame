@@ -38,9 +38,9 @@ picture of cards! display selected! start army with 99 of each for now.
 
 prevent constant capture/liberation!
 cardbug! - sets sprites at the start, you change type alter but not sprites.
--keep deploying till broke/teams with different numsquads TEAM_SIZE
+
  
-knockback both on tie
+knockback both on tie?
  
 -revive at towns for money?
 -town greeting first time, boss greeting
