@@ -683,9 +683,6 @@ function unit()
 		}
 		
 	};
-	this.hasStatus=function(stats){
-		//switch(stats)
-	};
 	this.hurt = function(dmg){
 		this.hp-=dmg;
 		this.damagetaken+=dmg;
@@ -963,7 +960,7 @@ function unit()
 			this.def=2;
 			this.mdef=5;
 			this.cost=10;
-			this.equipment[0]=bow;
+			this.equipment[0]=bow[0];
 			this.equipment[1]=shirt;
 			this.canlead=true;
 			this.sprite = Sprite("archer");
@@ -983,6 +980,7 @@ function unit()
 			this.mdef=5;
 			this.mag=15;
 			this.cost=10;
+			this.equipment[0]=rod;
 			this.equipment[1]=robe;
 			this.canlead=true;
 			this.sprite = Sprite("healer");
@@ -1003,6 +1001,7 @@ function unit()
 			this.mdef=5;
 			this.mag=15;
 			this.cost=10;
+			this.equipment[0]=katana[0];
 			this.equipment[1]=robe;
 			this.canlead=true;
 			this.sprite = Sprite("ninja");
@@ -1022,6 +1021,7 @@ function unit()
 			this.mdef=5;
 			this.mag=15;
 			this.cost=10;
+			this.equipment[0]=spear[0];
 			this.equipment[1]=robe;
 			this.canlead=true;
 			this.sprite = Sprite("winger");
@@ -1041,6 +1041,7 @@ function unit()
 			this.mdef=5;
 			this.mag=15;
 			this.cost=10;
+			this.equipment[0]=swords[1];
 			this.equipment[1]=chainmail;
 			this.canlead=true;
 			this.sprite = Sprite("knight");
