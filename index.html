@@ -1242,7 +1242,7 @@ function initTowns(){
 	towns[0].name="King's Landing";
 
 	towns[1].x=180;
-	towns[1].y=156;
+	towns[1].y=256;
 	towns[1].team=1;
 	towns[1].name="The Dreadfort";
 }
@@ -2142,8 +2142,8 @@ maps[0].setTile(30,26,1);
 
 for (var p=0;p<300;p++)
 {
-	var i=Math.floor(Math.random()*200)+4;
-	var k=Math.floor(Math.random()*160)+4;
+	var i=Math.floor(Math.random()*190)+4;
+	var k=Math.floor(Math.random()*260)+4;
 	maps[0].setTile(24,24,1);
 	maps[0].setTile(i,k,1);
 	maps[0].setTile(i+1,k+1,1);
@@ -2184,12 +2184,12 @@ armies[1].leader.name="Roose";
 for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].leader.class=3;
 	armies[1].squads[i].basex=180;
-	armies[1].squads[i].basey=156;
+	armies[1].squads[i].basey=256;
 	armies[1].squads[i].leader.setClass();
 	armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
 	armies[1].squads[i].team=1;
 	armies[1].squads[i].x=180;
-	armies[1].squads[i].y=156;
+	armies[1].squads[i].y=256;
 	armies[1].squads[i].smartRow();
 	armies[1].squads[i].deploy();//TODO delay between deployment 
 	armies[1].lastDeployed++;
