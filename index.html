@@ -147,6 +147,8 @@ AttackTypes.InflictStatus = 4;
 AttackTypes.HealStatus = 5; 
 AttackTypes.someweirdshitthatignoresdefensemaybe =6;
 
+
+
 function card(){
 	this.name = "Flaccid Dolphin";
 	this.type = Math.floor(Math.random()*5);
@@ -156,11 +158,17 @@ function card(){
 	if(this.type==3){	this.sprite = Sprite("card3");}
 	if(this.type==4){	this.sprite = Sprite("card4");}
 
+	this.setSprite=function(){
+		if(this.type==1){	this.sprite = Sprite("card1");}
+		if(this.type==2){	this.sprite = Sprite("card2");}
+		if(this.type==3){	this.sprite = Sprite("card3");}
+		if(this.type==4){	this.sprite = Sprite("card4");}
+	};
 	this.use=function(usqd,esqd)
 	{
 		//console.log("Played the " + this.name+ " card!");
 		if (this.type==0){
-			console.log("Played the Priestess card!");
+			console.log("Played the Mother card!");
 			for(var i=0;i<usqd.numUnits;i++){
 				if (usqd.units[i].alive) {
 					usqd.units[i].hp+=25;
@@ -169,7 +177,7 @@ function card(){
 			}
 		}else if(this.type==1)
 		{
-			console.log("Played the Devil card!");
+			console.log("Played the Drowned God card!");
 			for(var i=0;i<esqd.numUnits;i++){
 				if (esqd.units[i].alive) {
 					esqd.units[i].hurt(15);
@@ -177,16 +185,16 @@ function card(){
 			}
 		}else if(this.type==2)
 		{
-			console.log("Played the Fool card!");
+			console.log("Played The Father card!");
 			esqd.turns=20;
 			esqd.damaged=-1; //flee
 		}else if(this.type==3)
 		{
-			console.log("Played the...swappy card!");
+			console.log("Played The Stranger card!");
 			esqd.row();
-		}else if(this.type==4)
+		}else if(this.type==5)
 		{
-			console.log("Played the Angel card!");
+			console.log("Played the R'hllor card!");
 			for(var i=0;i<usqd.numUnits;i++){
 				if (!usqd.units[i].alive) {
 					usqd.units[i].hp+=25;
@@ -194,6 +202,10 @@ function card(){
 					if (usqd.units[i].hp>usqd.units[i].maxhp) {usqd.units[i].hp=usqd.units[i].maxhp;}
 				}
 			}
+		}else if(this.type==3)
+		{
+			console.log("Played The Crone card!");
+			usqd.healStatus();
 		}
 	}
 };
@@ -2429,6 +2441,7 @@ function update() {
 		 if(isBattle)
 		 {
 			armies[0].cards[CSELECTED].type=CSELECTED;
+			armies[0].cards[CSELECTED].setSprite();
 			armies[0].cards[CSELECTED].use(combatants[0],combatants[1]);
 		 }else {
 			CSELECTED++;
