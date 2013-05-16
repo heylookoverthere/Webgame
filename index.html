@@ -29,6 +29,8 @@
 $(document).bind("contextmenu",function(e){
 	return false;
     }); 
+	
+var radarBitmap=[];
 
 var textPause=false;
 var won="";
@@ -96,7 +98,12 @@ explosionsprite[3] =Sprite("explosion3");
 
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var canvas = canvasElement.get(0).getContext("2d");
+
+var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
+var radarCanvas = radarElement.get(0).getContext("2d");
+
 canvasElement.appendTo('body');
+//radarElement.appendTo('body');
 //todo:  find some way to put this in map or tile?
 var tileani=0;
 var anicount=0;
@@ -1867,8 +1874,10 @@ var ksavekey=new akey("o"); //define the different keys
 var loadkey=new akey("l");
 
 var randomwalk=false;
+var radar=true;
 
 var pausekey=new akey("space");
+var radarkey=new akey("y");
 var escapekey=new akey("q");
 var serversavekey=new akey("i");
 var serverloadkey=new akey("k");
@@ -2101,7 +2110,46 @@ function Map(I) { //map object
     I.setTile = function (x,y,data) {
 	I.tiles[x][y].data = data;
     };
+	
+	I.buildRadar= function(){
+	
+	radarCanvas.globalAlpha = 0.75;
+		for (var i=0;i<MAP_WIDTH; i++){
+			for (j=0;j<MAP_HEIGHT; j++){
+				radarCanvas.fillStyle = bColors[I.tiles[i][j].data];
+				radarCanvas.fillRect(i, j, 2, 2);
+		    }
+		}
+		radarBitmap = radarCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 
+	};
+
+	I.drawRadar= function (cam,x,y,arm) {
+	cam.check();
+	canvas.save();
+	canvas.globalAlpha = 0.75;
+	canvas.putImageData(radarBitmap,x,y);
+	for(var i=0;i<arm[0].numSquads;i++){
+	
+		canvas.fillStyle = "#FFD700";
+		canvas.fillRect(x+arm[0].squads[i].x, y+arm[0].squads[i].y, 4, 4);
+	}
+	
+	for(var i=0;i<arm[1].numSquads;i++){
+	
+		canvas.fillStyle = "red";
+		canvas.fillRect(x+arm[1].squads[i].x, y+arm[1].squads[i].y, 4, 4);
+	}
+	for(var i=0;i<numTowns;i++)
+	{
+		canvas.fillStyle = "blue";
+		if(towns[i].team==1){ canvas.fillStyle = "red";}
+		canvas.fillRect(x+towns[i].x, y+towns[i].y, 8, 8);
+	}
+	canvas.globalAlpha = 0.75;
+	canvas.fillRect(x+cam.x, y+cam.y, cam.width*I.zoom, cam.height*I.zoom);
+	canvas.restore();
+    };
     return I;
 }
 
@@ -2350,6 +2398,7 @@ function battleDraw()
 
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
+maps[0].buildRadar();
 //------------MAIN LOOP-----------------------------------------
 function update() {
     lasttime=milliseconds;
@@ -2422,7 +2471,6 @@ function update() {
 		
 		if(keydown.down) {
 		camera.y += 1*maps[0].zoom;
-		console.log(camera.x,camera.y);
 		if (camera.y>(MAP_HEIGHT-(camera.height*maps[0].zoom))) {(camera.y=MAP_HEIGHT-(camera.height*maps[0].zoom));}
 		}
 	//}
@@ -2517,6 +2565,16 @@ function update() {
 	
 	armies[0].cards[CSELECTED].sprite.draw(canvas,300, 5);
 
+	if(radarkey.check())
+	{
+		radar=!radar;
+	}
+	
+	if((radar) && (!isBattle))
+	{
+		maps[0].drawRadar(camera, 660, 340,armies);
+	}
+	
 	if((isBattle) || (battleReport)) {
 		battleDraw();
 		if (escapekey.check()) {isBattle=false;}
