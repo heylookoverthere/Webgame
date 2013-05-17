@@ -134,7 +134,7 @@ var battlePause=false;
 var unitinfo=false;
 var healcount=0;
 var healrate=140;
-var numTowns=5;
+var numTowns=8;
 var CSELECTED=0;
 
 function playSound(name){
@@ -1241,7 +1241,7 @@ function initTowns(){
 	{
 		towns[i] =new town();
 		var thx=Math.floor(Math.random()*190);
-		var thy=Math.floor(Math.random()*145);
+		var thy=Math.floor(Math.random()*245);
 		towns[i].x=thx;
 		towns[i].y=thy;
 		maps[0].tiles[thx][thy].data=0;
@@ -1370,6 +1370,7 @@ function squad() {
 	this.dx = 0;
 	this.dy = 0;
 	this.team=0;
+	this.cohesion=50;
 	this.damaged=0;
 	this.leaderless=false;
 	this.ID=89;
@@ -1672,6 +1673,7 @@ function squad() {
 		this.path=null; this.dx = 0; this.dy = 0; this.nextMove = null;
 	};
 	this.setDestination = function(x, y, map) {
+		this.clearDestination();
 	  this.path = map.getPath(this.x, this.y, x, y,this);
 	  this.dx=x;
 	  this.dy=y;
@@ -1726,6 +1728,7 @@ function endBattle(usqd,esqd){
 		won="Victory!";
 		armies[1].losses++;
 		armies[0].wins++;
+		usqd.cohesion++;
 		for(var i=0;i<esqd.numUnits;i++)
 		{
 			esqd.units[i].battleslost++;
@@ -1754,6 +1757,7 @@ function endBattle(usqd,esqd){
 		//usqd.setDestination(usqd.x,usqd.y,maps[0]);
 		usqd.clearDestination();
 		console.log("loss");
+		usqd.cohesion--;
 		won="Defeat!"
 		armies[0].losses++;
 		armies[1].wins++;
@@ -2197,10 +2201,11 @@ function Map(I) { //map object
 	for(var i=0;i<numTowns;i++)
 	{
 		canvas.fillStyle = "blue";
-		if(towns[i].team==1){ canvas.fillStyle = "red";}
+		if(towns[i].team==1){ canvas.fillStyle = "#FF2C85";}
 		canvas.fillRect(x+towns[i].x, y+towns[i].y, 8, 8);
 	}
-	canvas.globalAlpha = 0.75;
+	canvas.globalAlpha = 0.35;
+	canvas.fillStyle = "white";
 	canvas.fillRect(x+cam.x, y+cam.y, cam.width*I.zoom, cam.height*I.zoom);
 	canvas.restore();
     };
@@ -2281,7 +2286,7 @@ armies[0].init(0);
 armies[1].init(1);
 armies[0].squads[0].deploy();
 //armies[0].name = "Lannisters";
-armies[1].name = "Dornishmen";
+armies[1].name = "The Kingsguard";
 armies[1].leader.name="Roose";
 for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].leader.class=3;
@@ -2296,6 +2301,13 @@ for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].deploy();//TODO delay between deployment 
 	armies[1].lastDeployed++;
 }
+armies[0].leader.name="Ser Bearistan";
+armies[0].leader.class=0;
+armies[0].leader.setClass();
+armies[0].leader.maxhp+=20;
+armies[0].leader.hp=armies[0].leader.maxhp;
+armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
+
 armies[1].leader.name="Ramsey";
 armies[1].leader.maxhp+=150;
 armies[1].leader.hp+=100;
@@ -2305,7 +2317,9 @@ armies[1].leader.equipment[2]=cape;
 armies[1].squads[0].units[1].name="Reek";
 armies[1].squads[0].units[1].class=9;
 armies[1].squads[0].units[1].setClass();
+
 armies[1].squads[0].units[1].maxhp+=25;
+armies[1].squads[0].units[1].hp=armies[1].leadermaxhp;
 armies[1].squads[0].units[1].row=1;
 
 setInterval(function() {
