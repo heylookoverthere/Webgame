@@ -30,9 +30,9 @@ damage numbers drawn on sprites in battle. -meh
 -catapults to defend towns - eventually, builders
 -growth tables for classes. (all the same for now.)
 -maxturn=x*100 ticks, not turns taken.
-
-
 -time based turns
+
+-menus, arrow keys move around grid of unassigned units.
 
 prevent constant capture/liberation!
 	-better town colision detection
@@ -59,4 +59,7 @@ get spreadsheet style list of all untis each team health, attack etc, sortable.
 
 ["Brotherhood Without Banners","Second Sons","Golden Company","Company of the Cat","Brave Companions","The Unsullied","The Nights Watch","The Kingsguard","The Windblown","The Long Lances","Stormcrows"];
 
-
+bear->polarbead->cyborg bear
+chemist->alchemist->apocothary
+helear->cleric->priest
+shoe->boot-pegasusboot

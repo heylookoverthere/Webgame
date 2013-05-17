@@ -165,7 +165,13 @@ AttackTypes.InflictStatus = 4;
 AttackTypes.HealStatus = 5; 
 AttackTypes.someweirdshitthatignoresdefensemaybe =6;
 
-
+AITypes = {};
+AITypes.Random=0;
+AITypes.Rush=1;
+AITypes.FanOut=2;
+AITypes.AttackNearest=3;
+AITypes.DefendBase=4;
+AITypes.DefendTowns=5;
 
 function card(){
 	this.name = "Flaccid Dolphin";
@@ -722,6 +728,16 @@ function unit()
 		}
 	};
 	
+	this.giveAli= function(val){
+		this.ali+=val;
+		if(this.ali>100) {this.ali=100;}
+		if(this.ali<0) {this.ali=0;}
+	};
+	
+	this.changeClass=function(){
+		
+	};
+	
 	this.giveStatus=function(stats){
 		this.status[stats]=true;
 	}
@@ -819,7 +835,11 @@ function unit()
 						this.giveExp(delt);
 						this.damagedelt+=delt;
 						targe.hurt(delt); 
-						if(!targe.alive) { this.kills++;}
+						if(!targe.alive) { 
+							this.kills++;
+							if(targe.ali>this.ali+5){this.giveAli(2);}
+							if(targe.ali<this.ali-5){this.giveAli(2);}
+						}
 						if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
 						this.attacking=10;
 						targe.hurting=20;
@@ -856,10 +876,14 @@ function unit()
 						{
 							console.warn(tmpstr);
 						}
-						this.giveExp(delt);
+						this.giveExp(delt); //todo exp based on levels
 						this.damagedelt+=delt;
 						targe.hurt(delt); 
-						if(!targe.alive) { this.kills++;}
+						if(!targe.alive) { 
+							this.kills++;
+							if(targe.ali>this.ali+5){this.giveAli(2);}
+							if(targe.ali<this.ali-5){this.giveAli(2);}
+						}
 						if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
 						this.attacking=10;
 						targe.hurting=20;
@@ -923,7 +947,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=3;
 			this.luck=5;
-			this.ali=50;
+			this.ali=20;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
@@ -941,7 +965,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=2;
 			this.luck=5;
-			this.ali=50;
+			this.ali=35;
 			this.viewrange=5;
 			this.sprite = Sprite("wizard");
 			this.equipment[0]=rod;
@@ -962,7 +986,7 @@ function unit()
 			this.speed=4;
 			this.evade=4;
 			this.luck=5;
-			this.ali=50;
+			this.ali=10;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
@@ -979,7 +1003,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=3;
 			this.luck=5;
-			this.ali=50;
+			this.ali=40;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
@@ -998,7 +1022,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=2;
 			this.luck=5;
-			this.ali=50;
+			this.ali=60;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
@@ -1018,7 +1042,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=2;
 			this.luck=5;
-			this.ali=50;
+			this.ali=30;
 			this.viewrange=5;
 			this.def=2;
 			this.evade=9;
@@ -1039,7 +1063,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=3;
 			this.luck=5;
-			this.ali=50;
+			this.ali=40;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
@@ -1079,7 +1103,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=3;
 			this.luck=5;
-			this.ali=50;
+			this.ali=70;
 			this.viewrange=5;
 			this.def=2;
 			this.mdef=5;
@@ -1098,7 +1122,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=2;
 			this.luck=5;
-			this.ali=50;
+			this.ali=30;
 			this.viewrange=5;
 			this.sprite = Sprite("sage");
 			this.equipment[0]=icemagic[2];
@@ -1118,7 +1142,7 @@ function unit()
 			this.maxmp=40;
 			this.speed=2;
 			this.luck=5;
-			this.ali=50;
+			this.ali=90;
 			this.viewrange=5;
 			this.sprite = Sprite("angel");
 			this.equipment[0]=icemagic[1];
@@ -1294,10 +1318,18 @@ function endgame(){
 	}
 };
 
+
+	
+
+
 function army() {
 	this.numSquads=8;
 	this.team=0;
 	this.ali=50;
+	this.basex=2;
+	this.basey=2;
+	this.opinion=50;
+	this.fieldAI=AITypes.Random;
 	this.cards=new Array(5);
 	this.cards[0]=new card();
 	this.cards[1]=new card();
@@ -1310,8 +1342,8 @@ function army() {
 	this.wins=0;
 	this.losses=0;
 	this.lastDeployed=1;
-	this.getAli=function(){
-		return 100-this.ali;
+	this.getOpinion=function(){
+		return this.opinion;
 	};
 	this.init=function(side){
 		this.numSquads=8;
@@ -1608,8 +1640,8 @@ function squad() {
 			{
 				if(towns[i].team!=this.team){
 					towns[i].team=this.team;
-					if(towns[i].team==0) {console.log(this.leader.name+"'s unit liberated " + towns[i].name);}
-					if(towns[i].team==1) {console.warn(this.leader.name+"'s unit captured " + towns[i].name);}
+					if(towns[i].team==0) {armies[0].opinion+=5;console.log(this.leader.name+"'s unit liberated " + towns[i].name);}
+					if(towns[i].team==1) {armies[0].opinion-=10; console.warn(this.leader.name+"'s unit captured " + towns[i].name);}
 				}
 				this.heal();
 			}
@@ -1828,7 +1860,7 @@ function armyInfo(sq){
 	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 680, 56);
 	
 	canvas.fillStyle = "white";
-    canvas.fillRect(810+37,114,8,-armies[0].ali);//getAli());
+    canvas.fillRect(810+37,114,8,-(armies[0].opinion/2));//getAli());
 	thingysprite.draw(canvas,810,8);
 	var timeRound =1;
 	//if(theTime.hours>4) {timeRound=1;}
@@ -2289,6 +2321,8 @@ armies[0].squads[0].deploy();
 armies[0].name = "The Kingsguard";
 armies[1].name = "The Bastard Boys";
 armies[1].leader.name="Roose";
+armies[1].basex=180;
+armies[1].basey=256;
 for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].leader.class=3;
 	armies[1].squads[i].basex=180;
@@ -2604,14 +2638,25 @@ function update() {
 			}
 		for (var i=0;i<armies[0].numSquads;i++) {
 			armies[0].squads[i].update(maps[0]);
-			if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
-				armies[0].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			if(armies[0].fieldAI==AITypes.Random){
+				if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
+					armies[0].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			}else if(armies[0].fieldAI==AITypes.Rush){
+				if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
+					armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[0]); 
+				}
+			}
 		}
 		
 		for(var i=0;i<armies[1].numSquads;i++){	
 			armies[1].squads[i].update(maps[0]);
-			if( (!armies[1].squads[i].path) && (i != 0 )) {
-				armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			if(armies[1].fieldAI==AITypes.Random){
+				if( (!armies[1].squads[i].path) && (i != 0 )) {
+					armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+			}else if(armies[1].fieldAI==AITypes.Rush){
+				if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
+					armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[0]); };
+			}
 		}
 	}
 
