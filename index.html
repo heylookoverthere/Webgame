@@ -66,6 +66,8 @@ var battletick=0;
 var battleenddelay=10;
 var battleendtick=0;
 var winmode=1;
+var looseX=0;
+var looseY=0;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 var names= new Array (2);
 names[0]=new Array(120);
@@ -172,6 +174,14 @@ AITypes.FanOut=2;
 AITypes.AttackNearest=3;
 AITypes.DefendBase=4;
 AITypes.DefendTowns=5;
+
+SEEAss = {};
+SEEAss.Knight=0;
+SEEAss.Palladin=1;
+SEEAss.DarkKnight=2;
+SEEAss.Wizard=3;
+SEEAss.Mage=4;
+SEEAss.Sage=5;
 
 function card(){
 	this.name = "Flaccid Dolphin";
@@ -1396,6 +1406,10 @@ function army() {
 	this.cards[2]=new card();
 	this.cards[3]=new card();
 	this.cards[4]=new card();
+	this.numLooseUnits=2;
+	this.looseUnits=new Array (64);
+	this.looseUnits[0]=new unit();
+	this.looseUnits[1]=new unit();
 	this.gold=4000; 
 	this.name="Fighting Mongooses"
 	this.squads=new Array (TEAM_SIZE);
@@ -2651,7 +2665,7 @@ function update() {
 			if(armies[0].squads[MSELECTED].units[i].class==12) {closs="Dark Knight";}
 			if(armies[0].squads[MSELECTED].units[i].class==13) {closs="Palladin";}
 			if(armies[0].squads[MSELECTED].units[i].class==14) {closs="Polar Bear";}
-			var xp=100+armies[0].squads[MSELECTED].units[i].row*40;
+			var xp=100;
 			canvas.fillText("HP:", xp, 130+i*2*45);
 			canvas.fillText(armies[0].squads[MSELECTED].units[i].hp, xp+30, 130+i*2*45);
 			canvas.fillText("/", xp+60, 130+i*2*45);
@@ -2671,6 +2685,45 @@ function update() {
 			if(armies[0].squads[MSELECTED].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
 
 		}
+		for(var i=0;i<armies[0].numLooseUnits;i++)
+		{
+			if(!armies[0].looseUnits[i].alive) {continue;}
+			var closs="";
+			if(armies[0].looseUnits[i].class==0) {closs="bear";}
+			if(armies[0].looseUnits[i].class==1) {closs="Shoe";}
+			if(armies[0].looseUnits[i].class==2) {closs="Wizard";}
+			if(armies[0].looseUnits[i].class==3) {closs="Frog";}
+			if(armies[0].looseUnits[i].class==4) {closs="Archer";}
+			if(armies[0].looseUnits[i].class==5) {closs="Healer";}
+			if(armies[0].looseUnits[i].class==6) {closs="Ninja";}
+			if(armies[0].looseUnits[i].class==7) {closs="Winger";}
+			if(armies[0].looseUnits[i].class==8) {closs="Knight";}
+			if(armies[0].looseUnits[i].class==9) {closs="Cleric";}
+			if(armies[0].looseUnits[i].class==10) {closs="Sage";}
+			if(armies[0].looseUnits[i].class==11) {closs="Angel";}
+			if(armies[0].looseUnits[i].class==12) {closs="Dark Knight";}
+			if(armies[0].looseUnits[i].class==13) {closs="Palladin";}
+			if(armies[0].looseUnits[i].class==14) {closs="Polar Bear";}
+			var xp=340;
+			canvas.fillText("HP:", xp, 130+i*2*45);
+			canvas.fillText(armies[0].looseUnits[i].hp, xp+30, 130+i*2*45);
+			canvas.fillText("/", xp+60, 130+i*2*45);
+			canvas.fillText(armies[0].looseUnits[i].maxhp, xp+70, 130+i*2*45);
+			canvas.fillText("Lvl:", xp+100, 130+i*2*45);
+			canvas.fillText(armies[0].looseUnits[i].level, xp+130, 130+i*2*45);
+
+
+			canvas.fillStyle = "blue";
+			canvas.fillText("Name:", xp, 172+i*2*45);
+			canvas.fillText(armies[0].looseUnits[i].name, xp+52, 172+i*2*45);
+			canvas.fillText(closs, xp, 158+i*2*45);
+
+			armies[0].looseUnits[i].sprite.draw(canvas, xp-40, 135+i*2*45);
+
+			if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, 135+i*2*45);}
+			if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, 135+i*2*45);}
+
+		}
 		if(tabkey.check())
 		{
 			MSELECTED++;
@@ -2680,6 +2733,27 @@ function update() {
 			}
 			
 		}
+		if(downkey.check())
+		{
+			looseY++;
+			if(looseY>4) { looseY=4;}
+		}else if(upkey.check())
+		{
+			looseY--;
+			if(looseY<1) { looseY=0;}
+		
+		}else if(leftkey.check())
+		{
+			looseX--;
+			if(looseX<1) { looseX=0;}
+		
+		}else if(rightkey.check())
+		{
+			looseX++;
+			if(looseX>3) { looseX=3;}
+		
+		}
+		selector.draw(canvas, xp-40+looseX*200, looseY*2*45+92+45);
 		if(enterkey.check())
 		{
 			isMenu=2;
