@@ -317,6 +317,12 @@ swords[1].name="Valyrian Sword";
 swords[1].value=100;
 swords[1].tooltip = "Forged in the fires of Valyria, New Jersey.";
 
+swords[2]= new equipment();
+swords[2].attack=24;
+swords[2].name="Dawn Sword";
+swords[2].value=1000;
+swords[2].tooltip = "Forged from the heart of a fallen star.";
+
 katana=new Array(2);
 katana[0]= new equipment();
 katana[0].name="Wooden Katana";
@@ -1298,7 +1304,7 @@ function army() {
 	this.cards[2]=new card();
 	this.cards[3]=new card();
 	this.cards[4]=new card();
-	this.gold=4000;
+	this.gold=4000; 
 	this.name="Fighting Mongooses"
 	this.squads=new Array (TEAM_SIZE);
 	this.wins=0;
@@ -1313,6 +1319,7 @@ function army() {
 		this.gold=4000;
 		this.name="Fighting Mongooses"
 		for(var i=0;i<this.numSquads;i++){
+			//if(i=0) { this.squads[i].numUnits=5;}
 			this.squads[i]=new squad();
 			this.squads[i].ID=i;
 		}
@@ -2290,9 +2297,9 @@ for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].lastDeployed++;
 }
 armies[1].leader.name="Ramsey";
-armies[1].leader.maxhp+=100;
+armies[1].leader.maxhp+=150;
 armies[1].leader.hp+=100;
-armies[1].leader.equipment[0]=swords[1];
+armies[1].leader.equipment[0]=swords[2];
 armies[1].leader.equipment[1]=breastplate;
 armies[1].leader.equipment[2]=cape;
 armies[1].squads[0].units[1].name="Reek";
