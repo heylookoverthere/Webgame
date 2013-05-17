@@ -1674,6 +1674,7 @@ function time(){
 	this.hours=0; 
 	this.minutes=0;
 	this.seconds=0;
+	this.days=0;
 	this.update=function(){
 	this.seconds++;
 	if(this.seconds>60){
@@ -1809,6 +1810,7 @@ function armyInfo(sq){
 
 	canvas.fillText("Wins/losses: " +armies[0].wins+ " / " + armies[0].losses, 515, 24);
 	canvas.fillText("Deployed: "+armies[0].lastDeployed, 515, 36);
+	canvas.fillText("Days: "+theTime.days, 515, 56);
 	canvas.fillText("Selected: " + SELECTED, 680, 8);
 	canvas.fillText("Squads: "+armies[0].numSquads, 680, 24);
 	canvas.fillText("Units: " + numArmyUnits(0), 680, 38);
@@ -2287,11 +2289,18 @@ for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].deploy();//TODO delay between deployment 
 	armies[1].lastDeployed++;
 }
-armies[1].leader.name="Roose";
+armies[1].leader.name="Ramsey";
 armies[1].leader.maxhp+=100;
 armies[1].leader.hp+=100;
+armies[1].leader.equipment[0]=swords[1];
 armies[1].leader.equipment[1]=breastplate;
 armies[1].leader.equipment[2]=cape;
+armies[1].squads[0].units[1].name="Reek";
+armies[1].squads[0].units[1].class=9;
+armies[1].squads[0].units[1].setClass();
+armies[1].squads[0].units[1].maxhp+=25;
+armies[1].squads[0].units[1].row=1;
+
 setInterval(function() {
 
 	update();
