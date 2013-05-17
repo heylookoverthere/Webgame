@@ -91,6 +91,14 @@ var poisonsprite = Sprite("poison");
 var selector = Sprite("cursor");
 var noleader= Sprite("noleader");
 var flagsprite = Sprite("flag");
+var thingysprite = Sprite("thingy");
+var clocksprite=new Array(6);
+clocksprite[0] = Sprite("clock0");
+clocksprite[1] = Sprite("clock1");
+clocksprite[2] = Sprite("clock2");
+clocksprite[3] = Sprite("clock3");
+clocksprite[4] = Sprite("clock4");
+clocksprite[5] = Sprite("clock5");
 var explosionsprite=new Array(4);
 explosionsprite[0] =Sprite("explosion0");
 explosionsprite[1] =Sprite("explosion1");
@@ -1283,6 +1291,7 @@ function endgame(){
 function army() {
 	this.numSquads=8;
 	this.team=0;
+	this.ali=50;
 	this.cards=new Array(5);
 	this.cards[0]=new card();
 	this.cards[1]=new card();
@@ -1295,6 +1304,9 @@ function army() {
 	this.wins=0;
 	this.losses=0;
 	this.lastDeployed=1;
+	this.getAli=function(){
+		return 100-this.ali;
+	};
 	this.init=function(side){
 		this.numSquads=8;
 		this.team=side;
@@ -1658,7 +1670,25 @@ function squad() {
 	  this.dy=y;
 	};
 }
-
+function time(){
+	this.hours=0; 
+	this.minutes=0;
+	this.seconds=0;
+	this.update=function(){
+	this.seconds++;
+	if(this.seconds>60){
+	
+		this.minutes++;
+		if (this.minutes>60){
+			this.hours++;
+			if(this.hours>24) {this.hours=0; this.days++;} 
+			this.minutes=0;
+			this.seconds=0;
+		}
+	}
+	};
+}
+var theTime=new time();
 function endBattle(usqd,esqd){
 	isBattle=false;
 	battleReport=true;
@@ -1775,17 +1805,27 @@ function armyInfo(sq){
 	canvas.textBaseline = "middle";
 	canvas.fillStyle = "white";
 	canvas.fillText(armies[0].name, 360, 8);
-	canvas.fillText("Gold: "+armies[0].gold, 560, 8);
+	canvas.fillText("Gold: "+armies[0].gold, 515, 8);
 
-	canvas.fillText("Wins/losses: " +armies[0].wins+ " / " + armies[0].losses, 560, 24);
-	canvas.fillText("Deployed: "+armies[0].lastDeployed, 560, 36);
-	canvas.fillText("Selected:", 760, 8);
-	canvas.fillText(SELECTED, 840, 8);
-	canvas.fillText("Squads:", 760, 24);
-	canvas.fillText(armies[0].numSquads, 840, 24);
-	canvas.fillText("Units:", 760, 38);
-	canvas.fillText(numArmyUnits(0), 840, 38);
-	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 760, 56);
+	canvas.fillText("Wins/losses: " +armies[0].wins+ " / " + armies[0].losses, 515, 24);
+	canvas.fillText("Deployed: "+armies[0].lastDeployed, 515, 36);
+	canvas.fillText("Selected: " + SELECTED, 680, 8);
+	canvas.fillText("Squads: "+armies[0].numSquads, 680, 24);
+	canvas.fillText("Units: " + numArmyUnits(0), 680, 38);
+	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 680, 56);
+	
+	canvas.fillStyle = "white";
+    canvas.fillRect(790+37,114,8,-armies[0].ali);//getAli());
+	thingysprite.draw(canvas,790,8);
+	var timeRound =1;
+	//if(theTime.hours>4) {timeRound=1;}
+	if(theTime.hours>8) {timeRound=2;}
+	if(theTime.hours>12) {timeRound=3;}
+	if(theTime.hours>16) {timeRound=4;}
+	if(theTime.hours>20) {timeRound=0;}
+	clocksprite[timeRound].draw(canvas,802,8);
+
+	
 
 };
 
@@ -2501,7 +2541,7 @@ function update() {
 		if(tabkey.check())
 		{
 			MUSELECTED++;
-			if(MUSELECTED>armies[0].squads[MSELECTED].numUnits)
+			if(MUSELECTED>armies[0].squads[MSELECTED].numUnits-1)
 			{
 				MUSELECTED=0;
 			}
@@ -2558,7 +2598,17 @@ function update() {
 	for (var i=0;i<numTowns;i++) {
 		if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
 	}
-
+	theTime.update();
+	canvas.save();
+	canvas.globalAlpha=0.00;
+	if(theTime.hours>8){canvas.globalAlpha=0.20;}
+	if(theTime.hours>12){canvas.globalAlpha=0.30;}
+	if(theTime.hours>16){canvas.globalAlpha=0.40;}
+	if(theTime.hours>20){canvas.globalAlpha=0.50;}
+		canvas.fillStyle="#483D8B ";
+		canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+		canvas.restore();
+	
 	selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
 	//camera controls
 	//if(maps[0].zoom<3){
