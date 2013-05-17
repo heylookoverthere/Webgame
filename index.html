@@ -304,7 +304,7 @@ noarmor = new equipment();
 noarmor.slot=1;
 noaccessory = new equipment();
 noaccessory.slot=2;
-swords=new Array(2);
+swords=new Array(3);
 swords[0]= new equipment();
 swords[0].name="Wooden Sword";
 swords[0].attack=3;
@@ -1828,15 +1828,15 @@ function armyInfo(sq){
 	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 680, 56);
 	
 	canvas.fillStyle = "white";
-    canvas.fillRect(800+37,114,8,-armies[0].ali);//getAli());
-	thingysprite.draw(canvas,800,8);
+    canvas.fillRect(810+37,114,8,-armies[0].ali);//getAli());
+	thingysprite.draw(canvas,810,8);
 	var timeRound =1;
 	//if(theTime.hours>4) {timeRound=1;}
 	if(theTime.hours>8) {timeRound=2;}
 	if(theTime.hours>12) {timeRound=3;}
 	if(theTime.hours>16) {timeRound=4;}
 	if(theTime.hours>20) {timeRound=0;}
-	clocksprite[timeRound].draw(canvas,812,8);
+	clocksprite[timeRound].draw(canvas,822,8);
 
 	
 
@@ -2286,7 +2286,8 @@ armies[0].init(0);
 armies[1].init(1);
 armies[0].squads[0].deploy();
 //armies[0].name = "Lannisters";
-armies[1].name = "The Kingsguard";
+armies[0].name = "The Kingsguard";
+armies[1].name = "The Bastard Boys";
 armies[1].leader.name="Roose";
 for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].leader.class=3;
@@ -2301,7 +2302,7 @@ for (var i=0;i<armies[1].numSquads;i++){
 	armies[1].squads[i].deploy();//TODO delay between deployment 
 	armies[1].lastDeployed++;
 }
-armies[0].leader.name="Ser Bearistan";
+armies[0].leader.name="Bearistan";
 armies[0].leader.class=0;
 armies[0].leader.setClass();
 armies[0].leader.maxhp+=20;
@@ -2310,16 +2311,16 @@ armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
 
 armies[1].leader.name="Ramsey";
 armies[1].leader.maxhp+=150;
-armies[1].leader.hp+=100;
+armies[1].leader.hp=armies[1].leader.maxhp
 armies[1].leader.equipment[0]=swords[2];
 armies[1].leader.equipment[1]=breastplate;
-armies[1].leader.equipment[2]=cape;
+//armies[1].leader.equipment[2]=cape;
 armies[1].squads[0].units[1].name="Reek";
 armies[1].squads[0].units[1].class=9;
 armies[1].squads[0].units[1].setClass();
 
 armies[1].squads[0].units[1].maxhp+=25;
-armies[1].squads[0].units[1].hp=armies[1].leadermaxhp;
+armies[1].squads[0].units[1].hp=armies[1].leader.maxhp;
 armies[1].squads[0].units[1].row=1;
 
 setInterval(function() {

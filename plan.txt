@@ -20,6 +20,10 @@ storm god - lightning
 -lion of knight -riches
 great other - ice attack
 
+-time passes while paused
+
+-ethan met a ghost squad!
+
 -cards -animations, more types needed animationpause? attack queue wait for animation to finish?
 damage numbers drawn on sprites in battle. -meh
 -build + destroy bridges
