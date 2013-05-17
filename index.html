@@ -1815,15 +1815,15 @@ function armyInfo(sq){
 	canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 680, 56);
 	
 	canvas.fillStyle = "white";
-    canvas.fillRect(790+37,114,8,-armies[0].ali);//getAli());
-	thingysprite.draw(canvas,790,8);
+    canvas.fillRect(800+37,114,8,-armies[0].ali);//getAli());
+	thingysprite.draw(canvas,800,8);
 	var timeRound =1;
 	//if(theTime.hours>4) {timeRound=1;}
 	if(theTime.hours>8) {timeRound=2;}
 	if(theTime.hours>12) {timeRound=3;}
 	if(theTime.hours>16) {timeRound=4;}
 	if(theTime.hours>20) {timeRound=0;}
-	clocksprite[timeRound].draw(canvas,802,8);
+	clocksprite[timeRound].draw(canvas,812,8);
 
 	
 
@@ -2605,7 +2605,7 @@ function update() {
 	if(theTime.hours>12){canvas.globalAlpha=0.30;}
 	if(theTime.hours>16){canvas.globalAlpha=0.40;}
 	if(theTime.hours>20){canvas.globalAlpha=0.50;}
-		canvas.fillStyle="#483D8B ";
+		canvas.fillStyle="#1B1733 ";//"#483D8B ";
 		canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 		canvas.restore();
 	
