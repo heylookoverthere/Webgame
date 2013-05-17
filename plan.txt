@@ -15,12 +15,10 @@
 -great stallion -speed boost?
 -Many faced god - death?
 storm god - lightning
-
 -Bakkalon - great soldier - attack physical
 -lion of knight -riches
 great other - ice attack
 
--time passes while paused
 
 -ethan met a ghost squad!
 
@@ -28,26 +26,23 @@ great other - ice attack
 damage numbers drawn on sprites in battle. -meh
 -build + destroy bridges
 -wounded pepole bleeding out left behind antibiotics
--mutinies! =fight to death, if leader loses, squad defects
--catapults to defend towns
+-mutinies! =fight to death, if leader loses, squad defects - cohesion
+-catapults to defend towns - eventually, builders
 -growth tables for classes. (all the same for now.)
-maxturn=x*100 ticks, not turns taken.
-canvas.save()
+-maxturn=x*100 ticks, not turns taken.
 
-little corner thing with ali and time!
-
-picture of cards! display selected! start army with 99 of each for now.
 
 -time based turns
 
 prevent constant capture/liberation!
-cardbug! - sets sprites at the start, you change type alter but not sprites.
-
+	-better town colision detection
+	
+cardbug! - still there!!
  
 knockback both on tie?
  
 -revive at towns for money?
--town greeting first time, boss greeting
+-town greeting first time, boss greeting, dish out cards
 
 -amry inventory:how many of each item
 army looseunits.
@@ -62,19 +57,6 @@ narf: whatever.getshit("hp")
 
 get spreadsheet style list of all untis each team health, attack etc, sortable.
 
-Brotherhood Without Banners
-Second Sons
-Golden Company
-Company of the Cat
-Brave Companions
-The Unsullied
-The Nights Watch
-The Kingsguard
-The Windblown
-The Long Lances
-Stormcrows
+["Brotherhood Without Banners","Second Sons","Golden Company","Company of the Cat","Brave Companions","The Unsullied","The Nights Watch","The Kingsguard","The Windblown","The Long Lances","Stormcrows"];
 
-Theon
-Fletcher Dick
-Beardless Dick is a man of the Riverlands.
 
