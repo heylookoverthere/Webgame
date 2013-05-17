@@ -496,7 +496,7 @@ function unit()
 	this.status[4]=false;
 	this.status[5]=false;
 	this.status[6]=false;
-	this.class=Math.floor(Math.random()*12);
+	this.class=Math.floor(Math.random()*15);
 	this.row=Math.floor(Math.random()*2);
 	this.viewrange=5;
 	this.level=1;
@@ -1154,6 +1154,66 @@ function unit()
 			this.cost=10;
 			this.canlead=true;
 			this.attackType[0]=AttackTypes.Magical;
+			this.attackType[1]=AttackTypes.Heal;
+		}else if(cla==12) { //darkknight
+			this.maxhp=70;
+			this.hp=50;
+			this.attack=35;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=10;
+			this.viewrange=5;
+			this.sprite = Sprite("darkknight");
+			this.equipment[0]=swords[1];
+			this.equipment[1]=breastplate;
+			if (this.gender==1) {this.sprite = Sprite("darkknightgirl");}
+			this.def=12;
+			this.mdef=15;
+			this.mag=30;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Physical;
+		}else if(cla==13) { //palladin
+			this.maxhp=90;
+			this.hp=50;
+			this.attack=25;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=5;
+			this.ali=90;
+			this.viewrange=5;
+			this.sprite = Sprite("whiteknight");
+			this.equipment[0]=icemagic[1];
+			this.equipment[1]=robe;
+			if (this.gender==1) {this.sprite = Sprite("whiteknightgirl");}
+			this.def=6;
+			this.mdef=15;
+			this.mag=60;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
+			this.attackType[1]=AttackTypes.Heal;
+		}else if(cla==14) { //polar
+			this.maxhp=90;
+			this.hp=50;
+			this.attack=25;
+			this.maxmp=40;
+			this.speed=2;
+			this.luck=9;
+			this.ali=90;
+			this.viewrange=5;
+			this.sprite = Sprite("polarbear");
+			this.equipment[0]=icemagic[1];
+			this.equipment[1]=breastplate
+			if (this.gender==1) {this.sprite = Sprite("polarbear");}
+			this.def=16;
+			this.mdef=15;
+			this.mag=30;
+			this.cost=10;
+			this.canlead=true;
+			this.attackType[0]=AttackTypes.Physical;
 			this.attackType[1]=AttackTypes.Heal;
 		}
 		
@@ -2417,6 +2477,15 @@ function battleDraw()
 		if(combatants[0].units[i].class==3) {closs="Frog";}
 		if(combatants[0].units[i].class==4) {closs="Archer";}
 		if(combatants[0].units[i].class==5) {closs="Healer";}
+		if(combatants[0].units[i].class==6) {closs="Ninja";}
+		if(combatants[0].units[i].class==7) {closs="Winger";}
+		if(combatants[0].units[i].class==8) {closs="Knight";}
+		if(combatants[0].units[i].class==9) {closs="Cleric";}
+		if(combatants[0].units[i].class==10) {closs="Sage";}
+		if(combatants[0].units[i].class==11) {closs="Angel";}
+		if(combatants[0].units[i].class==12) {closs="Dark Knight";}
+		if(combatants[0].units[i].class==13) {closs="Palladin";}
+		if(combatants[0].units[i].class==14) {closs="Polar Bear";}
 		var xp=600+combatants[0].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[0].units[i].hp, xp+30, 130+i*2*45);
@@ -2470,6 +2539,15 @@ function battleDraw()
 		if(combatants[1].units[i].class==3) {closs="Frog";}
 		if(combatants[1].units[i].class==4) {closs="Archer";}
 		if(combatants[1].units[i].class==5) {closs="Healer";}
+		if(combatants[1].units[i].class==6) {closs="Ninja";}
+		if(combatants[1].units[i].class==7) {closs="Winger";}
+		if(combatants[1].units[i].class==8) {closs="Knight";}
+		if(combatants[1].units[i].class==9) {closs="Cleric";}
+		if(combatants[1].units[i].class==10) {closs="Sage";}
+		if(combatants[1].units[i].class==11) {closs="Angel";}
+		if(combatants[1].units[i].class==12) {closs="Dark Knight";}
+		if(combatants[1].units[i].class==13) {closs="Palladin";}
+		if(combatants[1].units[i].class==14) {closs="Polar Bear";}
 		var xp=135-combatants[1].units[i].row*40;
 		canvas.fillText("HP:", xp, 130+i*2*45);
 		canvas.fillText(combatants[1].units[i].hp, xp+30, 130+i*2*45);
@@ -2564,6 +2642,15 @@ function update() {
 			if(armies[0].squads[MSELECTED].units[i].class==3) {closs="Frog";}
 			if(armies[0].squads[MSELECTED].units[i].class==4) {closs="Archer";}
 			if(armies[0].squads[MSELECTED].units[i].class==5) {closs="Healer";}
+			if(armies[0].squads[MSELECTED].units[i].class==6) {closs="Ninja";}
+			if(armies[0].squads[MSELECTED].units[i].class==7) {closs="Winger";}
+			if(armies[0].squads[MSELECTED].units[i].class==8) {closs="Knight";}
+			if(armies[0].squads[MSELECTED].units[i].class==9) {closs="Cleric";}
+			if(armies[0].squads[MSELECTED].units[i].class==10) {closs="Sage";}
+			if(armies[0].squads[MSELECTED].units[i].class==11) {closs="Angel";}
+			if(armies[0].squads[MSELECTED].units[i].class==12) {closs="Dark Knight";}
+			if(armies[0].squads[MSELECTED].units[i].class==13) {closs="Palladin";}
+			if(armies[0].squads[MSELECTED].units[i].class==14) {closs="Polar Bear";}
 			var xp=100+armies[0].squads[MSELECTED].units[i].row*40;
 			canvas.fillText("HP:", xp, 130+i*2*45);
 			canvas.fillText(armies[0].squads[MSELECTED].units[i].hp, xp+30, 130+i*2*45);

@@ -18,7 +18,7 @@ storm god - lightning
 -Bakkalon - great soldier - attack physical
 -lion of knight -riches
 great other - ice attack
-
+---------------------
 
 -ethan met a ghost squad!
 
@@ -39,7 +39,7 @@ prevent constant capture/liberation!
 	
 cardbug! - still there!!
  
-knockback both on tie?
+knockback both on tie? - right now tie goes to the player
  
 -revive at towns for money?
 -town greeting first time, boss greeting, dish out cards
