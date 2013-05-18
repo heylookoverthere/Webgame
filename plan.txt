@@ -32,6 +32,11 @@ damage numbers drawn on sprites in battle. -meh
 -maxturn=x*100 ticks, not turns taken.
 -time based turns
 
+-N=new squad with unit as leader
+-A=add squad to unit (error messages in log if fail!)
+-R=remove squad from unit, put in loose. if loose=full no remove.
+remove leader=kill squad (this will be hard.) (maybe you can't exit menu wiht any invalid squads?) only if room in loose!
+
 -menus, arrow keys move around grid of unassigned units.
 
 prevent constant capture/liberation!

@@ -2450,9 +2450,9 @@ function menuDraw()
 	canvas.save();
     canvas.globalAlpha=0.80;
 	canvas.fillStyle =  "#DCDCDC";
-    canvas.fillRect(25,95,820,500);
+    canvas.fillRect(25,95,850,500);
 	canvas.fillStyle =bColors[6];//Math.floor(Math.random()*5)];// "#483D8B ";
-    canvas.fillRect(40,110,790,470);
+    canvas.fillRect(40,110,820,470);
 	canvas.restore();
 	canvas.font = "14pt Calibri";
 	canvas.textAlign = "left";
@@ -2665,7 +2665,7 @@ function update() {
 			if(armies[0].squads[MSELECTED].units[i].class==12) {closs="Dark Knight";}
 			if(armies[0].squads[MSELECTED].units[i].class==13) {closs="Palladin";}
 			if(armies[0].squads[MSELECTED].units[i].class==14) {closs="Polar Bear";}
-			var xp=100;
+			var xp=80;
 			canvas.fillText("HP:", xp, 130+i*2*45);
 			canvas.fillText(armies[0].squads[MSELECTED].units[i].hp, xp+30, 130+i*2*45);
 			canvas.fillText("/", xp+60, 130+i*2*45);
