@@ -1486,6 +1486,14 @@ function squad() {
 	this.nextMove = null;
 	this.nextTile = {x: this.x, y: this.y};
 	this.inNextTile = false;
+	
+	this.addUnit=function(uknit)
+	{
+		if (this.numUnits>4) {return false;}
+		this.units[this.numUnits]=uknit;//new unit();
+		this.units[this.numUnits].ID=this.numUnits;
+		this.numUnits++;
+	};
 	this.deploy=function()
 	{
 		var cst = this.getCost();
@@ -2057,6 +2065,7 @@ var enterkey=new akey("space");
 var menukey=new akey("m");
 var fleekey=new akey("f");
 var aikey=new akey("a");
+var addkey=aikey;
 var unitinfokey=new akey("u");
 var cardkey=new akey("c");
 var deploykey=new akey("d");
@@ -2752,6 +2761,9 @@ function update() {
 			looseX++;
 			if(looseX>3) { looseX=3;}
 		
+		}
+		if(addkey.check()){
+			armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY]); //TODO
 		}
 		selector.draw(canvas, xp-40+looseX*200, looseY*2*45+92+45);
 		if(enterkey.check())
