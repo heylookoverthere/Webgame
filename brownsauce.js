@@ -1186,7 +1186,7 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Heal;
         }else if(cla===14) { //polar
-            this.maxhp=90;
+            this.maxhp=70;
             this.hp=50;
             this.attack=25;
             this.maxmp=40;
@@ -2726,7 +2726,8 @@ function update() {
     }
     if(isMenu==1) 
     {
-        menuDraw();
+        var looseIndex=0;
+		menuDraw();
         //draw out squad
         canvas.fillStyle = "white";
         canvas.fillRect(284,110,16,470);
@@ -2850,12 +2851,12 @@ function update() {
             }
             
         }
-		var looseIndex= (looseX*5)+looseY;
+		looseIndex= (looseX*5)+looseY;
         if(addkey.check()){
             if(!sideBar){
 				if((armies[0].numLooseUnits>0) && (looseY<armies[0].numLooseUnits)){
-					if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY])){ //TODO
-						armies[0].removeLoose(looseY);
+					if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseIndex])){ //TODO
+						armies[0].removeLoose(looseIndex);
 					}else {console.log("Could not add unit, no free slots.");}
 				}else {console.log("No unit to add!");}
             }
@@ -2863,12 +2864,12 @@ function update() {
 		if(newkey.check()){
 			if(!sideBar){
 				if(looseY>armies[0].numLooseUnits-1){ console.log("select a leader!");}
-				else if(!armies[0].looseUnits[looseY].canlead){
+				else if(!armies[0].looseUnits[looseIndex].canlead){
 					console.log("This unit cannot lead!");
 				}else
 				{
-					if(armies[0].addSquad(armies[0].looseUnits[looseY])){
-						armies[0].removeLoose(looseY);
+					if(armies[0].addSquad(armies[0].looseUnits[looseIndex])){
+						armies[0].removeLoose(looseIndex);
 						console.log(armies[0].squads[armies[0].numSquads-1].leader.name + " 's squad has been created");
 					}
 				}
@@ -2876,10 +2877,10 @@ function update() {
 		}
         if(removekey.check()){
             if(sideBar){
-				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].leader)
+				if(armies[0].squads[MSELECTED].units[looseIndex]==armies[0].leader)
 				{
 					console.log("Cannot disband this squad.");
-				}else if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
+				}else if(armies[0].squads[MSELECTED].units[looseIndex]==armies[0].squads[MSELECTED].leader)
 				{
 					console.log("Squad disbanded.");
 					for (var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
@@ -2888,8 +2889,8 @@ function update() {
 					}
 					armies[0].removeSquad(armies[0].squads[MSELECTED].ID);
 				}else{
-					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY])){
-						armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
+					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseIndex])){
+						armies[0].squads[MSELECTED].removeUnit(looseIndex); //TODO
 						looseY=0;
 					}else {console.log("Could not remove unit, no free slots.");}
 				}
