@@ -182,7 +182,7 @@ function card(){
                     if (usqd.units[i].hp>usqd.units[i].maxhp) {usqd.units[i].hp=usqd.units[i].maxhp;}
                 }
             }
-        }else if(this.type==1)
+        }else if(this.type===1)
         {
             console.log("Played the Drowned God card!");
             for(var i=0;i<esqd.numUnits;i++){
@@ -190,16 +190,16 @@ function card(){
                     esqd.units[i].hurt(15);
                 }
             }
-        }else if(this.type==2)
+        }else if(this.type===2)
         {
             console.log("Played The Father card!");
             esqd.turns=20;
             esqd.damaged=-1; //flee
-        }else if(this.type==3)
+        }else if(this.type===3)
         {
             console.log("Played The Stranger card!");
             esqd.row();
-        }else if(this.type==5)
+        }else if(this.type===5)
         {
             console.log("Played the R'hllor card!");
             for(var i=0;i<usqd.numUnits;i++){
@@ -209,12 +209,11 @@ function card(){
                     if (usqd.units[i].hp>usqd.units[i].maxhp) {usqd.units[i].hp=usqd.units[i].maxhp;}
                 }
             }
-        }else if(this.type==3)
-        {
+        }else if(this.type===3) {
             console.log("Played The Crone card!");
             usqd.healStatus();
         }
-    }
+    };
 }
 
 function akey(k) {  //represents a keyboard button
@@ -523,7 +522,7 @@ function unit() {
         }
         //if(this.getAttackType() == AttackTypes.Physical ) {
         console.log(this.name+" "+this.class+" "+this.row);
-        return (this.attack-this.row)+this.equipAttack()+(this.level*.5)+Math.floor(Math.random()*3);
+        return (this.attack-this.row)+this.equipAttack()+(this.level*0.5)+Math.floor(Math.random()*3);
     };
     
     this.giveExp= function(val){
@@ -569,11 +568,11 @@ function unit() {
         texticles= "Exp: " + this.exp +"/"+this.nextLevel;
         canvas.fillText(texticles, 60, 192);
         
-        if(this.class==0) {var texticles= "Class: Bear"; }
-        if(this.class==1) {var texticles= "Class: Shoe"; }
-        if(this.class==2) {var texticles= "Class: Wizard"; }
-        if(this.class==3) {var texticles= "Class: Frog"; }
-        if(this.class==4) {var texticles= "Class: Archer"; }
+        if(this.class===0) {texticles= "Class: Bear"; }
+        if(this.class===1) {texticles= "Class: Shoe"; }
+        if(this.class===2) {texticles= "Class: Wizard"; }
+        if(this.class===3) {texticles= "Class: Frog"; }
+        if(this.class===4) {texticles= "Class: Archer"; }
         canvas.fillText(texticles, 180, 122);
         
         texticles= "Speed: " + this.speed+ "+"+this.equipment[1].speed ;
@@ -600,11 +599,11 @@ function unit() {
         texticles= "Ali: " + this.ali ;
         canvas.fillText(texticles, 280, 192);
         
-        if(this.getAttackType()==0) {texticles= "Attack Type: Physical";} 
-        if(this.getAttackType()==1) {texticles= "Attack Type: Ranged";} 
-        if(this.getAttackType()==2) {texticles= "Attack Type: Magic";} 
-        if(this.getAttackType()==3) {texticles= "Attack Type: Heal";} 
-        if(this.getAttackType()==4) {texticles= "Attack Type: Inflict Status";} 
+        if(this.getAttackType()===0) {texticles= "Attack Type: Physical";} 
+        if(this.getAttackType()===1) {texticles= "Attack Type: Ranged";} 
+        if(this.getAttackType()===2) {texticles= "Attack Type: Magic";} 
+        if(this.getAttackType()===3) {texticles= "Attack Type: Heal";} 
+        if(this.getAttackType()===4) {texticles= "Attack Type: Inflict Status";} 
         canvas.fillText(texticles, 60, 212);
         
         texticles= "Can be leader: " + this.canlead ;
@@ -644,7 +643,7 @@ function unit() {
         this.hp+=4;
         this.maxmp+=4;
         this.mp+=4;
-        this.speed+=.2;
+        this.speed+=0.2;
         this.evade+=1;
         this.def+=1;
         this.mdef+=1;
@@ -679,7 +678,7 @@ function unit() {
     
     this.getDef= function(attacktype){
         if((attacktype==AttackTypes.Physical) || (attacktype==AttackTypes.Ranged)){
-            if(this.row==0){
+            if(this.row===0){
                 return this.def+this.equipDef();
             }else{
                 return this.def+5+this.equipDef();
@@ -717,17 +716,17 @@ function unit() {
     
     this.giveStatus=function(stats){
         this.status[stats]=true;
-    }
+    };
     
     this.removeStatus=function(stats){
         this.status[stats]=false;
-    }
+    };
     
     
     this.hasStatus=function(stats){
         if(this.status[stats]) {return true;}
         return false;
-    }
+    };
     
     this.update = function (usqd,esqd){
         if(paused) {return;}
@@ -752,7 +751,7 @@ function unit() {
                             continue;
                         }
                     }
-                    if(deadguy!=null)
+                    if(deadguy!==null)
                     {
                         deadguy.alive=true;
                         deadguy.heal(this.mag);
@@ -797,13 +796,13 @@ function unit() {
                         {
                             targe=esqd.units[i];
                             var delt=Math.floor(this.getAttack()-targe.getDef(this.getAttackType()));
-                            if (delt<1) {delt=1;};
+                            if (delt<1) {delt=1;}
                             if(Math.floor(Math.random()*20) > targe.evade) {
                                 var temper="";
                                 if(Math.floor(Math.random()*CRIT_CHANCE) < this.luck) { delt=delt+(delt/2); temper=" critical";} //critical hit
                                 
                                 var tmpstr=this.name + temper+" hit " +targe.name+ " for " +delt+ " damage.";
-                                if(usqd.team==0) {
+                                if(usqd.team===0) {
                                     console.log(tmpstr);//todo MONSOLE
                                 }else
                                 {
@@ -827,10 +826,10 @@ function unit() {
                     }
                 }else
                 {
-                    if (usqd.battleAI==0) //weakest
+                    if (usqd.battleAI===0) //weakest
                     {
                         targe=esqd.getWeakest();
-                    }else if (usqd.battleAI==1) //Strongest
+                    }else if (usqd.battleAI===1) //Strongest
                     {
                         targe=esqd.getStrongest();
                     }else if (usqd.battleAI==2) //leader
@@ -838,16 +837,16 @@ function unit() {
                         targe=esqd.leader;
                         if(!targe.alive) {targe=esqd.getWeakest(); }
                     }
-                    if((esqd!=null) && (esqd.alive)){
-                        if(targe==null) { return;}//esqd.checkSurvivors(); return;}
+                    if((esqd!==null) && (esqd.alive)){
+                        if(targe===null) { return;}//esqd.checkSurvivors(); return;}
                         var delt=Math.floor(this.getAttack()-targe.getDef(this.getAttackType()));
-                        if (delt<1) {delt=1;};
+                        if (delt<1) {delt=1;}
                         if(Math.floor(Math.random()*20) > targe.evade) {
                             var temper="";
                             if(Math.floor(Math.random()*CRIT_CHANCE) < this.luck) { delt=delt+(delt/2); temper=" critical";} //critical hit
                             
                             var tmpstr=this.name + temper+" hit " +targe.name+ " for " +delt+ " damage.";
-                            if(usqd.team==0) {
+                            if(usqd.team===0) {
                                 console.log(tmpstr);//todo MONSOLE
                             }else
                             {
@@ -866,8 +865,14 @@ function unit() {
                             targe.hurting=20;
                             usqd.turns++;
                             usqd.damaged+=delt;
-                        }else {this.attacking=10; usqd.turns++;this.attacking=10; tmpstr = this.name + " missed "+ targe.name; console.log(tmpstr);} //miss
-                    }else {endBattle(usqd,esqd);}
+                        } else {
+			    this.attacking=10; 
+			    usqd.turns++;
+			    this.attacking=10; 
+			    var tmpstr = this.name + " missed "+ targe.name; 
+			    console.log(tmpstr);
+			} //miss
+                    } else { endBattle(usqd,esqd); }
                 }
             }
             
@@ -892,13 +897,13 @@ function unit() {
     };
     
     this.rowswap=function(){
-        if (this.row==0) { this.row=1;}
-        else if (this.row==1) { this.row=0;}
+        if (this.row===0) { this.row=1;}
+        else if (this.row===1) { this.row=0;}
     };
     
     this.setClass=function() {
         var cla=this.class;
-        if(cla==0) { //bear
+        if(cla===0) { //bear
             this.maxhp=60;
             this.hp=60;
             this.attack=14
@@ -916,8 +921,8 @@ function unit() {
             this.equipment[0]=swords[0];
             this.equipment[1]=breastplate;
             this.sprite = Sprite("bear1");
-            if (this.gender==1) {this.sprite = Sprite("beargirl");}
-        }else if(cla==3) { //frog
+            if (this.gender===1) {this.sprite = Sprite("beargirl");}
+        }else if(cla===3) { //frog
             this.maxhp=60;
             this.hp=60;
             this.attack=11;
@@ -934,8 +939,8 @@ function unit() {
             this.attackType[1]=AttackTypes.Ranged;
             this.equipment[1]=breastplate;
             this.sprite = Sprite("frogman1");
-            if (this.gender==1) {this.sprite = Sprite("froggirl");}
-        }else if(cla==2) { //wizard
+            if (this.gender===1) {this.sprite = Sprite("froggirl");}
+        }else if(cla===2) { //wizard
             this.maxhp=50;
             this.hp=50;
             this.attack=5;
@@ -947,7 +952,7 @@ function unit() {
             this.sprite = Sprite("wizard");
             this.equipment[0]=rod;
             this.equipment[1]=robe;
-            if (this.gender==1) {this.sprite = Sprite("wizardgirl");}
+            if (this.gender===1) {this.sprite = Sprite("wizardgirl");}
             this.def=2;
             this.mdef=5;
             this.mag=20;
@@ -955,7 +960,7 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Magical;
-        }else if(cla==1) { //shoe
+        }else if(cla===1) { //shoe
             this.maxhp=60;
             this.hp=60;
             this.attack=9;
@@ -972,8 +977,8 @@ function unit() {
             this.sprite = Sprite("shoe");
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
-            if (this.gender==1) {this.sprite = Sprite("shoegirl");}
-        }else if(cla==4) { //archer
+            if (this.gender===1) {this.sprite = Sprite("shoegirl");}
+        }else if(cla===4) { //archer
             this.maxhp=40;
             this.hp=40;
             this.attack=5;
@@ -991,8 +996,8 @@ function unit() {
             this.sprite = Sprite("archer");
             this.attackType[0]=AttackTypes.Ranged;
             this.attackType[1]=AttackTypes.Ranged;
-            if (this.gender==1) {this.sprite = Sprite("archergirl");}
-        }else if(cla==5) { //healer
+            if (this.gender===1) {this.sprite = Sprite("archergirl");}
+        }else if(cla===5) { //healer
             this.maxhp=30;
             this.hp=30;
             this.attack=5;
@@ -1011,8 +1016,8 @@ function unit() {
             this.sprite = Sprite("healer");
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Heal;
-            if (this.gender==1) {this.sprite = Sprite("healergirl");}
-        }else if(cla==6) { //ninja
+            if (this.gender===1) {this.sprite = Sprite("healergirl");}
+        }else if(cla===6) { //ninja
             this.maxhp=30;
             this.hp=30;
             this.attack=5;
@@ -1032,8 +1037,8 @@ function unit() {
             this.sprite = Sprite("ninja");
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
-            if (this.gender==1) {this.sprite = Sprite("ninjagirl");}
-        }else if(cla==7) { //winger
+            if (this.gender===1) {this.sprite = Sprite("ninjagirl");}
+        }else if(cla===7) { //winger
             this.maxhp=40;
             this.hp=40;
             this.attack=8;
@@ -1052,8 +1057,8 @@ function unit() {
             this.sprite = Sprite("winger");
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
-            if (this.gender==1) {this.sprite = Sprite("wingergirl");}
-        }else if(cla==8) { //knight
+            if (this.gender===1) {this.sprite = Sprite("wingergirl");}
+        }else if(cla===8) { //knight
             this.maxhp=40;
             this.hp=40;
             this.attack=12;
@@ -1072,8 +1077,8 @@ function unit() {
             this.sprite = Sprite("knight");
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
-            if (this.gender==1) {this.sprite = Sprite("knightgirl");}
-        }else if(cla==9) { //cleric
+            if (this.gender===1) {this.sprite = Sprite("knightgirl");}
+        }else if(cla===9) { //cleric
             this.maxhp=50;
             this.hp=40;
             this.attack=8;
@@ -1091,8 +1096,8 @@ function unit() {
             this.sprite = Sprite("cleric");
             this.attackType[0]=AttackTypes.Magical;
             this.attackType[1]=AttackTypes.Heal;
-            if (this.gender==1) {this.sprite = Sprite("clericgirl");}
-        }else if(cla==10) { //sage
+            if (this.gender===1) {this.sprite = Sprite("clericgirl");}
+        }else if(cla===10) { //sage
             this.maxhp=60;
             this.hp=50;
             this.attack=5;
@@ -1104,7 +1109,7 @@ function unit() {
             this.sprite = Sprite("sage");
             this.equipment[0]=icemagic[2];
             this.equipment[1]=robe;
-            if (this.gender==1) {this.sprite = Sprite("sagegirl");}
+            if (this.gender===1) {this.sprite = Sprite("sagegirl");}
             this.def=2;
             this.mdef=5;
             this.mag=20;
@@ -1112,7 +1117,7 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Magical;
-        }else if(cla==11) { //angel
+        }else if(cla===11) { //angel
             this.maxhp=60;
             this.hp=50;
             this.attack=5;
@@ -1124,7 +1129,7 @@ function unit() {
             this.sprite = Sprite("angel");
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
-            if (this.gender==1) {this.sprite = Sprite("angelgirl");}
+            if (this.gender===1) {this.sprite = Sprite("angelgirl");}
             this.def=2;
             this.mdef=15;
             this.mag=30;
@@ -1132,7 +1137,7 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Magical;
             this.attackType[1]=AttackTypes.Heal;
-        }else if(cla==12) { //darkknight
+        }else if(cla===12) { //darkknight
             this.maxhp=70;
             this.hp=50;
             this.attack=35;
@@ -1144,7 +1149,7 @@ function unit() {
             this.sprite = Sprite("darkknight");
             this.equipment[0]=swords[1];
             this.equipment[1]=breastplate;
-            if (this.gender==1) {this.sprite = Sprite("darkknightgirl");}
+            if (this.gender===1) {this.sprite = Sprite("darkknightgirl");}
             this.def=12;
             this.mdef=15;
             this.mag=30;
@@ -1152,7 +1157,7 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
-        }else if(cla==13) { //palladin
+        }else if(cla===13) { //palladin
             this.maxhp=90;
             this.hp=50;
             this.attack=25;
@@ -1164,7 +1169,7 @@ function unit() {
             this.sprite = Sprite("whiteknight");
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
-            if (this.gender==1) {this.sprite = Sprite("whiteknightgirl");}
+            if (this.gender===1) {this.sprite = Sprite("whiteknightgirl");}
             this.def=6;
             this.mdef=15;
             this.mag=60;
@@ -1172,7 +1177,7 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Heal;
-        }else if(cla==14) { //polar
+        }else if(cla===14) { //polar
             this.maxhp=90;
             this.hp=50;
             this.attack=25;
@@ -1184,7 +1189,7 @@ function unit() {
             this.sprite = Sprite("polarbear");
             this.equipment[0]=icemagic[1];
             this.equipment[1]=breastplate
-            if (this.gender==1) {this.sprite = Sprite("polarbear");}
+            if (this.gender===1) {this.sprite = Sprite("polarbear");}
             this.def=16;
             this.mdef=15;
             this.mag=30;
@@ -1198,25 +1203,25 @@ function unit() {
     this.setClass();
     this.hp=this.maxhp;
     this.mp=this.maxmp;
-    if (this.gender==2) {this.name="Nancy";}
+    if (this.gender===2) {this.name="Nancy";}
 }
 
 function numSquads(team){
     var count=0;
     for(var i=0;i<armies[0].numSquads;i++) 
     {
-        if(team==0) {if((armies[0].squads[i].alive) &&(armies[0].squads[i].deployed)) {count++;} }
+        if(team===0) {if((armies[0].squads[i].alive) &&(armies[0].squads[i].deployed)) {count++;} }
     }   
     for(var i=0;i<armies[1].numSquads;i++) 
     {
-        if(team==1) {if((armies[1].squads[i].alive) &&(armies[1].squads[i].deployed)){count++;} }
+        if(team===1) {if((armies[1].squads[i].alive) &&(armies[1].squads[i].deployed)){count++;} }
     }
     return count;
-};
+}
 
 function numArmyUnits(team){
     var count=0;
-    if(team==0){
+    if(team===0){
         for(var i=0;i<armies[0].numSquads;i++) 
         {
             if(armies[0].squads[i].alive) 
@@ -1224,7 +1229,7 @@ function numArmyUnits(team){
                 count+=armies[0].squads[i].numSquadUnits();
             }
         }
-    }else if (team==1) {
+    }else if (team===1) {
         for(var i=0;i<armies[1].numSquads;i++) 
         {
             if(armies[1].squads[i].alive) 
@@ -1237,7 +1242,7 @@ function numArmyUnits(team){
         }
     }
     return count;
-};
+}
 
 maps = [];
 maps.push(Map());
