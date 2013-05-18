@@ -337,6 +337,14 @@ bow[1].attack=35;
 bow[1].value=300;
 bow[1].tooltip = "Better bow!";
 
+claws= new equipment();
+claws.slot=0;
+claws.name="Bear hands";
+claws.evade=0;
+claws.attack=35;
+claws.value=30;
+claws.tooltip = "";
+
 var spear=new Array(2);
 spear[0]= new equipment();
 spear[0].slot=0;
@@ -918,7 +926,7 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
-            this.equipment[0]=swords[0];
+            this.equipment[0]=claws;
             this.equipment[1]=breastplate;
             this.sprite = Sprite("bear1");
             if (this.gender===1) {this.sprite = Sprite("beargirl");}
@@ -1187,7 +1195,7 @@ function unit() {
             this.ali=90;
             this.viewrange=5;
             this.sprite = Sprite("polarbear");
-            this.equipment[0]=icemagic[1];
+            this.equipment[0]=claws;
             this.equipment[1]=breastplate
             if (this.gender===1) {this.sprite = Sprite("polarbear");}
             this.def=16;
@@ -1378,10 +1386,12 @@ function army() {
     this.cards[2]=new card();
     this.cards[3]=new card();
     this.cards[4]=new card();
-    this.numLooseUnits=2;
+    this.numLooseUnits=1;
     this.looseUnits=new Array (64);
     this.looseUnits[0]=new unit();
-    this.looseUnits[1]=new unit();
+    //this.looseUnits[1]=new unit();
+    //this.looseUnits[2]=new unit();
+   // this.looseUnits[3]=new unit();
     this.gold=4000; 
     this.name="Fighting Mongooses"
     this.squads=new Array (TEAM_SIZE);
@@ -1391,10 +1401,20 @@ function army() {
     this.getOpinion=function(){
         return this.opinion;
     };
-    
+    this.numSquadsAlive=function()
+	{
+		var count=0;
+		for(var i=0;i<this.numSquads;i++)
+		{
+			if(this.squads[i].alive){
+				count++;
+			}
+		}
+		return count;
+	};
     this.addLoose=function(uknit)
     {
-        if (this.numLooseUnits>30) {return false;}
+        if (this.numLooseUnits>99) {return false;}
         this.looseUnits[this.numLooseUnits]=uknit;//new unit();
         this.numLooseUnits++;
 		return true;
@@ -1411,6 +1431,20 @@ function army() {
         }
         this.numLooseUnits--;
     };
+	
+	this.removeSquad=function(id)
+    {
+        if (this.numSquads<0) {return false;}
+        this.squads[id]=null;
+		for(var i=id;i<this.numSquads-1;i++)
+        {
+            this.squads[i]=this.squads[i+1];
+			this.squads[i].ID=i;
+            
+        }
+        this.numSquads--;
+    };
+	
     this.init=function(side){
         this.numSquads=8;
         this.team=side;
@@ -1550,7 +1584,12 @@ function squad() {
     }
     
     this.getCost=function(){
-        return 100;
+        var cst=0;
+		for(var i=0;i<this.numUnits;i++)
+		{
+			cst+=this.units[i].cost;
+		}
+		return cst;
     };
     this.flee= function(c)
     {
@@ -1948,7 +1987,7 @@ function armyInfo(sq){
     canvas.fillText("Deployed: "+armies[0].lastDeployed, 515, 36);
     canvas.fillText("Days: "+theTime.days, 515, 56);
     canvas.fillText("Selected: " + SELECTED, 680, 8);
-    canvas.fillText("Squads: "+armies[0].numSquads, 680, 24);
+    canvas.fillText("Squads: "+armies[0].numSquadsAlive(), 680, 24);
     canvas.fillText("Units: " + numArmyUnits(0), 680, 38);
     canvas.fillText(armies[0].squads[SELECTED].leader.name + "'s unit", 680, 56);
     
@@ -2631,6 +2670,7 @@ function battleDraw()
         combatants[0].damaged=0;
         combatants[1].damaged=10;
         endBattle(combatants[0],combatants[1]);
+		armies[0].removeSquad(combatants[0].ID);
     }
     if((combatants[1].alive)&& (!combatants[1].checkSurvivors()))   
     { 
@@ -2639,6 +2679,7 @@ function battleDraw()
         combatants[1].damaged=0;
         combatants[0].damaged=10;
         endBattle(combatants[0],combatants[1]);
+		armies[1].removeSquad(combatants[1].ID);
     }
     if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
     if(battletick>battledelay) {battletick=0;}
@@ -2675,6 +2716,7 @@ function update() {
         //draw out squad
         canvas.fillStyle = "white";
         canvas.fillRect(284,110,16,470);
+		if(MSELECTED>armies[0].numSquads-1) {MSELECTED=0;}
         for(var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
         {
             if((armies[0].squads[MSELECTED].units[i]==null)||(!armies[0].squads[MSELECTED].units[i].alive)) {continue;}
@@ -2800,9 +2842,17 @@ function update() {
         }
         if(removekey.check()){
             if(sideBar){
-				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
+				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].leader)
 				{
-					console.log("Cannot remove leaders yet.");
+					console.log("Cannot disband this squad.");
+				}else if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
+				{
+					console.log("Squad disbanded.");
+					for (var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
+					{
+						armies[0].addLoose(armies[0].squads[MSELECTED].units[i]);
+					}
+					armies[0].removeSquad(armies[0].squads[MSELECTED].ID);
 				}else{
 					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY])){
 						armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
