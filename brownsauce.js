@@ -1006,8 +1006,8 @@ function unit() {
             this.attackType[1]=AttackTypes.Ranged;
             if (this.gender===1) {this.sprite = Sprite("archergirl");}
         }else if(cla===5) { //healer
-            this.maxhp=30;
-            this.hp=30;
+            this.maxhp=35;
+            this.hp=35;
             this.attack=5;
             this.maxmp=40;
             this.speed=2;
@@ -1016,7 +1016,7 @@ function unit() {
             this.viewrange=5;
             this.def=2;
             this.mdef=5;
-            this.mag=15;
+            this.mag=20;
             this.cost=10;
             this.equipment[0]=rod;
             this.equipment[1]=robe;
@@ -1038,7 +1038,7 @@ function unit() {
             this.evade=9;
             this.mdef=5;
             this.mag=15;
-            this.cost=10;
+            this.cost=15;
             this.equipment[0]=katana[0];
             this.equipment[1]=robe;
             this.canlead=true;
@@ -1058,7 +1058,7 @@ function unit() {
             this.def=2;
             this.mdef=5;
             this.mag=15;
-            this.cost=10;
+            this.cost=15;
             this.equipment[0]=spear[0];
             this.equipment[1]=robe;
             this.canlead=true;
@@ -1078,7 +1078,7 @@ function unit() {
             this.def=12;
             this.mdef=5;
             this.mag=15;
-            this.cost=10;
+            this.cost=15;
             this.equipment[0]=swords[1];
             this.equipment[1]=chainmail;
             this.canlead=true;
@@ -1098,7 +1098,7 @@ function unit() {
             this.def=2;
             this.mdef=5;
             this.mag=30;
-            this.cost=10;
+            this.cost=20;
             this.equipment[1]=robe;
             this.canlead=true;
             this.sprite = Sprite("cleric");
@@ -1121,7 +1121,7 @@ function unit() {
             this.def=2;
             this.mdef=5;
             this.mag=20;
-            this.cost=10;
+            this.cost=20;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Magical;
@@ -1141,7 +1141,7 @@ function unit() {
             this.def=2;
             this.mdef=15;
             this.mag=30;
-            this.cost=10;
+            this.cost=50;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Magical;
             this.attackType[1]=AttackTypes.Heal;
@@ -1161,7 +1161,7 @@ function unit() {
             this.def=12;
             this.mdef=15;
             this.mag=30;
-            this.cost=10;
+            this.cost=30;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
@@ -1181,7 +1181,7 @@ function unit() {
             this.def=6;
             this.mdef=15;
             this.mag=60;
-            this.cost=10;
+            this.cost=30;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Heal;
@@ -1386,12 +1386,12 @@ function army() {
     this.cards[2]=new card();
     this.cards[3]=new card();
     this.cards[4]=new card();
-    this.numLooseUnits=1;
+    this.numLooseUnits=4;
     this.looseUnits=new Array (64);
     this.looseUnits[0]=new unit();
-    //this.looseUnits[1]=new unit();
-    //this.looseUnits[2]=new unit();
-   // this.looseUnits[3]=new unit();
+    this.looseUnits[1]=new unit();
+    this.looseUnits[2]=new unit();
+    this.looseUnits[3]=new unit();
     this.gold=4000; 
     this.name="Fighting Mongooses"
     this.squads=new Array (TEAM_SIZE);
@@ -1431,6 +1431,19 @@ function army() {
         }
         this.numLooseUnits--;
     };
+	
+	this.addSquad=function(uknit){
+		    if(this.numSquads>TEAM_SIZE) {console.log("You have too many squads already!");return false;}
+			this.numSquads++;
+            this.squads[this.numSquads-1]=new squad();
+			this.squads[this.numSquads-1].numUnits=1;
+			this.squads[this.numSquads-1].units[0]=uknit;
+			this.squads[this.numSquads-1].leader=uknit;
+            this.squads[this.numSquads-1].team=this.team;
+            this.squads[this.numSquads-1].ID=this.numSquads-1;
+            this.squads[this.numSquads-1].deployed=false;
+			return true;
+	};
 	
 	this.removeSquad=function(id)
     {
@@ -2121,6 +2134,7 @@ var unitinfokey=new akey("u");
 var cardkey=new akey("c");
 var deploykey=new akey("d");
 var removekey=deploykey;
+var newkey=new akey("n");
 var createkey=new akey("j");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
@@ -2756,6 +2770,9 @@ function update() {
             if(armies[0].squads[MSELECTED].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
 
         }
+		canvas.fillStyle = "white";
+		canvas.fillText("Cost:", 50, 560);
+        canvas.fillText(armies[0].squads[MSELECTED].getCost(), 110, 560);
         for(var i=0;i<armies[0].numLooseUnits;i++)
         {
             if((armies[0].looseUnits[i]==null)||(!armies[0].looseUnits[i].alive)) {continue;}
@@ -2800,6 +2817,7 @@ function update() {
         if(tabkey.check())
         {
             MSELECTED++;
+			looseY=0;
             if(MSELECTED>armies[0].numSquads-1)
             {
                 MSELECTED=0;
@@ -2809,7 +2827,8 @@ function update() {
         if(downkey.check())
         {
             looseY++;
-            if(looseY>4) { looseY=4;}
+            if((looseY>armies[0].squads[MSELECTED].numUnits-1)&&(sideBar)) { looseY=armies[0].squads[MSELECTED].numUnits-1;}
+			if(looseY>4) looseY=0;
         }else if(upkey.check())
         {
             looseY--;
@@ -2824,22 +2843,37 @@ function update() {
         {
             if(!sideBar){
                 looseX++;
-                if(looseX>3) { looseX=3;}
+                if(looseX>1) { looseX=1;}
             }else
             {
                 sideBar=false;
             }
             
         }
+		var looseIndex= (looseX*5)+looseY;
         if(addkey.check()){
             if(!sideBar){
-				if(armies[0].numLooseUnits>0){
+				if((armies[0].numLooseUnits>0) && (looseY<armies[0].numLooseUnits)){
 					if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY])){ //TODO
 						armies[0].removeLoose(looseY);
 					}else {console.log("Could not add unit, no free slots.");}
-				}else {console.log("No units left to add!");}
+				}else {console.log("No unit to add!");}
             }
         }
+		if(newkey.check()){
+			if(!sideBar){
+				if(looseY>armies[0].numLooseUnits-1){ console.log("select a leader!");}
+				else if(!armies[0].looseUnits[looseY].canlead){
+					console.log("This unit cannot lead!");
+				}else
+				{
+					if(armies[0].addSquad(armies[0].looseUnits[looseY])){
+						armies[0].removeLoose(looseY);
+						console.log(armies[0].squads[armies[0].numSquads-1].leader.name + " 's squad has been created");
+					}
+				}
+			}
+		}
         if(removekey.check()){
             if(sideBar){
 				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].leader)
@@ -2856,6 +2890,7 @@ function update() {
 				}else{
 					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY])){
 						armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
+						looseY=0;
 					}else {console.log("Could not remove unit, no free slots.");}
 				}
             }
