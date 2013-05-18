@@ -546,6 +546,26 @@ function unit() {
             this.status[i]=false;
         }
     };
+	
+	this.getClassName=function(){
+		var texticles="";
+		if(this.class===0) {texticles= "Bear"; }
+        if(this.class===1) {texticles= "Shoe"; }
+        if(this.class===2) {texticles= "Wizard"; }
+        if(this.class===3) {texticles= "Frog"; }
+        if(this.class===4) {texticles= "Archer"; }
+		if(this.class===4) {texticles= "Healer"; }
+		if(this.class===5) {texticles= "Ninja"; }
+		if(this.class===7) {texticles="Winger";}
+        if(this.class===8) {texticles="Knight";}
+        if(this.class===9) {texticles="Cleric";}
+        if(this.class===10) {texticles="Sage";}
+        if(this.class===11) {texticles="Angel";}
+        if(this.class===12) {texticles="Dark Knight";}
+        if(this.class===13) {texticles="Palladin";}
+        if(this.class===14) {texticles="Polar Bear";}
+		return texticles;
+	};
     
     this.drawInfo=function(){
         
@@ -575,13 +595,9 @@ function unit() {
         
         texticles= "Exp: " + this.exp +"/"+this.nextLevel;
         canvas.fillText(texticles, 60, 192);
-        
-        if(this.class===0) {texticles= "Class: Bear"; }
-        if(this.class===1) {texticles= "Class: Shoe"; }
-        if(this.class===2) {texticles= "Class: Wizard"; }
-        if(this.class===3) {texticles= "Class: Frog"; }
-        if(this.class===4) {texticles= "Class: Archer"; }
-        canvas.fillText(texticles, 180, 122);
+ 
+		texticles=this.getClassName();
+        canvas.fillText(texticles, 240, 122);
         
         texticles= "Speed: " + this.speed+ "+"+this.equipment[1].speed ;
         canvas.fillText(texticles, 180, 135);
@@ -2019,26 +2035,6 @@ function armyInfo(sq){
 
 };
 
-function squadInfo(sq){
-    canvas.font = "14pt Calibri";
-    canvas.textAlign = "left";
-    canvas.textBaseline = "middle";
-    canvas.fillStyle = "white";
-    /*for(var i=0;i<sq.numUnits;i++)
-      {
-      var closs="";
-      if(sq.units[i].class==0) {closs="bear";}
-      if(sq.units[i].class==1) {closs="Shoe";}
-      if(sq.units[i].class==2) {closs="Wizard";}
-      if(sq.units[i].class==3) {closs="Frog";}
-      canvas.fillText("HP:", 760, 94+i*45);
-      canvas.fillText(sq.units[i].hp, 840, 94+i*45);
-      canvas.fillText("alive?:", 760, 109+i*45);
-      canvas.fillText(sq.units[i].alive, 840, 109+i*45);
-      canvas.fillText(closs, 760, 122+i*45);
-
-      }*/
-};
 
 function drawmousetext(targ,cam) { //draws unit status info
     canvas.font = "14pt Calibri";
@@ -2566,22 +2562,7 @@ function battleDraw()
     for(var i=0;i<combatants[0].numUnits;i++)
     {
         if(!combatants[0].units[i].alive) {continue;}
-        var closs="";
-        if(combatants[0].units[i].class==0) {closs="bear";}
-        if(combatants[0].units[i].class==1) {closs="Shoe";}
-        if(combatants[0].units[i].class==2) {closs="Wizard";}
-        if(combatants[0].units[i].class==3) {closs="Frog";}
-        if(combatants[0].units[i].class==4) {closs="Archer";}
-        if(combatants[0].units[i].class==5) {closs="Healer";}
-        if(combatants[0].units[i].class==6) {closs="Ninja";}
-        if(combatants[0].units[i].class==7) {closs="Winger";}
-        if(combatants[0].units[i].class==8) {closs="Knight";}
-        if(combatants[0].units[i].class==9) {closs="Cleric";}
-        if(combatants[0].units[i].class==10) {closs="Sage";}
-        if(combatants[0].units[i].class==11) {closs="Angel";}
-        if(combatants[0].units[i].class==12) {closs="Dark Knight";}
-        if(combatants[0].units[i].class==13) {closs="Palladin";}
-        if(combatants[0].units[i].class==14) {closs="Polar Bear";}
+		var closs=combatants[0].units[i].getClassName();
         var xp=600+combatants[0].units[i].row*40;
         canvas.fillText("HP:", xp, 130+i*2*45);
         canvas.fillText(combatants[0].units[i].hp, xp+30, 130+i*2*45);
@@ -2627,23 +2608,8 @@ function battleDraw()
     canvas.fillText(texticles, 275, 132);
     for(var i=0;i<combatants[1].numUnits;i++)
     {
-        var closs="";
         if(!combatants[1].units[i].alive) {continue;}
-        if(combatants[1].units[i].class==0) {closs="bear";}
-        if(combatants[1].units[i].class==1) {closs="Shoe";}
-        if(combatants[1].units[i].class==2) {closs="Wizard";}
-        if(combatants[1].units[i].class==3) {closs="Frog";}
-        if(combatants[1].units[i].class==4) {closs="Archer";}
-        if(combatants[1].units[i].class==5) {closs="Healer";}
-        if(combatants[1].units[i].class==6) {closs="Ninja";}
-        if(combatants[1].units[i].class==7) {closs="Winger";}
-        if(combatants[1].units[i].class==8) {closs="Knight";}
-        if(combatants[1].units[i].class==9) {closs="Cleric";}
-        if(combatants[1].units[i].class==10) {closs="Sage";}
-        if(combatants[1].units[i].class==11) {closs="Angel";}
-        if(combatants[1].units[i].class==12) {closs="Dark Knight";}
-        if(combatants[1].units[i].class==13) {closs="Palladin";}
-        if(combatants[1].units[i].class==14) {closs="Polar Bear";}
+        var closs=combatants[1].units[i].getClassName();
         var xp=135-combatants[1].units[i].row*40;
         canvas.fillText("HP:", xp, 130+i*2*45);
         canvas.fillText(combatants[1].units[i].hp, xp+30, 130+i*2*45);
@@ -2735,22 +2701,7 @@ function update() {
         for(var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
         {
             if((armies[0].squads[MSELECTED].units[i]==null)||(!armies[0].squads[MSELECTED].units[i].alive)) {continue;}
-            var closs="";
-            if(armies[0].squads[MSELECTED].units[i].class==0) {closs="bear";}
-            if(armies[0].squads[MSELECTED].units[i].class==1) {closs="Shoe";}
-            if(armies[0].squads[MSELECTED].units[i].class==2) {closs="Wizard";}
-            if(armies[0].squads[MSELECTED].units[i].class==3) {closs="Frog";}
-            if(armies[0].squads[MSELECTED].units[i].class==4) {closs="Archer";}
-            if(armies[0].squads[MSELECTED].units[i].class==5) {closs="Healer";}
-            if(armies[0].squads[MSELECTED].units[i].class==6) {closs="Ninja";}
-            if(armies[0].squads[MSELECTED].units[i].class==7) {closs="Winger";}
-            if(armies[0].squads[MSELECTED].units[i].class==8) {closs="Knight";}
-            if(armies[0].squads[MSELECTED].units[i].class==9) {closs="Cleric";}
-            if(armies[0].squads[MSELECTED].units[i].class==10) {closs="Sage";}
-            if(armies[0].squads[MSELECTED].units[i].class==11) {closs="Angel";}
-            if(armies[0].squads[MSELECTED].units[i].class==12) {closs="Dark Knight";}
-            if(armies[0].squads[MSELECTED].units[i].class==13) {closs="Palladin";}
-            if(armies[0].squads[MSELECTED].units[i].class==14) {closs="Polar Bear";}
+            var closs=armies[0].squads[MSELECTED].units[i].getClassName();
             var xp=80;
             canvas.fillText("HP:", xp, 130+i*2*45);
             canvas.fillText(armies[0].squads[MSELECTED].units[i].hp, xp+30, 130+i*2*45);
@@ -2760,7 +2711,7 @@ function update() {
             canvas.fillText(armies[0].squads[MSELECTED].units[i].level, xp+130, 130+i*2*45);
 
 
-            canvas.fillStyle = "blue";
+        //    canvas.fillStyle = "blue";
             canvas.fillText("Name:", xp, 172+i*2*45);
             canvas.fillText(armies[0].squads[MSELECTED].units[i].name, xp+52, 172+i*2*45);
             canvas.fillText(closs, xp, 158+i*2*45);
@@ -2777,22 +2728,7 @@ function update() {
         for(var i=0;i<armies[0].numLooseUnits;i++)
         {
             if((armies[0].looseUnits[i]==null)||(!armies[0].looseUnits[i].alive)) {continue;}
-            var closs="";
-            if(armies[0].looseUnits[i].class==0) {closs="bear";}
-            if(armies[0].looseUnits[i].class==1) {closs="Shoe";}
-            if(armies[0].looseUnits[i].class==2) {closs="Wizard";}
-            if(armies[0].looseUnits[i].class==3) {closs="Frog";}
-            if(armies[0].looseUnits[i].class==4) {closs="Archer";}
-            if(armies[0].looseUnits[i].class==5) {closs="Healer";}
-            if(armies[0].looseUnits[i].class==6) {closs="Ninja";}
-            if(armies[0].looseUnits[i].class==7) {closs="Winger";}
-            if(armies[0].looseUnits[i].class==8) {closs="Knight";}
-            if(armies[0].looseUnits[i].class==9) {closs="Cleric";}
-            if(armies[0].looseUnits[i].class==10) {closs="Sage";}
-            if(armies[0].looseUnits[i].class==11) {closs="Angel";}
-            if(armies[0].looseUnits[i].class==12) {closs="Dark Knight";}
-            if(armies[0].looseUnits[i].class==13) {closs="Palladin";}
-            if(armies[0].looseUnits[i].class==14) {closs="Polar Bear";}
+            var closs=armies[0].looseUnits[i].getClassName();
             var xp=340;
 			var yp=130+i*2*45;
 			if(i>4) {xp=540; yp=130+(i-5)*2*45;}
@@ -2804,7 +2740,7 @@ function update() {
             canvas.fillText(armies[0].looseUnits[i].level, xp+130, yp);
 
 
-            canvas.fillStyle = "blue";
+            //canvas.fillStyle = "blue";
             canvas.fillText("Name:", xp, yp+42);
             canvas.fillText(armies[0].looseUnits[i].name, xp+52, yp+42);
             canvas.fillText(closs, xp, yp+28);
@@ -2907,12 +2843,25 @@ function update() {
         if(enterkey.check())
         {
             isMenu=2;
+			
         }
         return;
     }else if (isMenu==2)
     {
         //menuDraw();
-        armies[0].squads[MSELECTED].units[MUSELECTED].drawInfo();
+		if(!sideBar) {
+			if(armies[0].looseUnits[looseX*5+looseY]!=null){
+				armies[0].looseUnits[looseX*5+looseY].drawInfo();
+			}else
+			{
+				isMenu=1;
+			}
+		}else
+		{
+			if(armies[0].squads[MSELECTED].numUnits>looseY){
+				armies[0].squads[MSELECTED].units[looseY].drawInfo();
+			}
+		}
         
         if(tabkey.check())
         {
