@@ -39,6 +39,8 @@ remove leader=kill squad (this will be hard.) (maybe you can't exit menu wiht an
 
 -menus, arrow keys move around grid of unassigned units.
 
+-PHYSICAL ATTACK PENELTY BACK ROW?
+
 prevent constant capture/liberation!
 	-better town colision detection
 	

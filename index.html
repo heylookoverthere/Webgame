@@ -2302,6 +2302,14 @@ function Map(I) { //map object
 	canvas.save();
 	canvas.globalAlpha = 0.75;
 	canvas.putImageData(radarBitmap,x,y);
+	
+	for(var i=0;i<numTowns;i++)
+	{
+		canvas.fillStyle = "blue";
+		if(towns[i].team==1){ canvas.fillStyle = "#FF2C85";}
+		canvas.fillRect(x+towns[i].x, y+towns[i].y, 8, 8);
+	}
+	
 	for(var i=0;i<arm[0].numSquads;i++){
 	
 		canvas.fillStyle = "#FFD700";
@@ -2313,12 +2321,7 @@ function Map(I) { //map object
 		canvas.fillStyle = "red";
 		canvas.fillRect(x+arm[1].squads[i].x, y+arm[1].squads[i].y, 4, 4);
 	}
-	for(var i=0;i<numTowns;i++)
-	{
-		canvas.fillStyle = "blue";
-		if(towns[i].team==1){ canvas.fillStyle = "#FF2C85";}
-		canvas.fillRect(x+towns[i].x, y+towns[i].y, 8, 8);
-	}
+
 	canvas.globalAlpha = 0.35;
 	canvas.fillStyle = "white";
 	canvas.fillRect(x+cam.x, y+cam.y, cam.width*I.zoom, cam.height*I.zoom);
@@ -2407,7 +2410,7 @@ armies[1].leader.name="Roose";
 armies[1].basex=180;
 armies[1].basey=256;
 for (var i=0;i<armies[1].numSquads;i++){
-	armies[1].squads[i].leader.class=3;
+	armies[1].squads[i].leader.class=14;
 	armies[1].squads[i].basex=180;
 	armies[1].squads[i].basey=256;
 	armies[1].squads[i].leader.setClass();
@@ -2427,6 +2430,10 @@ armies[0].leader.hp=armies[0].leader.maxhp;
 armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
 
 armies[1].leader.name="Ramsey";
+armies[1].leader.class=12;
+armies[1].leader.setClass();
+armies[1].squads[0].sprite=armies[1].squads[0].leader.sprite;
+
 armies[1].leader.maxhp+=150;
 armies[1].leader.hp=armies[1].leader.maxhp
 armies[1].leader.equipment[0]=swords[2];
