@@ -31,7 +31,7 @@ $(document).bind("contextmenu",function(e){
     }); 
 	
 var radarBitmap=[];
-
+var sideBar=false;
 var textPause=false;
 var won="";
 var textText="";
@@ -1419,6 +1419,22 @@ function army() {
 	this.getOpinion=function(){
 		return this.opinion;
 	};
+	
+	this.addLoose=function(uknit)
+	{
+		if (this.numLooseUnits>9) {return false;}
+		this.looseUnits[this.numLooseUnits]=uknit;//new unit();
+		this.looseUnits[this.numLooseUnits].ID=this.numLooseUnits;
+		this.numLooseUnits++;
+	};
+	
+	this.removeLoose=function(uknit)
+	{
+		if (this.numLooseUnits<0) {return false;}
+		this.looseUnits[uknit.ID]=null;//new unit();
+		uknit=null;
+		this.numLooseUnits--;
+	};
 	this.init=function(side){
 		this.numSquads=8;
 		this.team=side;
@@ -1494,6 +1510,24 @@ function squad() {
 		this.units[this.numUnits].ID=this.numUnits;
 		this.numUnits++;
 	};
+	
+	this.removeUnit=function(uknit)
+	{
+		if (this.numUnits<1) {return false;}
+		uknit.exists=false;
+		uknit.alive=false;
+		
+		for(var i=uknit.ID;i<this.numUnits-1;i++)
+		{
+			this.units[i]=this.units[i+1];
+			this.units[i].ID=i;
+		}
+		/*this.units[this.numUnits].alive=false;
+		this.units[this.numUnits].exists=false;
+		this.units[this.numUnits].alive=null;*/
+		this.numUnits--;
+	};
+	
 	this.deploy=function()
 	{
 		var cst = this.getCost();
@@ -2066,9 +2100,11 @@ var menukey=new akey("m");
 var fleekey=new akey("f");
 var aikey=new akey("a");
 var addkey=aikey;
+var removekey="d";
 var unitinfokey=new akey("u");
 var cardkey=new akey("c");
 var deploykey=new akey("d");
+var removekey=deploykey;
 var createkey=new akey("j");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
@@ -2696,7 +2732,7 @@ function update() {
 			canvas.fillText(closs, xp, 158+i*2*45);
 
 			armies[0].squads[MSELECTED].units[i].sprite.draw(canvas, xp-40, 135+i*2*45);
-			if(i==MSELECTED) {selector.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
+			//if(i==MSELECTED) {selector.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
 			if(armies[0].squads[MSELECTED].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
 			if(armies[0].squads[MSELECTED].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].squads[MSELECTED].units[i].attacking/2, 135+i*2*45);}
 
@@ -2761,18 +2797,37 @@ function update() {
 		}else if(leftkey.check())
 		{
 			looseX--;
-			if(looseX<1) { looseX=0;}
+			if(looseX<1) { looseX=0;sideBar=true;}
 		
 		}else if(rightkey.check())
 		{
-			looseX++;
-			if(looseX>3) { looseX=3;}
+			if(!sideBar){
+				looseX++;
+				if(looseX>3) { looseX=3;}
+			}else
+			{
+				sideBar=false;
+			}
 		
 		}
 		if(addkey.check()){
-			armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY]); //TODO
+			if(!sideBar){
+				armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY]); //TODO
+				armies[0].removeLoose(looseY);
+			}
 		}
-		selector.draw(canvas, xp-40+looseX*200, looseY*2*45+92+45);
+		if(removekey.check()){
+			if(sideBar){
+				armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY]);
+				armies[0].squads[MSELECTED].removeUnit(armies[0].squads[MSELECTED].units[looseY]); //TODO
+			}
+		}
+		if(!sideBar){
+			selector.draw(canvas, xp-40+looseX*200, looseY*2*45+92+45);
+		}else
+		{
+			selector.draw(canvas, 40, looseY*2*45+92+45);
+		}
 		if(enterkey.check())
 		{
 			isMenu=2;
@@ -2922,7 +2977,7 @@ function update() {
 			armies[0].squads[armies[0].numSquads-1].deployed=false;
 		}
 	}
-	if(deploykey.check()){
+	if((deploykey.check())&&(isMenu==0)){
 		if (armies[0].lastDeployed>armies[0].numSquads-1) {
 				//return;
 		}else
