@@ -1424,15 +1424,13 @@ function army() {
 	{
 		if (this.numLooseUnits>9) {return false;}
 		this.looseUnits[this.numLooseUnits]=uknit;//new unit();
-		this.looseUnits[this.numLooseUnits].ID=this.numLooseUnits;
 		this.numLooseUnits++;
 	};
 	
-	this.removeLoose=function(uknit)
+	this.removeLoose=function(id)
 	{
 		if (this.numLooseUnits<0) {return false;}
-		this.looseUnits[uknit.ID]=null;//new unit();
-		uknit=null;
+		this.looseUnits[id]=null;
 		this.numLooseUnits--;
 	};
 	this.init=function(side){
@@ -1507,20 +1505,19 @@ function squad() {
 	{
 		if (this.numUnits>4) {return false;}
 		this.units[this.numUnits]=uknit;//new unit();
-		this.units[this.numUnits].ID=this.numUnits;
 		this.numUnits++;
 	};
 	
-	this.removeUnit=function(uknit)
+	this.removeUnit=function(id)
 	{
 		if (this.numUnits<1) {return false;}
-		uknit.exists=false;
-		uknit.alive=false;
+		this.units[id].exists=false;
+		this.units[id].alive=false;
 		
-		for(var i=uknit.ID;i<this.numUnits-1;i++)
+		for(var i=id;i<this.numUnits-1;i++)
 		{
 			this.units[i]=this.units[i+1];
-			this.units[i].ID=i;
+	
 		}
 		/*this.units[this.numUnits].alive=false;
 		this.units[this.numUnits].exists=false;
@@ -2739,7 +2736,7 @@ function update() {
 		}
 		for(var i=0;i<armies[0].numLooseUnits;i++)
 		{
-			if(!armies[0].looseUnits[i].alive) {continue;}
+			if((armies[0].looseUnits[i]==null)||(!armies[0].looseUnits[i].alive)) {continue;}
 			var closs="";
 			if(armies[0].looseUnits[i].class==0) {closs="bear";}
 			if(armies[0].looseUnits[i].class==1) {closs="Shoe";}
@@ -2819,7 +2816,7 @@ function update() {
 		if(removekey.check()){
 			if(sideBar){
 				armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY]);
-				armies[0].squads[MSELECTED].removeUnit(armies[0].squads[MSELECTED].units[looseY]); //TODO
+				armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
 			}
 		}
 		if(!sideBar){
