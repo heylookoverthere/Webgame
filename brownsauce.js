@@ -51,7 +51,7 @@ var townnames=new Array(40);
 townnames= ["Qarth","Meereen","Myr","Pentos","Ashford","Ashemark","Gulltown","Pyke","Lordsport","Lannisport","Lys","Tyrosh","Iben","New Ghis","Astapor","Yunkai","Qohor","Lorath","Volantis","Braavos","Vaes Dothrak","White Harbor","Maidenpool","Oldstones","Harrenhal","Riverrun","Seaguard","Winterfell","Saltpans","Castamere","Oxcross","Crakehall","The Crag","Duskendale","Dragonstone","Rosby","Highgarden","Oldtown","Grimston","Hardhome"];
 
 names[0]= ["Eddard", "Theon","Bealor", "Aerys", "Aemon", "Aemond", "Fletcher Dick", "Beardless Dick", "Valarr", "Hot Pie", "Lommy", "Jon", "Matarys", "Dunk", "Egg", "Aerion","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn","Howland","Daario","Xhondo","Yellow Dick","Zachery","Zekko","Zollo","Will","Willbert","Wendel","Wendamyr","The Weeper","Wat","Walton","Vardis","Urrigon","Ulmer","Tobho","Timett","Syrio","Styr"];
-names[1]= ["Alysane", "Lyra", "Naerys", "Pia", "Lynesse", "Maege", "Rhaenyra", "Elizibeth", "Rhae", "Tanselle", "Daena", "Elaena", "Myriah", "Aelinor","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei","Old Nan","Yna","Ysilla","Victaria","Visenya","Val","The Waif","Tya","Tysane","Tansey","Talla","Taela","Squirrel","Shiera","Sharna","Scolera","Sarra","Sallei","S'vrone","Rhea","Rhialta"];
+names[1]= ["Alysane", "Lyra", "Naerys", "Pia", "Lynesse", "Maege", "Rhaenyra", "Kyra", "Rhae", "Tanselle", "Daena", "Elaena", "Myriah", "Aelinor","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei","Old Nan","Yna","Ysilla","Victaria","Visenya","Val","The Waif","Tya","Tysane","Tansey","Talla","Taela","Squirrel","Shiera","Sharna","Scolera","Sarra","Sallei","S'vrone","Rhea","Rhialta"];
 var namesused=new Array(2);
 namesused[0]=new Array(120);
 namesused[1]=new Array(120);
@@ -1394,15 +1394,21 @@ function army() {
     
     this.addLoose=function(uknit)
     {
-        if (this.numLooseUnits>9) {return false;}
+        if (this.numLooseUnits>30) {return false;}
         this.looseUnits[this.numLooseUnits]=uknit;//new unit();
         this.numLooseUnits++;
+		return true;
     };
     
     this.removeLoose=function(id)
     {
         if (this.numLooseUnits<0) {return false;}
         this.looseUnits[id]=null;
+		for(var i=id;i<this.numLooseUnits-1;i++)
+        {
+            this.looseUnits[i]=this.looseUnits[i+1];
+            
+        }
         this.numLooseUnits--;
     };
     this.init=function(side){
@@ -1478,13 +1484,14 @@ function squad() {
         if (this.numUnits>4) {return false;}
         this.units[this.numUnits]=uknit;//new unit();
         this.numUnits++;
+		return true;
     };
     
     this.removeUnit=function(id)
     {
         if (this.numUnits<1) {return false;}
         this.units[id].exists=false;
-        this.units[id].alive=false;
+        //this.units[id].alive=false;
         
         for(var i=id;i<this.numUnits-1;i++)
         {
@@ -1495,6 +1502,7 @@ function squad() {
           this.units[this.numUnits].exists=false;
           this.units[this.numUnits].alive=null;*/
         this.numUnits--;
+		return true;
     };
     
     this.deploy=function()
@@ -2669,7 +2677,7 @@ function update() {
         canvas.fillRect(284,110,16,470);
         for(var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
         {
-            if(!armies[0].squads[MSELECTED].units[i].alive) {continue;}
+            if((armies[0].squads[MSELECTED].units[i]==null)||(!armies[0].squads[MSELECTED].units[i].alive)) {continue;}
             var closs="";
             if(armies[0].squads[MSELECTED].units[i].class==0) {closs="bear";}
             if(armies[0].squads[MSELECTED].units[i].class==1) {closs="Shoe";}
@@ -2726,23 +2734,25 @@ function update() {
             if(armies[0].looseUnits[i].class==13) {closs="Palladin";}
             if(armies[0].looseUnits[i].class==14) {closs="Polar Bear";}
             var xp=340;
-            canvas.fillText("HP:", xp, 130+i*2*45);
-            canvas.fillText(armies[0].looseUnits[i].hp, xp+30, 130+i*2*45);
-            canvas.fillText("/", xp+60, 130+i*2*45);
-            canvas.fillText(armies[0].looseUnits[i].maxhp, xp+70, 130+i*2*45);
-            canvas.fillText("Lvl:", xp+100, 130+i*2*45);
-            canvas.fillText(armies[0].looseUnits[i].level, xp+130, 130+i*2*45);
+			var yp=130+i*2*45;
+			if(i>4) {xp=540; yp=130+(i-5)*2*45;}
+            canvas.fillText("HP:", xp, yp);
+            canvas.fillText(armies[0].looseUnits[i].hp, xp+30, yp);
+            canvas.fillText("/", xp+60, yp);
+            canvas.fillText(armies[0].looseUnits[i].maxhp, xp+70, yp);
+            canvas.fillText("Lvl:", xp+100, yp);
+            canvas.fillText(armies[0].looseUnits[i].level, xp+130, yp);
 
 
             canvas.fillStyle = "blue";
-            canvas.fillText("Name:", xp, 172+i*2*45);
-            canvas.fillText(armies[0].looseUnits[i].name, xp+52, 172+i*2*45);
-            canvas.fillText(closs, xp, 158+i*2*45);
+            canvas.fillText("Name:", xp, yp+42);
+            canvas.fillText(armies[0].looseUnits[i].name, xp+52, yp+42);
+            canvas.fillText(closs, xp, yp+28);
 
-            armies[0].looseUnits[i].sprite.draw(canvas, xp-40, 135+i*2*45);
+            armies[0].looseUnits[i].sprite.draw(canvas, xp-40, yp);
 
-            if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, 135+i*2*45);}
-            if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, 135+i*2*45);}
+            if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, yp+5);}
+            if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, yp+5);}
 
         }
         if(tabkey.check())
@@ -2766,7 +2776,7 @@ function update() {
         }else if(leftkey.check())
         {
             looseX--;
-            if(looseX<1) { looseX=0;sideBar=true;}
+            if(looseX<0) { looseX=0;sideBar=true;}
             
         }else if(rightkey.check())
         {
@@ -2781,17 +2791,28 @@ function update() {
         }
         if(addkey.check()){
             if(!sideBar){
-                armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY]); //TODO
-                armies[0].removeLoose(looseY);
+				if(armies[0].numLooseUnits>0){
+					if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseY])){ //TODO
+						armies[0].removeLoose(looseY);
+					}else {console.log("Could not add unit, no free slots.");}
+				}else {console.log("No units left to add!");}
             }
         }
         if(removekey.check()){
             if(sideBar){
-                armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY]);
-                armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
+				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
+				{
+					console.log("Cannot remove leaders yet.");
+				}else{
+					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY])){
+						armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
+					}else {console.log("Could not remove unit, no free slots.");}
+				}
             }
         }
         if(!sideBar){
+			xp=340;
+			if(looseX>1) {xp=540;}
             selector.draw(canvas, xp-40+looseX*200, looseY*2*45+92+45);
         }else
         {
