@@ -565,7 +565,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*18);
+    this.class=Math.floor(Math.random()*19);
     this.row=Math.floor(Math.random()*2);
     this.viewrange=5;
     this.level=1;
@@ -652,6 +652,7 @@ function unit() {
 		if(this.class===15) {texticles="Cpt. Bearmerica";}
 		if(this.class===16) {texticles="Iron Bear";}
 		if(this.class===17) {texticles="Hulk Bear";}
+		if(this.class===18) {texticles="Rum Ham";}
 		return texticles;
 	};
     
@@ -1366,7 +1367,27 @@ function unit() {
             this.mdef=15;
             this.mag=30;
             this.cost=10;
-            this.canlead=true;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===18) { //RUM HAM
+            this.maxhp=50;
+            this.hp=50;
+            this.attack=14;
+            this.maxmp=80;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("rumham");
+            this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("rumhamgirl");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }
