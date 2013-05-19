@@ -565,7 +565,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*16);
+    this.class=Math.floor(Math.random()*18);
     this.row=Math.floor(Math.random()*2);
     this.viewrange=5;
     this.level=1;
@@ -650,6 +650,8 @@ function unit() {
         if(this.class===13) {texticles="Palladin";}
         if(this.class===14) {texticles="Polar Bear";}
 		if(this.class===15) {texticles="Cpt. Bearmerica";}
+		if(this.class===16) {texticles="Iron Bear";}
+		if(this.class===17) {texticles="Hulk Bear";}
 		return texticles;
 	};
     
@@ -1320,6 +1322,46 @@ function unit() {
             this.equipment[0]=claws;
             this.equipment[1]=heavyplate;
             if (this.gender===1) {this.sprite = Sprite("bearmericagirl");}
+            this.def=16;
+            this.mdef=15;
+            this.mag=30;
+            this.cost=10;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===16) { //iron bear
+            this.maxhp=150;
+            this.hp=150;
+            this.attack=35;
+            this.maxmp=40;
+            this.speed=2;
+            this.luck=12;
+            this.ali=90;
+            this.viewrange=5;
+            this.sprite = Sprite("ironbear");
+            this.equipment[0]=claws;
+            this.equipment[1]=heavyplate;
+            if (this.gender===1) {this.sprite = Sprite("ironbeargirl");}
+            this.def=16;
+            this.mdef=15;
+            this.mag=30;
+            this.cost=10;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===17) { //hulk bear
+            this.maxhp=250;
+            this.hp=250;
+            this.attack=65;
+            this.maxmp=40;
+            this.speed=1;
+            this.luck=0;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("hulkbear");
+            this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("shehulkbear");}
             this.def=16;
             this.mdef=15;
             this.mag=30;
