@@ -565,7 +565,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*15);
+    this.class=Math.floor(Math.random()*16);
     this.row=Math.floor(Math.random()*2);
     this.viewrange=5;
     this.level=1;
@@ -649,6 +649,7 @@ function unit() {
         if(this.class===12) {texticles="Dark Knight";}
         if(this.class===13) {texticles="Palladin";}
         if(this.class===14) {texticles="Polar Bear";}
+		if(this.class===15) {texticles="Cpt. Bearmerica";}
 		return texticles;
 	};
     
@@ -1297,7 +1298,7 @@ function unit() {
             this.viewrange=5;
             this.sprite = Sprite("polarbear");
             this.equipment[0]=claws;
-            this.equipment[1]=breastplate
+            this.equipment[1]=breastplate;
             if (this.gender===1) {this.sprite = Sprite("polarbear");}
             this.def=16;
             this.mdef=15;
@@ -1306,6 +1307,26 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Heal;
+        }else if(cla===15) { //capt bear
+            this.maxhp=150;
+            this.hp=150;
+            this.attack=35;
+            this.maxmp=40;
+            this.speed=2;
+            this.luck=12;
+            this.ali=90;
+            this.viewrange=5;
+            this.sprite = Sprite("bearmerica");
+            this.equipment[0]=claws;
+            this.equipment[1]=heavyplate;
+            if (this.gender===1) {this.sprite = Sprite("bearmericagirl");}
+            this.def=16;
+            this.mdef=15;
+            this.mag=30;
+            this.cost=10;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
         }
         
     };
@@ -2895,9 +2916,9 @@ function update() {
         {
             if((armies[0].looseUnits[i]==null)||(!armies[0].looseUnits[i].alive)) {continue;}
             var closs=armies[0].looseUnits[i].getClassName();
-            var xp=340;
+            var xp=360;
 			var yp=130+i*2*45;
-			if(i>4) {xp=540; yp=130+(i-5)*2*45;}
+			if(i>4) {xp=560; yp=130+(i-5)*2*45;}
             canvas.fillText("HP:", xp, yp);
             canvas.fillText(armies[0].looseUnits[i].hp, xp+30, yp);
             canvas.fillText("/", xp+60, yp);
@@ -2999,7 +3020,7 @@ function update() {
             }
         }
         if(!sideBar){
-			xp=340;
+			xp=360;
 			if(looseX>1) {xp=540;}
             selector.draw(canvas, xp-40+looseX*200, looseY*2*45+92+45);
         }else

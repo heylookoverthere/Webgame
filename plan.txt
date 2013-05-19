@@ -31,12 +31,21 @@ damage numbers drawn on sprites in battle. -meh
 -growth tables for classes. (all the same for now.)
 -maxturn=x*100 ticks, not turns taken.
 -time based turns
-
+-CHRONOTRIGGER
+-3 TIME PERIODS
+	0 = Last Blackfyre Rebellion / defiance of duskendale [0,1]
+	1 = Roberts Rebellion/lannister fuled rebellion? foriegn invation? volantis?
+    2=  greyjoy/Dornish/ rebellion [0:0=canon,0:1=not robert (rebels againt blackyre ayres (not as bad.) PTWP motivation?)
+	3 = war of the five kings 0:0:0=cannon, 0:0:1=robert lost, targs/blackfyers still rule.  else robert, dany invasion.
+	4 = endgame= long night=t/f (loss/ bankrupcy / dragon rape / famine/ rebellion(kindom)/ dothraki invasion / 
+ -more fuid? no.
 -N=new squad with unit as leader
 -A=add squad to unit (error messages in log if fail!)
 -R=remove squad from unit, put in loose. if loose=full no remove.
 remove leader=kill squad (this will be hard.) (maybe you can't exit menu wiht any invalid squads?) only if room in loose!
-
+{0,0,0}=canon = option to aid wall if eddard alive
+{1,0,0}canon with minor adust.  dany=invader.  loyalties adjusted.  Alternate rebellion? no duskendale? different laws. option to invade summer isles.
+{0,1,0}=cannon until RR failed.  targ rule continued.  edit dany char, rheagar lives, etc.  No greyjoy rebel.  option to have rhegar take throne.
 -menus, arrow keys move around grid of unassigned units.
 
 -PHYSICAL ATTACK PENELTY BACK ROW?
