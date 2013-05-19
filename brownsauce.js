@@ -303,9 +303,28 @@ swords[1].tooltip = "Forged in the fires of Valyria, New Jersey.";
 
 swords[2]= new equipment();
 swords[2].attack=24;
-swords[2].name="Dawn Sword";
+swords[2].name="Dawn";
 swords[2].value=1000;
 swords[2].tooltip = "Forged from the heart of a fallen star.";
+
+var axe=new Array(3);
+axe[0]= new equipment();
+axe[0].name="Wooden Axe";
+axe[0].attack=3;
+axe[0].value=10;
+axe[0].tooltip = "";
+
+axe[1]= new equipment();
+axe[1].attack=10;
+axe[1].name="War Axe";
+axe[1].value=100;
+axe[1].tooltip = "";
+
+axe[2]= new equipment();
+axe[2].attack=24;
+axe[2].name="Valyrian Axe";
+axe[2].value=300;
+axe[2].tooltip = "Forged from the heart of a fallen star.";
 
 var katana=new Array(2);
 katana[0]= new equipment();
@@ -371,6 +390,14 @@ crossbow[0].speed=1;
 crossbow[0].attack=15;
 crossbow[0].value=20;
 crossbow[0].tooltip = "Banned by the catholic church!";
+
+var ring=new Array(2);
+ring[0]= new equipment();
+ring[0].slot=0;
+ring[0].name="Lucky Ring";
+ring[0].luck=12;
+ring[0].value=200;
+ring[0].tooltip = "Luuuuucky";
 
 var rod = new equipment();
 rod.slot=1;
@@ -440,6 +467,14 @@ breastplate.mdef=1;
 breastplate.value=50;
 breastplate.tooltip = "Why are there nipples on it?";
 
+var mythrilmail= new equipment();
+mythrilmail.slot=1;
+mythrilmail.name="Mythril Mail";
+mythrilmail.def=17;
+mythrilmail.mdef=4;
+mythrilmail.value=1500;
+mythrilmail.tooltip = "frodo approved!";
+
 var chainmail= new equipment();
 chainmail.slot=1;
 chainmail.name="chainmail";
@@ -448,6 +483,22 @@ chainmail.mdef=1;
 chainmail.value=150;
 chainmail.tooltip = "you can pretend you're a fence!";
 
+var heavyplate= new equipment();
+heavyplate.slot=1;
+heavyplate.name="Heavy plate";
+heavyplate.def=26;
+heavyplate.mdef=2;
+heavyplate.value=250;
+heavyplate.tooltip = "Why are there nipples on it?";
+
+var enchantedpants= new equipment();
+enchantedpants.slot=1;
+enchantedpants.name="Enchanted Pants";
+enchantedpants.def=12;
+enchantedpants.mdef=18;
+enchantedpants.value=450;
+enchantedpants.tooltip = "It's enchanted!";
+
 var cape= new equipment();
 cape.slot=2;
 cape.name="Wooden Bow";
@@ -455,6 +506,40 @@ cape.evade=5;
 cape.attack=0;
 cape.value=20;
 cape.tooltip = "You're batman.";
+
+function randomItem(){
+	var gar=Math.floor(Math.random()*27);
+	var itm=swords[0];
+	if(gar==0) {itm=swords[1];}
+	if(gar==1) {itm=swords[2];}
+	if(gar==2) {itm=axe[0];}
+	if(gar==3) {itm=axe[1];}
+	if(gar==4) {itm=axe[2];}
+	if(gar==5) {itm=katana[0];}
+	if(gar==6) {itm=katana[0];}
+	if(gar==7) {itm=bow[0];}
+	if(gar==8) {itm=bow[1];}
+	if(gar==9) {itm=crossbow[0];}
+	if(gar==10) {itm=spear[0];}
+	if(gar==11) {itm=spear[1];}
+	if(gar==12) {itm=ring[0];}
+	if(gar==13) {itm=rod;}
+	if(gar==14) {itm=icemagic[0];}
+	if(gar==15) {itm=icemagic[1];}
+	if(gar==16) {itm=icemagic[2];}
+	if(gar==17) {itm=icemagic[3];}
+	if(gar==18) {itm=robe;}
+	if(gar==19) {itm=shirt;}
+	if(gar==20) {itm=icemagic[2];}
+	if(gar==21) {itm=icemagic[3];}
+	if(gar==22) {itm=breastplate;}
+	if(gar==23) {itm=mythrilmail;}
+	if(gar==24) {itm=heavyplate;}
+	if(gar==25) {itm=chainmail;}
+	if(gar==26) {itm=enchantedpants;}
+	if(gar==27) {itm=cape;}
+	return itm;
+};
 
 
 function unit() {
@@ -1395,6 +1480,13 @@ function army() {
     this.basex=2;
     this.basey=2;
     this.opinion=50;
+	this.numItems=30;
+	this.items=new Array(99);
+	for(var i=0;i<this.numItems;i++)
+	{
+		this.items[i]=randomItem();
+	}
+
     this.fieldAI=AITypes.Random;
     this.cards=new Array(5);
     this.cards[0]=new card();
@@ -1403,7 +1495,7 @@ function army() {
     this.cards[3]=new card();
     this.cards[4]=new card();
     this.numLooseUnits=4;
-    this.looseUnits=new Array (64);
+    this.looseUnits=new Array (99);
     this.looseUnits[0]=new unit();
     this.looseUnits[1]=new unit();
     this.looseUnits[2]=new unit();
@@ -1417,6 +1509,25 @@ function army() {
     this.getOpinion=function(){
         return this.opinion;
     };
+	
+	this.removeItem=function(id)
+    {
+        if (this.numItems<1) {return false;}
+        
+        for(var i=id;i<this.numITems-1;i++)
+        {
+            this.items[i]=this.items[i+1];
+            
+        }
+        this.numItems--;
+		return true;
+    };
+	
+	this.addItem=function(itm){
+		this.items.push(itm);
+		this.numItems++;
+	};
+	
     this.numSquadsAlive=function()
 	{
 		var count=0;
@@ -1492,6 +1603,48 @@ function army() {
         }
         
     };
+	this.drawEquipScreen=function()
+	{
+
+    canvas.save();
+    canvas.globalAlpha=0.80;
+    canvas.fillStyle =  "#DCDCDC";
+    canvas.fillRect(25,95,790,500);
+    canvas.fillStyle =bColors[5];//Math.floor(Math.random()*5)];// "#483D8B ";
+    canvas.fillRect(40,110,760,470);
+    canvas.restore();
+    canvas.font = "14pt Calibri";
+    canvas.textAlign = "left";
+    canvas.textBaseline = "middle";
+		for(var i=0;i<this.numItems;i++)
+		{
+		
+			var g=this.items[i].attack;
+			if(this.items[i].slot==1)
+			{
+				g=this.items[i].def;
+			}
+			var texticles= this.items[i].name
+			var xp=60;
+			var yp=130+i*32+32;
+			if(i>12){
+				xp+=200;
+				yp=130+(i-12)*32;
+			}
+			if(i>24){
+				xp+=200;
+				yp=130+(i-24)*32;
+			}
+			
+			if(i>32){
+				xp+=200;
+				yp=130+(i-32)*32;
+			}
+			canvas.fillText(g, xp+140, yp);
+			canvas.fillText(texticles, xp, yp);
+			
+		}
+	};
 }
 
 var armies=new Array (2);
@@ -2679,8 +2832,11 @@ function update() {
         {
             if(isMenu==1) 
             {   
-                isMenu=2;
+                isMenu=0;
             }else if(isMenu==2)
+            {
+                isMenu=0;
+            }else if(isMenu==3)
             {
                 isMenu=0;
             }else
@@ -2874,10 +3030,18 @@ function update() {
         }
         if(enterkey.check())
         {
-            isMenu=1;
+            isMenu=3;
         }
         return;
-    }
+    }else if (isMenu==3)
+	{
+		armies[0].drawEquipScreen();
+		if(enterkey.check())
+        {
+            isMenu=1;
+        }
+		return;
+	}
     if(zoomkey.check()) {
         maps[0].setZoom(camera);
     }
@@ -2934,7 +3098,7 @@ function update() {
     for (var i=0;i<numTowns;i++) {
         if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
-    if((!isBattle) &&(!isMenu)&&(!paused)&&(!battleReport)) {
+    if((!isBattle) &&(isMenu==0)&&(!paused)&&(!battleReport)) {
         theTime.update();
     }
     canvas.save();
