@@ -1773,6 +1773,14 @@ function squad() {
 		}
 		return cst;
     };
+	this.getAli=function(){
+        var cst=0;
+		for(var i=0;i<this.numUnits;i++)
+		{
+			cst+=this.units[i].ali;
+		}
+		return Math.floor(cst/this.numUnits);
+    };
     this.flee= function(c)
     {
         if(Math.floor(Math.random()*30) > (15)) {
@@ -2880,7 +2888,9 @@ function update() {
         }
 		canvas.fillStyle = "white";
 		canvas.fillText("Cost:", 50, 560);
-        canvas.fillText(armies[0].squads[MSELECTED].getCost(), 110, 560);
+        canvas.fillText(armies[0].squads[MSELECTED].getCost(), 90, 560);
+		canvas.fillText("Ali:", 140, 560);
+        canvas.fillText(armies[0].squads[MSELECTED].getAli(), 165, 560);
         for(var i=0;i<armies[0].numLooseUnits;i++)
         {
             if((armies[0].looseUnits[i]==null)||(!armies[0].looseUnits[i].alive)) {continue;}
