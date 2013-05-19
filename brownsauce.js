@@ -2930,7 +2930,7 @@ function update() {
         }else if(leftkey.check())
         {
             looseX--;
-            if(looseX<0) { looseX=0;sideBar=true;}
+            if(looseX<0) { looseX=0;sideBar=true;if(looseY>armies[0].squads[MSELECTED].numUnits) {looseY=armies[0].squads[MSELECTED].numUnits-1;}}
             
         }else if(rightkey.check())
         {
