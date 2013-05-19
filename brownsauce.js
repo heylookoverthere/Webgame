@@ -1564,7 +1564,7 @@ function army() {
     this.basex=2;
     this.basey=2;
     this.opinion=50;
-	this.numItems=30;
+	this.numItems=6;
 	this.items=new Array(99);
 	for(var i=0;i<this.numItems;i++)
 	{
@@ -1608,8 +1608,89 @@ function army() {
     };
 	
 	this.addItem=function(itm){
-		this.items.push(itm);
+		console.log("poo");
+		this.items[this.numItems]=itm;
 		this.numItems++;
+	};
+	
+	this.optimizeUnit=function(uknit){
+		
+		var bestwep=uknit.equipment[0];
+		var bestarm=uknit.equipment[1];
+		var bestacc=uknit.equipment[2];
+		var bestwepi=0;
+		var bestarmi=0;
+		var bestacci=0;
+		for(var i=0;i<this.numItems;i++)
+		{
+			if(this.items[i].slot==0)
+			{
+				if (this.items[i].attack>bestwep.attack)
+				{
+					bestwep=this.items[i];
+					bestwepi=i;
+				}
+			}else if(this.items[i].slot==1)
+			{
+				if (this.items[i].def>bestarm.def)
+				{
+					bestarm=this.items[i];
+					bestarmi=i;
+				}
+			}else if(this.items[i].slot==2)
+			{
+				if (this.items[i].attack>bestacc.attack)
+				{
+					bestacc=this.items[i];
+					bestacci=i;
+				}
+			}
+		}
+		
+		var oldwep=uknit.equipment[0];
+		var oldarm=uknit.equipment[1];
+		var oldacc=uknit.equipment[2];
+		
+		if(bestwep!=uknit.equipment[0]){
+
+			uknit.equipment[0]=bestwep;
+			this.removeItem(bestwepi);
+			if(oldwep!=unarmed) {
+				this.addItem(oldwep);
+			}
+		}
+		if(bestarm!=uknit.equipment[1]){
+			uknit.equipment[1]=bestarm;
+			this.removeItem(bestarmi);
+			if(oldarm!=noarmor) {
+				this.addItem(oldarm);
+			}
+		}	
+		if(bestacc!=uknit.equipment[2]){
+			uknit.equipment[2]=bestacc;
+			this.removeItem(bestacci);
+			if(oldacc!=noaccessory) {
+				this.addItem(oldacc);
+			}
+		}
+	};
+	
+	this.removeAll=function(uknit){
+		if(uknit.equipment[0]!=unarmed)
+		{
+			this.addItem(uknit.equipment[0]);
+			uknit.equipment[0]=unarmed;
+		}
+		if(uknit.equipment[1]!=noarmor)
+		{
+			this.addItem(uknit.equipment[1]);
+			uknit.equipment[1]=noarmor;
+		}
+		if(uknit.equipment[2]!=noaccessory)
+		{
+			this.addItem(unknit.equipment[2]);
+			uknit.equipment[2]=noaccessory;
+		}
 	};
 	
     this.numSquadsAlive=function()
@@ -2377,6 +2458,7 @@ var deploykey=new akey("d");
 var removekey=deploykey;
 var newkey=new akey("n");
 var createkey=new akey("j");
+var optkey=new akey("o");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -3112,7 +3194,24 @@ function update() {
 				armies[0].squads[MSELECTED].units[looseY].drawInfo();
 			}
 		}
-        
+        if(removekey.check())
+		{
+			if(sideBar){
+				armies[0].removeAll(armies[0].squads[MSELECTED].units[looseY]);
+			}else
+			{
+				armies[0].removeAll(armies[0].looseUnits[looseX*5+looseY]);
+			}
+		}
+		if(optkey.check())
+		{
+			if(sideBar){
+				armies[0].optimizeUnit(armies[0].squads[MSELECTED].units[looseY]);
+			}else
+			{
+				armies[0].optimizeUnit(armies[0].looseUnits[looseX*5+looseY]);
+			}
+		}
         if(tabkey.check())
         {
             MUSELECTED++;
@@ -3130,6 +3229,7 @@ function update() {
     }else if (isMenu==3)
 	{
 		armies[0].drawEquipScreen();
+		
 		if(enterkey.check())
         {
             isMenu=1;

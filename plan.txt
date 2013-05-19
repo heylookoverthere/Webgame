@@ -48,6 +48,13 @@ remove leader=kill squad (this will be hard.) (maybe you can't exit menu wiht an
 {0,1,0}=cannon until RR failed.  targ rule continued.  edit dany char, rheagar lives, etc.  No greyjoy rebel.  option to have rhegar take throne.
 -menus, arrow keys move around grid of unassigned units.
 
+-OPTIMIZE UNIT EQUIP
+ -loop throught slots, look for bette attack/def
+ -check compatibility, if so remove equiped if not none add to inv.
+ add to inv, remove from unit.
+ add to unit, remove from inv.
+ //worry about class combatibility later, once clases are things.
+
 -PHYSICAL ATTACK PENELTY BACK ROW?
 
 prevent constant capture/liberation!
