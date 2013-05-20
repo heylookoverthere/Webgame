@@ -28,6 +28,7 @@ var MSELECTED=0;
 var MUSELECTED=0;
 var BSELECTED=0;
 var NUM_STATUS=5;
+var NUM_CLASSES=19;
 var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
@@ -149,12 +150,29 @@ AITypes.DefendBase=4;
 AITypes.DefendTowns=5;
 
 SEEAss = {};
-SEEAss.Knight=0;
-SEEAss.Palladin=1;
-SEEAss.DarkKnight=2;
-SEEAss.Wizard=3;
-SEEAss.Mage=4;
-SEEAss.Sage=5;
+SEEAss.Knight=8;
+SEEAss.Palladin=13;
+SEEAss.DarkKnight=12;
+SEEAss.Wizard=2;
+//SEEAss.Mage=4;
+SEEAss.Archer=4
+SEEAss.Sage=10;
+SEEAss.Healer=5;
+SEEAss.Cleric=9;
+SEEAss.Angel=11;
+//SEEAss.Theif=5;
+SEEAss.Ninja=6;
+//SEEAss.Assasin=5;
+SEEAss.Bear=0;
+SEEAss.PolarBear=14;
+SEEAss.CptBearmerica=15;
+SEEAss.IronBear=16;
+SEEAss.HulkBear=17;
+SEEAss.Winger=7;
+SEEAss.Frog=3;
+SEEAss.RumHam=18;
+SEEAss.Shoe=1;
+
 
 function card(){
     this.name = "Flaccid Dolphin";
@@ -261,6 +279,7 @@ function equipment() {
     this.name="none";
     this.hitAll=false;
     this.slot=0;
+	this.classes=new Array();
     this.value=0;
     this.attack=0;
     this.def=0;
@@ -281,6 +300,12 @@ function equipment() {
     this.imp=false;
     this.HIV=false;
     this.tooltip = "";
+	this.allClasses=function(){
+		for(i=0;i<NUM_CLASSES;i++)
+		{
+			this.classes.push(i);
+		}
+	};
 }
 
 var unarmed = new equipment();
@@ -293,18 +318,30 @@ swords[0]= new equipment();
 swords[0].name="Wooden Sword";
 swords[0].attack=3;
 swords[0].value=10;
+swords[0].classes.push(SEEAss.Knight);
+swords[0].classes.push(SEEAss.DarkKnight);
+swords[0].classes.push(SEEAss.Palladin);
+swords[0].classes.push(SEEAss.RumHam);
 swords[0].tooltip = "It is dangerous to go alone.";
 
 swords[1]= new equipment();
 swords[1].attack=10;
 swords[1].name="Valyrian Sword";
 swords[1].value=100;
+swords[1].classes.push(SEEAss.Knight);
+swords[1].classes.push(SEEAss.DarkKnight);
+swords[1].classes.push(SEEAss.Palladin);
+swords[1].classes.push(SEEAss.RumHam);
 swords[1].tooltip = "Forged in the fires of Valyria, New Jersey.";
 
 swords[2]= new equipment();
 swords[2].attack=24;
 swords[2].name="Dawn";
 swords[2].value=1000;
+swords[2].classes.push(SEEAss.Knight);
+swords[2].classes.push(SEEAss.DarkKnight);
+swords[2].classes.push(SEEAss.Palladin);
+swords[2].classes.push(SEEAss.RumHam);
 swords[2].tooltip = "Forged from the heart of a fallen star.";
 
 var axe=new Array(3);
@@ -312,18 +349,30 @@ axe[0]= new equipment();
 axe[0].name="Wooden Axe";
 axe[0].attack=3;
 axe[0].value=10;
+axe[0].classes.push(SEEAss.Knight);
+axe[0].classes.push(SEEAss.DarkKnight);
+axe[0].classes.push(SEEAss.Palladin);
+axe[0].classes.push(SEEAss.RumHam);
 axe[0].tooltip = "";
 
 axe[1]= new equipment();
 axe[1].attack=10;
 axe[1].name="War Axe";
 axe[1].value=100;
+axe[1].classes.push(SEEAss.Knight);
+axe[1].classes.push(SEEAss.DarkKnight);
+axe[1].classes.push(SEEAss.Palladin);
+axe[1].classes.push(SEEAss.RumHam);
 axe[1].tooltip = "";
 
 axe[2]= new equipment();
 axe[2].attack=24;
 axe[2].name="Valyrian Axe";
 axe[2].value=300;
+axe[2].classes.push(SEEAss.Knight);
+axe[2].classes.push(SEEAss.DarkKnight);
+axe[2].classes.push(SEEAss.Palladin);
+axe[2].classes.push(SEEAss.RumHam);
 axe[2].tooltip = "Forged from the heart of a fallen star.";
 
 var katana=new Array(2);
@@ -331,12 +380,16 @@ katana[0]= new equipment();
 katana[0].name="Wooden Katana";
 katana[0].attack=9;
 katana[0].value=10;
+katana[0].classes.push(SEEAss.Ninja);
+katana[0].classes.push(SEEAss.RumHam);
 katana[0].tooltip = "Who makes a wooden Katana?";
 
 katana[1]= new equipment();
 katana[1].attack=30;
 katana[1].name="Muramasa";
 katana[1].value=100;
+katana[1].classes.push(SEEAss.Ninja);
+katana[1].classes.push(SEEAss.RumHam);
 katana[1].tooltip = "OGOPOGO!";
 
 var bow=new Array(2);
@@ -346,6 +399,8 @@ bow[0].name="Wooden Bow";
 bow[0].evade=1;
 bow[0].attack=15;
 bow[0].value=20;
+bow[0].classes.push(SEEAss.Archer);
+bow[0].classes.push(SEEAss.RumHam);
 bow[0].tooltip = "Finally, the power to slay your social betters.";
 
 bow[1]= new equipment();
@@ -354,14 +409,21 @@ bow[1].name="Weirwood Bow";
 bow[1].evade=7;
 bow[1].attack=35;
 bow[1].value=300;
+bow[1].classes.push(SEEAss.Archer);
+bow[1].classes.push(SEEAss.RumHam);
 bow[1].tooltip = "Better bow!";
 
 claws= new equipment();
 claws.slot=0;
 claws.name="Bear hands";
 claws.evade=0;
-claws.attack=35;
+claws.attack=15;
 claws.value=30;
+claws.classes.push(SEEAss.Bear);
+claws.classes.push(SEEAss.PolarBear);
+claws.classes.push(SEEAss.CptBearmerica);
+claws.classes.push(SEEAss.IronBear);
+claws.classes.push(SEEAss.HulkBear);
 claws.tooltip = "";
 
 var spear=new Array(2);
@@ -372,6 +434,9 @@ spear[0].evade=4;
 spear[0].attack=15;
 spear[0].value=20;
 spear[0].tooltip = "Poke 'em mon!";
+spear[0].classes.push(SEEAss.Angel);
+spear[0].classes.push(SEEAss.RumHam);
+spear[0].classes.push(SEEAss.Winger);
 
 spear[1]= new equipment();
 spear[1].slot=0;
@@ -380,6 +445,9 @@ spear[1].evade=12;
 spear[1].attack=25;
 spear[1].value=200;
 spear[1].tooltip = "You cheated.";
+spear[1].classes.push(SEEAss.Angel);
+spear[1].classes.push(SEEAss.RumHam);
+spear[1].classes.push(SEEAss.Winger);
 
 var crossbow=new Array(2);
 crossbow[0]= new equipment();
@@ -389,6 +457,8 @@ crossbow[0].evade=12;
 crossbow[0].speed=1;
 crossbow[0].attack=15;
 crossbow[0].value=20;
+crossbow[0].classes.push(SEEAss.Archer);
+crossbow[0].classes.push(SEEAss.RumHam);
 crossbow[0].tooltip = "Banned by the catholic church!";
 
 var ring=new Array(2);
@@ -398,6 +468,7 @@ ring[0].name="Lucky Ring";
 ring[0].luck=12;
 ring[0].value=200;
 ring[0].tooltip = "Luuuuucky";
+ring[0].classes.push(SEEAss.All);
 
 var rod = new equipment();
 rod.slot=1;
@@ -406,6 +477,12 @@ rod.attack=2;
 rod.mag=5;
 rod.mdef=5;
 rod.value=20;
+rod.classes.push(SEEAss.Healer);
+rod.classes.push(SEEAss.Sage);
+rod.classes.push(SEEAss.Wizard);
+rod.classes.push(SEEAss.Cleric);
+rod.classes.push(SEEAss.Healer);
+rod.classes.push(SEEAss.Angel);
 rod.tooltip = "Good for magic!";
 
 var icemagic=new Array(4);
@@ -416,6 +493,10 @@ icemagic[0].evade=2;
 icemagic[0].mag=15;
 icemagic[0].value=20;
 icemagic[0].tooltip = "Basic ice attack";
+icemagic[0].classes.push(SEEAss.Sage);
+icemagic[0].classes.push(SEEAss.Wizard);
+icemagic[0].classes.push(SEEAss.PolarBear);
+icemagic[0].classes.push(SEEAss.RumHam);
 
 icemagic[1]= new equipment();
 icemagic[1].slot=0;
@@ -424,6 +505,10 @@ icemagic[1].evade=0;
 icemagic[1].mag=25;
 icemagic[1].value=200;
 icemagic[1].tooltip = "It's...Slightly colder!";
+icemagic[1].classes.push(SEEAss.Sage);
+icemagic[1].classes.push(SEEAss.Wizard);
+icemagic[1].classes.push(SEEAss.PolarBear);
+icemagic[1].classes.push(SEEAss.RumHam);
 
 icemagic[2]= new equipment();
 icemagic[2].slot=0;
@@ -433,6 +518,10 @@ icemagic[2].evade=0;
 icemagic[2].mag=10;
 icemagic[2].value=2000;
 icemagic[2].tooltip = "Hits all enemies";
+icemagic[2].classes.push(SEEAss.Sage);
+icemagic[2].classes.push(SEEAss.Wizard);
+icemagic[2].classes.push(SEEAss.PolarBear);
+icemagic[2].classes.push(SEEAss.RumHam);
 
 icemagic[3]= new equipment();
 icemagic[3].slot=0;
@@ -442,6 +531,10 @@ icemagic[3].evade=0;
 icemagic[3].mag=25;
 icemagic[3].value=2000;
 icemagic[3].tooltip = "Hits all enemies harder";
+icemagic[3].classes.push(SEEAss.Sage);
+icemagic[3].classes.push(SEEAss.Wizard);
+icemagic[3].classes.push(SEEAss.PolarBear);
+icemagic[3].classes.push(SEEAss.RumHam);
 
 var robe= new equipment();
 robe.slot=1;
@@ -450,6 +543,7 @@ robe.def=1;
 robe.mdef=5;
 robe.value=20;
 robe.tooltip = "Should conceal your erection.";
+robe.allClasses();
 
 var shirt= new equipment();
 shirt.slot=1;
@@ -458,14 +552,18 @@ shirt.def=2;
 shirt.mdef=1;
 shirt.value=20;
 shirt.tooltip = "It's got stripes!.";
+shirt.allClasses();
 
 var breastplate= new equipment();
 breastplate.slot=1;
 breastplate.name="Breastplate";
-breastplate.def=6;
+breastplate.def=10;
 breastplate.mdef=1;
 breastplate.value=50;
 breastplate.tooltip = "Why are there nipples on it?";
+breastplate.classes.push(SEEAss.Knight);
+breastplate.classes.push(SEEAss.DarkKnight);
+breastplate.classes.push(SEEAss.Palladin);
 
 var mythrilmail= new equipment();
 mythrilmail.slot=1;
@@ -474,14 +572,28 @@ mythrilmail.def=17;
 mythrilmail.mdef=4;
 mythrilmail.value=1500;
 mythrilmail.tooltip = "frodo approved!";
+mythrilmail.classes.push(SEEAss.Knight);
+mythrilmail.classes.push(SEEAss.DarkKnight);
+mythrilmail.classes.push(SEEAss.Palladin);
+mythrilmail.classes.push(SEEAss.Archer);
+mythrilmail.classes.push(SEEAss.Palladin);
+mythrilmail.classes.push(SEEAss.RumHam);
 
 var chainmail= new equipment();
 chainmail.slot=1;
 chainmail.name="chainmail";
-chainmail.def=10;
+chainmail.def=6;
 chainmail.mdef=1;
 chainmail.value=150;
 chainmail.tooltip = "you can pretend you're a fence!";
+chainmail.classes.push(SEEAss.Knight);
+chainmail.classes.push(SEEAss.DarkKnight);
+chainmail.classes.push(SEEAss.Palladin);
+chainmail.classes.push(SEEAss.Archer);
+chainmail.classes.push(SEEAss.Frog);
+chainmail.classes.push(SEEAss.PolarBear);
+chainmail.classes.push(SEEAss.Bear);
+chainmail.classes.push(SEEAss.RumHam);
 
 var heavyplate= new equipment();
 heavyplate.slot=1;
@@ -490,6 +602,11 @@ heavyplate.def=26;
 heavyplate.mdef=2;
 heavyplate.value=250;
 heavyplate.tooltip = "Why are there nipples on it?";
+heavyplate.classes.push(SEEAss.Knight);
+heavyplate.classes.push(SEEAss.DarkKnight);
+heavyplate.classes.push(SEEAss.Palladin);
+heavyplate.classes.push(SEEAss.IronBear);
+heavyplate.classes.push(SEEAss.RumHam);
 
 var enchantedpants= new equipment();
 enchantedpants.slot=1;
@@ -498,6 +615,7 @@ enchantedpants.def=12;
 enchantedpants.mdef=18;
 enchantedpants.value=450;
 enchantedpants.tooltip = "It's enchanted!";
+enchantedpants.allClasses();
 
 var cape= new equipment();
 cape.slot=2;
@@ -506,6 +624,7 @@ cape.evade=5;
 cape.attack=0;
 cape.value=20;
 cape.tooltip = "You're batman.";
+cape.allClasses();
 
 function randomItem(){
 	var gar=Math.floor(Math.random()*27);
@@ -634,25 +753,25 @@ function unit() {
 	
 	this.getClassName=function(){
 		var texticles="";
-		if(this.class===0) {texticles= "Bear"; }
-        if(this.class===1) {texticles= "Shoe"; }
-        if(this.class===2) {texticles= "Wizard"; }
-        if(this.class===3) {texticles= "Frog"; }
-        if(this.class===4) {texticles= "Archer"; }
-		if(this.class===4) {texticles= "Healer"; }
-		if(this.class===5) {texticles= "Ninja"; }
-		if(this.class===7) {texticles="Winger";}
-        if(this.class===8) {texticles="Knight";}
-        if(this.class===9) {texticles="Cleric";}
-        if(this.class===10) {texticles="Sage";}
-        if(this.class===11) {texticles="Angel";}
-        if(this.class===12) {texticles="Dark Knight";}
-        if(this.class===13) {texticles="Palladin";}
-        if(this.class===14) {texticles="Polar Bear";}
-		if(this.class===15) {texticles="Cpt. Bearmerica";}
-		if(this.class===16) {texticles="Iron Bear";}
-		if(this.class===17) {texticles="Hulk Bear";}
-		if(this.class===18) {texticles="Rum Ham";}
+		if(this.class===SEEAss.Bear) {texticles= "Bear"; }
+        if(this.class===SEEAss.Shoe) {texticles= "Shoe"; }
+        if(this.class===SEEAss.Wizard) {texticles= "Wizard"; }
+        if(this.class===SEEAss.Frog) {texticles= "Frog"; }
+        if(this.class===SEEAss.Archer) {texticles= "Archer"; }
+		if(this.class===SEEAss.Healer) {texticles= "Healer"; }
+		if(this.class===SEEAss.Ninja) {texticles= "Ninja"; }
+		if(this.class===SEEAss.Winger) {texticles="Winger";}
+        if(this.class===SEEAss.Knight) {texticles="Knight";}
+        if(this.class===SEEAss.Cleric) {texticles="Cleric";}
+        if(this.class===SEEAss.Sage) {texticles="Sage";}
+        if(this.class===SEEAss.Angel) {texticles="Angel";}
+        if(this.class===SEEAss.DarkKnight) {texticles="Dark Knight";}
+        if(this.class===SEEAss.Palladin) {texticles="Palladin";}
+        if(this.class===SEEAss.PolarBear) {texticles="Polar Bear";}
+		if(this.class===SEEAss.CptBearmerica) {texticles="Cpt. Bearmerica";}
+		if(this.class===SEEAss.IronBear) {texticles="Iron Bear";}
+		if(this.class===SEEAss.HulkBear) {texticles="Hulk Bear";}
+		if(this.class===SEEAss.RumHam) {texticles="Rum Ham";}
 		return texticles;
 	};
     
@@ -841,6 +960,20 @@ function unit() {
         return false;
     };
     
+	this.equip=function(itm){
+		var flag=true;//false;
+		for(var i=0;i<itm.classes.length;i++)
+		{
+			if(itm.classes[i]==this.class){
+				flag=true;
+			}
+			
+		}
+		if (!flag) { return false;}
+		this.equipment[itm.slot]=itm;
+		return true;
+	};
+	
     this.update = function (usqd,esqd){
         if(paused) {return;}
         if(battleReport) {return;}
@@ -1380,7 +1513,7 @@ function unit() {
             this.ali=1;
             this.viewrange=5;
             this.sprite = Sprite("rumham");
-            this.equipment[0]=claws;
+            //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("rumhamgirl");}
             this.def=20;
@@ -1564,7 +1697,7 @@ function army() {
     this.basex=2;
     this.basey=2;
     this.opinion=50;
-	this.numItems=6;
+	this.numItems=30;
 	this.items=new Array(99);
 	for(var i=0;i<this.numItems;i++)
 	{
@@ -1598,7 +1731,7 @@ function army() {
     {
         if (this.numItems<1) {return false;}
         
-        for(var i=id;i<this.numITems-1;i++)
+        for(var i=id;i<this.numItems-1;i++)
         {
             this.items[i]=this.items[i+1];
             
@@ -1651,23 +1784,21 @@ function army() {
 		var oldarm=uknit.equipment[1];
 		var oldacc=uknit.equipment[2];
 		
-		if(bestwep!=uknit.equipment[0]){
-
-			uknit.equipment[0]=bestwep;
+		if((bestwep!=uknit.equipment[0])&&(	uknit.equip(bestwep))){
 			this.removeItem(bestwepi);
 			if(oldwep!=unarmed) {
 				this.addItem(oldwep);
 			}
 		}
-		if(bestarm!=uknit.equipment[1]){
-			uknit.equipment[1]=bestarm;
+		if((bestarm!=uknit.equipment[1]) && (uknit.equip(bestarm))){
+			//uknit.equip(bestarm);
 			this.removeItem(bestarmi);
 			if(oldarm!=noarmor) {
 				this.addItem(oldarm);
 			}
 		}	
-		if(bestacc!=uknit.equipment[2]){
-			uknit.equipment[2]=bestacc;
+		if((bestacc!=uknit.equipment[2])&& (uknit.equip(bestacc))){
+			
 			this.removeItem(bestacci);
 			if(oldacc!=noaccessory) {
 				this.addItem(oldacc);
@@ -3214,11 +3345,18 @@ function update() {
 		}
         if(tabkey.check())
         {
-            MUSELECTED++;
-            if(MUSELECTED>armies[0].squads[MSELECTED].numUnits-1)
-            {
-                MUSELECTED=0;
-            }
+            if(sideBar){
+				looseY++;
+				if (looseY>4) {looseY=0;}
+				if(MUSELECTED>armies[0].squads[MSELECTED].numUnits-1)
+				{
+					MUSELECTED=0;
+				}
+			}else
+			{
+				looseY++;
+				if (looseY>4) {looseY=0;}
+			}
             
         }
         if(enterkey.check())
