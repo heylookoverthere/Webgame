@@ -54,6 +54,7 @@ remove leader=kill squad (this will be hard.) (maybe you can't exit menu wiht an
  add to inv, remove from unit.
  add to unit, remove from inv.
  //worry about class combatibility later, once clases are things.
+ -bears shouldn't be abel to take off their hands and give them to teamates.
 
 -PHYSICAL ATTACK PENELTY BACK ROW?
 

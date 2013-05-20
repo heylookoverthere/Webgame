@@ -961,7 +961,7 @@ function unit() {
     };
     
 	this.equip=function(itm){
-		var flag=true;//false;
+		var flag=false;
 		for(var i=0;i<itm.classes.length;i++)
 		{
 			if(itm.classes[i]==this.class){
