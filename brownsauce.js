@@ -2770,7 +2770,11 @@ function update() {
         canvas.fillText(armies[0].squads[MSELECTED].getCost(), 90, 560);
 		canvas.fillText("Ali:", 140, 560);
         canvas.fillText(armies[0].squads[MSELECTED].getAli(), 165, 560);
-        for(var i=pageCount*10;i<pageCount*10+10;i++)
+		var babydick=pageCount*10+10;
+		if(babydick>armies[0].numLooseUnits){
+			babydick=armies[0].numLooseUnits;
+		}
+        for(var i=pageCount*10;i<babydick;i++)
         {
             if((armies[0].looseUnits[i]==null)||(!armies[0].looseUnits[i].alive)) {continue;}
             var closs=armies[0].looseUnits[i].getClassName();
