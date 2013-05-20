@@ -989,7 +989,7 @@ function unit() {
             var targe=null;
             if(this.getAttackType()==AttackTypes.Heal)
             {
-                if((this.class==9) || (this.class==11)){
+                if((this.class==SEEAss.Cleric) || (this.class==SEEAss.Angel)){
                     var deadguy=null;
                     for(var i=0;i<usqd.numUnits;i++){
                         if (!usqd.units[i].alive){
@@ -1005,7 +1005,7 @@ function unit() {
                         this.giveExp(this.mag);
                         var tmpstr=this.name + " revived " +deadguy.name;
                         console.log(tmpstr);
-                    }else  if (this.class==11) 
+                    }else  if (this.class==SEEAss.Angel) 
                     {
                         var tmpstr=this.name + " healed the party" ;
                         console.log(tmpstr);
@@ -1165,7 +1165,7 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
             this.equipment[0]=claws;
-            this.equipment[1]=breastplate;
+            //this.equipment[1]=breastplate;
             this.sprite = Sprite("bear1");
             if (this.gender===1) {this.sprite = Sprite("beargirl");}
         }else if(cla===3) { //frog
@@ -1196,8 +1196,8 @@ function unit() {
             this.ali=35;
             this.viewrange=5;
             this.sprite = Sprite("wizard");
-            this.equipment[0]=rod;
-            this.equipment[1]=robe;
+            //this.equipment[0]=rod;
+            //this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("wizardgirl");}
             this.def=2;
             this.mdef=5;
@@ -1278,7 +1278,7 @@ function unit() {
             this.mag=15;
             this.cost=15;
             this.equipment[0]=katana[0];
-            this.equipment[1]=robe;
+            //this.equipment[1]=robe;
             this.canlead=true;
             this.sprite = Sprite("ninja");
             this.attackType[0]=AttackTypes.Physical;
@@ -1298,7 +1298,7 @@ function unit() {
             this.mag=15;
             this.cost=15;
             this.equipment[0]=spear[0];
-            this.equipment[1]=robe;
+            //this.equipment[1]=robe;
             this.canlead=true;
             this.sprite = Sprite("winger");
             this.attackType[0]=AttackTypes.Physical;
@@ -1317,7 +1317,7 @@ function unit() {
             this.mdef=5;
             this.mag=15;
             this.cost=15;
-            this.equipment[0]=swords[1];
+            this.equipment[0]=swords[0];
             this.equipment[1]=chainmail;
             this.canlead=true;
             this.sprite = Sprite("knight");
@@ -1454,7 +1454,7 @@ function unit() {
             this.viewrange=5;
             this.sprite = Sprite("bearmerica");
             this.equipment[0]=claws;
-            this.equipment[1]=heavyplate;
+            this.equipment[1]=chainmail;
             if (this.gender===1) {this.sprite = Sprite("bearmericagirl");}
             this.def=16;
             this.mdef=15;
@@ -2140,7 +2140,7 @@ function squad() {
         {
             if(this.units[j].alive) {
                 this.units[j].row=0;
-                if ((this.units[j].class==5) || (this.units[j].class==4)||(this.units[j].class==2))
+                if ((this.units[j].class==SEEAss.Healer) || (this.units[j].class==SEEAss.Cleric)||(this.units[j].class==SEEAss.Archer)||(this.units[j].class==SEEAss.Wizard))
                 {
                     this.units[j].row=1;
                 }
@@ -2273,7 +2273,7 @@ function squad() {
         var terrain = map.tiles[this.nextTile.x][this.nextTile.y].data;
         var speed = (terrain == 4 ? 2 : 4);
         if (this.leaderless) {speed=3;} //PROBLEM?
-        if((terrain==4) &&(this.units[0].class==3)) {speed=4};
+        if((terrain==4) &&(this.units[0].class==SEEAss.Frog)) {speed=4};
 
         speed = speed / map.zoom;
 
@@ -2674,7 +2674,7 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
 };
 
 function tileToCost(data, sqd) {
-    if((data==4) &&(sqd.leader.class==3)) {return 4};
+    if((data==4) &&(sqd.leader.class==SEEAss.Frog)) {return 4};
     if( data == 1 ) return 0;
     if( data == 4 ) return 4;
     return 1;
@@ -2930,7 +2930,7 @@ armies[1].leader.name="Roose";
 armies[1].basex=180;
 armies[1].basey=256;
 for (var i=0;i<armies[1].numSquads;i++){
-    armies[1].squads[i].leader.class=14;
+    armies[1].squads[i].leader.class=SEEAss.Knight;
     armies[1].squads[i].basex=180;
     armies[1].squads[i].basey=256;
     armies[1].squads[i].leader.setClass();
@@ -2943,14 +2943,14 @@ for (var i=0;i<armies[1].numSquads;i++){
     armies[1].lastDeployed++;
 }
 armies[0].leader.name="Bearistan";
-armies[0].leader.class=0;
+armies[0].leader.class=SEEAss.Bear;
 armies[0].leader.setClass();
 armies[0].leader.maxhp+=20;
 armies[0].leader.hp=armies[0].leader.maxhp;
 armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
 
 armies[1].leader.name="Ramsey";
-armies[1].leader.class=12;
+armies[1].leader.class==SEEAss.DarkKnight;
 armies[1].leader.setClass();
 armies[1].squads[0].sprite=armies[1].squads[0].leader.sprite;
 
@@ -2960,7 +2960,7 @@ armies[1].leader.equipment[0]=swords[2];
 armies[1].leader.equipment[1]=breastplate;
 //armies[1].leader.equipment[2]=cape;
 armies[1].squads[0].units[1].name="Reek";
-armies[1].squads[0].units[1].class=9;
+armies[1].squads[0].units[1].class=SEEAss.Cleric;
 armies[1].squads[0].units[1].setClass();
 
 armies[1].squads[0].units[1].maxhp+=25;
