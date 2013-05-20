@@ -2489,6 +2489,8 @@ armies[0].squads[1].leader.setClass();
 armies[0].squads[1].leader.name="Iron Bear"
 armies[0].squads[2].leader.class=SEEAss.CptBearmerica;
 armies[0].squads[2].leader.setClass();
+armies[0].squads[1].sprite=armies[0].squads[1].leader.sprite;
+armies[0].squads[2].sprite=armies[0].squads[2].leader.sprite;
 armies[0].squads[2].leader.name="Captain Bearmerica"
 
 //armies[0].name = "Lannisters";
