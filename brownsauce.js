@@ -2838,7 +2838,7 @@ function update() {
 		}
 		if(pagedownkey.check())
 		{
-			if (pageCount<2){ pageCount++;}
+			if (pageCount<3){ pageCount++;}
 		}
 		looseIndex= (pageCount*10)+(looseX*5)+looseY;
         if(addkey.check()){
@@ -2898,7 +2898,7 @@ function update() {
             isMenu=2;
 			
         }
-		canvas.fillText("Page: "+ (pageCount+1)+ "/3",760,570);
+		canvas.fillText("Page: "+ (pageCount+1)+ "/4",760,570);
         return;
     }else if (isMenu==2)
     {
