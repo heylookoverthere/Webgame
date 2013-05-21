@@ -217,7 +217,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*17);
+    this.class=Math.floor(Math.random()*16);
     this.row=Math.floor(Math.random()*2);
     this.viewrange=5;
     this.level=1;
@@ -353,16 +353,16 @@ function unit() {
         canvas.fillText(texticles, 180, 192);
         
         texticles= "Magic: " + this.mag + "+"+this.equipment[1].mdef ;
-        canvas.fillText(texticles, 280, 135);
+        canvas.fillText(texticles, 330, 135);
         
         texticles= "Luck: " + this.luck + "+"+this.equipment[1].luck ;
-        canvas.fillText(texticles, 280, 152);
+        canvas.fillText(texticles, 330, 152);
         
         texticles= "Evade: " + this.evade + "+"+this.equipment[1].evade ;
-        canvas.fillText(texticles, 280, 172);
+        canvas.fillText(texticles, 330, 172);
         
         texticles= "Ali: " + this.ali ;
-        canvas.fillText(texticles, 280, 192);
+        canvas.fillText(texticles, 330, 192);
         
         if(this.getAttackType()===0) {texticles= "Attack Type: Physical";} 
         if(this.getAttackType()===1) {texticles= "Attack Type: Ranged";} 
@@ -1905,8 +1905,8 @@ function time(){
     this.days=0;
     this.update=function(){
         this.seconds++;
-        if(this.seconds>60){
-            
+        if(this.seconds>120){
+            this.seconds=0;
             this.minutes++;
             if (this.minutes>60){
                 this.hours++;
@@ -2491,7 +2491,11 @@ armies[0].squads[2].leader.class=SEEAss.CptBearmerica;
 armies[0].squads[2].leader.setClass();
 armies[0].squads[1].sprite=armies[0].squads[1].leader.sprite;
 armies[0].squads[2].sprite=armies[0].squads[2].leader.sprite;
-armies[0].squads[2].leader.name="Captain Bearmerica"
+armies[0].squads[2].leader.name="Captain Bearmerica";
+armies[0].squads[2].smartRow();
+armies[0].squads[0].smartRow();
+armies[0].squads[1].smartRow();
+
 
 //armies[0].name = "Lannisters";
 armies[0].name = "The Kingsguard";
@@ -2504,8 +2508,9 @@ armies[1].addSquad(new unit());
 armies[1].addSquad(new unit());
 armies[1].addSquad(new unit());
 armies[1].addSquad(new unit());
+
 for (var i=0;i<armies[1].numSquads;i++){
-    armies[1].squads[i].leader.class=SEEAss.PolarBear;
+    armies[1].squads[i].leader.class=SEEAss.HulkBear;
     armies[1].squads[i].basex=180;
     armies[1].squads[i].basey=256;
     armies[1].squads[i].leader.setClass();
@@ -2516,6 +2521,10 @@ for (var i=0;i<armies[1].numSquads;i++){
     armies[1].squads[i].smartRow();
     armies[1].squads[i].deploy();//TODO delay between deployment 
     armies[1].lastDeployed++;
+	for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
+	{
+		armies[1].squads[i].addUnit(new unit());
+	}
 }
 armies[0].leader.name="Bearistan";
 armies[0].leader.class=SEEAss.Bear;
@@ -2597,12 +2606,9 @@ function battleDraw()
         if(!combatants[0].units[i].alive) {continue;}
 		var closs=combatants[0].units[i].getClassName();
         var xp=600+combatants[0].units[i].row*40;
-        canvas.fillText("HP:", xp, 130+i*2*45);
-        canvas.fillText(combatants[0].units[i].hp, xp+30, 130+i*2*45);
-        canvas.fillText("/", xp+60, 130+i*2*45);
-        canvas.fillText(combatants[0].units[i].maxhp, xp+70, 130+i*2*45);
-        canvas.fillText("Lvl:", xp+100, 130+i*2*45);
-        canvas.fillText(combatants[0].units[i].level, xp+130, 130+i*2*45);
+        canvas.fillText("HP:"+combatants[0].units[i].hp +"/"+combatants[0].units[i].maxhp, xp, 130+i*2*45);
+        canvas.fillText("Lvl: "+ combatants[0].units[i].level, xp+100, 130+i*2*45);
+ 
         canvas.fillText("ATB:", xp, 145+i*2*45);
         canvas.fillStyle =  "#DCDCDC";
         canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
@@ -2644,12 +2650,8 @@ function battleDraw()
         if(!combatants[1].units[i].alive) {continue;}
         var closs=combatants[1].units[i].getClassName();
         var xp=135-combatants[1].units[i].row*40;
-        canvas.fillText("HP:", xp, 130+i*2*45);
-        canvas.fillText(combatants[1].units[i].hp, xp+30, 130+i*2*45);
-        canvas.fillText("/", xp+60, 130+i*2*45);
-        canvas.fillText(combatants[1].units[i].maxhp, xp+70, 130+i*2*45);
-        canvas.fillText("Lvl:", xp+100, 130+i*2*45);
-        canvas.fillText(combatants[1].units[i].level, xp+130, 130+i*2*45);
+        canvas.fillText("HP:"+combatants[1].units[i].hp +"/"+combatants[1].units[i].maxhp, xp, 130+i*2*45);
+        canvas.fillText("Lvl: "+ combatants[1].units[i].level, xp+100, 130+i*2*45);
         canvas.fillText("ATB:", xp, 143+i*2*45);
         canvas.fillStyle =  "#DCDCDC";
         canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);

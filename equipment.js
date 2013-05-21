@@ -16,10 +16,10 @@ SEEAss.Bear=0;
 SEEAss.PolarBear=14;
 SEEAss.CptBearmerica=18;
 SEEAss.IronBear=17;
-SEEAss.HulkBear=15;
+SEEAss.HulkBear=16;
 SEEAss.Winger=7;
 SEEAss.Frog=3;
-SEEAss.RumHam=16;
+SEEAss.RumHam=15;
 SEEAss.Shoe=1;
 
 var radarBitmap=[];
