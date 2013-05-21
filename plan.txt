@@ -51,6 +51,9 @@ damage numbers drawn on sprites in battle. -meh
  -citizen kane. = best acc in the game.  you must own every newspaper and make your home at xanadu.
 .mounted
 
+-time capsulse?
+
+
  
  Production
  -Amount of units enemy produces per cycle; == week?

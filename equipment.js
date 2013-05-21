@@ -310,12 +310,60 @@ crossbow[0].tooltip = "Banned by the catholic church!";
 
 var ring=new Array(2);
 ring[0]= new equipment();
-ring[0].slot=0;
+ring[0].slot=2;
 ring[0].name="Lucky Ring";
 ring[0].luck=12;
 ring[0].value=200;
 ring[0].tooltip = "Luuuuucky";
 ring[0].classes.push(SEEAss.All);
+
+ring[1]= new equipment();
+ring[1].slot=2;
+ring[1].name="Cursed Ring";
+ring[1].luck=12;
+ring[1].value=200;
+ring[1].tooltip = "fuck!";
+ring[1].classes.push(SEEAss.All);
+
+ring[2]= new equipment();
+ring[2].slot=2;
+ring[2].name="Ruby Ring";
+ring[2].mag=12;
+ring[2].value=200;
+ring[2].tooltip = "maaaaaaagic";
+ring[2].classes.push(SEEAss.All);
+
+ring[3]= new equipment();
+ring[3].slot=2;
+ring[3].name="Crystal Ring";
+ring[3].mdef=20;
+ring[3].value=200;
+ring[3].tooltip = "MDEF";
+ring[3].classes.push(SEEAss.All);
+
+ring[4]= new equipment();
+ring[4].slot=2;
+ring[4].name="White Ring";
+ring[4].maxhp=40;
+ring[4].value=200;
+ring[4].tooltip = "...on the moon";
+ring[4].classes.push(SEEAss.All);
+
+ring[5]= new equipment();
+ring[5].slot=2;
+ring[5].name="Protect Ring";
+ring[5].def=20;
+ring[5].value=200;
+ring[5].tooltip = "Protecty";
+ring[5].classes.push(SEEAss.All);
+
+ring[6]= new equipment();
+ring[6].slot=2;
+ring[6].name="Mist Ring";
+ring[6].luck=12;
+ring[6].value=200;
+ring[6].tooltip = "Misty";
+ring[6].classes.push(SEEAss.All);
 
 var rod = new equipment();
 rod.slot=1;
