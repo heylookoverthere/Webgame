@@ -146,6 +146,7 @@ different weapon for front/back row
  Mythril boots: def +30; speed+1;evade+5;
  Myhril Cape: def+30;mdef+15;mag+5;
  
+ -status effects for refelct, protect, regen, cloak.
  
  attacktype[row]
 -squad drops

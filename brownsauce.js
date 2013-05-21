@@ -26,14 +26,17 @@ function playSound(name){
     }
     
 }
-
+var NUM_BUFFS=2;
 Status = {};
-Status.Poison = 0; 
-Status.Haste = 1;
-Status.Slow = 2;
-Status.Mute = 3;
-Status.Imp = 4;
-Status.Reflect = 5; 
+Status.Haste = 0;
+Status.Reflect =1; 
+Status.Protect = 2; 
+Status.Regen=3;
+Status.Cloaked=4;
+Status.Beserk=5;
+Status.Slow = 6;
+Status.Mute = 7;
+Status.Imp = 8;
 
 
 AttackTypes = {};
@@ -210,6 +213,8 @@ function unit() {
     this.maxhp=40;
     this.maxmp=40;
 	this.statusTrack=0;
+	this.whichBuff=0;
+	this.whichDebuff=0;
 	this.undead=false;
     this.nextLevel=20;
     this.speed=1;
@@ -610,9 +615,29 @@ function unit() {
                 }
             }else if(this.getAttackType()==AttackTypes.GiveStatus){
 				targe=usqd.units[this.statusTrack];
-				usqd.units[this.statusTrack].giveStatus(Status.Haste);
+				usqd.units[this.statusTrack].giveStatus(this.whichBuff);
+				var stsu = "Haste";
+				if(this.whichBuff==Status.Regen)
+				{
+					stsu="Regen";
+				}else if(this.whichBuff==Status.Reflect)
+				{
+					stsu="Reflect";
+				}else if(this.whichBuff==Status.Protect)
+				{
+					stsu="Protect";
+				}else if(this.whichBuff==Status.Cloak)
+				{
+					stsu="Cloaked";
+				}
+				console.log(this.name+" cast "+stsu+" on "+ usqd.units[this.statusTrack].name);
 				this.statusTrack++;//todo: change
-				if (this.statusTrack>usqd.numUnits-1) {this.statusTrack=0;}
+				if (this.statusTrack>usqd.numUnits-1) 
+				{
+					this.statusTrack=0;
+					this.whichBuff++;
+					if(this.wichBuff>NUM_BUFFS-1) {this.whichBuff=0;}
+				}
 				
 			}else if(this.getAttackType()==AttackTypes.HealStatus){
 				esqd.healStatus();
