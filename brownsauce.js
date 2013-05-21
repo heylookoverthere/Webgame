@@ -41,7 +41,7 @@ AttackTypes.Physical = 0;
 AttackTypes.Ranged = 1;
 AttackTypes.Magical = 2;
 AttackTypes.Heal = 3;
-AttackTypes.InflictStatus = 4;
+AttackTypes.GiveStatus = 4;
 AttackTypes.HealStatus = 5; 
 AttackTypes.someweirdshitthatignoresdefensemaybe =6;
 
@@ -209,6 +209,7 @@ function unit() {
     this.mp=0;
     this.maxhp=40;
     this.maxmp=40;
+	this.statusTrack=0;
 	this.undead=false;
     this.nextLevel=20;
     this.speed=1;
@@ -607,7 +608,16 @@ function unit() {
                     var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
                     console.log(tmpstr);
                 }
-            }else
+            }else if(this.getAttackType()==AttackTypes.GiveStatus){
+				targe=usqd.units[this.statusTrack];
+				usqd.units[this.statusTrack].giveStatus(Status.Haste);
+				this.statusTrack++;//todo: change
+				if (this.statusTrack>usqd.numUnits-1) {this.statusTrack=0;}
+				
+			}else if(this.getAttackType()==AttackTypes.HealStatus){
+				esqd.healStatus();
+				//esqd.esuna();
+			}else
             {
                 if(this.equipment[0].hitAll){
                     for(var i=0;i<esqd.numUnits;i++)
@@ -1115,8 +1125,8 @@ function unit() {
             this.mag=3;
             this.cost=210;
             this.canlead=true;
-            this.attackType[0]=AttackTypes.Physical;
-            this.attackType[1]=AttackTypes.Ranged;
+            this.attackType[0]=AttackTypes.GiveStatus;
+            this.attackType[1]=AttackTypes.GiveStatus;
         }
 		else if(cla===SEEAss.Creeper) { 
             this.maxhp=30;
