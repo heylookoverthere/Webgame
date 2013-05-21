@@ -225,7 +225,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*16);
+    this.class=Math.floor(Math.random()*21);
     this.row=Math.floor(Math.random()*2);
     this.viewrange=5;
     this.level=1;
@@ -313,6 +313,10 @@ function unit() {
 		if(this.class===SEEAss.IronBear) {texticles="Iron Bear";}
 		if(this.class===SEEAss.HulkBear) {texticles="Hulk Bear";}
 		if(this.class===SEEAss.RumHam) {texticles="Rum Ham";}
+		if(this.class===SEEAss.Theif) {texticles="Theif";}
+		if(this.class===SEEAss.Dancer) {texticles="Dancer";}
+		if(this.class===SEEAss.Creeper) {texticles="Creeper";}
+		if(this.class===SEEAss.Skeleton) {texticles="Skeleton";}
 		return texticles;
 	};
     
@@ -1073,7 +1077,109 @@ function unit() {
             this.canlead=false;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Dancer) { //RUM HAM
+            this.maxhp=50;
+            this.hp=50;
+            this.attack=14;
+            this.maxmp=80;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("dancer");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("dancer");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
         }
+		else if(cla===SEEAss.Creeper) { 
+            this.maxhp=30;
+            this.hp=30;
+            this.attack=14;
+            this.maxmp=80;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("creeper");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("creeper");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.EarthBound) { //Earthbount
+            this.maxhp=50;
+            this.hp=50;
+            this.attack=14;
+            this.maxmp=80;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("ebound");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("ebound");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Skeleton) {
+            this.maxhp=50;
+            this.hp=50;
+            this.attack=14;
+            this.maxmp=80;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("skeleton");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("skeleton");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Theif) {
+            this.maxhp=40;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=8;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("theif");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("theif");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }
+        
         
     };
     this.setClass();
