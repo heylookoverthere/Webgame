@@ -1548,8 +1548,8 @@ function army() {
     this.numSquads=3;
     this.team=0;
     this.ali=50;
-    this.basex=2;
-    this.basey=2;
+    this.basex=12;
+    this.basey=12;
     this.opinion=50;
 	this.numItems=30;
 	this.items=new Array(99);
@@ -1832,8 +1832,8 @@ function squad() {
     //AI 
     //target
     //waypoints?
-    this.x = 2;
-    this.y = 2;
+    this.x = 12;
+    this.y = 12;
     this.army=0;
     this.basex=12;
     this.basey=12;
