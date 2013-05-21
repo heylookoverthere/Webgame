@@ -1955,6 +1955,15 @@ function squad() {
 		}
 		return Math.floor(cst/this.numUnits);
     };
+	
+	this.getLuck=function(){
+        var cst=0;
+		for(var i=0;i<this.numUnits;i++)
+		{
+			cst+=this.units[i].luck;
+		}
+		return Math.floor(cst);
+    };
     this.flee= function(c)
     {
         if(Math.floor(Math.random()*30) > (15)) {
@@ -3063,6 +3072,13 @@ function battleDraw()
     { 
         var tmpstr=combatants[1].leader.name + "'s squad was eliminated.";
         console.log(tmpstr); 
+		var ods=80;//combatants[0].getLuck();
+		if(Math.floor(Math.random()*100)<ods){
+			var dong=randomItem();
+			console.log( combatants[0].leader.name+ " found a " +dong.name);
+			armies[0].addItem(dong);
+			
+		}
         combatants[1].damaged=0;
         combatants[0].damaged=10;
         endBattle(combatants[0],combatants[1]);
