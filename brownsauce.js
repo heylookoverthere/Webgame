@@ -160,7 +160,7 @@ function status() {
 
 
 function randomItem(){
-	var gar=Math.floor(Math.random()*27);
+	var gar=Math.floor(Math.random()*35);
 	var itm=swords[0];
 	if(gar==0) {itm=swords[1];}
 	if(gar==1) {itm=swords[2];}
@@ -190,6 +190,14 @@ function randomItem(){
 	if(gar==25) {itm=chainmail;}
 	if(gar==26) {itm=enchantedpants;}
 	if(gar==27) {itm=cape;}
+	if(gar==28) {itm=swords[3];}
+	if(gar==29) {itm=swords[4];}
+	if(gar==30) {itm=swords[5];}
+	if(gar==31) {itm=swords[6];}
+	if(gar==32) {itm=swords[7];}
+	if(gar==33) {itm=swords[8];}
+	if(gar==34) {itm=swords[9];}
+	if(gar==35) {itm=knives[0];}
 	return itm;
 };
 

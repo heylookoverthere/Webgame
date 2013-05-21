@@ -53,7 +53,69 @@ damage numbers drawn on sprites in battle. -meh
 
 -time capsulse?
 
+.getspeed (equip)
+.getevade
+.getluck
+.religion (unit compatibility/card effects (storm(lit),old(ice), seven[7](bonuses), R'llor(fire),Drowned God(water),Great Other(death)
+.faith
+ 
+ Longbow
+ Silver Bow
+ Ice Bow
+ Lightning Bow
+ Fire Bow
+ Mythril Bow
+ WindSlash
+ Artemis Bow
+ Yoichi Bow
+ ObSagittarius Bow
+ 
+ Chaosbringer
+ Deathbringer
+ Arodight
+ Balmung
+ Valhlalla
+ Mage Masher
+ Orichalcum
+ Platinum Dagger
+ 
+ Rod of Faith
+ Poison Rod
+ Stardust Rod
+ Crown Sceptre
+ Flame Rod
+ Ice Rod
+ Thunder rod
+ 
+ 
+ Ashura
+ Kotesu
+ Osafune
+ Murasame
+ Ama-no-Murakumo
+ Kiyomori
+ Muramasa
+ Masamune
+ Kiki-ichimojo
+ Chirjiraden
+ 
+ 
+ Flame MAil
+ Ice Amor
+ Diamond Armorw
+ Genji Armor
+ Dragon Mail
+ Crystal Mail
+ Adamant Amror
+ Gia Gear
+ 
+ Battle Axe
+ Giant Axe
+ Slasher
+ Franciscia
+ Valyrian Axe
 
+ 
  
  Production
  -Amount of units enemy produces per cycle; == week?

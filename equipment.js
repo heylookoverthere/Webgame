@@ -160,7 +160,7 @@ var noarmor = new equipment();
 noarmor.slot=1;
 var noaccessory = new equipment();
 noaccessory.slot=2;
-var swords=new Array(3);
+var swords=new Array(10);
 swords[0]= new equipment();
 swords[0].name="Wooden Sword";
 swords[0].attack=3;
@@ -172,25 +172,129 @@ swords[0].classes.push(SEEAss.RumHam);
 swords[0].tooltip = "It is dangerous to go alone.";
 
 swords[1]= new equipment();
-swords[1].attack=10;
-swords[1].name="Valyrian Sword";
-swords[1].value=100;
+swords[1].attack=6;
+swords[1].name="Iron Sword";
+swords[1].value=50;
 swords[1].classes.push(SEEAss.Knight);
 swords[1].classes.push(SEEAss.DarkKnight);
 swords[1].classes.push(SEEAss.Palladin);
 swords[1].classes.push(SEEAss.RumHam);
-swords[1].tooltip = "Forged in the fires of Valyria, New Jersey.";
+swords[1].tooltip = "it's metal!";
+
 
 swords[2]= new equipment();
-swords[2].attack=24;
-swords[2].name="Dawn";
-swords[2].value=1000;
+swords[2].attack=9;
+swords[2].name="Silver Sword";
+swords[2].value=100;
 swords[2].classes.push(SEEAss.Knight);
 swords[2].classes.push(SEEAss.DarkKnight);
 swords[2].classes.push(SEEAss.Palladin);
 swords[2].classes.push(SEEAss.RumHam);
-swords[2].tooltip = "Forged from the heart of a fallen star.";
+swords[2].tooltip = "Shiney!";
 
+swords[4]= new equipment();
+swords[4].attack=14;
+swords[4].name="Longclaw";
+swords[4].speed=1;
+swords[4].value=3000;
+swords[4].classes.push(SEEAss.Knight);
+swords[4].classes.push(SEEAss.DarkKnight);
+swords[4].classes.push(SEEAss.Palladin);
+swords[4].classes.push(SEEAss.RumHam);
+swords[4].tooltip = "Ancestral blade of house Mormont";
+
+swords[5]= new equipment();
+swords[5].attack=18;
+swords[5].name="Ice";
+swords[5].value=1500;
+swords[5].classes.push(SEEAss.Knight);
+swords[5].classes.push(SEEAss.DarkKnight);
+swords[5].classes.push(SEEAss.Palladin);
+swords[5].classes.push(SEEAss.RumHam);
+swords[5].tooltip = "Ancestral blade of house Stark";
+
+swords[6]= new equipment();
+swords[6].attack=29;
+swords[6].name="Dark Sister";
+swords[6].speed=1;
+swords[6].value=5000;
+swords[6].classes.push(SEEAss.Knight);
+swords[6].classes.push(SEEAss.DarkKnight);
+swords[6].classes.push(SEEAss.Palladin);
+swords[6].classes.push(SEEAss.RumHam);
+swords[6].tooltip = "Bloodraven's sword";
+
+
+swords[3]= new equipment();
+swords[3].attack=10;
+swords[3].name="Lady Forlorn";
+swords[3].value=1000;
+swords[3].classes.push(SEEAss.Knight);
+swords[3].classes.push(SEEAss.DarkKnight);
+swords[3].classes.push(SEEAss.Palladin);
+swords[3].classes.push(SEEAss.RumHam);
+swords[3].tooltip = "Ancestral blade of house Corbray";
+
+swords[7]= new equipment();
+swords[7].attack=24;
+swords[7].speed=2;
+swords[7].name="Dawn";
+swords[7].value=9000;
+swords[7].classes.push(SEEAss.Knight);
+swords[7].classes.push(SEEAss.DarkKnight);
+swords[7].classes.push(SEEAss.Palladin);
+swords[7].classes.push(SEEAss.RumHam);
+swords[7].tooltip = "Forged from the heart of a fallen star.";
+
+swords[8]= new equipment();
+swords[8].attack=24;
+swords[8].def=5;
+swords[8].name="Blackfyre";
+swords[8].value=6000;
+swords[8].classes.push(SEEAss.Knight);
+swords[8].classes.push(SEEAss.DarkKnight);
+swords[8].classes.push(SEEAss.Palladin);
+swords[8].classes.push(SEEAss.RumHam);
+swords[8].tooltip = "Ancestral blade of house Targaryan";
+
+swords[9]= new equipment();
+swords[9].attack=24;
+swords[9].def=10;
+swords[9].evade=5;
+swords[9].mdef=20;
+swords[9].name="Lightbringer";
+//kill undead
+swords[9].value=10000;
+swords[9].classes.push(SEEAss.Knight);
+swords[9].classes.push(SEEAss.DarkKnight);
+swords[9].classes.push(SEEAss.Palladin);
+swords[9].classes.push(SEEAss.RumHam);
+swords[9].tooltip = "Legenday blade of Azro Ahai.";
+
+knives=new Array(2);
+knives[0]= new equipment();
+knives[0].name="Dirk";
+knives[0].attack=3;
+knives[0].value=10;
+knives[0].evade=10;
+knives[0].speed=1;
+knives[0].classes.push(SEEAss.Knight);
+knives[0].classes.push(SEEAss.DarkKnight);
+knives[0].classes.push(SEEAss.Palladin);
+knives[0].classes.push(SEEAss.RumHam);
+knives[0].tooltip = "DERP";
+
+knives[1]= new equipment();
+knives[1].name="Valyrian Dirk";
+knives[1].attack=13;
+knives[1].value=800;
+knives[1].evade=14;
+knives[1].speed=2;
+knives[1].classes.push(SEEAss.Knight);
+knives[1].classes.push(SEEAss.DarkKnight);
+knives[1].classes.push(SEEAss.Palladin);
+knives[1].classes.push(SEEAss.RumHam);
+knives[1].tooltip = "VALYRIAN DERP";
 var axe=new Array(3);
 axe[0]= new equipment();
 axe[0].name="Wooden Axe";
