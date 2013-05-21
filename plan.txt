@@ -160,6 +160,7 @@ prevent constant capture/liberation! -HOW FUCKING HARD IS IT
 	
 cardbug! - still there!!
  
+ .attacking.dancin.healing.casting.
 knockback both on tie? - right now tie goes to the player
  
 -revive at towns for money?

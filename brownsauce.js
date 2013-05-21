@@ -1,4 +1,3 @@
-
 $(document).bind("contextmenu",function(e){
     return false;
 }); 
@@ -1507,8 +1506,8 @@ function initTowns(){
         towns[i].name=townnames[Math.floor(Math.random()*40)];
     }
 
-    towns[0].x=2;
-    towns[0].y=2;
+    towns[0].x=12;
+    towns[0].y=12;
     towns[0].team=0;
     towns[0].name="King's Landing";
 
@@ -1836,8 +1835,8 @@ function squad() {
     this.x = 2;
     this.y = 2;
     this.army=0;
-    this.basex=2;
-    this.basey=2;
+    this.basex=12;
+    this.basey=12;
     this.battleAI=0;
     this.alive=true;
     this.numUnits=Math.floor(Math.random()*3)+3;//3;
@@ -2618,6 +2617,37 @@ function Map(I) { //map object
         var graph = mapToGraph(I,sqd);
         return astar.search(graph.nodes, graph.nodes[startX][startY], graph.nodes[endX][endY]);
     };
+	
+	I.stringifyTiles = function(name) {
+		var tempstring= "";
+		for (i=0;i<MAP_WIDTH; i++){
+			for (j=0;j<MAP_HEIGHT; j++){
+			tempstring = tempstring +I.tiles[i][j].data;
+			tempstring += ","
+			}
+		}
+	};
+	
+	I.loadTiles = function (name) {
+	var hempstring=localStorage.getItem(name);
+		I.buildMapFromLoadedTiles(name, hempstring);
+    };
+	
+	I.buildMapFromLoadedTiles = function(name, hempstring) {
+		tempstring=hempstring.split(",");
+		for (i=0;i<MAP_WIDTH; i++){
+			for (j=0;j<MAP_HEIGHT; j++){
+			I.tiles[i][j].data = tempstring[j+MAP_HEIGHT*i];
+			}
+		}
+    };
+	
+	I.saveTiles = function (name) {
+		var tempstring = I.stringifyTiles(name);
+		localStorage.setItem(name, tempstring);
+	
+    };
+	
     
     I.drawPath = function(x,y,xx,yy) {
         var path = I.getPath(x, y, xx, yy);
