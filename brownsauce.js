@@ -253,6 +253,8 @@ function unit() {
     this.battlesfought=0;
     this.battleswon=0;
     this.battleslost=0;
+	this.religon=Math.floor(Math.random()*4);
+	this.faith=Math.floor(Math.random()*60)+20;
     var nami=Math.floor(Math.random()*120);
     while(true) {
         if(namesused[this.gender][nami]) 
@@ -265,10 +267,22 @@ function unit() {
     
     this.getAttack= function(){
         //if status==beserek attack harder
+		var nightBoost=0;
+		if(theTime.hours>12){
+			if(this.class==SEEAss.Werewolf){
+				nightBoost=20;
+				//this.attack+=20;
+			}else if (this.class==SEEAss.Vampire)
+			{
+				nightBoost=10;
+				//this.attack+=10;
+				//this.evade+=10;
+			}
+		}
         if(this.getAttackType() == AttackTypes.Physical ) {
-            return (this.attack-this.row)+this.equipAttack()+(this.level*1.5)+Math.floor(Math.random()*3);
+            return (this.attack+nightBoost-this.row)+this.equipAttack()+(this.level*1.5)+Math.floor(Math.random()*3);
         }else if( this.getAttackType() == AttackTypes.Ranged ) { //no row penalty
-            return (this.attack)+this.equipAttack()+(this.level*1.5)+Math.floor(Math.random()*3);
+            return (this.attack+nightBoost)+this.equipAttack()+(this.level*1.5)+Math.floor(Math.random()*3);
         }else if( this.getAttackType() == AttackTypes.Magical ) {  //no row penalty
             return (this.mag)+this.equipMag()+(this.level*1.5)+Math.floor(Math.random()*3);
         }else if( this.getAttackType() == AttackTypes.Heal ) {
@@ -1100,7 +1114,7 @@ function unit() {
             this.mdef=15;
             this.mag=3;
             this.cost=210;
-            this.canlead=false;
+            this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }
@@ -1181,7 +1195,7 @@ function unit() {
             this.mdef=15;
             this.mag=3;
             this.cost=210;
-            this.canlead=false;
+            this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Werewolf) {
@@ -1194,7 +1208,7 @@ function unit() {
             this.ali=1;
             this.viewrange=5;
             this.sprite = Sprite("lycan");
-			//this.nightsprite= Sprite("wereworlf");
+			this.nightSprite= Sprite("werewolf");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("lycan");}
@@ -1202,7 +1216,7 @@ function unit() {
             this.mdef=15;
             this.mag=3;
             this.cost=210;
-            this.canlead=false;
+            this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Samurai) {
@@ -1222,7 +1236,7 @@ function unit() {
             this.mdef=15;
             this.mag=3;
             this.cost=210;
-            this.canlead=false;
+            this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Monk) {
@@ -1242,7 +1256,7 @@ function unit() {
             this.mdef=15;
             this.mag=3;
             this.cost=210;
-            this.canlead=false;
+            this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Vampire) {
@@ -1250,7 +1264,7 @@ function unit() {
             this.hp=40;
             this.attack=4;
             this.maxmp=8;
-            this.speed=3;
+            this.speed=1;
             this.luck=7;
             this.ali=1;
             this.viewrange=5;
@@ -1262,7 +1276,7 @@ function unit() {
             this.mdef=15;
             this.mag=3;
             this.cost=210;
-            this.canlead=false;
+            this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Tiger) {
@@ -1285,6 +1299,49 @@ function unit() {
             this.canlead=false;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Witch) {
+            this.maxhp=120;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=80;
+			this.gender=1;
+            this.speed=2;
+            this.luck=17;
+			this.name="Deneb";
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("witch");
+            this.equipment[0]=icemagic[3];
+            this.equipment[1]=robe;
+            if (this.gender===1) {this.sprite = Sprite("witch");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=17;
+            this.cost=310;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Magical;
+            this.attackType[1]=AttackTypes.Magical;
+        }else if(cla===SEEAss.Pumpkinhead) {
+            this.maxhp=80;
+            this.hp=40;
+            this.attack=8;
+            this.maxmp=80;
+			this.gender=0;
+            this.speed=1;
+            this.luck=17;
+			this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("pumpkinhead");
+            this.equipment[0]=icemagic[3];
+            this.equipment[1]=robe;
+            if (this.gender===1) {this.sprite = Sprite("pumpkinhead");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=17;
+            this.cost=210;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Magical;
         }
         
         
@@ -1999,7 +2056,11 @@ function squad() {
 
     this.draw = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} //TODO: also check visual range for enemies
-        this.sprite.draw(canvas,
+        var press=this.leader.sprite;
+		if((this.leader.class==SEEAss.Werewolf) && (theTime.hours>12)) {
+			press=this.leader.nightSprite
+		}
+		press.draw(canvas,
                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
         if (this.leaderless){
@@ -2724,6 +2785,11 @@ armies[1].name = "The Bastard Boys";
 armies[1].leader.name="Roose";
 armies[1].basex=180;
 armies[1].basey=256;
+
+
+
+
+
 armies[1].addSquad(new unit());
 armies[1].addSquad(new unit());
 armies[1].addSquad(new unit());
@@ -2754,10 +2820,20 @@ armies[0].leader.maxhp+=20;
 armies[0].leader.hp=armies[0].leader.maxhp;
 armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
 
-armies[1].leader.name="Ramsey";
-armies[1].leader.class==SEEAss.DarkKnight;
-armies[1].leader.setClass();
+armies[1].squads[0].name="Ramsey";
+armies[1].squads[0].leader.class=SEEAss.DarkKnight;
+armies[1].squads[0].leader.setClass();
 armies[1].squads[0].sprite=armies[1].squads[0].leader.sprite;
+
+armies[1].squads[1].leader.class=SEEAss.Witch;
+armies[1].squads[1].leader.setClass();
+armies[1].squads[1].leader.name="Deneb";
+for(i=1;i<armies[1].squads[1].numUnits;i++)
+{
+	armies[1].squads[1].units[i].class=SEEAss.Pumpkinhead;
+	armies[1].squads[1].units[i].setClass();
+}
+
 
 armies[1].leader.maxhp+=150;
 armies[1].leader.hp=armies[1].leader.maxhp
@@ -2825,6 +2901,11 @@ function battleDraw()
     for(var i=0;i<combatants[0].numUnits;i++)
     {
         if(!combatants[0].units[i].alive) {continue;}
+		var sevenup=combatants[0].units[i].sprite;
+		if((combatants[0].units[i].class==SEEAss.Werewolf) && (theTime.hours>12))
+		{
+			sevenup=combatants[0].units[i].nightSprite;
+		}
 		var closs=combatants[0].units[i].getClassName();
         var xp=600+combatants[0].units[i].row*40;
         canvas.fillText("HP:"+combatants[0].units[i].hp +"/"+combatants[0].units[i].maxhp, xp, 130+i*2*45);
@@ -2853,7 +2934,7 @@ function battleDraw()
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
         
         if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
-            combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
+            sevenup.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
         }
         if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
@@ -2868,6 +2949,11 @@ function battleDraw()
     canvas.fillText(texticles, 275, 132);
     for(var i=0;i<combatants[1].numUnits;i++)
     {
+		var sevenup=combatants[1].units[i].sprite;
+		if((combatants[1].units[i].class==SEEAss.Werewolf) && (theTime.hours>12))
+		{
+			sevenup=combatants[1].units[i].nightSprite;
+		}
         if(!combatants[1].units[i].alive) {continue;}
         var closs=combatants[1].units[i].getClassName();
         var xp=135-combatants[1].units[i].row*40;
@@ -2887,7 +2973,7 @@ function battleDraw()
         if((combatants[1].units[i].attacking>0) && (combatants[1].units[i].hurting<1)) {combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);}
         
         if((combatants[1].units[i].hurting<1) || (combatants[1].units[i].hurting%2==0)) {
-            combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
+           sevenup.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
         }
         if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
         if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}

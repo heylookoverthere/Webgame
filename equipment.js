@@ -31,6 +31,16 @@ SEEAss.Vampire=22;
 SEEAss.Samurai=23;
 SEEAss.Monk=24;
 SEEAss.Tiger=25;
+SEEAss.Witch=29;
+SEEAss.Pumpkinhead=30;
+
+Religon={};
+Religon.Seven=1;
+Religon.Old=2;
+Religon.Red=3;
+Religon.Storm=4;
+Religon.Other=5;
+
 
 var radarBitmap=[];
 var sideBar=false;

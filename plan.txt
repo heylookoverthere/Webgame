@@ -148,8 +148,10 @@ different weapon for front/back row
  
  
  attacktype[row]
+-squad drops
+-random items
+-town items
 
- =pageup/down
 -PHYSICAL ATTACK PENELTY BACK ROW?
 
 prevent constant capture/liberation! -HOW FUCKING HARD IS IT
