@@ -53,6 +53,7 @@ damage numbers drawn on sprites in battle. -meh
 
 -time capsulse?
 
+different weapon for front/back row
 .getspeed (equip)
 .getevade
 .getluck

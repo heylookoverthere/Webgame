@@ -209,6 +209,7 @@ function unit() {
     this.mp=0;
     this.maxhp=40;
     this.maxmp=40;
+	this.undead=false;
     this.nextLevel=20;
     this.speed=1;
     this.evade=1;
@@ -225,7 +226,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*21);
+    this.class=Math.floor(Math.random()*26);
     this.row=Math.floor(Math.random()*2);
     this.viewrange=5;
     this.level=1;
@@ -317,6 +318,11 @@ function unit() {
 		if(this.class===SEEAss.Dancer) {texticles="Dancer";}
 		if(this.class===SEEAss.Creeper) {texticles="Creeper";}
 		if(this.class===SEEAss.Skeleton) {texticles="Skeleton";}
+		if(this.class===SEEAss.Monk) {texticles="Monk";}
+		if(this.class===SEEAss.Vampire) {texticles="Vampire";}
+		if(this.class===SEEAss.Werewolf) {texticles="Werewolf";}
+		if(this.class===SEEAss.Tiger) {texticles="Tiger";}
+		if(this.class===SEEAss.Samurai) {texticles="Samurai";}
 		return texticles;
 	};
     
@@ -1171,6 +1177,107 @@ function unit() {
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("theif");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Werewolf) {
+            this.maxhp=40;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=8;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("lycan");
+			//this.nightsprite= Sprite("wereworlf");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("lycan");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Samurai) {
+            this.maxhp=40;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=8;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("samurai");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("samurai");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Monk) {
+            this.maxhp=40;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=8;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("monk");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("monk");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Vampire) {
+            this.maxhp=40;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=8;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("vamp");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("vamp");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=3;
+            this.cost=210;
+            this.canlead=false;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Ranged;
+        }else if(cla===SEEAss.Tiger) {
+            this.maxhp=40;
+            this.hp=40;
+            this.attack=4;
+            this.maxmp=8;
+            this.speed=3;
+            this.luck=7;
+            this.ali=1;
+            this.viewrange=5;
+            this.sprite = Sprite("tiger");
+            //this.equipment[0]=claws;
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("tiger");}
             this.def=20;
             this.mdef=15;
             this.mag=3;
