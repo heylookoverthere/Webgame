@@ -2457,6 +2457,7 @@ var ksavekey=new akey("o"); //define the different keys
 var loadkey=new akey("l");
 
 var randomwalk=false;
+var gamestart=false;
 var radar=true;
 
 var pausekey=new akey("space");
@@ -3079,12 +3080,14 @@ function battleDraw()
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
 maps[0].buildMap("map");
+
 //------------MAIN LOOP-----------------------------------------
 function update() {
     lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
     tick++;
+	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
     if(menukey.check()) {
         if(!isBattle) 
         {
@@ -3381,7 +3384,7 @@ function update() {
         for(var i=0;i<armies[1].numSquads;i++){ 
             armies[1].squads[i].update(maps[0]);
             if(armies[1].fieldAI==AITypes.Random){
-                if( (!armies[1].squads[i].path) && (i != 0 )) {
+                if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
                     armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
