@@ -51,6 +51,7 @@ TileType.Water=5;
 TileType.Ocean=6;
 TileType.Forest=3;
 TileType.Road=8;
+TileType.Sand=9;
 
 var radarBitmap=[];
 var mapBitmap=[];
@@ -79,6 +80,7 @@ var MUSELECTED=0;
 var BSELECTED=0;
 var NUM_STATUS=5;
 var NUM_CLASSES=19;
+var MAPNAME ="map3";
 var pageCount=0;
 var tick=0;
 var gamespeed=0;//2;
@@ -109,7 +111,7 @@ namesused[0]=new Array(120);
 namesused[1]=new Array(120);
 for( var i=0; i<120; i++ ){ namesused[0][i]=false;namesused[1][i]=false; }
 
-var tileSprite=new Array(9);
+var tileSprite=new Array(10);
 tileSprite[TileType.Grass] = Sprite("grass");
 tileSprite[TileType.Forest] = Sprite("darkgrass"); 
 tileSprite[TileType.Ocean] = Sprite("water");
@@ -119,9 +121,10 @@ tileSprite[TileType.Hills] = Sprite("hills");
 tileSprite[TileType.Swamp] = Sprite("swamp");
 tileSprite[TileType.Plains] = Sprite("plains");
 tileSprite[TileType.Road] = Sprite("road");
+tileSprite[TileType.Sand] = Sprite("sand");
 
 
-var tileColors=new Array(9);
+var tileColors=new Array(10);
 tileColors[TileType.Grass] = "#008000";
 tileColors[TileType.Forest] = "#003300";
 tileColors[TileType.Ocean] = "#000099";
@@ -130,7 +133,8 @@ tileColors[TileType.Mountains] = "#330000";
 tileColors[TileType.Hills] = "#996666";
 tileColors[TileType.Swamp] = "#669900";
 tileColors[TileType.Plains] = "#FF9966";
-tileColors[TileType.Road] = "#999966";
+tileColors[TileType.Road] = "#CCCCCC";
+tileColors[TileType.Sand] = "#999966";
 
 var poisonsprite = Sprite("poison");
 var selector = Sprite("cursor");

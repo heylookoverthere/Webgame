@@ -19,6 +19,7 @@ storm god - lightning
 -lion of knight -riches
 great other - ice attack
 ---------------------
+-map object=name, num towns, towm locations,base locations,
 
 -cards -animations, more types needed animationpause? attack queue wait for animation to finish?
 damage numbers drawn on sprites in battle. -meh

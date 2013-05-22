@@ -1514,6 +1514,30 @@ function initTowns(){
 	
 	towns[5].x=99;
     towns[5].y=189;
+	if(MAPNAME=="map3"){
+		towns[0].x=35;
+		towns[0].y=35;
+		towns[0].team=0;
+		towns[0].name="Kings Landing";
+
+		towns[1].x=157;
+		towns[1].y=225;
+		towns[1].team=1;
+		towns[1].name="The Dreadfort";
+		
+		towns[2].x=156;
+		towns[2].y=82;
+		
+		towns[3].x=164;
+		towns[3].y=121;
+		
+		towns[4].x=39;
+		towns[4].y=191;
+		
+		towns[5].x=84;
+		towns[5].y=63;
+	
+	}
 	
 }
 
@@ -2572,10 +2596,13 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
 };
 
 function tileToCost(data, sqd) {
-    if((data==4) &&(sqd.leader.class==SEEAss.Frog)) {return 4};
-    if( data == 1 ) return 0;
-    if( data == 4 ) return 4;
-    return 1;
+    if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
+    if(( data == TileType.Mountains ) ||( data == TileType.Ocean )) return 0;
+    if( data == TileType.Swamp  ) return 5;
+	if( data == TileType.Forest  ) return 3;
+	if( data == TileType.Sand  ) return 2;
+	if( data == TileType.Road  ) return 1;
+    return 2;
 };
 
 function mapToGraph(map, sqd) { 
@@ -2744,6 +2771,10 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Forest);
 		  } else if (( rgba[0]==0) && (rgba[1]==0) && (rgba[2]==255)){
 			I.setTile(xPos, yPos, TileType.Ocean);
+		  } else if (( rgba[0]==255) && (rgba[1]==255) && (rgba[2]==0)){
+			I.setTile(xPos, yPos, TileType.Sand);
+		  } else if (( rgba[0]==195) && (rgba[1]==195) && (rgba[2]==195)){
+			I.setTile(xPos, yPos, TileType.Road);
 		  }  else {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
@@ -2806,15 +2837,6 @@ function Map(I) { //map object
 
 
 
-for(var i=0;i<15;i++){
-    for(var k=0;k<70;k++)
-    {
-        maps[0].setTile(20+i,0+k,4);
-        maps[0].setTile(20+i,0+k,4);
-        maps[0].setTile(20+i,0+k,4);
-    }
-}
-
 armies[0].init(0);
 armies[1].init(1);
 armies[0].squads[0].deploy();
@@ -2829,7 +2851,14 @@ armies[0].squads[2].leader.name="Captain Bearmerica";
 armies[0].squads[2].smartRow();
 armies[0].squads[0].smartRow();
 armies[0].squads[1].smartRow();
-
+for (var i=0;i<armies[0].numSquads;i++){
+	if(MAPNAME=="map3"){
+		armies[0].squads[i].basex=35;
+		armies[0].squads[i].basey=35;
+		armies[0].squads[i].x=35;
+		armies[0].squads[i].y=35;
+	}
+}
 
 //armies[0].name = "Lannisters";
 armies[0].name = "The Kingsguard";
@@ -2837,7 +2866,10 @@ armies[1].name = "The Bastard Boys";
 armies[1].leader.name="Roose";
 armies[1].basex=180;
 armies[1].basey=256;
-
+if(MAPNAME=="map3"){
+	armies[1].basex=157;
+	armies[1].basey=225;
+}
 
 
 
@@ -2852,11 +2884,15 @@ for (var i=0;i<armies[1].numSquads;i++){
     armies[1].squads[i].leader.class=SEEAss.HulkBear;
     armies[1].squads[i].basex=180;
     armies[1].squads[i].basey=256;
+	if(MAPNAME=="map3"){
+		armies[1].squads[i].basex=157;
+		armies[1].squads[i].basey=225;
+	}
     armies[1].squads[i].leader.setClass();
     armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
     armies[1].squads[i].team=1;
-    armies[1].squads[i].x=180;
-    armies[1].squads[i].y=256;
+    armies[1].squads[i].x=armies[1].squads[i].basex;
+    armies[1].squads[i].y=armies[1].squads[i].basey;
     armies[1].squads[i].smartRow();
     armies[1].squads[i].deploy();//TODO delay between deployment 
     armies[1].lastDeployed++;
@@ -3068,7 +3104,7 @@ function battleDraw()
 
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
-maps[0].buildMap("map");
+maps[0].buildMap(MAPNAME);
 
 //------------MAIN LOOP-----------------------------------------
 function update() {
