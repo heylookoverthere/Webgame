@@ -2135,6 +2135,11 @@ function squad() {
                           (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
                           (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
         }
+	    if(maps[0].tiles[this.x][this.y+1].data==TileType.Forest) {
+			tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y+1)*16);
+			tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x+1)*16, (this.y-cam.y+1)*16);
+	
+		}
     };
 
     this.drawdest = function(cam) {
