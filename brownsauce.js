@@ -2743,9 +2743,6 @@ function Map(I) { //map object
 
 	I.buildMap= function(name){
         
-        //var mapsprite=Sprite("crap");
-//		mapsprite.draw(mapCanvas,0,0);
-//		mapCanvas.save();
 var imageObj = new Image();
 imageObj.onload = function() {
         mapCanvas.drawImage(imageObj, 0, 0);
