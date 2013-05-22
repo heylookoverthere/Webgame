@@ -1537,6 +1537,29 @@ function initTowns(){
 		towns[5].x=84;
 		towns[5].y=63;
 	
+	}else if(MAPNAME=="map1"){
+		towns[0].x=55;
+		towns[0].y=52;
+		towns[0].team=0;
+		towns[0].name="Kings Landing";
+
+		towns[1].x=151;
+		towns[1].y=230;
+		towns[1].team=1;
+		towns[1].name="The Dreadfort";
+		
+		towns[2].x=163;
+		towns[2].y=40;
+		
+		towns[3].x=62;
+		towns[3].y=126;
+		
+		towns[4].x=80;
+		towns[4].y=193;
+		
+		towns[5].x=78;
+		towns[5].y=263;
+	
 	}
 	
 }
@@ -2136,8 +2159,12 @@ function squad() {
                           (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
         }
 	    if(maps[0].tiles[this.x][this.y+1].data==TileType.Forest) {
-			tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y+1)*16);
-			tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x+1)*16, (this.y-cam.y+1)*16);
+			var gx=(this.x-cam.x)*16;
+			var gy=(this.y-cam.y+1)*16;
+			if(this.dx>7) { gx++;}
+			if(this.dy>7) { gx++;}
+			tileSprite[TileType.Forest].draw(canvas, gx, gy);
+			tileSprite[TileType.Forest].draw(canvas, gx+16, gy);//todo
 	
 		}
     };
@@ -2862,6 +2889,11 @@ for (var i=0;i<armies[0].numSquads;i++){
 		armies[0].squads[i].basey=35;
 		armies[0].squads[i].x=35;
 		armies[0].squads[i].y=35;
+	}else 	if(MAPNAME=="map1"){
+		armies[0].squads[i].basex=55;
+		armies[0].squads[i].basey=52;
+		armies[0].squads[i].x=55;
+		armies[0].squads[i].y=52;
 	}
 }
 
@@ -2874,6 +2906,9 @@ armies[1].basey=256;
 if(MAPNAME=="map3"){
 	armies[1].basex=157;
 	armies[1].basey=225;
+}else if(MAPNAME=="map1"){
+	armies[1].basex=151;
+	armies[1].basey=230;
 }
 
 
@@ -2892,6 +2927,9 @@ for (var i=0;i<armies[1].numSquads;i++){
 	if(MAPNAME=="map3"){
 		armies[1].squads[i].basex=157;
 		armies[1].squads[i].basey=225;
+	}else if(MAPNAME=="map1"){
+		armies[1].squads[i].basex=151;
+		armies[1].squads[i].basey=230;
 	}
     armies[1].squads[i].leader.setClass();
     armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
@@ -3514,6 +3552,9 @@ function update() {
 			if(MAPNAME=="map3")
 			{	armies[0].squads[armies[0].lastDeployed].x=35;
 				armies[0].squads[armies[0].lastDeployed].y=35;
+			}else if(MAPNAME=="map1")
+			{	armies[0].squads[armies[0].lastDeployed].x=55;
+				armies[0].squads[armies[0].lastDeployed].y=52;
 			}
             armies[0].lastDeployed++; 
         }
