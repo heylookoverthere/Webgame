@@ -2742,7 +2742,9 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Mountains);
 		  } else if (( rgba[0]==0) && (rgba[1]==255) && (rgba[2]==0)){
 			I.setTile(xPos, yPos, TileType.Forest);
-		  } else {
+		  } else if (( rgba[0]==0) && (rgba[1]==0) && (rgba[2]==255)){
+			I.setTile(xPos, yPos, TileType.Ocean);
+		  }  else {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
