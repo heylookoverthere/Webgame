@@ -2705,21 +2705,7 @@ function Map(I) { //map object
                     }
                 }
                 if(dominantType.type && dominantType.type <41) {
-
-                    if(dominantType.type==TileType.Grass){
-                        tileSprite[TileType.Grass].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else if(dominantType.type==TileType.Mountains){
-                        tileSprite[TileType.Mountains].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else if(dominantType.type==TileType.Swamp){
-                        tileSprite[TileType.Swamp].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else if(dominantType.type==TileType.Water){
-                        tileSprite[TileType.Water].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1)); 
-                    }else if(dominantType.type==TileType.Ocean){
-                        tileSprite[TileType.Ocean].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else{  //if strange data, draw a solid color
-                        canvas.fillStyle = bColors[0]; 
-                        canvas.fillRect((this.x-cam.x)*this.width, (this.y-cam.y)*this.height, this.width, this.height);
-                    }   
+					tileSprite[dominantType.type].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                 }
             }
         }
@@ -2751,14 +2737,13 @@ function Map(I) { //map object
 		  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
 		  var yPos = Math.floor(i / 4 / MAP_WIDTH);
 		  var xPos = (i / 4) % MAP_WIDTH;
-		  //if( rgba[1]>0 ) {
+		if(( rgba[0]==0) && (rgba[1]==0) && (rgba[2]==0)) {
 
-			//I.setTile(xPos, yPos, TileType.Forest);
-		/*  } else */if( rgba[0] || rgba[1] || rgba[2] ) {
-
-			I.setTile(xPos, yPos, TileType.Grass);
-		  } else {
 			I.setTile(xPos, yPos, TileType.Mountains);
+		  } else if (( rgba[0]==0) && (rgba[1]==255) && (rgba[2]==0)){
+			I.setTile(xPos, yPos, TileType.Forest);
+		  } else {
+			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
 		maps[0].buildRadar();

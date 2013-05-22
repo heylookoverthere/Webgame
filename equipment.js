@@ -45,11 +45,11 @@ var TileType={};
 TileType.Grass=0;
 TileType.Plains=1;
 TileType.Swamp=2;
-TileType.Hills=3;
+TileType.Hills=7;
 TileType.Mountains=4;
 TileType.Water=5;
 TileType.Ocean=6;
-TileType.Forest=7;
+TileType.Forest=3;
 TileType.Road=8;
 
 var radarBitmap=[];
