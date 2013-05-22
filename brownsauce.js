@@ -2219,6 +2219,7 @@ function squad() {
         this.path=null; this.dx = 0; this.dy = 0; this.nextMove = null;
     };
     this.setDestination = function(x, y, map) {
+		if(!map.walkable(x,y)) {return;}
         this.clearDestination();
         this.path = map.getPath(this.x, this.y, x, y,this);
         this.dx=x;
@@ -2628,6 +2629,11 @@ function Map(I) { //map object
         var graph = mapToGraph(I,sqd);
         return astar.search(graph.nodes, graph.nodes[startX][startY], graph.nodes[endX][endY]);
     };
+	
+	I.walkable=function(x,y){
+		if(I.tiles[x][y].data!=1) {return true;}
+		return false;
+	}
 	
 	I.stringifyTiles = function(name) {
 		var tempstring= "";

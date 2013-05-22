@@ -165,7 +165,7 @@ knockback both on tie? - right now tie goes to the player
  
 -revive at towns for money?
 -town greeting first time, boss greeting, dish out cards
-
+-EDIT SET DESTINATION TO CHECK THERE'S NO ROCKS FIRST.
 -angel ring?
 
 narf: this.getshit = function(property) { return this[property]; }
