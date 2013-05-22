@@ -2743,25 +2743,25 @@ function Map(I) { //map object
 
 	I.buildMap= function(name){
         
-var imageObj = new Image();
-imageObj.onload = function() {
-        mapCanvas.drawImage(imageObj, 0, 0);
-		mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
-for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
-  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
-  var yPos = Math.floor(i / 4 / MAP_WIDTH);
-  var xPos = (i / 4) % MAP_WIDTH;
-  if( rgba[0] || rgba[1] || rgba[2] ) {
+		var imageObj = new Image();
+		imageObj.onload = function() {
+				mapCanvas.drawImage(imageObj, 0, 0);
+				mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
+		for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
+		  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
+		  var yPos = Math.floor(i / 4 / MAP_WIDTH);
+		  var xPos = (i / 4) % MAP_WIDTH;
+		  if( rgba[0] || rgba[1] || rgba[2] ) {
 
-    I.setTile(xPos, yPos, 0);
-  } else {
-    I.setTile(xPos, yPos, 1);
-  }
-}
-maps[0].buildRadar();
+			I.setTile(xPos, yPos, 0);
+		  } else {
+			I.setTile(xPos, yPos, 1);
+		  }
+		}
+		maps[0].buildRadar();
 
       };
-imageObj.src = "images/map.png";
+	imageObj.src = "images/"+name+".png";
 
     };
 	
@@ -2813,55 +2813,6 @@ imageObj.src = "images/map.png";
         canvas.restore();
     };
     return I;
-}
-
-
-
-
-
-maps[0].clear();
-maps[0].setTile(24,24,1);
-maps[0].setTile(23,24,1);
-maps[0].setTile(22,24,1);
-maps[0].setTile(24,25,1);
-maps[0].setTile(23,25,1);
-maps[0].setTile(22,25,1);
-maps[0].setTile(24,26,1);
-maps[0].setTile(23,26,1);
-maps[0].setTile(22,26,1);
-
-maps[0].setTile(27,24,1);
-maps[0].setTile(26,24,1);
-maps[0].setTile(25,24,1);
-maps[0].setTile(27,25,1);
-maps[0].setTile(26,25,1);
-maps[0].setTile(25,25,1);
-maps[0].setTile(27,26,1);
-maps[0].setTile(26,26,1);
-maps[0].setTile(25,26,1);
-
-maps[0].setTile(28,24,1);
-maps[0].setTile(29,24,1);
-maps[0].setTile(30,24,1);
-maps[0].setTile(28,25,1);
-maps[0].setTile(29,25,1);
-maps[0].setTile(30,25,1);
-maps[0].setTile(28,26,1);
-maps[0].setTile(29,26,1);
-maps[0].setTile(30,26,1);
-
-for (var p=0;p<300;p++)
-{
-    var i=Math.floor(Math.random()*190)+4;
-    var k=Math.floor(Math.random()*260)+4;
-    maps[0].setTile(24,24,1);
-    maps[0].setTile(i,k,1);
-    maps[0].setTile(i+1,k+1,1);
-    maps[0].setTile(i+1,k,1);
-    maps[0].setTile(i,k+1,1);
-    maps[0].setTile(i+1,k+1,1);
-
-    
 }
 
 
@@ -3128,7 +3079,7 @@ function battleDraw()
 
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
-maps[0].buildMap();
+maps[0].buildMap("map");
 //------------MAIN LOOP-----------------------------------------
 function update() {
     lasttime=milliseconds;
@@ -3136,7 +3087,7 @@ function update() {
     milliseconds = timestamp.getTime();
     tick++;
     if(menukey.check()) {
-        if(!isBattle)
+        if(!isBattle) 
         {
             if(isMenu==1) 
             {   
