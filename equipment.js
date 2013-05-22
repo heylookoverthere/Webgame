@@ -41,6 +41,16 @@ Religon.Red=3;
 Religon.Storm=4;
 Religon.Other=5;
 
+var TileType={};
+TileType.Grass=0;
+TileType.Plains=1;
+TileType.Swamp=2;
+TileType.Hills=3;
+TileType.Mountains=4;
+TileType.Water=5;
+TileType.Ocean=6;
+TileType.Forest=7;
+TileType.Road=8;
 
 var radarBitmap=[];
 var mapBitmap=[];
@@ -99,11 +109,17 @@ namesused[0]=new Array(120);
 namesused[1]=new Array(120);
 for( var i=0; i<120; i++ ){ namesused[0][i]=false;namesused[1][i]=false; }
 
-var darkgrasssprite = Sprite("darkgrass"); //begin loading images.  Eventually I should put them all on one .png file
-var grasssprite = Sprite("grass");
-var watersprite = Sprite("water");
-var stonesprite = Sprite("stone");
-var mossysprite = Sprite("mossy");
+var tileSprite=new Array(9);
+tileSprite[TileType.Grass] = Sprite("grass");
+tileSprite[TileType.Forest] = Sprite("darkgrass"); 
+tileSprite[TileType.Ocean] = Sprite("water");
+tileSprite[TileType.Water] = Sprite("water");
+tileSprite[TileType.Mountains] = Sprite("stone");
+tileSprite[TileType.Hills] = Sprite("hills");
+tileSprite[TileType.Swamp] = Sprite("swamp");
+tileSprite[TileType.Plains] = Sprite("plains");
+tileSprite[TileType.Road] = Sprite("road");
+
 var poisonsprite = Sprite("poison");
 var selector = Sprite("cursor");
 var noleader= Sprite("noleader");

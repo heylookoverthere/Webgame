@@ -3,16 +3,7 @@ $(document).bind("contextmenu",function(e){
 }); 
 
 
-var TileType={};
-TileType.Grass=0;
-TileType.Plains=1;
-TileType.Swamp=2;
-TileType.Hills=3;
-TileType.Mountains=4;
-TileType.Water=5;
-TileType.Ocean=6;
-TileType.Forest=7;
-TileType.Road=8;
+
 
 
 
@@ -2547,19 +2538,19 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
         data: 0,
         draw: function(cam) { 
             if(this.data==TileType.Grass){
-                grasssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Grass].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Mountains){
-                stonesprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+				tileSprite[TileType.Mountains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Swamp){
-                mudsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Swamp].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Forest){
-                crystalsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
+                tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
             }else if(this.data==TileType.Water){
-                mossysprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Water].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Plains){
-                stonebricksprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Plains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Ocean){
-                plankssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Ocean].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
 
             }else if(this.data==42){
                 watersprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
@@ -2639,7 +2630,7 @@ function Map(I) { //map object
     };
 	
 	I.walkable=function(x,y){
-		if(I.tiles[x][y].data!=1) {return true;}
+		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean)) {return true;}
 		return false;
 	}
 	
@@ -2714,16 +2705,17 @@ function Map(I) { //map object
                     }
                 }
                 if(dominantType.type && dominantType.type <41) {
+
                     if(dominantType.type==TileType.Grass){
-                        grasssprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+                        tileSprite[TileType.Grass].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                     }else if(dominantType.type==TileType.Mountains){
-                        stonesprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+                        tileSprite[TileType.Mountains].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                     }else if(dominantType.type==TileType.Swamp){
-                        mudsprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+                        tileSprite[TileType.Swamp].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                     }else if(dominantType.type==TileType.Water){
-                        crystalsprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1)); 
+                        tileSprite[TileType.Water].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1)); 
                     }else if(dominantType.type==TileType.Ocean){
-                        mossysprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+                        tileSprite[TileType.Ocean].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                     }else{  //if strange data, draw a solid color
                         canvas.fillStyle = bColors[0]; 
                         canvas.fillRect((this.x-cam.x)*this.width, (this.y-cam.y)*this.height, this.width, this.height);
@@ -2759,7 +2751,10 @@ function Map(I) { //map object
 		  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
 		  var yPos = Math.floor(i / 4 / MAP_WIDTH);
 		  var xPos = (i / 4) % MAP_WIDTH;
-		  if( rgba[0] || rgba[1] || rgba[2] ) {
+		  //if( rgba[1]>0 ) {
+
+			//I.setTile(xPos, yPos, TileType.Forest);
+		/*  } else */if( rgba[0] || rgba[1] || rgba[2] ) {
 
 			I.setTile(xPos, yPos, TileType.Grass);
 		  } else {
