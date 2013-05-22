@@ -2755,6 +2755,8 @@ for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
     I.setTile(xPos, yPos, 1);
   }
 }
+maps[0].buildRadar();
+
       };
 imageObj.src = "images/map.png";
 
@@ -3123,7 +3125,6 @@ function battleDraw()
 
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
-maps[0].buildRadar();
 maps[0].buildMap();
 //------------MAIN LOOP-----------------------------------------
 function update() {
