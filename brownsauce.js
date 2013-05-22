@@ -3420,7 +3420,7 @@ function update() {
             armies[0].squads[i].update(maps[0]);
             if(armies[0].fieldAI==AITypes.Random){
                 if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
-                    armies[0].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+                    armies[0].squads[i].setDestination(Math.floor(Math.random()*200),Math.floor(Math.random()*200),maps[0]); };
             }else if(armies[0].fieldAI==AITypes.Rush){
                 if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
                     armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[0]); 
