@@ -3392,7 +3392,7 @@ function update() {
             armies[1].squads[i].update(maps[0]);
             if(armies[1].fieldAI==AITypes.Random){
                 if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
-                    armies[1].squads[i].setDestination(Math.floor(Math.random()*70),Math.floor(Math.random()*70),maps[0]); };
+                    armies[1].squads[i].setDestination(Math.floor(Math.random()*200),Math.floor(Math.random()*200),maps[0]); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
                     armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[0]); };
