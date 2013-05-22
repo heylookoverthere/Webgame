@@ -2760,7 +2760,7 @@ function Map(I) { //map object
        radarCanvas.globalAlpha = 0.75;
         for (var i=0;i<MAP_WIDTH; i++){
             for (j=0;j<MAP_HEIGHT; j++){
-                radarCanvas.fillStyle = bColors[I.tiles[i][j].data];
+                radarCanvas.fillStyle = tileColors[I.tiles[i][j].data];
                 radarCanvas.fillRect(i, j, 2, 2);
             }
         }

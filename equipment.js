@@ -120,6 +120,18 @@ tileSprite[TileType.Swamp] = Sprite("swamp");
 tileSprite[TileType.Plains] = Sprite("plains");
 tileSprite[TileType.Road] = Sprite("road");
 
+
+var tileColors=new Array(9);
+tileColors[TileType.Grass] = "#008000";
+tileColors[TileType.Forest] = "#003300";
+tileColors[TileType.Ocean] = "#000099";
+tileColors[TileType.Water] = "#0066CC";
+tileColors[TileType.Mountains] = "#330000";
+tileColors[TileType.Hills] = "#996666";
+tileColors[TileType.Swamp] = "#669900";
+tileColors[TileType.Plains] = "#FF9966";
+tileColors[TileType.Road] = "#999966";
+
 var poisonsprite = Sprite("poison");
 var selector = Sprite("cursor");
 var noleader= Sprite("noleader");
