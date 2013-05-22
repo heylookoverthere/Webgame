@@ -3506,6 +3506,10 @@ function update() {
         }else
         {
             armies[0].squads[armies[0].lastDeployed].deploy();
+			if(MAPNAME=="map3")
+			{	armies[0].squads[armies[0].lastDeployed].x=35;
+				armies[0].squads[armies[0].lastDeployed].y=35;
+			}
             armies[0].lastDeployed++; 
         }
         /*      if (armies[0].lastDeployed>armies[0].numSquads-1) {
