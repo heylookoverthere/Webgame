@@ -121,7 +121,7 @@ explosionsprite[0] =Sprite("explosion0");
 explosionsprite[1] =Sprite("explosion1");
 explosionsprite[2] =Sprite("explosion2");
 explosionsprite[3] =Sprite("explosion3");
-var mapsprite=Sprite("map2");
+
 
 var tileani=0;
   

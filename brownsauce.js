@@ -2786,7 +2786,6 @@ function Map(I) { //map object
         canvas.save();
         canvas.globalAlpha = 0.75;
         canvas.putImageData(radarBitmap,x,y);
-		//mapsprite.draw(canvas,x,y);
         
         for(var i=0;i<numTowns;i++)
         {
