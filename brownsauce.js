@@ -2738,21 +2738,26 @@ function Map(I) { //map object
 	I.buildMap= function(name){
         
         //var mapsprite=Sprite("crap");
-		mapsprite.draw(mapCanvas,0,0);
-		mapCanvas.save();
+//		mapsprite.draw(mapCanvas,0,0);
+//		mapCanvas.save();
+var imageObj = new Image();
+imageObj.onload = function() {
+        mapCanvas.drawImage(imageObj, 0, 0);
 		mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        for (var i=0;i<MAP_WIDTH; i++){
-            for (j=0;j<MAP_HEIGHT; j++){
-				//var val=mapBitmap.data[i*4+j*MAP_WIDTH]
-				var val=mapBitmap.data[0];//((j*(MAP_WIDTH*4)) + (i*4)) + 1];
-				I.setTile(i,j,0);
-				if(val>0) { //rock
-					I.setTile(i,j,1);
-					I.tiles[i][j].x=i;
-                    I.tiles[i][j].y=j;
-				}
-            }
-        }
+for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
+  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
+  var yPos = Math.floor(i / 4 / MAP_WIDTH);
+  var xPos = (i / 4) % MAP_WIDTH;
+  if( rgba[0] || rgba[1] || rgba[2] ) {
+
+    I.setTile(xPos, yPos, 0);
+  } else {
+    I.setTile(xPos, yPos, 1);
+  }
+}
+      };
+imageObj.src = "images/map.png";
+
     };
 	
     I.buildRadar= function(){
