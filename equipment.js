@@ -142,7 +142,7 @@ var battlePause=false;
 var unitinfo=false;
 var healcount=0;
 var healrate=140;
-var numTowns=8;
+var numTowns=6;
 var CSELECTED=0;
 
 function equipment() {

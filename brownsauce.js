@@ -3,6 +3,17 @@ $(document).bind("contextmenu",function(e){
 }); 
 
 
+var TileType={};
+TileType.Grass=0;
+TileType.Plains=1;
+TileType.Swamp=2;
+TileType.Hills=3;
+TileType.Mountains=4;
+TileType.Water=5;
+TileType.Ocean=6;
+TileType.Forest=7;
+TileType.Road=8;
+
 
 
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
@@ -1488,23 +1499,6 @@ function initTowns(){
     for(var i=0;i<numTowns;i++)
     {
         towns[i] =new town();
-        var thx=Math.floor(Math.random()*190);
-        var thy=Math.floor(Math.random()*245);
-        towns[i].x=thx;
-        towns[i].y=thy;
-        maps[0].tiles[thx][thy].data=0;
-        maps[0].tiles[thx+1][thy+1].data=0;
-        maps[0].tiles[thx][thy+1].data=0;
-        maps[0].tiles[thx+1][thy].data=0;
-        maps[0].tiles[thx+1][thy].data=0;
-        maps[0].tiles[thx+2][thy+1].data=0;
-        maps[0].tiles[thx+1][thy+1].data=0;
-        maps[0].tiles[thx+2][thy].data=0;
-        maps[0].tiles[thx][thy+1].data=0;
-        maps[0].tiles[thx+1][thy+2].data=0;
-        maps[0].tiles[thx][thy+2].data=0;
-        maps[0].tiles[thx+1][thy+1].data=0;
-        maps[0].tiles[thx+2][thy+2].data=0;
         towns[i].name=townnames[Math.floor(Math.random()*40)];
     }
 
@@ -1517,6 +1511,19 @@ function initTowns(){
     towns[1].y=256;
     towns[1].team=1;
     towns[1].name="The Dreadfort";
+	
+	towns[2].x=45;
+    towns[2].y=138;
+	
+	towns[3].x=39;
+    towns[3].y=230;
+	
+	towns[4].x=177;
+    towns[4].y=48;
+	
+	towns[5].x=99;
+    towns[5].y=189;
+	
 }
 
 function endgame(){
@@ -2233,7 +2240,7 @@ function time(){
     this.days=0;
     this.update=function(){
         this.seconds++;
-        if(this.seconds>120){
+        if(this.seconds>60){
             this.seconds=0;
             this.minutes++;
             if (this.minutes>60){
@@ -2539,19 +2546,19 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
         color: "#FFC020",
         data: 0,
         draw: function(cam) { 
-            if(this.data==0){
+            if(this.data==TileType.Grass){
                 grasssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==1){
+            }else if(this.data==TileType.Mountains){
                 stonesprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==2){
+            }else if(this.data==TileType.Swamp){
                 mudsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==3){
+            }else if(this.data==TileType.Forest){
                 crystalsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
-            }else if(this.data==4){
+            }else if(this.data==TileType.Water){
                 mossysprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==5){
+            }else if(this.data==TileType.Plains){
                 stonebricksprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==6){
+            }else if(this.data==TileType.Ocean){
                 plankssprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
 
             }else if(this.data==42){
@@ -2707,15 +2714,15 @@ function Map(I) { //map object
                     }
                 }
                 if(dominantType.type && dominantType.type <41) {
-                    if(dominantType.type==0){
+                    if(dominantType.type==TileType.Grass){
                         grasssprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else if(dominantType.type==1){
+                    }else if(dominantType.type==TileType.Mountains){
                         stonesprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else if(dominantType.type==2){
+                    }else if(dominantType.type==TileType.Swamp){
                         mudsprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                    }else if(dominantType.type==3){
+                    }else if(dominantType.type==TileType.Water){
                         crystalsprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1)); 
-                    }else if(dominantType.type==4){
+                    }else if(dominantType.type==TileType.Ocean){
                         mossysprite.draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                     }else{  //if strange data, draw a solid color
                         canvas.fillStyle = bColors[0]; 
@@ -2754,9 +2761,9 @@ function Map(I) { //map object
 		  var xPos = (i / 4) % MAP_WIDTH;
 		  if( rgba[0] || rgba[1] || rgba[2] ) {
 
-			I.setTile(xPos, yPos, 0);
+			I.setTile(xPos, yPos, TileType.Grass);
 		  } else {
-			I.setTile(xPos, yPos, 1);
+			I.setTile(xPos, yPos, TileType.Mountains);
 		  }
 		}
 		maps[0].buildRadar();
