@@ -43,6 +43,7 @@ Religon.Other=5;
 
 
 var radarBitmap=[];
+var mapBitmap=[];
 var sideBar=false;
 var textPause=false;
 var won="";
@@ -120,6 +121,7 @@ explosionsprite[0] =Sprite("explosion0");
 explosionsprite[1] =Sprite("explosion1");
 explosionsprite[2] =Sprite("explosion2");
 explosionsprite[3] =Sprite("explosion3");
+var mapsprite=Sprite("map");
 
 var tileani=0;
 var anicount=0;
@@ -600,7 +602,7 @@ mythrilmail.classes.push(SEEAss.RumHam);
 
 var chainmail= new equipment();
 chainmail.slot=1;
-chainmail.name="chainmail";
+chainmail.name="Chainmail";
 chainmail.def=6;
 chainmail.mdef=1;
 chainmail.value=150;

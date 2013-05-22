@@ -11,6 +11,8 @@ var canvas = canvasElement.get(0).getContext("2d");
 var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var radarCanvas = radarElement.get(0).getContext("2d");
 
+var mapElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
+var mapCanvas = mapElement.get(0).getContext("2d");
 canvasElement.appendTo('body');
 //radarElement.appendTo('body');
 
@@ -1551,7 +1553,7 @@ function army() {
     this.basex=12;
     this.basey=12;
     this.opinion=50;
-	this.numItems=30;
+	this.numItems=5;
 	this.items=new Array(99);
 	for(var i=0;i<this.numItems;i++)
 	{
@@ -2731,24 +2733,50 @@ function Map(I) { //map object
         I.tiles[x][y].data = data;
     };
     
+	        
+
+	I.buildMap= function(name){
+        
+        //var mapsprite=Sprite("crap");
+		mapsprite.draw(mapCanvas,0,0);
+		mapCanvas.save();
+		mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
+        for (var i=0;i<MAP_WIDTH; i++){
+            for (j=0;j<MAP_HEIGHT; j++){
+				//var val=mapBitmap.data[i*4+j*MAP_WIDTH]
+				var val=mapBitmap.data[0];//((j*(MAP_WIDTH*4)) + (i*4)) + 1];
+				I.setTile(i,j,0);
+				if(val>0) { //rock
+					I.setTile(i,j,1);
+					I.tiles[i][j].x=i;
+                    I.tiles[i][j].y=j;
+				}
+            }
+        }
+    };
+	
     I.buildRadar= function(){
         
-        radarCanvas.globalAlpha = 0.75;
+       radarCanvas.globalAlpha = 0.75;
         for (var i=0;i<MAP_WIDTH; i++){
             for (j=0;j<MAP_HEIGHT; j++){
                 radarCanvas.fillStyle = bColors[I.tiles[i][j].data];
                 radarCanvas.fillRect(i, j, 2, 2);
             }
         }
+
         radarBitmap = radarCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 
     };
 
     I.drawRadar= function (cam,x,y,arm) {
+		
+	
         cam.check();
         canvas.save();
         canvas.globalAlpha = 0.75;
         canvas.putImageData(radarBitmap,x,y);
+		//mapsprite.draw(canvas,x,y);
         
         for(var i=0;i<numTowns;i++)
         {
@@ -3072,7 +3100,7 @@ function battleDraw()
     { 
         var tmpstr=combatants[1].leader.name + "'s squad was eliminated.";
         console.log(tmpstr); 
-		var ods=80;//combatants[0].getLuck();
+		var ods=combatants[0].getLuck()+30;
 		if(Math.floor(Math.random()*100)<ods){
 			var dong=randomItem();
 			console.log( combatants[0].leader.name+ " found a " +dong.name);
@@ -3091,6 +3119,7 @@ function battleDraw()
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
 maps[0].buildRadar();
+maps[0].buildMap();
 //------------MAIN LOOP-----------------------------------------
 function update() {
     lasttime=milliseconds;
@@ -3428,7 +3457,7 @@ function update() {
     canvas.fillStyle="#1B1733 ";//"#483D8B ";
     canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
     canvas.restore();
-    
+    //todo error
     selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
     //camera controls
     //if(maps[0].zoom<3){
