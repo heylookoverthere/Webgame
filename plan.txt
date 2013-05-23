@@ -44,6 +44,8 @@ damage numbers drawn on sprites in battle. -meh
 -menus, arrow keys move around grid of items.
 
  -bears shouldn't be abel to take off their hands and give them to teamates.
+ -knockback
+ fog of war/view range
  
  OMG WE NEED CRABS (possibly of both types.)
  -maybe you can buy up things.

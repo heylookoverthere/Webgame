@@ -1666,7 +1666,7 @@ function army() {
     };
 	
 	this.addItem=function(itm){
-		console.log("poo");
+		if((itm==claws) || (itm=unarmed)) {return;} 
 		this.items[this.numItems]=itm;
 		this.numItems++;
 	};
@@ -2062,7 +2062,9 @@ function squad() {
         if(this.alive==true){
             console.log(this.leader.name + "'s squad has no qualified leader! returning to base!" );
             this.leaderless=true;
-            this.clearDestination();
+			if(this.path){
+				this.clearDestination();
+			}
             //this.setDestination(this.basex,this.basey,maps[0]);
         }
         return ;
