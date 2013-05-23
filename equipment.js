@@ -114,7 +114,7 @@ for( var i=0; i<120; i++ ){ namesused[0][i]=false;namesused[1][i]=false; }
 var tileSprite=new Array(10);
 tileSprite[TileType.Grass] = Sprite("grass");
 tileSprite[TileType.Forest] = Sprite("darkgrass"); 
-tileSprite[TileType.Ocean] = Sprite("water");
+tileSprite[TileType.Ocean] = Sprite("ocean");
 tileSprite[TileType.Water] = Sprite("water");
 tileSprite[TileType.Mountains] = Sprite("stone");
 tileSprite[TileType.Hills] = Sprite("hills");
