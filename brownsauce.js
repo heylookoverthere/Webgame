@@ -3524,7 +3524,7 @@ function update() {
             armies[0].squads[i].update(maps[0]);
             if(armies[0].fieldAI==AITypes.Random){
                 if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
-                    armies[0].squads[i].setDestination(Math.floor(Math.random()*200),Math.floor(Math.random()*200),maps[0]); };
+                    armies[0].squads[i].setDestination(Math.floor(Math.random()*(MAP_WIDTH)),Math.floor(Math.random()*(MAP_HEIGHT)),maps[0]); };
             }else if(armies[0].fieldAI==AITypes.Rush){
                 if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
                     armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[0]); 
@@ -3536,7 +3536,7 @@ function update() {
             armies[1].squads[i].update(maps[0]);
             if(armies[1].fieldAI==AITypes.Random){
                 if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
-                    armies[1].squads[i].setDestination(Math.floor(Math.random()*200),Math.floor(Math.random()*200),maps[0]); };
+                    armies[1].squads[i].setDestination(Math.floor(Math.random()*(MAP_WIDTH)),Math.floor(Math.random()*(MAP_HEIGHT)),maps[0]); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
                     armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[0]); };
