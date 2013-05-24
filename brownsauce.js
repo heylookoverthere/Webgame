@@ -2231,13 +2231,28 @@ function squad() {
                           (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
         }
 	    if(maps[0].tiles[this.x][this.y+1].data==TileType.Forest) {
-			var gx=(this.x-cam.x)*16;
-			var gy=(this.y-cam.y+1)*16;
-			if(this.dx>7) { gx++;}
-			if(this.dy>7) { gx++;}
+			var gx=(this.x-cam.x)*16/maps[0].zoom;
+			var gy=(this.y-cam.y+1)*16/maps[0].zoom;
+			if(this.bx>8) { gx++;}
+			if(this.by>8) { gx++;}
+			if(this.bx<8) { gx--;}
+			if(this.by<8) { gx--;}
 			tileSprite[TileType.Forest].draw(canvas, gx, gy);
 			tileSprite[TileType.Forest].draw(canvas, gx+16, gy);//todo
 	
+		}else if(maps[0].tiles[this.x][this.y+1].data==TileType.Water) {
+			var gx=(this.x-cam.x)*16/maps[0].zoom;
+			var gy=(this.y-cam.y+1)*16/maps[0].zoom;
+			if(this.bx>8) { gx++;}
+			if(this.by>8) { gx++;}
+			if(this.bx<8) { gx--;}
+			if(this.by<8) { gx--;}
+			canvas.save();
+			canvas.globalAlpha=0.80;
+			tileSprite[TileType.Water].draw(canvas, gx, gy);
+			tileSprite[TileType.Water].draw(canvas, gx+16, gy);//todo
+	
+			canvas.restore();
 		}
     };
 
