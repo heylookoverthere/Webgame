@@ -1594,6 +1594,17 @@ function initTowns(){
 		towns[1].team=1;
 		towns[1].name="The Dreadfort";
 		
+		towns[2].x=0;
+		towns[2].y=0;
+		
+		towns[3].x=0;
+		towns[3].y=0;
+		
+		towns[4].x=0;
+		towns[4].y=0;
+		
+		towns[5].x=0;
+		towns[5].y=0;
 		//numTowns=2;
 	
 	}
