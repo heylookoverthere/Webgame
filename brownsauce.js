@@ -2305,57 +2305,57 @@ function squad() {
         this.dy=y;
     };
 	
-	this.kickBack=function(esqd){
+    this.kickBack=function(esqd){
 	if(this.x>esqd.x) {
-			var theKnock=this.knockback;
-			for(var i=0;i<this.knockback;i++)
-			{
-				if((maps[0].tiles[this.x+i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x+i][this.y]==TileType.Ocean)){
-					theKnock=i;
-					break;
-				}
-			}
-			this.x+=theKnock;
-			
+	    var theKnock=this.knockback;
+	    for(var i=0;i<this.knockback;i++)
+	    {
+		if((maps[0].tiles[this.x+i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x+i][this.y]==TileType.Ocean)){
+		    theKnock=i;
+		    break;
+		}
+	    }
+	    this.x+=theKnock;
+	    
             
-			 if(this.x>MAP_WIDTH) {this.x=MAP_WIDTH-1;}
+	    if(this.x>MAP_WIDTH) {this.x=MAP_WIDTH-1;}
         }else if (this.x<esqd.x)
         {
-			var theKnock=this.knockback;
-			for(var i=0;i<this.knockback;i++)
-			{
-				if((maps[0].tiles[this.x-i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x-i][this.y]==TileType.Ocean)){
-					theKnock=i;
-					break;
-				}
-			}
+	    var theKnock=this.knockback;
+	    for(var i=0;i<this.knockback;i++)
+	    {
+		if((maps[0].tiles[this.x-i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x-i][this.y]==TileType.Ocean)){
+		    theKnock=i;
+		    break;
+		}
+	    }
             this.x-=theKnock;
-           if(this.x<1) {this.x=0;}
+            if(this.x<1) {this.x=0;}
         }else if(this.y>esqd.y) {
-			var theKnock=this.knockback;
+	    var theKnock=this.knockback;
             for(var i=0;i<this.knockback;i++)
-			{
-				if((maps[0].tiles[this.x][this.y+i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y+i]==TileType.Ocean)){
-					theKnock=i;
-					break;
-				}
-			}
-			this.y+=theKnock;
+	    {
+		if((maps[0].tiles[this.x][this.y+i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y+i]==TileType.Ocean)){
+		    theKnock=i;
+		    break;
+		}
+	    }
+	    this.y+=theKnock;
             if(this.y<1) {this.y=0;}
         }else
         {
-			var theKnock=this.knockback;
+	    var theKnock=this.knockback;
             for(var i=0;i<this.knockback;i++)
-			{
-				if((maps[0].tiles[this.x][this.y-i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y-i]==TileType.Ocean)){
-					theKnock=i;
-					break;
-				}
-			}
-			this.y-=theKnock;
+	    {
+		if((maps[0].tiles[this.x][this.y-i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y-i]==TileType.Ocean)){
+		    theKnock=i;
+		    break;
+		}
+	    }
+	    this.y-=theKnock;
             if(this.y>MAP_HEIGHT) {this.y=MAP_HEIGHT-1;}
         }
-	};
+    };
 }
 function time(){
     this.hours=0; 
