@@ -1594,7 +1594,7 @@ function initTowns(){
 		towns[1].team=1;
 		towns[1].name="The Dreadfort";
 		
-		numTowns=2;
+		//numTowns=2;
 	
 	}
 	
