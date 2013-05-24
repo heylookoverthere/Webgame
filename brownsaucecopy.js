@@ -168,42 +168,42 @@ function status() {
 function randomItem(){
 	var gar=Math.floor(Math.random()*35);
 	var itm=swords[0];
-	if(gar===0) {itm=swords[1];}
-	if(gar===1) {itm=swords[2];}
-	if(gar===2) {itm=axe[0];}
-	if(gar===3) {itm=axe[1];}
-	if(gar===4) {itm=axe[2];}
-	if(gar===5) {itm=katana[0];}
-	if(gar===6) {itm=katana[0];}
-	if(gar===7) {itm=bow[0];}
-	if(gar===8) {itm=bow[1];}
-	if(gar===9) {itm=crossbow[0];}
-	if(gar===10) {itm=spear[0];}
-	if(gar===11) {itm=spear[1];}
-	if(gar===12) {itm=ring[0];}
-	if(gar===13) {itm=rod;}
-	if(gar===14) {itm=icemagic[0];}
-	if(gar===15) {itm=icemagic[1];}
-	if(gar===16) {itm=icemagic[2];}
-	if(gar===17) {itm=icemagic[3];}
-	if(gar===18) {itm=robe;}
-	if(gar===19) {itm=shirt;}
-	if(gar===20) {itm=icemagic[2];}
-	if(gar===21) {itm=icemagic[3];}
-	if(gar===22) {itm=breastplate;}
-	if(gar===23) {itm=mythrilmail;}
-	if(gar===24) {itm=heavyplate;}
-	if(gar===25) {itm=chainmail;}
-	if(gar===26) {itm=enchantedpants;}
-	if(gar===27) {itm=cape;}
-	if(gar===28) {itm=swords[3];}
-	if(gar===29) {itm=swords[4];}
-	if(gar===30) {itm=swords[5];}
-	if(gar===31) {itm=swords[6];}
-	if(gar===32) {itm=swords[7];}
-	if(gar===33) {itm=swords[8];}
-	if(gar===34) {itm=swords[9];}
-	if(gar===35) {itm=knives[0];}
+	if(gar==0) {itm=swords[1];}
+	if(gar==1) {itm=swords[2];}
+	if(gar==2) {itm=axe[0];}
+	if(gar==3) {itm=axe[1];}
+	if(gar==4) {itm=axe[2];}
+	if(gar==5) {itm=katana[0];}
+	if(gar==6) {itm=katana[0];}
+	if(gar==7) {itm=bow[0];}
+	if(gar==8) {itm=bow[1];}
+	if(gar==9) {itm=crossbow[0];}
+	if(gar==10) {itm=spear[0];}
+	if(gar==11) {itm=spear[1];}
+	if(gar==12) {itm=ring[0];}
+	if(gar==13) {itm=rod;}
+	if(gar==14) {itm=icemagic[0];}
+	if(gar==15) {itm=icemagic[1];}
+	if(gar==16) {itm=icemagic[2];}
+	if(gar==17) {itm=icemagic[3];}
+	if(gar==18) {itm=robe;}
+	if(gar==19) {itm=shirt;}
+	if(gar==20) {itm=icemagic[2];}
+	if(gar==21) {itm=icemagic[3];}
+	if(gar==22) {itm=breastplate;}
+	if(gar==23) {itm=mythrilmail;}
+	if(gar==24) {itm=heavyplate;}
+	if(gar==25) {itm=chainmail;}
+	if(gar==26) {itm=enchantedpants;}
+	if(gar==27) {itm=cape;}
+	if(gar==28) {itm=swords[3];}
+	if(gar==29) {itm=swords[4];}
+	if(gar==30) {itm=swords[5];}
+	if(gar==31) {itm=swords[6];}
+	if(gar==32) {itm=swords[7];}
+	if(gar==33) {itm=swords[8];}
+	if(gar==34) {itm=swords[9];}
+	if(gar==35) {itm=knives[0];}
 	return itm;
 };
 
@@ -1456,12 +1456,12 @@ function town() {
             this.sprite.draw(canvas,
                              (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
                              (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
-            if(this.team===0)
+            if(this.team==0)
             {
                 this.bsprite[0].draw(canvas,
                                      (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
                                      (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
-            }else if(this.team===1)
+            }else if(this.team==1)
             {
                 this.rsprite[0].draw(canvas,
                                      (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
@@ -1469,12 +1469,12 @@ function town() {
             }
         }else
         {
-            if(this.team===0)
+            if(this.team==0)
             {
                 this.bsprite[1].draw(canvas,
                                      (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
                                      (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
-            }else if(this.team===1)
+            }else if(this.team==1)
             {
                 this.rsprite[1].draw(canvas,
                                      (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
@@ -1704,21 +1704,21 @@ function army() {
 		var bestacci=0;
 		for(var i=0;i<this.numItems;i++)
 		{
-			if(this.items[i].slot===0)
+			if(this.items[i].slot==0)
 			{
 				if ((uknit.canEquip(this.items[i]))&&(this.items[i].attack>bestwep.attack))
 				{
 					bestwep=this.items[i];
 					bestwepi=i;
 				}
-			}else if(this.items[i].slot===1)
+			}else if(this.items[i].slot==1)
 			{
 				if ((uknit.canEquip(this.items[i]))&&(this.items[i].def>bestarm.def))
 				{
 					bestarm=this.items[i];
 					bestarmi=i;
 				}
-			}else if(this.items[i].slot===2)
+			}else if(this.items[i].slot==2)
 			{
 				if ((uknit.canEquip(this.items[i]))&&(this.items[i].attack>bestacc.attack))
 				{
@@ -1968,7 +1968,7 @@ function squad() {
     this.deploy=function()
     {
         var cst = this.getCost();
-        if (armies[this.team].gold<cst) {  console.log("Not enough gold to deploy"+ this.leader.name+ "'s unit."); return;}
+        if (armies[this.team].gold<cst) { return; console.log("Not enough gold to deploy"+ this.leader.name+ "'s unit.");}
         armies[this.team].gold-=cst;
         //revive and heal all just in case.
         this.deployed=true;
@@ -1994,8 +1994,8 @@ function squad() {
     this.row=function(){
         for (var i=0;i<this.numUnits;i++)
         {
-            if (this.units[i].row===0) { this.units[i].row=1;}
-            else if (this.units[i].row===1) { this.units[i].row=0;}
+            if (this.units[i].row==0) { this.units[i].row=1;}
+            else if (this.units[i].row==1) { this.units[i].row=0;}
         }
     };
     this.heal=function(){
@@ -2082,7 +2082,7 @@ function squad() {
                 return;
             }
         }
-        if(this.alive===true){
+        if(this.alive==true){
             console.log(this.leader.name + "'s squad has no qualified leader! returning to base!" );
             this.leaderless=true;
 			if(this.path){
@@ -2137,7 +2137,7 @@ function squad() {
         {
             if(this.units[j].alive) {anylife=true;}
         }
-        if (anylife===false) { 
+        if (anylife==false) { 
             this.alive=false;
             return false;
         }
@@ -2173,7 +2173,7 @@ function squad() {
         if ((!this.alive) ||(!this.deployed)){return;} //TODO: also check visual range for enemies
         var press=this.leader.sprite;
 		if((this.leader.class==SEEAss.Werewolf) && (theTime.hours>12)) {
-			press=this.leader.nightSprite;
+			press=this.leader.nightSprite
 		}
 		press.draw(canvas,
                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
@@ -2222,7 +2222,7 @@ function squad() {
             var tmpstr=this.leader.name + "'s squad encountered an enemy @ " +this.x + " , " +this.y;
             console.log(tmpstr);//todo MONSOLEreturn;
         };
-        if((this.leaderless===true) && (this.path==null)){
+        if((this.leaderless==true) && (this.path==null)){
             this.setDestination(this.basex,this.basey,maps[0])}
         for(var i=0;i<numTowns;i++)
         {
@@ -2335,52 +2335,44 @@ function endBattle(usqd,esqd){
     if(usqd.damaged>=esqd.damaged) //win
     {
         if(usqd.x>esqd.x) {
-			var theKnock=esqd.x-usqd.knockback;
+			esqd.x-=usqd.knockback;
 			for(var i=esqd.x;i>esqd.x-usqd.knockback;i--)
 			{
 				if((maps[0].tiles[i][esqd.y]==TileType.Mountains) || (maps[0].tiles[i][esqd.y]==TileType.Ocean)){
-					theKnock=i+2;
-					break;
+					esqd.x=i+2;
 				}
 			}
-			esqd.x=theKnock;
-			
             if(esqd.x<1) {esqd.x=0;}
         }else
         {
-			var theKnock=esqd.x+usqd.knockback;
+			esqd.x+=usqd.knockback;
 			for(var i=esqd.x;i<esqd.x+usqd.knockback;i++)
 			{
 				if((maps[0].tiles[i][esqd.y]==TileType.Mountains) || (maps[0].tiles[i][esqd.y]==TileType.Ocean)){
-					theKnock=i-2;
-					break;
+					esqd.x=i-2;
 				}
 			}
-            esqd.x=theKnock;
+            
             if(esqd.x>MAP_WIDTH) {esqd.x=MAP_WIDTH-1;}
         }
         if(usqd.y>esqd.y) {
-			var theKnock=esqd.y-usqd.knockback;
+			esqd.y-=usqd.knockback;
             for(var i=esqd.y;i>esqd.y-usqd.knockback;i--)
 			{
 				if((maps[0].tiles[esqd.x][i]==TileType.Mountains) || (maps[0].tiles[esqd.x][i]==TileType.Ocean)){
-					theKnock=i+2;
-					break;
+					esqd.y=i+2;
 				}
 			}
-			esqd.y=theKnock;
             if(esqd.y<1) {esqd.y=0;}
         }else
         {
-			var theKnock=esqd.y+usqd.knockback;
+			esqd.y+=usqd.knockback;
             for(var i=esqd.y;i<esqd.y+usqd.knockback;i++)
 			{
 				if((maps[0].tiles[esqd.x][i]==TileType.Mountains) || (maps[0].tiles[esqd.x][i]==TileType.Ocean)){
-					theKnock=i-2;
-					break;
+					esqd.y=i-2;
 				}
 			}
-			esqd.y=theKnock;
             if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
         }
 		/*while((maps[0].tiles[esqd.x][esqd.y].data==TileTypes.Ocean) || (maps[0].tiles[esqd.x][esqd.y].data==TileTypes.Mountain))
@@ -2405,56 +2397,44 @@ function endBattle(usqd,esqd){
         }
     }else if(usqd.damaged<esqd.damaged) {//lose
         if(esqd.x>usqd.x) {
-		var theKnock= usqd.x-esqd.knockback;
+		usqd.x-=esqd.knockback;
 			for(var i=usqd.x;i>usqd.x-esqd.knockback;i--)
 			{
 				if((maps[0].tiles[i][usqd.y]==TileType.Mountains) || (maps[0].tiles[i][usqd.y]==TileType.Ocean)){
-					theKnock=i+2;
-					break;
+					usqd.x=i+2;
 				}
 			}
-			usqd.x=theKnock;
-			console.log(theKnock);
             if(usqd.x<1) {usqd.x=0;}
         }else
         {
-			var theKnock=usqd.x+esqd.knockback;
+			usqd.x+=esqd.knockback;
 			for(var i=usqd.x;i<usqd.x+esqd.knockback;i++)
 			{
 				if((maps[0].tiles[i][usqd.y]==TileType.Mountains) || (maps[0].tiles[i][usqd.y]==TileType.Ocean)){
-					theKnock=i-2;
-					break;
-		
+					usqd.x=i-2;
 				}
 			}
-            usqd.x=theKnock;
-			console.log(theKnock);
+            
             if(usqd.x>MAP_WIDTH) {usqd.x=MAP_WIDTH-1;}
         }
         if(esqd.y>usqd.y) {
-		var theKnock=usqd.y-esqd.knockback;
+		usqd.y-=esqd.knockback;
             for(var i=usqd.y;i>usqd.y-esqd.knockback;i--)
 			{
 				if((maps[0].tiles[usqd.x][i]==TileType.Mountains) || (maps[0].tiles[usqd.x][i]==TileType.Ocean)){
-					theKnock=i+2;
-					break;
+					usqd.y=i+2;
 				}
 			}
-			usqd.y=theKnock;
-			console.log(theKnock);
             if(usqd.y<1) {usqd.y=0;}
         }else
         {
-			var theKnock=usqd.y+esqd.knockback;
-            for(var i=usqd.y;i<usqd.y+esqd.knockback;i++)
+			usqd.y+=esqd.knockback;
+            for(var i=esqd.y;i<esqd.y+usqd.knockback;i++)
 			{
 				if((maps[0].tiles[usqd.x][i]==TileType.Mountains) || (maps[0].tiles[usqd.x][i]==TileType.Ocean)){
-					theKnock=i-2;
-					break;
+					usqd.y=i-2;
 				}
 			}
-			usqd.y=theKnock;
-			console.log(theKnock);
             if(usqd.y>MAP_HEIGHT) {usqd.y=MAP_HEIGHT-1;}
         }
 		/*while((maps[0].tiles[usqd.x][usqd.y].data==TileTypes.Ocean) || (maps[0].tiles[usqd.x][usqd.y].data==TileTypes.Mountain))
