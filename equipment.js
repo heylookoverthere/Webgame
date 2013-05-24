@@ -80,7 +80,7 @@ var MUSELECTED=0;
 var BSELECTED=0;
 var NUM_STATUS=5;
 var NUM_CLASSES=19;
-var MAPNAME ="map5";
+var MAPNAME ="map3";
 var pageCount=0;
 var tick=0;
 var gamespeed=0;//2;
@@ -154,7 +154,19 @@ explosionsprite[1] =Sprite("explosion1");
 explosionsprite[2] =Sprite("explosion2");
 explosionsprite[3] =Sprite("explosion3");
 
-
+function cloud{
+	this.x=Math.floor(Math.random()*200);
+	this.y=Math.floor(Math.random()*200);
+	this.sprite="cloud1";
+	if(Math.floor(Math.random()*20)>10){
+		this.sprite="cloud2";
+	}
+};
+var clouds=new Array[8];
+if(var i=0;i<8;i++)
+{
+	clouds[i]=new cloud();
+}
 var tileani=0;
   
 var anicount=0;
