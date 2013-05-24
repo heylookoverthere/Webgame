@@ -2332,7 +2332,7 @@ function squad() {
     this.kickBack=function(esqd){
 
 	function booTile(x, y) {
-	    return ((maps[0].tiles[x][y]==TileType.Mountains) || (maps[0].tiles[x][y]==TileType.Ocean));
+	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean));
 	};
 
 	var newX, newY;
