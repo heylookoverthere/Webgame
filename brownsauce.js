@@ -2308,10 +2308,10 @@ function squad() {
     this.kickBack=function(esqd){
 	if(this.x>esqd.x) {
 	    var theKnock=this.knockback;
-	    for(var i=0;i<this.knockback;i++)
+	    for(var i=1;i<this.knockback+1;i++)
 	    {
 		if((maps[0].tiles[this.x+i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x+i][this.y]==TileType.Ocean)){
-		    theKnock=i;
+		    theKnock=i-1;
 		    break;
 		}
 	    }
@@ -2322,10 +2322,10 @@ function squad() {
         }else if (this.x<esqd.x)
         {
 	    var theKnock=this.knockback;
-	    for(var i=0;i<this.knockback;i++)
+	    for(var i=1;i<this.knockback+1;i++)
 	    {
 		if((maps[0].tiles[this.x-i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x-i][this.y]==TileType.Ocean)){
-		    theKnock=i;
+		    theKnock=i-1;
 		    break;
 		}
 	    }
@@ -2333,10 +2333,10 @@ function squad() {
             if(this.x<1) {this.x=0;}
         }else if(this.y>esqd.y) {
 	    var theKnock=this.knockback;
-            for(var i=0;i<this.knockback;i++)
+            for(var i=1;i<this.knockback+1;i++)
 	    {
 		if((maps[0].tiles[this.x][this.y+i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y+i]==TileType.Ocean)){
-		    theKnock=i;
+		    theKnock=i-1;
 		    break;
 		}
 	    }
@@ -2345,10 +2345,10 @@ function squad() {
         }else
         {
 	    var theKnock=this.knockback;
-            for(var i=0;i<this.knockback;i++)
+            for(var i=1;i<this.knockback+1;i++)
 	    {
 		if((maps[0].tiles[this.x][this.y-i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y-i]==TileType.Ocean)){
-		    theKnock=i;
+		    theKnock=i-1;
 		    break;
 		}
 	    }
