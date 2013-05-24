@@ -2325,6 +2325,11 @@ function endBattle(usqd,esqd){
             esqd.y+=usqd.knockback;
             if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
         }
+		/*while((maps[0].tiles[esqd.x][esqd.y].data==TileTypes.Ocean) || (maps[0].tiles[esqd.x][esqd.y].data==TileTypes.Mountain))
+		{
+				esqd.x--;
+				esqd.y--;
+		}*/
         //esqd.path=null;
         esqd.setDestination(usqd.x,usqd.y,maps[0]);
         console.log("win @", usqd.x,usqd.y) 
@@ -2357,6 +2362,11 @@ function endBattle(usqd,esqd){
             usqd.y+=esqd.knockback;
             if(usqd.y>MAP_HEIGHT-1) {usqd.y=MAP_HEIGHT-1;}
         }
+		/*while((maps[0].tiles[usqd.x][usqd.y].data==TileTypes.Ocean) || (maps[0].tiles[usqd.x][usqd.y].data==TileTypes.Mountain))
+		{
+				usqd.x--;
+				usqd.y--;
+		}*/
         //usqd.setDestination(usqd.x,usqd.y,maps[0]);
         usqd.clearDestination();
         console.log("loss");
@@ -2809,7 +2819,9 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Sand);
 		  } else if (( rgba[0]==195) && (rgba[1]==195) && (rgba[2]==195)){
 			I.setTile(xPos, yPos, TileType.Road);
-		  }  else {
+		  } else if (( rgba[0]==1) && (rgba[1]==100) && (rgba[2]==255)){
+			I.setTile(xPos, yPos, TileType.Water);
+		  }   else {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}

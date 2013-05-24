@@ -43,7 +43,6 @@ damage numbers drawn on sprites in battle. -meh
 {0,1,0}=cannon until RR failed.  targ rule continued.  edit dany char, rheagar lives, etc.  No greyjoy rebel.  option to have rhegar take throne.
 -menus, arrow keys move around grid of items.
 
- -bears shouldn't be abel to take off their hands and give them to teamates.
  -knockback
  fog of war/view range
  
