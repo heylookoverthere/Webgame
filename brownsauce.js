@@ -1448,7 +1448,7 @@ function town() {
     this.rsprite[0] = Sprite("townred");
     this.rsprite[1] = Sprite("townreds");
     this.checkCollision=function(squd){
-        return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+4) && (squd.y>this.y-1) && (squd.y<this.y+4)); 
+        return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+2) && (squd.y>this.y-1) && (squd.y<this.y+2)); 
     };
     this.draw=function(cam)
     {
@@ -2367,7 +2367,7 @@ function squad() {
 	    newX = function(x, y, i) { return x-i; };
 	    newY = function(x, y, i) { return y; };
 	    adjust = function(that, theKnock) { that.x-=theKnock; if( that.x < 1 ) { that.x = 0; } };
-    }if( this.y > esqd.y ) {
+    }else if( this.y > esqd.y ) {
 	    newX = function(x, y, i) { return x; };
 	    newY = function(x, y, i) { return y+i; };
 	    adjust = function(that, theKnock) { that.y+=theKnock; if(that.y>MAP_HEIGHT) { that.y=MAP_HEIGHT-1; } };
@@ -2814,8 +2814,6 @@ function Map(I) { //map object
 
     I.setZoom = function(cam) {
         if (I.zoom == 1) {I.zoom=2;} else /*if (I.zoom==2) {I.zoom=4;} else*/ {I.zoom=1;}
-        cam.x=0;
-        cam.y=0;
         cam.zoom=I.zoom;
     };
 
