@@ -2335,38 +2335,42 @@ function endBattle(usqd,esqd){
     if(usqd.damaged>=esqd.damaged) //win
     {
         if(usqd.x>esqd.x) {
+			esqd.x-=usqd.knockback;
 			for(var i=esqd.x;i>esqd.x-usqd.knockback;i--)
 			{
 				if((maps[0].tiles[i][esqd.y]==TileType.Mountains) || (maps[0].tiles[i][esqd.y]==TileType.Ocean)){
-					esqd.x=i-1;
+					esqd.x=i+2;
 				}
 			}
             if(esqd.x<1) {esqd.x=0;}
         }else
         {
+			esqd.x+=usqd.knockback;
 			for(var i=esqd.x;i<esqd.x+usqd.knockback;i++)
 			{
 				if((maps[0].tiles[i][esqd.y]==TileType.Mountains) || (maps[0].tiles[i][esqd.y]==TileType.Ocean)){
-					esqd.x=i-1;
+					esqd.x=i-2;
 				}
 			}
             
             if(esqd.x>MAP_WIDTH) {esqd.x=MAP_WIDTH-1;}
         }
         if(usqd.y>esqd.y) {
+			esqd.y-=usqd.knockback;
             for(var i=esqd.y;i>esqd.y-usqd.knockback;i--)
 			{
 				if((maps[0].tiles[esqd.x][i]==TileType.Mountains) || (maps[0].tiles[esqd.x][i]==TileType.Ocean)){
-					esqd.y=i-1;
+					esqd.y=i+2;
 				}
 			}
             if(esqd.y<1) {esqd.y=0;}
         }else
         {
+			esqd.y+=usqd.knockback;
             for(var i=esqd.y;i<esqd.y+usqd.knockback;i++)
 			{
 				if((maps[0].tiles[esqd.x][i]==TileType.Mountains) || (maps[0].tiles[esqd.x][i]==TileType.Ocean)){
-					esqud.y=i-1;
+					esqd.y=i-2;
 				}
 			}
             if(esqd.y>MAP_HEIGHT) {esqd.y=MAP_HEIGHT-1;}
@@ -2393,38 +2397,42 @@ function endBattle(usqd,esqd){
         }
     }else if(usqd.damaged<esqd.damaged) {//lose
         if(esqd.x>usqd.x) {
+		usqd.x-=esqd.knockback;
 			for(var i=usqd.x;i>usqd.x-esqd.knockback;i--)
 			{
 				if((maps[0].tiles[i][usqd.y]==TileType.Mountains) || (maps[0].tiles[i][usqd.y]==TileType.Ocean)){
-					usqd.x=i-1;
+					usqd.x=i+2;
 				}
 			}
             if(usqd.x<1) {usqd.x=0;}
         }else
         {
+			usqd.x+=esqd.knockback;
 			for(var i=usqd.x;i<usqd.x+esqd.knockback;i++)
 			{
 				if((maps[0].tiles[i][usqd.y]==TileType.Mountains) || (maps[0].tiles[i][usqd.y]==TileType.Ocean)){
-					usqd.x=i-1;
+					usqd.x=i-2;
 				}
 			}
             
             if(usqd.x>MAP_WIDTH) {usqd.x=MAP_WIDTH-1;}
         }
         if(esqd.y>usqd.y) {
+		usqd.y-=esqd.knockback;
             for(var i=usqd.y;i>usqd.y-esqd.knockback;i--)
 			{
 				if((maps[0].tiles[usqd.x][i]==TileType.Mountains) || (maps[0].tiles[usqd.x][i]==TileType.Ocean)){
-					usqd.y=i-1;
+					usqd.y=i+2;
 				}
 			}
             if(usqd.y<1) {usqd.y=0;}
         }else
         {
+			usqd.y+=esqd.knockback;
             for(var i=esqd.y;i<esqd.y+usqd.knockback;i++)
 			{
 				if((maps[0].tiles[usqd.x][i]==TileType.Mountains) || (maps[0].tiles[usqd.x][i]==TileType.Ocean)){
-					usqd.y=i-1;
+					usqd.y=i-2;
 				}
 			}
             if(usqd.y>MAP_HEIGHT) {usqd.y=MAP_HEIGHT-1;}
