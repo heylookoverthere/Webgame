@@ -2312,12 +2312,13 @@ function squad() {
 			{
 				if((maps[0].tiles[this.x+i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x+i][this.y]==TileType.Ocean)){
 					theKnock=i;
-					continue;
+					break;
 				}
 			}
 			this.x+=theKnock;
 			
-            if(this.x<1) {this.x=0;}
+            
+			 if(this.x>MAP_WIDTH) {this.x=MAP_WIDTH-1;}
         }else if (this.x<esqd.x)
         {
 			var theKnock=this.knockback;
@@ -2325,18 +2326,18 @@ function squad() {
 			{
 				if((maps[0].tiles[this.x-i][this.y]==TileType.Mountains) || (maps[0].tiles[this.x-i][this.y]==TileType.Ocean)){
 					theKnock=i;
-					continue;
+					break;
 				}
 			}
             this.x-=theKnock;
-            if(this.x>MAP_WIDTH) {this.x=MAP_WIDTH-1;}
+           if(this.x<1) {this.x=0;}
         }else if(this.y>esqd.y) {
 			var theKnock=this.knockback;
             for(var i=0;i<this.knockback;i++)
 			{
 				if((maps[0].tiles[this.x][this.y+i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y+i]==TileType.Ocean)){
 					theKnock=i;
-					continue;
+					break;
 				}
 			}
 			this.y+=theKnock;
@@ -2348,7 +2349,7 @@ function squad() {
 			{
 				if((maps[0].tiles[this.x][this.y-i]==TileType.Mountains) || (maps[0].tiles[this.x][this.y-i]==TileType.Ocean)){
 					theKnock=i;
-					continue;
+					break;
 				}
 			}
 			this.y-=theKnock;
@@ -2840,6 +2841,8 @@ function Map(I) { //map object
 		var imageObj = new Image();
 		imageObj.onload = function() {
 				mapCanvas.drawImage(imageObj, 0, 0);
+				MAP_WIDTH=imageObj.width;
+				MAP_HEIGHT=imageObj.height;				
 				mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 		for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
 		  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
