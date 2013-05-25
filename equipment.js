@@ -61,6 +61,7 @@ var won="";
 var textText="";
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
+var wind=Math.floor(Math.random()*2)+1;
 var MAP_WIDTH = 999;
 var MAP_HEIGHT = 999;
 var CRIT_CHANCE=100;
@@ -160,16 +161,38 @@ explosionsprite[1] =Sprite("explosion1");
 explosionsprite[2] =Sprite("explosion2");
 explosionsprite[3] =Sprite("explosion3");
 
+var numClouds=14;
+
 function cloud(){
-	this.x=Math.floor(Math.random()*200);
-	this.y=Math.floor(Math.random()*200);
-	this.sprite="cloud1";
-	if(Math.floor(Math.random()*20)>10){
-		this.sprite="cloud2";
+	this.x=Math.floor(Math.random()*3520)+100;
+	this.y=Math.floor(Math.random()*4480)+300;
+	this.layer=Math.floor(Math.random()*2)+1;
+	this.sprite=Sprite("cloud1");
+	var rnd=Math.floor(Math.random()*9);
+	if(rnd>1){
+		this.sprite=Sprite("cloud2");
+	}	if(rnd>2){
+		this.sprite=Sprite("cloud3");
+	}	if(rnd>3){
+		this.sprite=Sprite("cloud4");
+	}	if(rnd>4){
+		this.sprite=Sprite("cloud5");
+	}	if(rnd>5){
+		this.sprite=Sprite("cloud6");
+	}	if(rnd>6){
+		this.sprite=Sprite("cloud7");
+	}   if(rnd>7){
+		this.sprite=Sprite("cloud8");
+	}   if(rnd>8){
+		this.sprite=Sprite("cloud9");
 	}
+	this.update=function(){
+		this.y-=this.layer*wind;
+		if (this.y<-200) {this.y=Math.floor(Math.random()*4480)+300;this.x=Math.floor(Math.random()*3420)+100;}
+	};
 };
-var clouds=new Array(8);
-for(var i=0;i<8;i++)
+var clouds=new Array(numClouds);
+for(var i=0;i<numClouds;i++)
 {
 	clouds[i]=new cloud();
 }

@@ -3787,6 +3787,15 @@ function update() {
             armies[0].squads[SELECTED].leader.drawInfo();
         }
     }
+	canvas.save();
+	canvas.globalAlpha=0.60;
+	for(var i=0;i<numClouds;i++)
+	{
+		clouds[i].update();
+		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
+
+	}
+	canvas.restore();
     endgame();
 }
 
