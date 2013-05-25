@@ -2853,8 +2853,11 @@ function Map(I) { //map object
 					tileSprite[dominantType.type].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                 }else if(dominantType.type&& dominantType.type<24){
 					tileSprite[20+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-				}else{
+				}else if (dominantType.type&& dominantType.type<28) {
 					tileSprite[24+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}else 
+				{
+					tileSprite[TileType.Lava+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}
             }
         }
@@ -2901,7 +2904,11 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Road);
 		  } else if (( rgba[0]==1) && (rgba[1]==100) && (rgba[2]==255)){
 			I.setTile(xPos, yPos, TileType.Water);
-		  }   else {
+		  } else if (( rgba[0]==128) && (rgba[1]==64) && (rgba[2]==64)){
+			I.setTile(xPos, yPos, TileType.Plains);
+		  } else if (( rgba[0]==255) && (rgba[1]==1) && (rgba[2]==1)){
+			I.setTile(xPos, yPos, TileType.Lava);
+		  }  else {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
@@ -3792,8 +3799,10 @@ function update() {
 	for(var i=0;i<numClouds;i++)
 	{
 		clouds[i].update();
+		if(maps[0].zoom>1)
+		{
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
-
+		}
 	}
 	canvas.restore();
     endgame();

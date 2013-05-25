@@ -49,6 +49,7 @@ TileType.Hills=7;
 TileType.Mountains=4;
 TileType.Water=20;
 TileType.Ocean=24;
+TileType.lava=28;
 TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
@@ -112,7 +113,7 @@ namesused[0]=new Array(120);
 namesused[1]=new Array(120);
 for( var i=0; i<120; i++ ){ namesused[0][i]=false;namesused[1][i]=false; }
 
-var tileSprite=new Array(30);
+var tileSprite=new Array(39);
 tileSprite[TileType.Grass] = Sprite("grass");
 tileSprite[TileType.Forest] = Sprite("darkgrass"); 
 tileSprite[TileType.Ocean] = Sprite("ocean");
@@ -123,15 +124,20 @@ tileSprite[TileType.Water] = Sprite("water");
 tileSprite[TileType.Water+1] = Sprite("water");
 tileSprite[TileType.Water+2] = Sprite("water");
 tileSprite[TileType.Ocean+3] = Sprite("water");
+tileSprite[TileType.Lava] = Sprite("lava0");
+tileSprite[TileType.Lava+1] = Sprite("lava1");
+tileSprite[TileType.Lava+2] = Sprite("lava2");
+tileSprite[TileType.Lava+3] = Sprite("lava3");
+tileSprite[TileType.Lava+4] = Sprite("lava4");
 tileSprite[TileType.Mountains] = Sprite("stone");
 tileSprite[TileType.Hills] = Sprite("hills");
 tileSprite[TileType.Swamp] = Sprite("swamp");
-tileSprite[TileType.Plains] = Sprite("plains");
+tileSprite[TileType.Plains] = Sprite("dirt");
 tileSprite[TileType.Road] = Sprite("road");
 tileSprite[TileType.Sand] = Sprite("sand");
 
 
-var tileColors=new Array(30);
+var tileColors=new Array(39);
 tileColors[TileType.Grass] = "#008000";
 tileColors[TileType.Forest] = "#003300";
 tileColors[TileType.Ocean] = "#000099";
@@ -142,6 +148,7 @@ tileColors[TileType.Swamp] = "#669900";
 tileColors[TileType.Plains] = "#FF9966";
 tileColors[TileType.Road] = "#CCCCCC";
 tileColors[TileType.Sand] = "#999966";
+tileColors[TileType.Lava] = "#FF0000";
 
 var poisonsprite = Sprite("poison");
 var selector = Sprite("cursor");
@@ -161,7 +168,7 @@ explosionsprite[1] =Sprite("explosion1");
 explosionsprite[2] =Sprite("explosion2");
 explosionsprite[3] =Sprite("explosion3");
 
-var numClouds=14;
+var numClouds=24;
 
 function cloud(){
 	this.x=Math.floor(Math.random()*3520)+100;
@@ -188,7 +195,7 @@ function cloud(){
 	}
 	this.update=function(){
 		this.y-=this.layer*wind;
-		if (this.y<-200) {this.y=Math.floor(Math.random()*4480)+300;this.x=Math.floor(Math.random()*3420)+100;}
+		if (this.y<-200) {this.y=Math.floor(Math.random()*300)+4480;this.x=Math.floor(Math.random()*3420)+100;}
 	};
 };
 var clouds=new Array(numClouds);
