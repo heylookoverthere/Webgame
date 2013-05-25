@@ -46,14 +46,7 @@ damage numbers drawn on sprites in battle. -meh
  -knockback
  fog of war/view range
  
- OMG WE NEED CRABS (possibly of both types.)
- -maybe you can buy up things.
- last thing=local newspaper
- intitally no apparent benefit
- -citizen kane. = best acc in the game.  you must own every newspaper and make your home at xanadu.
-.mounted
 
--time capsulse?
 
 different weapon for front/back row
 .getspeed (equip)
