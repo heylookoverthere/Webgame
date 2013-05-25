@@ -1455,31 +1455,31 @@ function town() {
     {
         if(maps[0].zoom<2) {
             this.sprite.draw(canvas,
-                             (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-                             (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+                             (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                             (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
             if(this.team===0)
             {
                 this.bsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-                                     (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
             }else if(this.team===1)
             {
                 this.rsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-                                     (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
             }
         }else
         {
             if(this.team===0)
             {
                 this.bsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-                                     (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
             }else if(this.team===1)
             {
                 this.rsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / maps[0].zoom, 
-                                     (this.y * 16  - 8- cam.y * 16) / maps[0].zoom);
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
             }
         }
     };
@@ -2863,7 +2863,7 @@ function Map(I) { //map object
     I.zoom = 1;
 
     I.setZoom = function(cam) {
-        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20;} else if (I.zoom==2) {I.zoom=4;cam.x-=20;cam.y-=13;} else {I.zoom=1;cam.x+=50;cam.y+=33;}
+        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20;} else if (I.zoom==2) {I.zoom=3;cam.x-=20;cam.y-=13;} else {I.zoom=1;cam.x+=50;cam.y+=33;}
 		if(cam.x<0)
 		{
 			cam.x=0;
@@ -2900,13 +2900,14 @@ function Map(I) { //map object
     I.draw = function(cam) {
         cam.zoom=I.zoom;
         cam.check();
-        for (i=cam.x;i<cam.x+cam.width*I.zoom; i+=I.zoom){
-            for (j=cam.y;j<cam.y+cam.height*I.zoom; j+=I.zoom){
+        for (i=cam.x;i<cam.x+cam.width*Math.pow(2, I.zoom-1); i+=I.zoom){
+            for (j=cam.y;j<cam.y+cam.height*Math.pow(2, I.zoom-1); j+=I.zoom){
                 var tileTypes = {};
                 for( var ii=0; ii<I.zoom; ii+=1 ) {
                     if ((i+ii>=MAP_WIDTH)) { continue;}
                     for( var jj=0; jj<I.zoom; jj+=1 ) {
                         if ((j+jj>=MAP_HEIGHT)) {continue;}
+
                         var data = I.tiles[i+ii][j+jj];
                         if( data ) {
                             if( !tileTypes[data.data] ) { tileTypes[data.data] = 1; }
@@ -2915,6 +2916,7 @@ function Map(I) { //map object
                     }
                 }
                 var dominantType = {type: null, occurs: 0};
+
                 for( var type in tileTypes ) {
                     if( tileTypes[type] && tileTypes[type] > dominantType.occurs ) {
                         dominantType.occurs = tileTypes[type];
