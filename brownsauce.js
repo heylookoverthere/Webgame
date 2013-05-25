@@ -2274,8 +2274,8 @@ function squad() {
 	    if(maps[0].tiles[this.x][this.y+1].data==TileType.Forest) {
 			var gx=(this.x-cam.x)*16/maps[0].zoom;
 			var gy=(this.y-cam.y+1)*16/maps[0].zoom;
-			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(maps[0].zoom-1));
-			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(maps[0].zoom-1));//todo
+			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*Math.pow(2, maps[0].zoom-1));
+			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*Math.pow(2, maps[0].zoom-1));//todo
 	
 		}else if(maps[0].tiles[this.x][this.y+1].data==TileType.Water) {
 			var gx=(this.x-cam.x)*16/maps[0].zoom;
@@ -2346,7 +2346,7 @@ function squad() {
         if (this.leaderless) {speed=3;} //PROBLEM?
         if((terrain==4) &&(this.units[0].class==SEEAss.Frog)) {speed=4};
 
-        speed = speed / map.zoom;
+        //speed = speed / Math.pow(2, maps[0].zoom-1);
 
         if( this.nextMove.x > this.x ) {
             this.bx += speed;
