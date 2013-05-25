@@ -1387,6 +1387,7 @@ function unit() {
     this.setClass();
     this.hp=this.maxhp;
     this.mp=this.maxmp;
+	this.viewrange=50;
     if (this.gender===2) {this.name="Nancy";}
 }
 
@@ -1681,7 +1682,9 @@ function endgame(){
 };
 
 
-
+distance=function(one,two){
+	return(1);
+};
 
 
 function army() {
@@ -1717,10 +1720,24 @@ function army() {
     this.wins=0;
     this.losses=0;
     this.lastDeployed=1;
+	this.visibleEnemies=new Array;
     this.getOpinion=function(){
         return this.opinion;
     };
-	
+	this.getVisible=function(enemyarmy){
+		//this.visibleEnemies=null;
+		for(var i=0;i<enemyarmy.numSquads;i++)
+		{
+			for( var j=0;j<this.numSquads;j++)
+			{
+				if(distance(enemyarmy.squads[i],this.squads[j])<this.squads[j].viewrange)
+				{
+					this.visibleEnemies.push(enemyarmy.squads[i]);
+					break;
+				}
+			}
+		}
+	};
 	this.call=function (nme){
 		for(var i=0;i<this.numLooseUnits;i++)
 		{
@@ -2626,6 +2643,7 @@ var gamestart=false;
 var radar=true;
 
 var pausekey=new akey("space");
+var escapekey=new akey("esc");
 var pageupkey=new akey("pageup");
 var pagedownkey=new akey("pagedown");
 var radarkey=new akey("y");
@@ -2643,7 +2661,7 @@ var speedkey=new akey("x");
 var statuskey=new akey("s");
 var rowkey=new akey("r");
 var enterkey=new akey("space");
-var menukey=new akey("m");
+var menukey=new akey("esc");
 var fleekey=new akey("f");
 var aikey=new akey("a");
 var addkey=aikey;
@@ -2844,7 +2862,7 @@ function Map(I) { //map object
     I.zoom = 1;
 
     I.setZoom = function(cam) {
-        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20;} else if (I.zoom==2) {I.zoom=3;cam.x-=20;cam.y-=13;} else {I.zoom=1;cam.x+=50;cam.y+=33;}
+        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20;} else if (I.zoom==2) {I.zoom=4;cam.x-=20;cam.y-=13;} else {I.zoom=1;cam.x+=50;cam.y+=33;}
 		if(cam.x<0)
 		{
 			cam.x=0;
@@ -2976,7 +2994,7 @@ function Map(I) { //map object
 	
     I.buildRadar= function(){
         
-       radarCanvas.globalAlpha = 0.55;
+       //radarCanvas.globalAlpha = 0.55;
         for (var i=0;i<MAP_WIDTH; i++){
             for (j=0;j<MAP_HEIGHT; j++){
                 radarCanvas.fillStyle = tileColors[I.tiles[i][j].data];
@@ -3673,11 +3691,18 @@ function update() {
         if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
     }
     for (var i=0;i<armies[1].numSquads;i++) {
-        armies[1].squads[i].draw(camera);
+		armies[1].squads[i].draw(camera);
         if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
         
-    }
-    
+    }/*
+	armies[0].getVisible(armies[1]);
+	if(armies[0].visibleEnemies!=null){
+		for (var i=0;i<armies[0].visibleEnemies.length;i++) {
+			armies[0].visibleEnemies[i].draw(camera);
+			if(isOver(armies[0].visibleEnemies[i],camera)) { drawmousetext(armies[0].visibleEnemies[i],camera); };
+			
+		}
+    }*/
     for (var i=0;i<numTowns;i++) {
         if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
