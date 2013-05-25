@@ -168,7 +168,7 @@ explosionsprite[1] =Sprite("explosion1");
 explosionsprite[2] =Sprite("explosion2");
 explosionsprite[3] =Sprite("explosion3");
 
-var numClouds=24;
+var numClouds=44;
 
 function cloud(){
 	this.x=Math.floor(Math.random()*3520)+100;

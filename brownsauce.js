@@ -2844,7 +2844,7 @@ function Map(I) { //map object
     I.zoom = 1;
 
     I.setZoom = function(cam) {
-        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20} else /*if (I.zoom==2) {I.zoom=4;} else*/ {I.zoom=1;cam.x+=30;cam.y+=20}
+        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20;} else if (I.zoom==2) {I.zoom=3;cam.x-=20;cam.y-=13;} else {I.zoom=1;cam.x+=50;cam.y+=33;}
 		if(cam.x<0)
 		{
 			cam.x=0;
@@ -3865,12 +3865,12 @@ function update() {
 	for(var i=0;i<numClouds;i++)
 	{
 		clouds[i].update();
-		if((maps[0].zoom>1) &&(!isBattle)&&(!isMenu))
+		if((maps[0].zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport))
 		{
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
 		}
 	}
-	if((radar) && (!isBattle))
+	if((radar) && (!isBattle)&&(!battleReport))
     {
         //maps[0].drawRadar(camera, 660, 340,armies);
 		maps[0].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
