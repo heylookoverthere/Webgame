@@ -2844,8 +2844,38 @@ function Map(I) { //map object
     I.zoom = 1;
 
     I.setZoom = function(cam) {
-        if (I.zoom == 1) {I.zoom=2;} else /*if (I.zoom==2) {I.zoom=4;} else*/ {I.zoom=1;}
+        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20} else /*if (I.zoom==2) {I.zoom=4;} else*/ {I.zoom=1;cam.x+=30;cam.y+=20}
+		if(cam.x<0)
+		{
+			cam.x=0;
+		}
+		if(cam.y<0)
+		{
+			cam.y=0;
+		}
+		if(I.zoom==0)
+		{
+			if(cam.x>MAP_WIDTH-60)
+			{
+				cam.x=MAP_WIDTH-60;
+			}
+			if(cam.y>MAP_HEIGHT-40)
+			{
+				cam.y=MAP_HEIGHT-40;
+			}
+		}else if(I.zoom==2)
+		{
+			if(cam.x>MAP_WIDTH-30)
+			{
+				cam.x=MAP_WIDTH-30;
+			}
+			if(cam.y>MAP_HEIGHT-20)
+			{
+				cam.y=MAP_HEIGHT-20;
+			}
+		}
         cam.zoom=I.zoom;
+		cam.check();
     };
 
     I.draw = function(cam) {
@@ -2917,21 +2947,21 @@ function Map(I) { //map object
 		if(( rgba[0]==0) && (rgba[1]==0) && (rgba[2]==0)) {
 
 			I.setTile(xPos, yPos, TileType.Mountains);
-		  } else if (( rgba[0]==0) && (rgba[1]==255) && (rgba[2]==0)){
+		  } else if (( rgba[0]<10) && (rgba[1]>245) && (rgba[2]<10)){
 			I.setTile(xPos, yPos, TileType.Forest);
-		  } else if (( rgba[0]==0) && (rgba[1]==0) && (rgba[2]==255)){
+		  } else if (( rgba[0]<10) && (rgba[1]<10) && (rgba[2]>245)){
 			I.setTile(xPos, yPos, TileType.Ocean);
-		  } else if (( rgba[0]==255) && (rgba[1]==255) && (rgba[2]==0)){
+		  } else if (( rgba[0]>245) && (rgba[1]>245) && (rgba[2]<10)){
 			I.setTile(xPos, yPos, TileType.Sand);
 		  } else if (( rgba[0]==195) && (rgba[1]==195) && (rgba[2]==195)){
 			I.setTile(xPos, yPos, TileType.Road);
-		  } else if (( rgba[0]==1) && (rgba[1]==100) && (rgba[2]==255)){
+		  } else if (( rgba[0]<10) && (rgba[1]==100) && (rgba[2]>245)){
 			I.setTile(xPos, yPos, TileType.Water);
 		  } else if (( rgba[0]==128) && (rgba[1]==64) && (rgba[2]==64)){
 			I.setTile(xPos, yPos, TileType.Plains);
-		  } else if (( rgba[0]==255) && (rgba[1]==1) && (rgba[2]==1)){
+		  } else if (( rgba[0]>245) && (rgba[1]<10) && (rgba[2]<10)){
 			I.setTile(xPos, yPos, TileType.Lava);
-		  } else if (( rgba[0]==1) && (rgba[1]==255) && (rgba[2]==64)){
+		  } else if (( rgba[0]<10) && (rgba[1]>245) && (rgba[2]==64)){
 			I.setTile(xPos, yPos, TileType.Swamp);
 		  } else {
 			I.setTile(xPos, yPos, TileType.Grass);
@@ -2946,7 +2976,7 @@ function Map(I) { //map object
 	
     I.buildRadar= function(){
         
-       radarCanvas.globalAlpha = 0.75;
+       radarCanvas.globalAlpha = 0.55;
         for (var i=0;i<MAP_WIDTH; i++){
             for (j=0;j<MAP_HEIGHT; j++){
                 radarCanvas.fillStyle = tileColors[I.tiles[i][j].data];
@@ -3318,7 +3348,7 @@ function battleDraw()
 //document.getElementById("myAudio").play(); //starts music
 initTowns();
 maps[0].buildMap(MAPNAME);
-
+camera.center(armies[0].squads[0]);
 //------------MAIN LOOP-----------------------------------------
 function update() {
     lasttime=milliseconds;
@@ -3802,11 +3832,7 @@ function update() {
         radar=!radar;
     }
     
-    if((radar) && (!isBattle))
-    {
-        //maps[0].drawRadar(camera, 660, 340,armies);
-		maps[0].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
-    }
+
     
     if((isBattle) || (battleReport)) {
         battleDraw();
@@ -3844,6 +3870,11 @@ function update() {
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
 		}
 	}
+	if((radar) && (!isBattle))
+    {
+        //maps[0].drawRadar(camera, 660, 340,armies);
+		maps[0].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
+    }
 	canvas.restore();
     endgame();
 }
