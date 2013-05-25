@@ -47,8 +47,8 @@ TileType.Plains=1;
 TileType.Swamp=2;
 TileType.Hills=7;
 TileType.Mountains=4;
-TileType.Water=5;
-TileType.Ocean=6;
+TileType.Water=20;
+TileType.Ocean=24;
 TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
@@ -111,11 +111,17 @@ namesused[0]=new Array(120);
 namesused[1]=new Array(120);
 for( var i=0; i<120; i++ ){ namesused[0][i]=false;namesused[1][i]=false; }
 
-var tileSprite=new Array(10);
+var tileSprite=new Array(30);
 tileSprite[TileType.Grass] = Sprite("grass");
 tileSprite[TileType.Forest] = Sprite("darkgrass"); 
 tileSprite[TileType.Ocean] = Sprite("ocean");
+tileSprite[TileType.Ocean+1] = Sprite("ocean1");
+tileSprite[TileType.Ocean+2] = Sprite("ocean2");
+tileSprite[TileType.Ocean+3] = Sprite("ocean3");
 tileSprite[TileType.Water] = Sprite("water");
+tileSprite[TileType.Water+1] = Sprite("water");
+tileSprite[TileType.Water+2] = Sprite("water");
+tileSprite[TileType.Ocean+3] = Sprite("water");
 tileSprite[TileType.Mountains] = Sprite("stone");
 tileSprite[TileType.Hills] = Sprite("hills");
 tileSprite[TileType.Swamp] = Sprite("swamp");
@@ -124,7 +130,7 @@ tileSprite[TileType.Road] = Sprite("road");
 tileSprite[TileType.Sand] = Sprite("sand");
 
 
-var tileColors=new Array(10);
+var tileColors=new Array(30);
 tileColors[TileType.Grass] = "#008000";
 tileColors[TileType.Forest] = "#003300";
 tileColors[TileType.Ocean] = "#000099";

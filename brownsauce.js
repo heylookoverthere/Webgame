@@ -2241,10 +2241,10 @@ function squad() {
 			var gy=(this.y-cam.y+1)*16/maps[0].zoom;
 			canvas.save();
 			canvas.globalAlpha=0.80;
-			tileSprite[TileType.Water].draw(canvas, gx, gy+8*(maps[0].zoom-1));
-			tileSprite[TileType.Water].draw(canvas, gx+16, gy+8*(maps[0].zoom-1));//todo
-			tileSprite[TileType.Water].draw(canvas, gx, gy+16+8*(maps[0].zoom-1));
-			tileSprite[TileType.Water].draw(canvas, gx+16, gy+16+8*(maps[0].zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(maps[0].zoom-1));
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(maps[0].zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(maps[0].zoom-1));
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(maps[0].zoom-1));//todo
 			canvas.restore();
 		}
     };
@@ -2690,11 +2690,11 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
             }else if(this.data==TileType.Forest){
                 tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
             }else if(this.data==TileType.Water){
-                tileSprite[TileType.Water].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Water+tileani].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Plains){
                 tileSprite[TileType.Plains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
             }else if(this.data==TileType.Ocean){
-                tileSprite[TileType.Ocean].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+                tileSprite[TileType.Ocean+tileani].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
 
             }else if(this.data==42){
                 watersprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
@@ -2849,9 +2849,13 @@ function Map(I) { //map object
                         dominantType.type = type;
                     }
                 }
-                if(dominantType.type && dominantType.type <41) {
+                if(dominantType.type && dominantType.type <20) {
 					tileSprite[dominantType.type].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
-                }
+                }else if(dominantType.type&& dominantType.type<24){
+					tileSprite[20+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}else{
+					tileSprite[24+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+				}
             }
         }
     };
@@ -3278,6 +3282,12 @@ function update() {
     timestamp = new Date();
     milliseconds = timestamp.getTime();
     tick++;
+	if (milliseconds-lastani>WATER_RATE) {
+		tileani++;
+		lastani=milliseconds;
+		anicount=0;
+    }
+    if (tileani>2) {tileani=0} //tile animations
 	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
     if(menukey.check()) {
         if(!isBattle) 
