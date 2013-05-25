@@ -237,7 +237,7 @@ function unit() {
     this.status[6]=false;
     this.class=Math.floor(Math.random()*26);
     this.row=Math.floor(Math.random()*2);
-    this.viewrange=5;
+    this.viewRange=5;
     this.level=1;
     this.def=1;
     this.mdef=1;
@@ -769,7 +769,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=50;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=3;
             this.cost=10;
@@ -788,7 +788,7 @@ function unit() {
             this.speed=3;
             this.luck=5;
             this.ali=20;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=5;
             this.cost=10;
@@ -806,7 +806,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=35;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("wizard");
             //this.equipment[0]=rod;
             //this.equipment[1]=robe;
@@ -827,7 +827,7 @@ function unit() {
             this.evade=4;
             this.luck=5;
             this.ali=10;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=5;
             this.cost=10;
@@ -844,7 +844,7 @@ function unit() {
             this.speed=3;
             this.luck=5;
             this.ali=40;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=5;
             this.cost=10;
@@ -863,7 +863,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=60;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=5;
             this.mag=20;
@@ -883,7 +883,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=30;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.evade=9;
             this.mdef=5;
@@ -904,7 +904,7 @@ function unit() {
             this.speed=3;
             this.luck=5;
             this.ali=40;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=5;
             this.mag=15;
@@ -924,7 +924,7 @@ function unit() {
             this.speed=3;
             this.luck=5;
             this.ali=50;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=12;
             this.mdef=5;
             this.mag=15;
@@ -944,7 +944,7 @@ function unit() {
             this.speed=3;
             this.luck=5;
             this.ali=70;
-            this.viewrange=5;
+            this.viewRange=5;
             this.def=2;
             this.mdef=5;
             this.mag=30;
@@ -963,7 +963,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=30;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("sage");
             this.equipment[0]=icemagic[2];
             this.equipment[1]=robe;
@@ -983,7 +983,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=90;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("angel");
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
@@ -1003,7 +1003,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=10;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("darkknight");
             this.equipment[0]=swords[1];
             this.equipment[1]=breastplate;
@@ -1023,7 +1023,7 @@ function unit() {
             this.speed=2;
             this.luck=5;
             this.ali=90;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("whiteknight");
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
@@ -1043,7 +1043,7 @@ function unit() {
             this.speed=2;
             this.luck=9;
             this.ali=90;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("polarbear");
             this.equipment[0]=claws;
             this.equipment[1]=breastplate;
@@ -1063,7 +1063,7 @@ function unit() {
             this.speed=2;
             this.luck=12;
             this.ali=90;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("bearmerica");
             this.equipment[0]=claws;
             this.equipment[1]=chainmail;
@@ -1083,7 +1083,7 @@ function unit() {
             this.speed=2;
             this.luck=12;
             this.ali=90;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("ironbear");
             this.equipment[0]=claws;
             this.equipment[1]=heavyplate;
@@ -1103,7 +1103,7 @@ function unit() {
             this.speed=1;
             this.luck=0;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("hulkbear");
             this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1123,7 +1123,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("rumham");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1143,7 +1143,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("dancer");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1164,7 +1164,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("creeper");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1184,7 +1184,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("ebound");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1204,7 +1204,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("skeleton");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1224,7 +1224,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("theif");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1244,7 +1244,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("lycan");
 			this.nightSprite= Sprite("werewolf");
             //this.equipment[0]=claws;
@@ -1265,7 +1265,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("samurai");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1285,7 +1285,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("monk");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1305,7 +1305,7 @@ function unit() {
             this.speed=1;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("vamp");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1325,7 +1325,7 @@ function unit() {
             this.speed=3;
             this.luck=7;
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("tiger");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1347,7 +1347,7 @@ function unit() {
             this.luck=17;
 			this.name="Deneb";
             this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("witch");
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
@@ -1368,7 +1368,7 @@ function unit() {
             this.speed=1;
             this.luck=17;
 			this.ali=1;
-            this.viewrange=5;
+            this.viewRange=5;
             this.sprite = Sprite("pumpkinhead");
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
@@ -1387,7 +1387,7 @@ function unit() {
     this.setClass();
     this.hp=this.maxhp;
     this.mp=this.maxmp;
-	this.viewrange=50;
+	this.viewRange=50;
     if (this.gender===2) {this.name="Nancy";}
 }
 
@@ -1683,7 +1683,7 @@ function endgame(){
 
 
 distance=function(one,two){
-	return(1);
+	return(Math.sqrt(Math.pow(one.x-two.x,2)+Math.pow(one.y-two.y,2)));
 };
 
 
@@ -1730,7 +1730,7 @@ function army() {
 		{
 			for( var j=0;j<this.numSquads;j++)
 			{
-				if(distance(enemyarmy.squads[i],this.squads[j])<this.squads[j].viewrange)
+				if(distance(enemyarmy.squads[i],this.squads[j])<this.squads[j].viewRange)
 				{
 					this.visibleEnemies.push(enemyarmy.squads[i]);
 					break;
@@ -2025,6 +2025,7 @@ function squad() {
     this.nextMove = null;
     this.nextTile = {x: this.x, y: this.y};
     this.inNextTile = false;
+	this.viewRange=50;
     
     this.addUnit=function(uknit)
     {
@@ -3690,11 +3691,11 @@ function update() {
         if(isOver(armies[0].squads[i],camera)) { drawmousetext(armies[0].squads[i],camera); };
         if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
     }
-    for (var i=0;i<armies[1].numSquads;i++) {
+    /*for (var i=0;i<armies[1].numSquads;i++) {
 		armies[1].squads[i].draw(camera);
         if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
         
-    }/*
+    }*/
 	armies[0].getVisible(armies[1]);
 	if(armies[0].visibleEnemies!=null){
 		for (var i=0;i<armies[0].visibleEnemies.length;i++) {
@@ -3702,7 +3703,7 @@ function update() {
 			if(isOver(armies[0].visibleEnemies[i],camera)) { drawmousetext(armies[0].visibleEnemies[i],camera); };
 			
 		}
-    }*/
+    }
     for (var i=0;i<numTowns;i++) {
         if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
