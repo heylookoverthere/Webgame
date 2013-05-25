@@ -2264,12 +2264,12 @@ function squad() {
 			press=this.leader.nightSprite;
 		}
 		press.draw(canvas,
-                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
-                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
+                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[0].zoom-1));
         if (this.leaderless){
             noleader.draw(canvas,
-                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / maps[0].zoom, 
-                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / maps[0].zoom);
+                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
+                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[0].zoom-1));
         }
 	    if(maps[0].tiles[this.x][this.y+1].data==TileType.Forest) {
 			var gx=(this.x-cam.x)*16/maps[0].zoom;
@@ -2292,7 +2292,7 @@ function squad() {
 
     this.drawdest = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} 
-        flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / maps[0].zoom, ((this.dy * 16 - cam.y * 16)+8) / maps[0].zoom);
+        flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, maps[0].zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, maps[0].zoom-1));
     };
     
     this.checkcollision= function() {
@@ -3722,7 +3722,7 @@ function update() {
     canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
     canvas.restore();
     //todo error
-    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / maps[0].zoom, (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / maps[0].zoom);
+    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, maps[0].zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, maps[0].zoom-1));
     //camera controls
     //if(maps[0].zoom<3){
     if(keydown.left) {
