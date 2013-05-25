@@ -2363,7 +2363,7 @@ function squad() {
     this.kickBack=function(esqd){
 
 	function booTile(x, y) {
-	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean));
+	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean)||(maps[0].tiles[x][y].data==TileType.Lava));
 	};
 
 	var newX, newY;
@@ -2777,7 +2777,7 @@ function Map(I) { //map object
     };
 	
 	I.walkable=function(x,y){
-		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean)) {return true;}
+		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean) &&(I.tiles[x][y].data!=TileType.Lava)) {return true;}
 		return false;
 	}
 	
@@ -2908,7 +2908,9 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Plains);
 		  } else if (( rgba[0]==255) && (rgba[1]==1) && (rgba[2]==1)){
 			I.setTile(xPos, yPos, TileType.Lava);
-		  }  else {
+		  } else if (( rgba[0]==1) && (rgba[1]==255) && (rgba[2]==64)){
+			I.setTile(xPos, yPos, TileType.Swamp);
+		  } else {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
