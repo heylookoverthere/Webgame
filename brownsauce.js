@@ -2310,6 +2310,7 @@ function squad() {
         return null;
     };
     this.update = function(map) {
+		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle)) {return;}
         targ=this.checkcollision();
         if(this.team==1) {targ=null;} 
@@ -2608,20 +2609,35 @@ function mouseClick(e) {  //represents the mouse
 
     e.preventDefault();    
     mX = e.pageX - canvasElement.get(0).offsetLeft;
-    mY = e.pageY - canvasElement.get(0).offsetTop;      
+    mY = e.pageY - canvasElement.get(0).offsetTop;
+    switch (e.which) {
+        case 1:
+            	tx=Math.floor(mX/16) * Math.pow(2, maps[0].zoom-1);
+				ty=Math.floor(mY/16) * Math.pow(2, maps[0].zoom-1);
 
-    tx=Math.floor(mX/16) * Math.pow(2, maps[0].zoom-1);
-    ty=Math.floor(mY/16) * Math.pow(2, maps[0].zoom-1);
+				onSomething=null;
+				for(var i=0;i<armies[0].numSquads;i++)
+				{
+					if (isOver(armies[0].squads[i],camera)) {onSomething=armies[0].squads[i];SELECTED=i;}
+				}
+				if (onSomething==null){
+					if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
+					armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
+				}
+            break;
+        case 2:
+            alert('Middle mouse button pressed');
+            break;
+        case 3:
+            alert('Right mouse button pressed');
+            break;
+        default:
+            alert('You have a strange mouse');
+    }
 
-    onSomething=null;
-    for(var i=0;i<armies[0].numSquads;i++)
-    {
-        if (isOver(armies[0].squads[i],camera)) {onSomething=armies[0].squads[i];SELECTED=i;}
-    }
-    if (onSomething==null){
-        if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
-        armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
-    }
+		
+
+
 
 };
 
@@ -3016,6 +3032,7 @@ function Map(I) { //map object
         canvas.save();
         canvas.globalAlpha = 0.75;
         canvas.putImageData(radarBitmap,x,y);
+		//canvas.drawImage(radarCanvas,x,y);
         
         for(var i=0;i<numTowns;i++)
         {
