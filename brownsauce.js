@@ -2610,8 +2610,8 @@ function mouseClick(e) {  //represents the mouse
     mX = e.pageX - canvasElement.get(0).offsetLeft;
     mY = e.pageY - canvasElement.get(0).offsetTop;      
 
-    tx=Math.floor(mX/16) * maps[0].zoom;
-    ty=Math.floor(mY/16) * maps[0].zoom;
+    tx=Math.floor(mX/16) * Math.pow(2, maps[0].zoom-1);
+    ty=Math.floor(mY/16) * Math.pow(2, maps[0].zoom-1);
 
     onSomething=null;
     for(var i=0;i<armies[0].numSquads;i++)
