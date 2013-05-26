@@ -2430,7 +2430,7 @@ function squad() {
         this.path=null; this.dx = 0; this.dy = 0; this.nextMove = null;
     };
     this.setDestination = function(x, y, map) {
-		if(!map.walkable(x,y)) {return;}
+		if(!map.walkable(x,y,this)) {return;}
         this.clearDestination();
         this.path = map.getPath(this.x, this.y, x, y,this);
         this.dx=x;
@@ -2439,7 +2439,9 @@ function squad() {
 	
     this.kickBack=function(esqd){
 
-	function booTile(x, y) {
+	function booTile(x, y,sqd) {
+		if(sqd.getFlightHeight()>1) {return false;}
+		if((sqd.getFlightHeight()>0) && (I.tiles[x][y].data!=TileType.Mountains)){return false;}
 	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean)||(maps[0].tiles[x][y].data==TileType.Lava));
 	};
 
@@ -2464,7 +2466,7 @@ function squad() {
 
 	var theKnock = this.knockback;
 	for( var i = 1; i < this.knockback + 1; i++ ) {
-	    if( booTile(newX(this.x, this.y, i), newY(this.x, this.y, i)) ) {
+	    if( booTile(newX(this.x, this.y, i), newY(this.x, this.y, i),this) ) {
 		theKnock=i-1;
 		break;
 	    }
@@ -2869,7 +2871,9 @@ function Map(I) { //map object
         return astar.search(graph.nodes, graph.nodes[startX][startY], graph.nodes[endX][endY]);
     };
 	
-	I.walkable=function(x,y){
+	I.walkable=function(x,y,sqd){
+		if(sqd.getFlightHeight()>1) {return true;}
+		if((sqd.getFlightHeight()>0) && (I.tiles[x][y].data!=TileType.Mountains)){return true;}
 		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean) &&(I.tiles[x][y].data!=TileType.Lava)) {return true;}
 		return false;
 	}
