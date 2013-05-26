@@ -1659,6 +1659,29 @@ function initTowns(){
 		towns[5].x=158;
 		towns[5].y=244;
 	
+	}else if(MAPNAME=="map8"){
+		towns[0].x=100;
+		towns[0].y=124;
+		towns[0].team=0;
+		towns[0].name="Kings Landing";
+
+		towns[1].x=153;
+		towns[1].y=199;
+		towns[1].team=1;
+		towns[1].name="The Dreadfort";
+		
+		towns[2].x=69;
+		towns[2].y=242;
+		
+		towns[3].x=233;
+		towns[3].y=300;
+		
+		towns[4].x=278;
+		towns[4].y=89;
+		
+		towns[5].x=158;
+		towns[5].y=244;
+	
 	}
 	
 }
@@ -3154,6 +3177,11 @@ for (var i=0;i<armies[0].numSquads;i++){
 		armies[0].squads[i].basey=456;
 		armies[0].squads[i].x=362;
 		armies[0].squads[i].y=456;
+	}else 	if(MAPNAME=="map8"){
+		armies[0].squads[i].basex=100;
+		armies[0].squads[i].basey=124;
+		armies[0].squads[i].x=100;
+		armies[0].squads[i].y=124;
 	}
 }
 
@@ -3181,6 +3209,9 @@ if(MAPNAME=="map3"){
 }else if(MAPNAME=="map7"){
 	armies[1].basex=103;
 	armies[1].basey=132;
+}else if(MAPNAME=="map8"){
+	armies[1].basex=153;
+	armies[1].basey=124;
 }
 
 
@@ -3214,6 +3245,9 @@ for (var i=0;i<armies[1].numSquads;i++){
 	}else if(MAPNAME=="map7"){
 		armies[1].squads[i].basex=103;
 		armies[1].squads[i].basey=132;
+	}else if(MAPNAME=="map8"){
+		armies[1].squads[i].basex=153;
+		armies[1].squads[i].basey=199;
 	}
     armies[1].squads[i].leader.setClass();
     armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
@@ -3864,6 +3898,9 @@ function update() {
 			}else if(MAPNAME=="map7")
 			{	armies[0].squads[armies[0].lastDeployed].x=362;
 				armies[0].squads[armies[0].lastDeployed].y=456;
+			}else if(MAPNAME=="map8")
+			{	armies[0].squads[armies[0].lastDeployed].x=100;
+				armies[0].squads[armies[0].lastDeployed].y=124;
 			}
             armies[0].lastDeployed++; 
         }
