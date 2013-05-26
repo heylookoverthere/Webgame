@@ -2812,8 +2812,10 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
 };
 
 function tileToCost(data, sqd) {
-    if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
+	if(sqd.getFlightHeight>2) {return 2;}
     if(( data == TileType.Mountains ) ||( data == TileType.Ocean )) return 0;
+	if(sqd.getFlightHeight>1) {return 2;}
+	if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
     if( data == TileType.Swamp  ) return 5;
 	if( data == TileType.Forest  ) return 3;
 	if( data == TileType.Sand  ) return 2;
