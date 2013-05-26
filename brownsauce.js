@@ -907,6 +907,7 @@ function unit() {
             this.luck=5;
             this.ali=40;
             this.viewRange=5;
+			this.flightHeight=6;
             this.def=2;
             this.mdef=5;
             this.mag=15;
