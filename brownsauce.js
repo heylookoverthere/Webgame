@@ -907,7 +907,7 @@ function unit() {
             this.luck=5;
             this.ali=40;
             this.viewRange=5;
-			this.flightHeight=6;
+			this.flightHeight=2;
             this.def=2;
             this.mdef=5;
             this.mag=15;
@@ -987,6 +987,7 @@ function unit() {
             this.luck=5;
             this.ali=90;
             this.viewRange=5;
+			this.flightHeight=1;
             this.sprite = Sprite("angel");
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
@@ -1086,6 +1087,7 @@ function unit() {
             this.speed=2;
             this.luck=12;
             this.ali=90;
+			this.flightHeight=3;
             this.viewRange=5;
             this.sprite = Sprite("ironbear");
             this.equipment[0]=claws;
@@ -2047,7 +2049,9 @@ function squad() {
 		var feight=0;
 		for(var i=0;i<this.numUnits;i++)
 		{
-			feight+=this.units[i].flightHeight;
+			if(this.units[i].alive){
+				feight+=this.units[i].flightHeight;
+			}
 		}
 		return feight;
 	};	
@@ -2442,7 +2446,7 @@ function squad() {
 
 	function booTile(x, y,sqd) {
 		if(sqd.getFlightHeight()>1) {return false;}
-		if((sqd.getFlightHeight()>0) && (I.tiles[x][y].data!=TileType.Mountains)){return false;}
+		if((sqd.getFlightHeight()>0) && (maps[0].tiles[x][y].data!=TileType.Mountains)){return false;}
 	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean)||(maps[0].tiles[x][y].data==TileType.Lava));
 	};
 
@@ -2812,9 +2816,9 @@ function makeNewTile() { //the Map is made of a 2D array of tiles.
 };
 
 function tileToCost(data, sqd) {
-	if(sqd.getFlightHeight>2) {return 2;}
+	if(sqd.getFlightHeight()>2) {return 2;}
     if(( data == TileType.Mountains ) ||( data == TileType.Ocean )) return 0;
-	if(sqd.getFlightHeight>1) {return 2;}
+	if(sqd.getFlightHeight()>1) {return 2;}
 	if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
     if( data == TileType.Swamp  ) return 5;
 	if( data == TileType.Forest  ) return 3;
