@@ -237,7 +237,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*27);
+    this.class=Math.floor(Math.random()*28);
     this.row=Math.floor(Math.random()*2);
     this.viewRange=5;
     this.level=1;
@@ -768,11 +768,11 @@ function unit() {
             this.hp=60;
             this.attack=14
             this.maxmp=40;
-            this.speed=2;
+            this.speed=0;
             this.luck=5;
             this.ali=50;
             this.viewRange=5;
-            this.def=2;
+            this.def=15;
             this.mdef=3;
             this.cost=10;
             this.canlead=true;
@@ -791,7 +791,7 @@ function unit() {
             this.luck=5;
             this.ali=20;
             this.viewRange=5;
-            this.def=2;
+            this.def=12;
             this.mdef=5;
             this.cost=10;
             this.canlead=true;
@@ -805,7 +805,7 @@ function unit() {
             this.hp=50;
             this.attack=5;
             this.maxmp=40;
-            this.speed=2;
+            this.speed=1;
             this.luck=5;
             this.ali=35;
             this.viewRange=5;
@@ -813,7 +813,7 @@ function unit() {
             //this.equipment[0]=rod;
             //this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("wizardgirl");}
-            this.def=2;
+            this.def=12;
             this.mdef=5;
             this.mag=20;
             this.cost=10;
@@ -825,12 +825,12 @@ function unit() {
             this.hp=60;
             this.attack=9;
             this.maxmp=40;
-            this.speed=4;
+            this.speed=1;
             this.evade=4;
             this.luck=5;
             this.ali=10;
             this.viewRange=5;
-            this.def=2;
+            this.def=10;
             this.mdef=5;
             this.cost=10;
             this.canlead=false;
@@ -839,15 +839,16 @@ function unit() {
             this.attackType[1]=AttackTypes.Physical;
             if (this.gender===1) {this.sprite = Sprite("shoegirl");}
         }else if(cla===SEEAss.Archer) { //archer
-            this.maxhp=40;
-            this.hp=40;
+            this.maxhp=45;
+            this.hp=45;
             this.attack=5;
             this.maxmp=40;
-            this.speed=3;
+            this.speed=1;
             this.luck=5;
             this.ali=40;
             this.viewRange=5;
-            this.def=2;
+			this.evade=2;
+            this.def=11;
             this.mdef=5;
             this.cost=10;
             this.equipment[0]=bow[0];
@@ -858,15 +859,15 @@ function unit() {
             this.attackType[1]=AttackTypes.Ranged;
             if (this.gender===1) {this.sprite = Sprite("archergirl");}
         }else if(cla===SEEAss.Healer) { //healer
-            this.maxhp=35;
-            this.hp=35;
-            this.attack=5;
+            this.maxhp=45;
+            this.hp=45;
+            this.attack=2;
             this.maxmp=40;
-            this.speed=2;
+            this.speed=1;
             this.luck=5;
             this.ali=60;
             this.viewRange=5;
-            this.def=2;
+            this.def=8;
             this.mdef=5;
             this.mag=20;
             this.cost=10;
@@ -886,7 +887,7 @@ function unit() {
             this.luck=5;
             this.ali=30;
             this.viewRange=5;
-            this.def=2;
+            this.def=14;
             this.evade=9;
             this.mdef=5;
             this.mag=15;
@@ -899,16 +900,17 @@ function unit() {
             this.attackType[1]=AttackTypes.Ranged;
             if (this.gender===1) {this.sprite = Sprite("ninjagirl");}
         }else if(cla===SEEAss.Winger) { //winger
-            this.maxhp=40;
-            this.hp=40;
+            this.maxhp=45;
+            this.hp=45;
             this.attack=8;
             this.maxmp=40;
-            this.speed=3;
+            this.speed=1;
             this.luck=5;
             this.ali=40;
+			this.evade=2;
             this.viewRange=5;
 			this.flightHeight=2;
-            this.def=2;
+            this.def=13;
             this.mdef=5;
             this.mag=15;
             this.cost=15;
@@ -920,15 +922,15 @@ function unit() {
             this.attackType[1]=AttackTypes.Physical;
             if (this.gender===1) {this.sprite = Sprite("wingergirl");}
         }else if(cla===SEEAss.Knight) { //knight
-            this.maxhp=40;
-            this.hp=40;
-            this.attack=12;
+            this.maxhp=75;
+            this.hp=75;
+            this.attack=20;
             this.maxmp=40;
-            this.speed=3;
+            this.speed=1;
             this.luck=5;
-            this.ali=50;
+            this.ali=60;
             this.viewRange=5;
-            this.def=12;
+            this.def=25;
             this.mdef=5;
             this.mag=15;
             this.cost=15;
@@ -940,15 +942,15 @@ function unit() {
             this.attackType[1]=AttackTypes.Physical;
             if (this.gender===1) {this.sprite = Sprite("knightgirl");}
         }else if(cla===SEEAss.Cleric) { //cleric
-            this.maxhp=50;
-            this.hp=40;
+            this.maxhp=60;
+            this.hp=60;
             this.attack=8;
             this.maxmp=40;
-            this.speed=3;
+            this.speed=2;
             this.luck=5;
             this.ali=70;
             this.viewRange=5;
-            this.def=2;
+            this.def=12;
             this.mdef=5;
             this.mag=30;
             this.cost=20;
@@ -960,7 +962,7 @@ function unit() {
             if (this.gender===1) {this.sprite = Sprite("clericgirl");}
         }else if(cla===SEEAss.Sage) { //sage
             this.maxhp=60;
-            this.hp=50;
+            this.hp=60;
             this.attack=5;
             this.maxmp=40;
             this.speed=2;
@@ -971,7 +973,7 @@ function unit() {
             this.equipment[0]=icemagic[2];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("sagegirl");}
-            this.def=2;
+            this.def=12;
             this.mdef=5;
             this.mag=20;
             this.cost=20;
@@ -979,8 +981,8 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Magical;
         }else if(cla===SEEAss.Angel) { //angel
-            this.maxhp=60;
-            this.hp=50;
+            this.maxhp=80;
+            this.hp=80;
             this.attack=5;
             this.maxmp=40;
             this.speed=2;
@@ -992,7 +994,7 @@ function unit() {
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("angelgirl");}
-            this.def=2;
+            this.def=14;
             this.mdef=15;
             this.mag=30;
             this.cost=50;
@@ -1000,11 +1002,11 @@ function unit() {
             this.attackType[0]=AttackTypes.Magical;
             this.attackType[1]=AttackTypes.Heal;
         }else if(cla===SEEAss.DarkKnight) { //darkknight
-            this.maxhp=70;
-            this.hp=50;
-            this.attack=35;
+            this.maxhp=100;
+            this.hp=100;
+            this.attack=25;
             this.maxmp=40;
-            this.speed=2;
+            this.speed=1;
             this.luck=5;
             this.ali=10;
             this.viewRange=5;
@@ -1012,7 +1014,7 @@ function unit() {
             this.equipment[0]=swords[1];
             this.equipment[1]=breastplate;
             if (this.gender===1) {this.sprite = Sprite("darkknightgirl");}
-            this.def=12;
+            this.def=30;
             this.mdef=15;
             this.mag=30;
             this.cost=30;
@@ -1020,9 +1022,9 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
         }else if(cla===SEEAss.Palladin) { //palladin
-            this.maxhp=90;
-            this.hp=50;
-            this.attack=25;
+            this.maxhp=120;
+            this.hp=120;
+            this.attack=18;
             this.maxmp=40;
             this.speed=2;
             this.luck=5;
@@ -1032,7 +1034,7 @@ function unit() {
             this.equipment[0]=icemagic[1];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("whiteknightgirl");}
-            this.def=6;
+            this.def=20;
             this.mdef=15;
             this.mag=60;
             this.cost=30;
@@ -1041,8 +1043,8 @@ function unit() {
             this.attackType[1]=AttackTypes.Heal;
         }else if(cla===SEEAss.PolarBear) { //polar
             this.maxhp=70;
-            this.hp=50;
-            this.attack=25;
+            this.hp=70;
+            this.attack=14;
             this.maxmp=40;
             this.speed=2;
             this.luck=9;
@@ -1062,7 +1064,7 @@ function unit() {
         }else if(cla===SEEAss.CptBearmerica) { //capt bear
             this.maxhp=150;
             this.hp=150;
-            this.attack=35;
+            this.attack=16;
             this.maxmp=40;
             this.speed=2;
             this.luck=12;
@@ -1072,7 +1074,7 @@ function unit() {
             this.equipment[0]=claws;
             this.equipment[1]=chainmail;
             if (this.gender===1) {this.sprite = Sprite("bearmericagirl");}
-            this.def=16;
+            this.def=25;
             this.mdef=15;
             this.mag=30;
             this.cost=10;
@@ -1082,18 +1084,19 @@ function unit() {
         }else if(cla===SEEAss.IronBear) { //iron bear
             this.maxhp=150;
             this.hp=150;
-            this.attack=35;
+            this.attack=16;
             this.maxmp=40;
             this.speed=2;
             this.luck=12;
             this.ali=90;
+			this.evade=2;
 			this.flightHeight=3;
             this.viewRange=5;
             this.sprite = Sprite("ironbear");
             this.equipment[0]=claws;
             this.equipment[1]=heavyplate;
             if (this.gender===1) {this.sprite = Sprite("ironbeargirl");}
-            this.def=16;
+            this.def=40;
             this.mdef=15;
             this.mag=30;
             this.cost=10;
@@ -1101,9 +1104,9 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.HulkBear) { //hulk bear
-            this.maxhp=200;
-            this.hp=200;
-            this.attack=65;
+            this.maxhp=130;
+            this.hp=130;
+            this.attack=35;
             this.maxmp=40;
             this.speed=1;
             this.luck=0;
@@ -1141,19 +1144,20 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Dancer) { //RUM HAM
-            this.maxhp=50;
-            this.hp=50;
-            this.attack=14;
+            this.maxhp=45;
+            this.hp=45;
+            this.attack=1;
             this.maxmp=80;
-            this.speed=3;
+            this.speed=1;
             this.luck=7;
             this.ali=1;
+			this.evade=2;
             this.viewRange=5;
             this.sprite = Sprite("dancer");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("dancer");}
-            this.def=20;
+            this.def=12;
             this.mdef=15;
             this.mag=3;
             this.cost=210;
@@ -1222,19 +1226,20 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Theif) {
-            this.maxhp=40;
-            this.hp=40;
-            this.attack=4;
+            this.maxhp=45;
+            this.hp=45;
+            this.attack=14;
             this.maxmp=8;
-            this.speed=3;
+            this.speed=2;
             this.luck=7;
-            this.ali=1;
+            this.ali=20;
             this.viewRange=5;
+			this.evade=4;
             this.sprite = Sprite("theif");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("theif");}
-            this.def=20;
+            this.def=14;
             this.mdef=15;
             this.mag=3;
             this.cost=210;
@@ -1244,7 +1249,7 @@ function unit() {
         }else if(cla===SEEAss.Werewolf) {
             this.maxhp=40;
             this.hp=40;
-            this.attack=4;
+            this.attack=24;
             this.maxmp=8;
             this.speed=3;
             this.luck=7;
@@ -1263,19 +1268,20 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Samurai) {
-            this.maxhp=40;
-            this.hp=40;
-            this.attack=4;
+            this.maxhp=80;
+            this.hp=80;
+            this.attack=30;
             this.maxmp=8;
-            this.speed=3;
+            this.speed=2;
             this.luck=7;
             this.ali=1;
+			this.evade=5;
             this.viewRange=5;
             this.sprite = Sprite("samurai");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("samurai");}
-            this.def=20;
+            this.def=25;
             this.mdef=15;
             this.mag=3;
             this.cost=210;
@@ -1283,25 +1289,25 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Monk) {
-            this.maxhp=40;
-            this.hp=40;
-            this.attack=4;
+            this.maxhp=100;
+            this.hp=100;
+            this.attack=28;
             this.maxmp=8;
-            this.speed=3;
+            this.speed=2;
             this.luck=7;
-            this.ali=1;
+            this.ali=60;
             this.viewRange=5;
             this.sprite = Sprite("monk");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
             if (this.gender===1) {this.sprite = Sprite("monk");}
-            this.def=20;
+            this.def=25;
             this.mdef=15;
             this.mag=3;
             this.cost=210;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
-            this.attackType[1]=AttackTypes.Ranged;
+            this.attackType[1]=AttackTypes.Physical;
         }else if(cla===SEEAss.Vampire) {
             this.maxhp=40;
             this.hp=40;
@@ -1343,8 +1349,8 @@ function unit() {
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
         }else if(cla===SEEAss.Witch) {
-            this.maxhp=120;
-            this.hp=40;
+            this.maxhp=100;
+            this.hp=100;
             this.attack=4;
             this.maxmp=80;
 			this.gender=1;
@@ -1366,7 +1372,7 @@ function unit() {
             this.attackType[1]=AttackTypes.Magical;
         }else if(cla===SEEAss.Pumpkinhead) {
             this.maxhp=80;
-            this.hp=40;
+            this.hp=80;
             this.attack=8;
             this.maxmp=80;
 			this.gender=0;
@@ -1378,7 +1384,7 @@ function unit() {
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("pumpkinhead");}
-            this.def=20;
+            this.def=18;
             this.mdef=15;
             this.mag=17;
             this.cost=210;
@@ -1387,7 +1393,7 @@ function unit() {
             this.attackType[1]=AttackTypes.Magical;
         }else if(cla===SEEAss.Mermaid) {
             this.maxhp=80;
-            this.hp=40;
+            this.hp=80;
             this.attack=8;
             this.maxmp=80;
 			this.gender=1;
@@ -1400,13 +1406,34 @@ function unit() {
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("mermaid");}
-            this.def=20;
+            this.def=9;
             this.mdef=15;
             this.mag=17;
             this.cost=210;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Magical;
+        }else if(cla===SEEAss.Octopus) {
+            this.maxhp=100;
+            this.hp=100;
+            this.attack=12;
+            this.maxmp=80;
+            this.speed=1;
+            this.luck=7;
+			this.ali=10;
+            this.viewRange=5;
+			this.swimCarry=3;
+            this.sprite = Sprite("octopus");
+            this.equipment[0]=icemagic[3];
+            this.equipment[1]=robe;
+            if (this.gender===1) {this.sprite = Sprite("octopus");}
+            this.def=17;
+            this.mdef=15;
+            this.mag=17;
+            this.cost=210;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Physical;
         }
         
         
