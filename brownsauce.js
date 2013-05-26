@@ -3791,11 +3791,11 @@ function update() {
             }
         }
         for (var i=0;i<armies[0].numSquads;i++) {
-			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].delpoyed)) {continue;}
+			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
             armies[0].squads[i].update(maps[0]);
 			if(armies[0].squads[i].path!=null) {continue;}
             if(armies[0].fieldAI==AITypes.Random){
-                if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
+                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) {
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					/*while(!maps[0].walkable(cx,cy,armies[0].squads[i])){
