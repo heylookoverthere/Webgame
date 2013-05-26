@@ -19,7 +19,7 @@ SEEAss.Theif=17;
 SEEAss.Creeper=18
 SEEAss.Dancer=19;
 SEEAss.Skeleton=20;
-SEEAss.CptBearmerica=26;
+SEEAss.CptBearmerica=31;
 SEEAss.IronBear=27;
 SEEAss.HulkBear=28;
 SEEAss.Winger=7;
@@ -33,6 +33,7 @@ SEEAss.Monk=24;
 SEEAss.Tiger=25;
 SEEAss.Witch=29;
 SEEAss.Pumpkinhead=30;
+SEEAss.Mermaid=26;
 
 Religon={};
 Religon.Seven=1;
