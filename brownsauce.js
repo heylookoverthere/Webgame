@@ -2359,15 +2359,15 @@ function squad() {
                           (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
                           (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[0].zoom-1));
         }
-	    if(maps[0].tiles[this.x][this.y+1].data==TileType.Forest) {
-			var gx=(this.x-cam.x)*16/maps[0].zoom;
-			var gy=(this.y-cam.y+1)*16/maps[0].zoom;
-			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*Math.pow(2, maps[0].zoom-1));
-			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*Math.pow(2, maps[0].zoom-1));//todo
+	    if(maps[0].tiles[this.x][this.y+2].data==TileType.Forest) {
+			var gx=(this.x-cam.x)*16/Math.pow(2, maps[0].zoom-1);
+			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[0].zoom-1);
+			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, maps[0].zoom-1)-1));
+			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, maps[0].zoom-1)-1));//todo
 	
-		}else if(maps[0].tiles[this.x][this.y+1].data==TileType.Water) {
-			var gx=(this.x-cam.x)*16/maps[0].zoom;
-			var gy=(this.y-cam.y+1)*16/maps[0].zoom;
+		}else if((maps[0].tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
+			var gx=(this.x-cam.x)*16/Math.pow(2, maps[0].zoom-1);
+			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[0].zoom-1);
 			canvas.save();
 			canvas.globalAlpha=0.80;
 			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(maps[0].zoom-1));
@@ -3791,10 +3791,18 @@ function update() {
             }
         }
         for (var i=0;i<armies[0].numSquads;i++) {
+			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].delpoyed)) {continue;}
             armies[0].squads[i].update(maps[0]);
+			if(armies[0].squads[i].path!=null) {continue;}
             if(armies[0].fieldAI==AITypes.Random){
                 if( (!armies[0].squads[i].path) && (randomwalk) && i != SELECTED ) {
-                    armies[0].squads[i].setDestination(Math.floor(Math.random()*(MAP_WIDTH)),Math.floor(Math.random()*(MAP_HEIGHT)),maps[0]); };
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					/*while(!maps[0].walkable(cx,cy,armies[0].squads[i])){
+						cx=Math.floor(Math.random()*(MAP_WIDTH));
+						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					}*/
+                    armies[0].squads[i].setDestination(cx,cy,maps[0]); };
             }else if(armies[0].fieldAI==AITypes.Rush){
                 if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
                     armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[0]); 
@@ -3803,10 +3811,18 @@ function update() {
         }
         
         for(var i=0;i<armies[1].numSquads;i++){ 
+			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
             armies[1].squads[i].update(maps[0]);
+			if(armies[1].squads[i].path!=null) {continue;}
             if(armies[1].fieldAI==AITypes.Random){
                 if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
-                    armies[1].squads[i].setDestination(Math.floor(Math.random()*(MAP_WIDTH)),Math.floor(Math.random()*(MAP_HEIGHT)),maps[0]); };
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					/*while(!maps[0].walkable(cx,cy,armies[1].squads[i])){
+						cx=Math.floor(Math.random()*(MAP_WIDTH));
+						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					}*/
+                    armies[1].squads[i].setDestination(cx,cy,maps[0]); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
                     armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[0]); };
