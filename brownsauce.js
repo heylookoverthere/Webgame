@@ -2085,9 +2085,12 @@ function squad() {
 		var feight=0;
 		for(var i=0;i<this.numUnits;i++)
 		{
-			feight+=this.units[i].swimCarry;
+			if(this.units[i].alive){
+				feight+=this.units[i].swimCarry;
+			}
 		}
-		return feight;
+		if ( feight>0) {return true;}
+		return false;
 	};	
     
 	this.addUnit=function(uknit)
@@ -2470,6 +2473,7 @@ function squad() {
 	function booTile(x, y,sqd) {
 		if(sqd.getFlightHeight()>1) {return false;}
 		if((sqd.getFlightHeight()>0) && (maps[0].tiles[x][y].data!=TileType.Mountains)){return false;}
+		if((sqd.canSwim()) && (maps[0].tiles[x][y].data==TileType.Water)) {return false;}
 	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean)||(maps[0].tiles[x][y].data==TileType.Lava));
 	};
 
@@ -2842,6 +2846,8 @@ function tileToCost(data, sqd) {
 	if(sqd.getFlightHeight()>2) {return 2;}
     if(( data == TileType.Mountains ) ||( data == TileType.Ocean )) return 0;
 	if(sqd.getFlightHeight()>1) {return 2;}
+	if(( data == TileType.Water ) && sqd.canSwim()){ return 2;}
+	if( data == TileType.Water ) {return 0;}
 	if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
     if( data == TileType.Swamp  ) return 5;
 	if( data == TileType.Forest  ) return 3;
@@ -2904,6 +2910,7 @@ function Map(I) { //map object
 	I.walkable=function(x,y,sqd){
 		if(sqd.getFlightHeight()>1) {return true;}
 		if((sqd.getFlightHeight()>0) && (I.tiles[x][y].data!=TileType.Mountains)){return true;}
+		if((sqd.canSwim()) && (maps[0].tiles[x][y].data==TileType.Water)) {return true;}
 		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean) &&(I.tiles[x][y].data!=TileType.Lava)) {return true;}
 		return false;
 	}
