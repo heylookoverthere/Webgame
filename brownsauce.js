@@ -2141,6 +2141,9 @@ function squad() {
 		if(map.tiles[this.x][this.y].data==TileType.Forest) {return SEEAss.Tiger;}
 		if(map.tiles[this.x][this.y].data==TileType.Plains) {return SEEAss.EarthBound;}
 		if(map.tiles[this.x][this.y].data==TileType.Sand) {return SEEAss.Creeper;}
+		if(map.tiles[this.x][this.y].data==TileType.Road) {return SEEAss.Creeper;}
+		if(theTime.hours>16) {return SEEAss.Pumpkinhead;}
+		if(theTime.hours>12) {return SEEAss.Skeleton;}
 		return SEEAss.Shoe;
 	};
 	
@@ -2559,7 +2562,7 @@ function squad() {
 		if(!this.hasTamer()) {return false;}
 		if(this.encounterCounter>this.encounterPoint){
 			this.encounterCounter=0;
-			this.encounterPoint=Math.floor(Math.random()*400)+200;
+			this.encounterPoint=Math.floor(Math.random()*400)+ENCOUNTER_RATE;
 			return true;
 		}
 		return false;
@@ -3588,7 +3591,7 @@ function battleDraw()
     }
     if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
     if((tamekey.check()) && (combatants[0].hasTamer())){
-		var meth=Math.floor(Math.random()*20);
+		var meth=Math.floor(Math.random()*TAME_CHANCE);
 		if(meth<10){
 			console.log("Tamed the "+combatants[1].units[0].getClassName());
 			armies[0].addLoose(combatants[1].units[0]);
@@ -3597,7 +3600,8 @@ function battleDraw()
 		}else
 		{
 			console.log("Monster bit you!");
-			//todo hurt tamer.
+			//todo hurt tamer?
+			combatants[0].units[Math.floor(Math.random()*combatants[0].numUnits)].hurt(combatants[1].units[0].attack*2);
 		}
 		
 	}
