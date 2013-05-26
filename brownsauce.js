@@ -348,6 +348,10 @@ function unit() {
 		if(this.class===SEEAss.Werewolf) {texticles="Werewolf";}
 		if(this.class===SEEAss.Tiger) {texticles="Tiger";}
 		if(this.class===SEEAss.Samurai) {texticles="Samurai";}
+		if(this.class===SEEAss.Pumpkinhead) {texticles="Pumpkin Head";}
+		if(this.class===SEEAss.Witch) {texticles="Witch";}
+		if(this.class===SEEAss.Octopus) {texticles="Octopus";}
+		if(this.class===SEEAss.Mermaid) {texticles="Mermaid";}
 		return texticles;
 	};
     
@@ -3731,6 +3735,11 @@ function update() {
             isMenu=2;
 			
         }
+		var txte="";
+		if (armies[0].squads[MSELECTED].canSwim()) {txte="Can Swim";}
+		if (armies[0].squads[MSELECTED].getFlightHeight()>0) {txte="Low Flying";}
+		if (armies[0].squads[MSELECTED].getFlightHeight()>1) {txte="High Flying";}
+		canvas.fillText(txte,460,570);
 		canvas.fillText("Page: "+ (pageCount+1)+ "/4",760,570);
         return;
     }else if (isMenu==2)
