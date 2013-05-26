@@ -21,7 +21,7 @@ SEEAss.Dancer=19;
 SEEAss.Skeleton=20;
 SEEAss.CptBearmerica=31;
 SEEAss.IronBear=32;
-SEEAss.HulkBear=28;
+SEEAss.HulkBear=33;
 SEEAss.Winger=7;
 SEEAss.Frog=3;
 SEEAss.RumHam=15;
@@ -35,6 +35,7 @@ SEEAss.Witch=29;
 SEEAss.Pumpkinhead=30;
 SEEAss.Mermaid=26;
 SEEAss.Octopus=27;
+SEEAss.BeastTamer=28;
 
 Religon={};
 Religon.Seven=1;
@@ -387,6 +388,14 @@ trident[0].classes.push(SEEAss.Mermaid);
 trident[0].classes.push(SEEAss.RumHam);
 trident[0].tooltip = "DERP";
 
+var whip=new Array(1);
+whip[0]= new equipment();
+whip[0].name="Leather Whip";
+whip[0].attack=3;
+whip[0].value=10;
+whip[0].classes.push(SEEAss.BeastTamer);
+whip[0].classes.push(SEEAss.RumHam);
+whip[0].tooltip = "whip it";
 
 knives=new Array(2);
 knives[0]= new equipment();

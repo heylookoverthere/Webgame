@@ -237,7 +237,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*28);
+    this.class=Math.floor(Math.random()*29);
     this.row=Math.floor(Math.random()*2);
     this.viewRange=5;
     this.level=1;
@@ -352,6 +352,7 @@ function unit() {
 		if(this.class===SEEAss.Witch) {texticles="Witch";}
 		if(this.class===SEEAss.Octopus) {texticles="Octopus";}
 		if(this.class===SEEAss.Mermaid) {texticles="Mermaid";}
+		if(this.class===SEEAss.BeastTamer) {texticles="Beast Tamer";}
 		return texticles;
 	};
     
@@ -1438,6 +1439,26 @@ function unit() {
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
+        }else if(cla===SEEAss.BeastTamer) {
+            this.maxhp=50;
+            this.hp=50;
+            this.attack=12;
+            this.maxmp=80;
+            this.speed=1;
+            this.luck=7;
+			this.ali=40;
+            this.viewRange=5;
+            this.sprite = Sprite("beasttamer");
+            this.equipment[0]=whip[0];
+            this.equipment[1]=shirt;
+            if (this.gender===1) {this.sprite = Sprite("beasttamer");}
+            this.def=17;
+            this.mdef=15;
+            this.mag=17;
+            this.cost=210;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Physical;
         }
         
         
@@ -2059,6 +2080,8 @@ function army() {
 	};
 }
 
+
+
 var armies=new Array (2);
 armies[0]=new army();
 armies[1]=new army();
@@ -2109,6 +2132,17 @@ function squad() {
     this.nextTile = {x: this.x, y: this.y};
     this.inNextTile = false;
 	this.viewRange=50;
+	this.encounterCounter=0;
+	this.encounterPoint=Math.floor(Math.random()*400)+200;
+	
+	 this.classFromTerrain=function(map){
+		if(map.tiles[this.x][this.y].data==TileType.Swamp) {return SEEAss.Frog;}
+		if(map.tiles[this.x][this.y].data==TileType.Water) {return SEEAss.Octopus;}
+		if(map.tiles[this.x][this.y].data==TileType.Forest) {return SEEAss.Tiger;}
+		if(map.tiles[this.x][this.y].data==TileType.Plains) {return SEEAss.EarthBound;}
+		if(map.tiles[this.x][this.y].data==TileType.Sand) {return SEEAss.Creeper;}
+		return SEEAss.Shoe;
+	};
 	
 	this.getViewRange=function()
 	{
@@ -2428,6 +2462,7 @@ function squad() {
 
         return null;
     };
+
     this.update = function(map) {
 		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle)) {return;}
@@ -2470,13 +2505,17 @@ function squad() {
 
         if( this.nextMove.x > this.x ) {
             this.bx += speed;
+			this.encounterCounter++;
         } else if( this.nextMove.x < this.x ) {
             this.bx -= speed;
+			this.encounterCounter++;
         }
         if( this.nextMove.y > this.y ) {
             this.by += speed;
+			this.encounterCounter++;
         } else if( this.nextMove.y < this.y ) {
             this.by -= speed;
+			this.encounterCounter++;
         }
 
         if( !this.inNextTile && ( this.bx <= 0 || this.bx >= 16 || this.by <= 0 || this.by >= 16 )) {
@@ -2497,7 +2536,34 @@ function squad() {
             this.nextMove = null;
 
         }
-    }
+		if(this.randomEncounter()){
+			var bloke=new unit();
+			bloke.class=this.classFromTerrain(map);
+			bloke.setClass();
+			console.log(this.leader.name + "'s squad encountered a wild "+bloke.getClassName());
+			var blokeSquad=new squad();
+			blokeSquad.numUnits=1;
+			blokeSquad.units[0]=bloke;
+			combatants[0]=this;
+			combatants[1]=blokeSquad;
+			isBattle=true;
+		}
+    };
+	this.hasTamer=function(){
+		for(var i=0;i<this.numUnits;i++){
+			if (this.units[i].class==SEEAss.BeastTamer) {return true;}
+		}
+		return false;
+	};
+	this.randomEncounter=function(){
+		if(!this.hasTamer()) {return false;}
+		if(this.encounterCounter>this.encounterPoint){
+			this.encounterCounter=0;
+			this.encounterPoint=Math.floor(Math.random()*400)+200;
+			return true;
+		}
+		return false;
+	};
     this.updateNextMove = function() {
         if( !this.path ) {
             return;
@@ -2812,6 +2878,7 @@ var removekey=deploykey;
 var newkey=new akey("n");
 var createkey=new akey("j");
 var optkey=new akey("o");
+var tamekey=new akey("t");
 
 var camera = {  //represents the camera, aka what part of the map is on screen
     x: 0,
@@ -3520,7 +3587,21 @@ function battleDraw()
 		armies[1].removeSquad(combatants[1].ID);
     }
     if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
-    if(battletick>battledelay) {battletick=0;}
+    if((tamekey.check()) && (combatants[0].hasTamer())){
+		var meth=Math.floor(Math.random()*20);
+		if(meth<10){
+			console.log("Tamed the "+combatants[1].units[0].getClassName());
+			armies[0].addLoose(combatants[1].units[0]);
+			combatants[0].turns=10;
+			combatants[0].damaged=400;
+		}else
+		{
+			console.log("Monster bit you!");
+			//todo hurt tamer.
+		}
+		
+	}
+	if(battletick>battledelay) {battletick=0;}
 }
 
 //document.getElementById("myAudio").play(); //starts music
