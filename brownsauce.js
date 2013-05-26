@@ -2473,7 +2473,7 @@ function squad() {
         if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
             mode=1; preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
-            var tmpstr=this.leader.name + "'s squad encountered an enemy @ " +this.x + " , " +this.y;
+            var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
 			battleBox.msg=tmpstr;
 			battleBox.exists=true;
@@ -2546,13 +2546,17 @@ function squad() {
 			var bloke=new unit();
 			bloke.class=this.classFromTerrain(map);
 			bloke.setClass();
-			console.log(this.leader.name + "'s squad encountered a wild "+bloke.getClassName());
+			var tmpstr=this.leader.name + "'s squad encountered a wild "+bloke.getClassName();
+			console.log(tmpstr);
 			var blokeSquad=new squad();
 			blokeSquad.numUnits=1;
 			blokeSquad.units[0]=bloke;
 			combatants[0]=this;
 			combatants[1]=blokeSquad;
-			isBattle=true;
+			preBattle=preBattleLength;
+			battleBox.msg=tmpstr;
+			battleBox.exists=true;
+            console.log(tmpstr);//todo MONSOLEreturn;
 		}
     };
 	this.hasTamer=function(){
