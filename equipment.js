@@ -20,7 +20,7 @@ SEEAss.Creeper=18
 SEEAss.Dancer=19;
 SEEAss.Skeleton=20;
 SEEAss.CptBearmerica=31;
-SEEAss.IronBear=27;
+SEEAss.IronBear=32;
 SEEAss.HulkBear=28;
 SEEAss.Winger=7;
 SEEAss.Frog=3;
@@ -34,6 +34,7 @@ SEEAss.Tiger=25;
 SEEAss.Witch=29;
 SEEAss.Pumpkinhead=30;
 SEEAss.Mermaid=26;
+SEEAss.Octopus=27;
 
 Religon={};
 Religon.Seven=1;
@@ -374,6 +375,18 @@ swords[9].classes.push(SEEAss.DarkKnight);
 swords[9].classes.push(SEEAss.Palladin);
 swords[9].classes.push(SEEAss.RumHam);
 swords[9].tooltip = "Legenday blade of Azro Ahai.";
+
+trident=new Array(1);
+trident[0]= new equipment();
+trident[0].name="Trident";
+trident[0].attack=8;
+trident[0].value=10;
+trident[0].evade=10;
+trident[0].speed=1;
+trident[0].classes.push(SEEAss.Mermaid);
+trident[0].classes.push(SEEAss.RumHam);
+trident[0].tooltip = "DERP";
+
 
 knives=new Array(2);
 knives[0]= new equipment();
