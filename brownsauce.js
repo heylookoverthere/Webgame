@@ -2468,12 +2468,15 @@ function squad() {
 
     this.update = function(map) {
 		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
-        if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle)) {return;}
+        if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle) ||(preBattle)) {return;}
         targ=this.checkcollision();
         if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
-            mode=1; isBattle=true; combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
+            mode=1; preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy @ " +this.x + " , " +this.y;
+
+			battleBox.msg=tmpstr;
+			battleBox.exists=true;
             console.log(tmpstr);//todo MONSOLEreturn;
         };
         if((this.leaderless===true) && (this.path==null)){
@@ -2715,24 +2718,32 @@ function endBattle(usqd,esqd){
     
 };
 
-function textbox(msg) {  //draws a text box
-    canvas.save();
-    canvas.globalAlpha=0.80;
-    canvas.fillStyle = "#DCDCDC";
-    canvas.fillRect(30,400,840,210);
-    
-    canvas.fillStyle = "#483D8B ";
-    canvas.fillRect(40,410,820,190);
-    
-    canvas.font = "16pt Calibri";
-    canvas.textAlign = "left";
-    canvas.textBaseline = "middle";
-    canvas.fillStyle = "white";
-    canvas.fillText(msg, 60,410+15);
-    
-    canvas.restore();
+function textbox() {  //draws a text box
+	this.exists=false;
+	this.x=140;
+	this.y=370;
+	this.width=600;
+	this.height=55;
+	this.msg="Msg";
+	this.draw=function(can){
+		can.save();
+		can.globalAlpha=0.80;
+		can.fillStyle = "#DCDCDC";
+		can.fillRect(this.x-10,this.y-10,this.width+10,this.height+10);
+		
+		can.fillStyle = "#483D8B ";
+		can.fillRect(this.x,this.y,this.width-10,this.height-10);
+		
+		can.font = "16pt Calibri";
+		can.textAlign = "left";
+		can.textBaseline = "middle";
+		can.fillStyle = "white";
+		can.fillText(this.msg, this.x+10,this.y+24);
+		
+		can.restore();
+	};
 };
-
+var battleBox=new textbox();
 function armyInfo(sq){
     canvas.font = "14pt Calibri";
     canvas.textAlign = "left";
@@ -3901,7 +3912,15 @@ function update() {
     {
         towns[i].draw(camera);
     }
-    if ((tick>gamespeed) && (!isBattle)){
+	if((preBattle) &&(!paused)&&(!isMenu)){
+            preBattle--; 
+            if (preBattle<1){
+				preBattle=0;
+				isBattle=true;
+                //paused=true;
+            }
+        }
+    if ((tick>gamespeed) && (!isBattle)&&(!preBattle)){
         tick=0;
         if(battleReport) {
             battleendtick++; 
@@ -3911,6 +3930,7 @@ function update() {
                 battleendtick=0;
             }
         }
+
         for (var i=0;i<armies[0].numSquads;i++) {
 			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
             armies[0].squads[i].update(maps[0]);
@@ -3972,7 +3992,7 @@ function update() {
     for (var i=0;i<numTowns;i++) {
         if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
-    if((!isBattle) &&(isMenu==0)&&(!paused)&&(!battleReport)) {
+    if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
         theTime.update();
     }
     canvas.save();
@@ -4130,7 +4150,7 @@ function update() {
     
     if((isBattle) || (battleReport)) {
         battleDraw();
-        if (escapekey.check()) {isBattle=false;}
+        //if (escapekey.check()) {isBattle=false;}
     }
 
     if(speedkey.check()){
@@ -4159,17 +4179,21 @@ function update() {
 	for(var i=0;i<numClouds;i++)
 	{
 		clouds[i].update();
-		if((maps[0].zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport))
+		if((maps[0].zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
 		{
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
 		}
 	}
-	if((radar) && (!isBattle)&&(!battleReport))
+	if((radar) && (!isBattle)&&(!battleReport)&&(!preBattle))
     {
         //maps[0].drawRadar(camera, 660, 340,armies);
 		maps[0].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
     }
 	canvas.restore();
+	if(preBattle)
+	{
+		battleBox.draw(canvas);
+	}
     endgame();
 }
 
