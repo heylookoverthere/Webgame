@@ -237,7 +237,7 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*26);
+    this.class=Math.floor(Math.random()*27);
     this.row=Math.floor(Math.random()*2);
     this.viewRange=5;
     this.level=1;
@@ -1378,6 +1378,28 @@ function unit() {
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("pumpkinhead");}
+            this.def=20;
+            this.mdef=15;
+            this.mag=17;
+            this.cost=210;
+            this.canlead=true;
+            this.attackType[0]=AttackTypes.Physical;
+            this.attackType[1]=AttackTypes.Magical;
+        }else if(cla===SEEAss.Mermaid) {
+            this.maxhp=80;
+            this.hp=40;
+            this.attack=8;
+            this.maxmp=80;
+			this.gender=1;
+            this.speed=1;
+            this.luck=17;
+			this.ali=1;
+            this.viewRange=5;
+			this.swimCarry=2;
+            this.sprite = Sprite("mermaid");
+            this.equipment[0]=icemagic[3];
+            this.equipment[1]=robe;
+            if (this.gender===1) {this.sprite = Sprite("mermaid");}
             this.def=20;
             this.mdef=15;
             this.mag=17;
