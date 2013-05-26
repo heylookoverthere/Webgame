@@ -215,6 +215,8 @@ function unit() {
     this.mp=0;
     this.maxhp=40;
     this.maxmp=40;
+	this.flightHeight=-1;
+	this.SwimCarry=-1;
 	this.statusTrack=0;
 	this.whichBuff=0;
 	this.whichDebuff=0;
@@ -1989,6 +1991,8 @@ function squad() {
     //AI 
     //target
     //waypoints?
+	this.flightHeight=0;
+	this.swimCarry=0;
     this.x = 12;
     this.y = 12;
     this.army=0;
@@ -2026,8 +2030,39 @@ function squad() {
     this.nextTile = {x: this.x, y: this.y};
     this.inNextTile = false;
 	this.viewRange=50;
+	
+	this.getViewRange=function()
+	{
+		var feight=0;
+		for(var i=0;i<this.numUnits;i++)
+		{
+			feight+=this.units[i].viewRange;
+		}
+		return Math.floor(feight/this.numUnits);
+	};	
     
-    this.addUnit=function(uknit)
+	this.getFlightHeight=function()
+	{
+		var feight=0;
+		for(var i=0;i<this.numUnits;i++)
+		{
+			feight+=this.units[i].flightHeight;
+		}
+		return feight;
+	};	
+	
+	
+	this.canSwim=function()
+	{
+		var feight=0;
+		for(var i=0;i<this.numUnits;i++)
+		{
+			feight+=this.units[i].swimCarry;
+		}
+		return feight;
+	};	
+    
+	this.addUnit=function(uknit)
     {
         if (this.numUnits>4) {return false;}
         this.units[this.numUnits]=uknit;//new unit();
