@@ -36,6 +36,7 @@ SEEAss.Pumpkinhead=30;
 SEEAss.Mermaid=26;
 SEEAss.Octopus=27;
 SEEAss.BeastTamer=28;
+var starting=false;
 
 Religon={};
 Religon.Seven=1;
@@ -192,6 +193,7 @@ function cloud(){
 	this.y=Math.floor(Math.random()*4480)+300;
 	this.layer=Math.floor(Math.random()*2)+1;
 	this.sprite=Sprite("cloud1");
+	this.ang=Math.floor(Math.random()*90);
 	var rnd=Math.floor(Math.random()*9);
 	if(rnd>1){
 		this.sprite=Sprite("cloud2");
@@ -231,7 +233,7 @@ var soundsplaying ="";
 var timestamp = new Date(); 
 var milliseconds = timestamp.getTime();
 var lasttime=0;
-var lastmove=0;
+
 var battlespeed=100;
 var battleRate=2;
 var paused=false;

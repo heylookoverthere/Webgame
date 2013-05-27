@@ -2044,6 +2044,7 @@ function squad() {
     this.x = 12;
     this.y = 12;
     this.army=0;
+	this.lastmove=0;
     this.basex=12;
     this.basey=12;
     this.battleAI=0;
@@ -2458,7 +2459,7 @@ function squad() {
 		var milli=stamp.getTime();
 		//speed=(speed * delta) * (60 / 1000);
 
-		if(milli-lastmove>30){
+		if(milli-this.lastmove>30){
 			if( this.nextMove.x > this.x ) {
 				this.bx += speed;
 				this.encounterCounter++;
@@ -2473,7 +2474,7 @@ function squad() {
 				this.by -= speed;
 				this.encounterCounter++;
 			}
-			lastmove=stamp.getTime();
+			this.lastmove=stamp.getTime();
 		}
 
         if( !this.inNextTile && ( this.bx <= 0 || this.bx >= 16 || this.by <= 0 || this.by >= 16 )) {
@@ -3607,6 +3608,15 @@ function worldMapUpdate(){
 		if(mapSelected>numMaps-1){mapSelected=0;}
 	}
 	if(startkey.check()){
+		canvas.font = "16pt Calibri";
+		canvas.fillStyle = "white";
+		canvas.fillText("LOADING....", 700, 600);
+		starting=true;
+		return;
+	}
+	if(starting)
+	{
+		starting=false;
 		mode=2;
 		worldmapsprite=null;
 		curMap.buildRadar();
@@ -3667,6 +3677,7 @@ function worldMapUpdate(){
 		initTowns();
 		mapInitArmies();
 		//set map!
+	
 	}
 };
 //------------MAIN LOOP-----------------------------------------
@@ -4210,7 +4221,10 @@ function update() {
 		clouds[i].update();
 		if((curMap.zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
 		{
+		//canvas.save();
+		//canvas.rotate(clouds[i].ang*Math.PI/180);
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
+		//canvas.restore();
 		}
 	}
 	if((radar) && (!isBattle)&&(!battleReport)&&(!preBattle))
