@@ -506,6 +506,7 @@ function unit() {
         
     };
     this.hurt = function(dmg){
+
         this.hp-=dmg;
         this.damagetaken+=dmg;
         if (this.hp<0) {this.hp=0; this.alive=false;                    var tmpstr=this.name + " died.";
@@ -574,6 +575,9 @@ function unit() {
             //gambits, attack
             if(this.hasStatus(Status.Poison)){
                 this.hurt(3);
+            }
+			if(this.hasStatus(Status.Regen)){
+                this.heal(3);
             }
             this.atb=0;
             var targe=null;
@@ -675,6 +679,9 @@ function unit() {
                                 }
                                 this.giveExp(delt);
                                 this.damagedelt+=delt;
+								if(targe.haveStatus(Status.Protect)){
+									delt-=delt/.25;
+								}
                                 targe.hurt(delt); 
                                 if(!targe.alive) { 
                                     this.kills++;
@@ -2566,6 +2573,7 @@ function squad() {
 		return false;
 	};
 	this.randomEncounter=function(){
+		if(this.team==1) {return false;}
 		if(!this.hasTamer()) {return false;}
 		if(this.encounterCounter>this.encounterPoint){
 			this.encounterCounter=0;
@@ -3525,13 +3533,19 @@ function battleDraw()
 
         if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
         if(i==BSELECTED) {selector.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-        if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-        
+
+				
         if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
             sevenup.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
         }
         if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
+		canvas.save();
+		canvas.globalAlpha=0.60;
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		if(combatants[0].units[i].hasStatus(Status.Protect)) {protectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+        if(combatants[0].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		if(combatants[0].units[i].hasStatus(Status.Regen)) {regensprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		canvas.restore();
         if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
         if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
     }
@@ -3570,7 +3584,13 @@ function battleDraw()
            sevenup.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
         }
         if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
+		canvas.save();
+		canvas.globalAlpha=0.60;
         if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+	    if(combatants[1].units[i].hasStatus(Status.Protect)) {protectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+	    if(combatants[1].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+	    if(combatants[1].units[i].hasStatus(Status.Regen)) {regensprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		canvas.restore();
         if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
         if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
     }
@@ -3616,7 +3636,10 @@ function battleDraw()
 		{
 			console.log("Monster bit you!");
 			//todo hurt tamer?
-			combatants[0].units[Math.floor(Math.random()*combatants[0].numUnits)].hurt(combatants[1].units[0].attack*2);
+			var turtle=Math.floor(Math.random()*combatants[0].numUnits)
+
+			combatants[0].units[turtle].hurt(combatants[1].units[0].attack*2);
+			if((combatants[0].units[turtle]==combatants[0].leader) &&(!combatants[0].units[turtle].alive)) {combatants[0].pickNewLeader();}
 		}
 		
 	}
