@@ -158,6 +158,9 @@ tileColors[TileType.Sand] = "#999966";
 tileColors[TileType.Lava] = "#FF0000";
 
 var poisonsprite = Sprite("poison");
+var protectsprite = Sprite("protect");
+var reflectsprite = Sprite("reflect");
+var regensprite = Sprite("regen");
 var selector = Sprite("cursor");
 var noleader= Sprite("noleader");
 var flagsprite = Sprite("flag");
