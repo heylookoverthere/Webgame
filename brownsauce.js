@@ -1518,6 +1518,10 @@ function numArmyUnits(team){
 
 maps = [];
 maps.push(Map());
+maps.push(Map());
+maps.push(Map());
+maps.push(Map());
+maps.push(Map());
 
 function town() {
     this.x = 1;
@@ -1540,30 +1544,30 @@ function town() {
     };
     this.draw=function(cam)
     {
-        if(maps[0].zoom<2) {
+        if(maps[mapSelected].zoom<2) {
             if(this.team===0)
             {
                 this.bsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
             }else if(this.team===1)
             {
                 this.rsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
             }
         }else
         {
             if(this.team===0)
             {
                 this.bsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
             }else if(this.team===1)
             {
                 this.rsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
             }
         }
     };
@@ -1572,11 +1576,7 @@ function town() {
 towns=new Array(numTowns+1);
 function initTowns(){
 
-    for(var i=0;i<numTowns;i++)
-    {
-        towns[i] =new town();
-        towns[i].name=townnames[Math.floor(Math.random()*40)];
-    }
+
 
     towns[0].x=12;
     towns[0].y=12;
@@ -2337,7 +2337,7 @@ function squad() {
 			if(this.path){
 				this.clearDestination();
 			}
-            //this.setDestination(this.basex,this.basey,maps[0]);
+            //this.setDestination(this.basex,this.basey,maps[mapSelected]);
         }
         return ;
     };
@@ -2425,35 +2425,35 @@ function squad() {
 			press=this.leader.nightSprite;
 		}
 		press.draw(canvas,
-                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[0].zoom-1));
+                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
+                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
         if (this.leaderless){
             noleader.draw(canvas,
-                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[0].zoom-1));
+                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
+                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
         }
-	    if(maps[0].tiles[this.x][this.y+2].data==TileType.Forest) {
-			var gx=(this.x-cam.x)*16/Math.pow(2, maps[0].zoom-1);
-			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[0].zoom-1);
-			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, maps[0].zoom-1)-1));
-			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, maps[0].zoom-1)-1));//todo
+	    if(maps[mapSelected].tiles[this.x][this.y+2].data==TileType.Forest) {
+			var gx=(this.x-cam.x)*16/Math.pow(2, maps[mapSelected].zoom-1);
+			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[mapSelected].zoom-1);
+			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, maps[mapSelected].zoom-1)-1));
+			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, maps[mapSelected].zoom-1)-1));//todo
 	
-		}else if((maps[0].tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
-			var gx=(this.x-cam.x)*16/Math.pow(2, maps[0].zoom-1);
-			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[0].zoom-1);
+		}else if((maps[mapSelected].tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
+			var gx=(this.x-cam.x)*16/Math.pow(2, maps[mapSelected].zoom-1);
+			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[mapSelected].zoom-1);
 			canvas.save();
 			canvas.globalAlpha=0.80;
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(maps[0].zoom-1));
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(maps[0].zoom-1));//todo
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(maps[0].zoom-1));
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(maps[0].zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(maps[mapSelected].zoom-1));
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(maps[mapSelected].zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(maps[mapSelected].zoom-1));
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(maps[mapSelected].zoom-1));//todo
 			canvas.restore();
 		}
     };
 
     this.drawdest = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} 
-        flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, maps[0].zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, maps[0].zoom-1));
+        flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, maps[mapSelected].zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, maps[mapSelected].zoom-1));
     };
     
     this.checkcollision= function() {
@@ -2485,7 +2485,7 @@ function squad() {
             console.log(tmpstr);//todo MONSOLEreturn;
         };
         if((this.leaderless===true) && (this.path==null)){
-            this.setDestination(this.basex,this.basey,maps[0])}
+            this.setDestination(this.basex,this.basey,maps[mapSelected])}
         for(var i=0;i<numTowns;i++)
         {
             if(towns[i].checkCollision(this)) 
@@ -2512,7 +2512,7 @@ function squad() {
         if (this.leaderless) {speed=3;} //PROBLEM?
         if((terrain==4) &&(this.units[0].class==SEEAss.Frog)) {speed=4};
 
-        //speed = speed / Math.pow(2, maps[0].zoom-1);
+        //speed = speed / Math.pow(2, maps[mapSelected].zoom-1);
 
         if( this.nextMove.x > this.x ) {
             this.bx += speed;
@@ -2607,9 +2607,9 @@ function squad() {
 
 	function booTile(x, y,sqd) {
 		if(sqd.getFlightHeight()>1) {return false;}
-		if((sqd.getFlightHeight()>0) && (maps[0].tiles[x][y].data!=TileType.Mountains)){return false;}
-		if((sqd.canSwim()) && (maps[0].tiles[x][y].data==TileType.Water)) {return false;}
-	    return ((maps[0].tiles[x][y].data==TileType.Mountains) || (maps[0].tiles[x][y].data==TileType.Ocean)||(maps[0].tiles[x][y].data==TileType.Lava));
+		if((sqd.getFlightHeight()>0) && (maps[mapSelected].tiles[x][y].data!=TileType.Mountains)){return false;}
+		if((sqd.canSwim()) && (maps[mapSelected].tiles[x][y].data==TileType.Water)) {return false;}
+	    return ((maps[mapSelected].tiles[x][y].data==TileType.Mountains) || (maps[mapSelected].tiles[x][y].data==TileType.Ocean)||(maps[mapSelected].tiles[x][y].data==TileType.Lava));
 	};
 
 	var newX, newY;
@@ -2794,7 +2794,7 @@ function drawmousetext(targ,cam) { //draws unit status info
     if(targ.team==1) {  canvas.fillStyle = "red";}
 
     tempstr = targ.leader.name+": "+targ.getHP()+ " / " +targ.getMaxHP();
-    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[0].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[0].zoom+targ.height+8);
+    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[mapSelected].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[mapSelected].zoom+targ.height+8);
     
     canvas.fillStyle = "#5F9EA0";
 };
@@ -2807,13 +2807,13 @@ function drawtowntext(targ,cam) { //draws town name
     //if(targ.team==1) {        canvas.fillStyle = "red";}
 
     tempstr = targ.name;
-    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[0].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[0].zoom+targ.height-4);
+    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[mapSelected].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[mapSelected].zoom+targ.height-4);
     
     canvas.fillStyle = "#5F9EA0";
 };
 
 isOver= function(targ,cam){ //is the mouse over the player/object 
-    if((mX>(targ.x-cam.x)*16/maps[0].zoom) && (mX<((targ.x-cam.x)*16+targ.width*maps[0].zoom)/maps[0].zoom) &&(mY>((targ.y-cam.y)*16)/maps[0].zoom) &&(mY<((targ.y-cam.y)*16+targ.height)/maps[0].zoom)) {return true;}
+    if((mX>(targ.x-cam.x)*16/maps[mapSelected].zoom) && (mX<((targ.x-cam.x)*16+targ.width*maps[mapSelected].zoom)/maps[mapSelected].zoom) &&(mY>((targ.y-cam.y)*16)/maps[mapSelected].zoom) &&(mY<((targ.y-cam.y)*16+targ.height)/maps[mapSelected].zoom)) {return true;}
     return false;
 };
 
@@ -2824,8 +2824,8 @@ function mouseClick(e) {  //represents the mouse
     mY = e.pageY - canvasElement.get(0).offsetTop;
     switch (e.which) {
         case 1:
-            	tx=Math.floor(mX/16) * Math.pow(2, maps[0].zoom-1);
-				ty=Math.floor(mY/16) * Math.pow(2, maps[0].zoom-1);
+            	tx=Math.floor(mX/16) * Math.pow(2, maps[mapSelected].zoom-1);
+				ty=Math.floor(mY/16) * Math.pow(2, maps[mapSelected].zoom-1);
 
 				onSomething=null;
 				for(var i=0;i<armies[0].numSquads;i++)
@@ -2834,7 +2834,7 @@ function mouseClick(e) {  //represents the mouse
 				}
 				if (onSomething==null){
 					if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
-					armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[0]); 
+					armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[mapSelected]); 
 				}
             break;
         case 2:
@@ -3033,6 +3033,11 @@ function Map(I) { //map object
     I = I || {};
     var i = 0;
     var j = 0;
+	I.x=0;
+	I.y=0;
+	//list of towns
+	//story file?
+	//enemy unit file
     I.active = true;
     I.color = "#00A";
     I.tiles = new Array(MAP_WIDTH);
@@ -3055,7 +3060,7 @@ function Map(I) { //map object
 	I.walkable=function(x,y,sqd){
 		if(sqd.getFlightHeight()>1) {return true;}
 		if((sqd.getFlightHeight()>0) && (I.tiles[x][y].data!=TileType.Mountains)){return true;}
-		if((sqd.canSwim()) && (maps[0].tiles[x][y].data==TileType.Water)) {return true;}
+		if((sqd.canSwim()) && (maps[mapSelected].tiles[x][y].data==TileType.Water)) {return true;}
 		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean) &&(I.tiles[x][y].data!=TileType.Lava)) {return true;}
 		return false;
 	}
@@ -3225,7 +3230,7 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
-		maps[0].buildRadar();
+		maps[mapSelected].buildRadar();
 
       };
 	imageObj.src = "images/"+name+".png";
@@ -3283,172 +3288,301 @@ function Map(I) { //map object
 }
 
 
-
-armies[0].init(0);
-armies[1].init(1);
-armies[0].squads[0].deploy();
-armies[0].squads[1].leader.class=SEEAss.IronBear;
-armies[0].squads[1].leader.setClass();
-armies[0].squads[1].leader.name="Iron Bear"
-armies[0].squads[2].leader.class=SEEAss.CptBearmerica;
-armies[0].squads[2].leader.setClass();
-armies[0].squads[1].sprite=armies[0].squads[1].leader.sprite;
-armies[0].squads[2].sprite=armies[0].squads[2].leader.sprite;
-armies[0].squads[2].leader.name="Captain Bearmerica";
-armies[0].squads[2].smartRow();
-armies[0].squads[0].smartRow();
-armies[0].squads[1].smartRow();
-for (var i=0;i<armies[0].numSquads;i++){
-	if(MAPNAME=="map3"){
-		armies[0].squads[i].basex=35;
-		armies[0].squads[i].basey=35;
-		armies[0].squads[i].x=35;
-		armies[0].squads[i].y=35;
-	}else 	if(MAPNAME=="map1"){
-		armies[0].squads[i].basex=55;
-		armies[0].squads[i].basey=52;
-		armies[0].squads[i].x=55;
-		armies[0].squads[i].y=52;
-	}else 	if(MAPNAME=="map4"){
-		armies[0].squads[i].basex=49;
-		armies[0].squads[i].basey=59;
-		armies[0].squads[i].x=49;
-		armies[0].squads[i].y=59;
-	}else 	if(MAPNAME=="map6"){
-		armies[0].squads[i].basex=12;
-		armies[0].squads[i].basey=12;
-		armies[0].squads[i].x=12;
-		armies[0].squads[i].y=12;
-	}else 	if(MAPNAME=="map5"){
-		armies[0].squads[i].basex=55;
-		armies[0].squads[i].basey=52;
-		armies[0].squads[i].x=55;
-		armies[0].squads[i].y=52;
-	}else 	if(MAPNAME=="map7"){
-		armies[0].squads[i].basex=362;
-		armies[0].squads[i].basey=456;
-		armies[0].squads[i].x=362;
-		armies[0].squads[i].y=456;
-	}else 	if(MAPNAME=="map8"){
-		armies[0].squads[i].basex=100;
-		armies[0].squads[i].basey=124;
-		armies[0].squads[i].x=100;
-		armies[0].squads[i].y=124;
+function initArmies(){
+	armies[0].init(0);
+	armies[1].init(1);
+	armies[0].squads[0].deploy();
+	armies[0].squads[1].leader.class=SEEAss.IronBear;
+	armies[0].squads[1].leader.setClass();
+	armies[0].squads[1].leader.name="Iron Bear"
+	armies[0].squads[2].leader.class=SEEAss.CptBearmerica;
+	armies[0].squads[2].leader.setClass();
+	armies[0].squads[1].sprite=armies[0].squads[1].leader.sprite;
+	armies[0].squads[2].sprite=armies[0].squads[2].leader.sprite;
+	armies[0].squads[2].leader.name="Captain Bearmerica";
+	armies[0].squads[2].smartRow();
+	armies[0].squads[0].smartRow();
+	armies[0].squads[1].smartRow();
+	for (var i=0;i<armies[0].numSquads;i++){
+		if(MAPNAME=="map3"){
+			armies[0].squads[i].basex=35;
+			armies[0].squads[i].basey=35;
+			armies[0].squads[i].x=35;
+			armies[0].squads[i].y=35;
+		}else 	if(MAPNAME=="map1"){
+			armies[0].squads[i].basex=55;
+			armies[0].squads[i].basey=52;
+			armies[0].squads[i].x=55;
+			armies[0].squads[i].y=52;
+		}else 	if(MAPNAME=="map4"){
+			armies[0].squads[i].basex=49;
+			armies[0].squads[i].basey=59;
+			armies[0].squads[i].x=49;
+			armies[0].squads[i].y=59;
+		}else 	if(MAPNAME=="map6"){
+			armies[0].squads[i].basex=12;
+			armies[0].squads[i].basey=12;
+			armies[0].squads[i].x=12;
+			armies[0].squads[i].y=12;
+		}else 	if(MAPNAME=="map5"){
+			armies[0].squads[i].basex=55;
+			armies[0].squads[i].basey=52;
+			armies[0].squads[i].x=55;
+			armies[0].squads[i].y=52;
+		}else 	if(MAPNAME=="map7"){
+			armies[0].squads[i].basex=362;
+			armies[0].squads[i].basey=456;
+			armies[0].squads[i].x=362;
+			armies[0].squads[i].y=456;
+		}else 	if(MAPNAME=="map8"){
+			armies[0].squads[i].basex=100;
+			armies[0].squads[i].basey=124;
+			armies[0].squads[i].x=100;
+			armies[0].squads[i].y=124;
+		}
 	}
-}
 
-//armies[0].name = "Lannisters";
-armies[0].name = "The Kingsguard";
-armies[1].name = "The Bastard Boys";
-armies[1].leader.name="Roose";
-armies[1].basex=180;
-armies[1].basey=256;
-if(MAPNAME=="map3"){
-	armies[1].basex=157;
-	armies[1].basey=225;
-}else if(MAPNAME=="map1"){
-	armies[1].basex=151;
-	armies[1].basey=230;
-}else if(MAPNAME=="map4"){
-	armies[1].basex=174;
-	armies[1].basey=164;
-}else if(MAPNAME=="map6"){
-	armies[1].basex=71;
-	armies[1].basey=71;
-}else if(MAPNAME=="map5"){
-	armies[1].basex=151;
-	armies[1].basey=230;
-}else if(MAPNAME=="map7"){
-	armies[1].basex=103;
-	armies[1].basey=132;
-}else if(MAPNAME=="map8"){
-	armies[1].basex=153;
-	armies[1].basey=124;
-}
-
-
-
-
-armies[1].addSquad(new unit());
-armies[1].addSquad(new unit());
-armies[1].addSquad(new unit());
-armies[1].addSquad(new unit());
-armies[1].addSquad(new unit());
-
-for (var i=0;i<armies[1].numSquads;i++){
-    armies[1].squads[i].leader.class=SEEAss.HulkBear;
-    armies[1].squads[i].basex=180;
-    armies[1].squads[i].basey=256;
+	//armies[0].name = "Lannisters";
+	armies[0].name = "The Kingsguard";
+	armies[1].name = "The Bastard Boys";
+	armies[1].leader.name="Roose";
+	armies[1].basex=180;
+	armies[1].basey=256;
 	if(MAPNAME=="map3"){
-		armies[1].squads[i].basex=157;
-		armies[1].squads[i].basey=225;
+		armies[1].basex=157;
+		armies[1].basey=225;
 	}else if(MAPNAME=="map1"){
-		armies[1].squads[i].basex=151;
-		armies[1].squads[i].basey=230;
+		armies[1].basex=151;
+		armies[1].basey=230;
 	}else if(MAPNAME=="map4"){
-		armies[1].squads[i].basex=174;
-		armies[1].squads[i].basey=164;
+		armies[1].basex=174;
+		armies[1].basey=164;
 	}else if(MAPNAME=="map6"){
-		armies[1].squads[i].basex=71;
-		armies[1].squads[i].basey=71;
+		armies[1].basex=71;
+		armies[1].basey=71;
 	}else if(MAPNAME=="map5"){
-		armies[1].squads[i].basex=151;
-		armies[1].squads[i].basey=230;
+		armies[1].basex=151;
+		armies[1].basey=230;
 	}else if(MAPNAME=="map7"){
-		armies[1].squads[i].basex=103;
-		armies[1].squads[i].basey=132;
+		armies[1].basex=103;
+		armies[1].basey=132;
 	}else if(MAPNAME=="map8"){
-		armies[1].squads[i].basex=153;
-		armies[1].squads[i].basey=199;
+		armies[1].basex=153;
+		armies[1].basey=124;
 	}
-    armies[1].squads[i].leader.setClass();
-    armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
-    armies[1].squads[i].team=1;
-    armies[1].squads[i].x=armies[1].squads[i].basex;
-    armies[1].squads[i].y=armies[1].squads[i].basey;
-    armies[1].squads[i].smartRow();
-    armies[1].squads[i].deploy();//TODO delay between deployment 
-    armies[1].lastDeployed++;
-	for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
+
+
+
+
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+
+	for (var i=0;i<armies[1].numSquads;i++){
+		armies[1].squads[i].leader.class=SEEAss.HulkBear;
+		armies[1].squads[i].basex=180;
+		armies[1].squads[i].basey=256;
+		if(MAPNAME=="map3"){
+			armies[1].squads[i].basex=157;
+			armies[1].squads[i].basey=225;
+		}else if(MAPNAME=="map1"){
+			armies[1].squads[i].basex=151;
+			armies[1].squads[i].basey=230;
+		}else if(MAPNAME=="map4"){
+			armies[1].squads[i].basex=174;
+			armies[1].squads[i].basey=164;
+		}else if(MAPNAME=="map6"){
+			armies[1].squads[i].basex=71;
+			armies[1].squads[i].basey=71;
+		}else if(MAPNAME=="map5"){
+			armies[1].squads[i].basex=151;
+			armies[1].squads[i].basey=230;
+		}else if(MAPNAME=="map7"){
+			armies[1].squads[i].basex=103;
+			armies[1].squads[i].basey=132;
+		}else if(MAPNAME=="map8"){
+			armies[1].squads[i].basex=153;
+			armies[1].squads[i].basey=199;
+		}
+		armies[1].squads[i].leader.setClass();
+		armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
+		armies[1].squads[i].team=1;
+		armies[1].squads[i].x=armies[1].squads[i].basex;
+		armies[1].squads[i].y=armies[1].squads[i].basey;
+		armies[1].squads[i].smartRow();
+		armies[1].squads[i].deploy();//TODO delay between deployment 
+		armies[1].lastDeployed++;
+		for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
+		{
+			armies[1].squads[i].addUnit(new unit());
+		}
+	}
+	armies[0].leader.name="Bearistan";
+	armies[0].leader.class=SEEAss.Bear;
+	armies[0].leader.setClass();
+	armies[0].leader.maxhp+=20;
+	armies[0].leader.hp=armies[0].leader.maxhp;
+	armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
+
+	armies[1].squads[0].name="Ramsey";
+	armies[1].squads[0].leader.class=SEEAss.DarkKnight;
+	armies[1].squads[0].leader.setClass();
+	armies[1].squads[0].sprite=armies[1].squads[0].leader.sprite;
+
+	armies[1].squads[1].leader.class=SEEAss.Witch;
+	armies[1].squads[1].leader.setClass();
+	armies[1].squads[1].leader.name="Deneb";
+	for(i=1;i<armies[1].squads[1].numUnits;i++)
 	{
-		armies[1].squads[i].addUnit(new unit());
+		armies[1].squads[1].units[i].class=SEEAss.Pumpkinhead;
+		armies[1].squads[1].units[i].setClass();
 	}
-}
-armies[0].leader.name="Bearistan";
-armies[0].leader.class=SEEAss.Bear;
-armies[0].leader.setClass();
-armies[0].leader.maxhp+=20;
-armies[0].leader.hp=armies[0].leader.maxhp;
-armies[0].squads[0].sprite=armies[0].squads[0].leader.sprite;
-
-armies[1].squads[0].name="Ramsey";
-armies[1].squads[0].leader.class=SEEAss.DarkKnight;
-armies[1].squads[0].leader.setClass();
-armies[1].squads[0].sprite=armies[1].squads[0].leader.sprite;
-
-armies[1].squads[1].leader.class=SEEAss.Witch;
-armies[1].squads[1].leader.setClass();
-armies[1].squads[1].leader.name="Deneb";
-for(i=1;i<armies[1].squads[1].numUnits;i++)
-{
-	armies[1].squads[1].units[i].class=SEEAss.Pumpkinhead;
-	armies[1].squads[1].units[i].setClass();
-}
 
 
-armies[1].leader.maxhp+=150;
-armies[1].leader.hp=armies[1].leader.maxhp
-armies[1].leader.equipment[0]=swords[2];
-armies[1].leader.equipment[1]=breastplate;
-//armies[1].leader.equipment[2]=cape;
-armies[1].squads[0].units[1].name="Reek";
-armies[1].squads[0].units[1].class=SEEAss.Cleric;
-armies[1].squads[0].units[1].setClass();
+	armies[1].leader.maxhp+=150;
+	armies[1].leader.hp=armies[1].leader.maxhp
+	armies[1].leader.equipment[0]=swords[2];
+	armies[1].leader.equipment[1]=breastplate;
+	//armies[1].leader.equipment[2]=cape;
+	armies[1].squads[0].units[1].name="Reek";
+	armies[1].squads[0].units[1].class=SEEAss.Cleric;
+	armies[1].squads[0].units[1].setClass();
 
-armies[1].squads[0].units[1].maxhp+=25;
-armies[1].squads[0].units[1].hp=armies[1].leader.maxhp;
-armies[1].squads[0].units[1].row=1;
+	armies[1].squads[0].units[1].maxhp+=25;
+	armies[1].squads[0].units[1].hp=armies[1].leader.maxhp;
+	armies[1].squads[0].units[1].row=1;
+};
 
+function mapInitArmies(){
+	for (var i=0;i<armies[0].numSquads;i++){
+		if(MAPNAME=="map3"){
+			armies[0].squads[i].basex=35;
+			armies[0].squads[i].basey=35;
+			armies[0].squads[i].x=35;
+			armies[0].squads[i].y=35;
+		}else 	if(MAPNAME=="map1"){
+			armies[0].squads[i].basex=55;
+			armies[0].squads[i].basey=52;
+			armies[0].squads[i].x=55;
+			armies[0].squads[i].y=52;
+		}else 	if(MAPNAME=="map4"){
+			armies[0].squads[i].basex=49;
+			armies[0].squads[i].basey=59;
+			armies[0].squads[i].x=49;
+			armies[0].squads[i].y=59;
+		}else 	if(MAPNAME=="map6"){
+			armies[0].squads[i].basex=12;
+			armies[0].squads[i].basey=12;
+			armies[0].squads[i].x=12;
+			armies[0].squads[i].y=12;
+		}else 	if(MAPNAME=="map5"){
+			armies[0].squads[i].basex=55;
+			armies[0].squads[i].basey=52;
+			armies[0].squads[i].x=55;
+			armies[0].squads[i].y=52;
+		}else 	if(MAPNAME=="map7"){
+			armies[0].squads[i].basex=362;
+			armies[0].squads[i].basey=456;
+			armies[0].squads[i].x=362;
+			armies[0].squads[i].y=456;
+		}else 	if(MAPNAME=="map8"){
+			armies[0].squads[i].basex=100;
+			armies[0].squads[i].basey=124;
+			armies[0].squads[i].x=100;
+			armies[0].squads[i].y=124;
+		}
+	}
+	
+	for (var i=0;i<armies[1].numSquads;i++){
+
+		if(MAPNAME=="map3"){
+			armies[1].squads[i].basex=157;
+			armies[1].squads[i].basey=225;
+		}else if(MAPNAME=="map1"){
+			armies[1].squads[i].basex=151;
+			armies[1].squads[i].basey=230;
+		}else if(MAPNAME=="map4"){
+			armies[1].squads[i].basex=174;
+			armies[1].squads[i].basey=164;
+		}else if(MAPNAME=="map6"){
+			armies[1].squads[i].basex=71;
+			armies[1].squads[i].basey=71;
+		}else if(MAPNAME=="map5"){
+			armies[1].squads[i].basex=151;
+			armies[1].squads[i].basey=230;
+		}else if(MAPNAME=="map7"){
+			armies[1].squads[i].basex=103;
+			armies[1].squads[i].basey=132;
+		}else if(MAPNAME=="map8"){
+			armies[1].squads[i].basex=153;
+			armies[1].squads[i].basey=199;
+		}else if(MAPNAME=="map"){
+			armies[1].squads[i].basex=192;
+			armies[1].squads[i].basey=251;
+		}
+	}
+	//armies[0].name = "Lannisters";
+	armies[0].name = "The Kingsguard";
+	armies[1].name = "The Bastard Boys";
+	armies[1].leader.name="Roose";
+	armies[1].basex=180;
+	armies[1].basey=256;
+	if(MAPNAME=="map3"){
+		armies[1].basex=157;
+		armies[1].basey=225;
+	}else if(MAPNAME=="map1"){
+		armies[1].basex=151;
+		armies[1].basey=230;
+	}else if(MAPNAME=="map4"){
+		armies[1].basex=174;
+		armies[1].basey=164;
+	}else if(MAPNAME=="map6"){
+		armies[1].basex=71;
+		armies[1].basey=71;
+	}else if(MAPNAME=="map5"){
+		armies[1].basex=151;
+		armies[1].basey=230;
+	}else if(MAPNAME=="map7"){
+		armies[1].basex=103;
+		armies[1].basey=132;
+	}else if(MAPNAME=="map8"){
+		armies[1].basex=153;
+		armies[1].basey=124;
+	}
+
+
+
+	for (var i=0;i<armies[1].numSquads;i++){
+		armies[1].squads[i].leader.class=SEEAss.HulkBear;
+		armies[1].squads[i].basex=180;
+		armies[1].squads[i].basey=256;
+		if(MAPNAME=="map3"){
+			armies[1].squads[i].basex=157;
+			armies[1].squads[i].basey=225;
+		}else if(MAPNAME=="map1"){
+			armies[1].squads[i].basex=151;
+			armies[1].squads[i].basey=230;
+		}else if(MAPNAME=="map4"){
+			armies[1].squads[i].basex=174;
+			armies[1].squads[i].basey=164;
+		}else if(MAPNAME=="map6"){
+			armies[1].squads[i].basex=71;
+			armies[1].squads[i].basey=71;
+		}else if(MAPNAME=="map5"){
+			armies[1].squads[i].basex=151;
+			armies[1].squads[i].basey=230;
+		}else if(MAPNAME=="map7"){
+			armies[1].squads[i].basex=103;
+			armies[1].squads[i].basey=132;
+		}else if(MAPNAME=="map8"){
+			armies[1].squads[i].basex=153;
+			armies[1].squads[i].basey=199;
+		}
+	}
+
+};
 setInterval(function() {
 
 	if(mode==0){
@@ -3654,10 +3788,32 @@ function battleDraw()
 	bmenuBox.draw(canvas);
 	if(battletick>battledelay) {battletick=0;}
 }
-
+initArmies();
 //document.getElementById("myAudio").play(); //starts music
+    for(var i=0;i<numTowns;i++)
+    {
+        towns[i] =new town();
+        towns[i].name=townnames[Math.floor(Math.random()*40)];
+    }
 initTowns();
-maps[0].buildMap(MAPNAME);
+//maps[0].buildMap("map1");
+
+maps[0].x=200;
+maps[0].y=150;
+//maps[1].buildMap("map3");
+maps[1].x=345;
+maps[1].y=216;
+
+maps[2].x=443;
+maps[2].y=174;
+//maps[3].buildMap("map");
+
+maps[3].x=594;
+maps[3].y=360;
+//maps[4].buildMap("map4");
+
+maps[4].x=708;
+maps[4].y=434;
 camera.center(armies[0].squads[0]);
 function mainMenuUpdate(){
 	lasttime=milliseconds;
@@ -3696,11 +3852,35 @@ function worldMapUpdate(){
     milliseconds = timestamp.getTime();
     tick++;
 	worldmapsprite.draw(canvas,0,0);
-	armies[0].leader.sprite.draw(canvas,200,150);
+	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x,maps[mapSelected].y);
 	//check for clicks on maps, move there or close as possible.
 	//check for key for menu
+	if(tabkey.check()){
+		mapSelected++;
+		if(mapSelected>numMaps-1){mapSelected=0;}
+	}
 	if(startkey.check()){
 		mode=2;
+
+		maps[mapSelected].buildRadar();
+		if(mapSelected==0){
+			maps[mapSelected].buildMap("map1");
+			MAPNAME="map1";
+		}else if(mapSelected==1){
+			maps[mapSelected].buildMap("map3");
+			MAPNAME="map3";
+		}else if(mapSelected==2){
+			maps[mapSelected].buildMap("map7");
+			MAPNAME="map7";
+		}else if(mapSelected==3){
+			maps[mapSelected].buildMap("map");
+			MAPNAME="map";
+		} else if(mapSelected==4){
+			maps[mapSelected].buildMap("map4");
+			MAPNAME="map4";
+		}
+		initTowns();
+		mapInitArmies();
 		//set map!
 	}
 };
@@ -3986,9 +4166,9 @@ function update() {
 		return;
 	}
     if(zoomkey.check()) {
-        maps[0].setZoom(camera);
+        maps[mapSelected].setZoom(camera);
     }
-    maps[0].draw(camera);
+    maps[mapSelected].draw(camera);
     for(var i=0;i<numTowns;i++)
     {
         towns[i].draw(camera);
@@ -4014,40 +4194,40 @@ function update() {
 
         for (var i=0;i<armies[0].numSquads;i++) {
 			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
-            armies[0].squads[i].update(maps[0]);
+            armies[0].squads[i].update(maps[mapSelected]);
 			if(armies[0].squads[i].path!=null) {continue;}
             if(armies[0].fieldAI==AITypes.Random){
                 if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) {
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!maps[0].walkable(cx,cy,armies[0].squads[i])){
+					/*while(!maps[mapSelected].walkable(cx,cy,armies[0].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					}*/
-                    armies[0].squads[i].setDestination(cx,cy,maps[0]); };
+                    armies[0].squads[i].setDestination(cx,cy,maps[mapSelected]); };
             }else if(armies[0].fieldAI==AITypes.Rush){
                 if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
-                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[0]); 
+                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[mapSelected]); 
                 }
             }
         }
         
         for(var i=0;i<armies[1].numSquads;i++){ 
 			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
-            armies[1].squads[i].update(maps[0]);
+            armies[1].squads[i].update(maps[mapSelected]);
 			if(armies[1].squads[i].path!=null) {continue;}
             if(armies[1].fieldAI==AITypes.Random){
                 if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!maps[0].walkable(cx,cy,armies[1].squads[i])){
+					/*while(!maps[mapSelected].walkable(cx,cy,armies[1].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					}*/
-                    armies[1].squads[i].setDestination(cx,cy,maps[0]); };
+                    armies[1].squads[i].setDestination(cx,cy,maps[mapSelected]); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
-                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[0]); };
+                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[mapSelected]); };
             }
         }
     }
@@ -4086,27 +4266,27 @@ function update() {
     canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
     canvas.restore();
     //todo error
-    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, maps[0].zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, maps[0].zoom-1));
+    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
     //camera controls
-    //if(maps[0].zoom<3){
+    //if(maps[mapSelected].zoom<3){
     if(keydown.left) {
-        camera.x -= 1*maps[0].zoom;
+        camera.x -= 1*maps[mapSelected].zoom;
         if (camera.x<0) {camera.x=0;}
     }
     
     if(keydown.right) {
-        camera.x += 1*maps[0].zoom;
-        if (camera.x>(MAP_WIDTH-(camera.width*maps[0].zoom))) {camera.x=MAP_WIDTH-(camera.width*maps[0].zoom);}
+        camera.x += 1*maps[mapSelected].zoom;
+        if (camera.x>(MAP_WIDTH-(camera.width*maps[mapSelected].zoom))) {camera.x=MAP_WIDTH-(camera.width*maps[mapSelected].zoom);}
     }
     
     if(keydown.up) {
-        camera.y -= 1*maps[0].zoom;
+        camera.y -= 1*maps[mapSelected].zoom;
         if (camera.y<0) {camera.y=0;}
     }
     
     if(keydown.down) {
-        camera.y += 1*maps[0].zoom;
-        if (camera.y>(MAP_HEIGHT-(camera.height*maps[0].zoom))) {(camera.y=MAP_HEIGHT-(camera.height*maps[0].zoom));}
+        camera.y += 1*maps[mapSelected].zoom;
+        if (camera.y>(MAP_HEIGHT-(camera.height*maps[mapSelected].zoom))) {(camera.y=MAP_HEIGHT-(camera.height*maps[mapSelected].zoom));}
     }
     //}
     if (ksavekey.check()) {randomwalk=!randomwalk;}
@@ -4186,7 +4366,7 @@ function update() {
     
     
     if(zoomkey.check()) {
-        maps[0].setZoom(camera);
+        maps[mapSelected].setZoom(camera);
     }
     
     if(aikey.check()) {
@@ -4260,15 +4440,15 @@ function update() {
 	for(var i=0;i<numClouds;i++)
 	{
 		clouds[i].update();
-		if((maps[0].zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
+		if((maps[mapSelected].zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
 		{
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
 		}
 	}
 	if((radar) && (!isBattle)&&(!battleReport)&&(!preBattle))
     {
-        //maps[0].drawRadar(camera, 660, 340,armies);
-		maps[0].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
+        //maps[mapSelected].drawRadar(camera, 660, 340,armies);
+		maps[mapSelected].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
     }
 	canvas.restore();
 	if(preBattle)
