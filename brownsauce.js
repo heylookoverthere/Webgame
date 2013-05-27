@@ -630,6 +630,7 @@ function unit() {
             }else if(this.getAttackType()==AttackTypes.GiveStatus){
 				targe=usqd.units[this.statusTrack];
 				usqd.units[this.statusTrack].giveStatus(this.whichBuff);
+				this.whichBuff=Math.floor(Math.random()*3);//todo
 				var stsu = "Haste";
 				if(this.whichBuff==Status.Regen)
 				{
@@ -679,7 +680,7 @@ function unit() {
                                 }
                                 this.giveExp(delt);
                                 this.damagedelt+=delt;
-								if(targe.haveStatus(Status.Protect)){
+								if(targe.hasStatus(Status.Protect)){
 									delt-=delt/.25;
 								}
                                 targe.hurt(delt); 
@@ -1527,7 +1528,7 @@ function town() {
     this.pop=2;
     this.width=32;
     this.height=32;
-    this.sprite = Sprite("town");
+    //this.sprite = Sprite("town");
     this.bsprite=new Array(2);
     this.bsprite[0] = Sprite("townblue");
     this.bsprite[1] = Sprite("townblues");
@@ -1540,9 +1541,6 @@ function town() {
     this.draw=function(cam)
     {
         if(maps[0].zoom<2) {
-            this.sprite.draw(canvas,
-                             (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[0].zoom-1), 
-                             (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[0].zoom-1));
             if(this.team===0)
             {
                 this.bsprite[0].draw(canvas,
@@ -3478,10 +3476,12 @@ function menuDraw()
     canvas.textBaseline = "middle";
     
 }
-
+	bmenuBox=new textbox();
+	bmenuBox.msg="                     A=AI  C=Card  F=Flee R=Row swap T=Tame";
+	bmenuBox.y=570;
 function battleDraw()
 {
-
+	bmenuBox.exists=true;
     battletick++;
     canvas.save();
     canvas.globalAlpha=0.60;
@@ -3643,6 +3643,8 @@ function battleDraw()
 		}
 		
 	}
+
+	bmenuBox.draw(canvas);
 	if(battletick>battledelay) {battletick=0;}
 }
 
