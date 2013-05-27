@@ -1578,15 +1578,15 @@ function initTowns(){
 
 
 
-    towns[0].x=12;
-    towns[0].y=12;
+    towns[0].x=armies[0].basex;
+    towns[0].y=armies[0].basey;
     towns[0].team=0;
-    towns[0].name="King's Landing";
+    towns[0].name=armies[0].baseName;
 
-    towns[1].x=180;
-    towns[1].y=256;
+    towns[1].x=armies[1].basex;
+    towns[1].y=armies[1].basey;
     towns[1].team=1;
-    towns[1].name="The Dreadfort";
+    towns[1].name=armies[1].baseName;
 	
 	towns[2].x=45;
     towns[2].y=138;
@@ -1600,15 +1600,7 @@ function initTowns(){
 	towns[5].x=99;
     towns[5].y=189;
 	if(MAPNAME=="map3"){
-		towns[0].x=35;
-		towns[0].y=35;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=157;
-		towns[1].y=225;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=156;
 		towns[2].y=82;
@@ -1623,15 +1615,7 @@ function initTowns(){
 		towns[5].y=63;
 	
 	}else if(MAPNAME=="map1"){
-		towns[0].x=55;
-		towns[0].y=52;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=151;
-		towns[1].y=230;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=163;
 		towns[2].y=40;
@@ -1646,15 +1630,7 @@ function initTowns(){
 		towns[5].y=263;
 	
 	}else if(MAPNAME=="map4"){
-		towns[0].x=49;
-		towns[0].y=59;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=174;
-		towns[1].y=164;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=42;
 		towns[2].y=179;
@@ -1669,15 +1645,7 @@ function initTowns(){
 		towns[5].y=179;
 	
 	}else if(MAPNAME=="map6"){
-		towns[0].x=12;
-		towns[0].y=12;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=71;
-		towns[1].y=71;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=8;
 		towns[2].y=8;
@@ -1693,15 +1661,7 @@ function initTowns(){
 		//numTowns=2;
 	
 	}else if(MAPNAME=="map5"){
-		towns[0].x=55;
-		towns[0].y=52;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=151;
-		towns[1].y=230;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=163;
 		towns[2].y=40;
@@ -1716,15 +1676,7 @@ function initTowns(){
 		towns[5].y=263;
 	
 	}else if(MAPNAME=="map7"){
-		towns[0].x=362;
-		towns[0].y=456;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=103;
-		towns[1].y=132;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=69;
 		towns[2].y=242;
@@ -1739,15 +1691,7 @@ function initTowns(){
 		towns[5].y=244;
 	
 	}else if(MAPNAME=="map8"){
-		towns[0].x=100;
-		towns[0].y=124;
-		towns[0].team=0;
-		towns[0].name="Kings Landing";
 
-		towns[1].x=153;
-		towns[1].y=199;
-		towns[1].team=1;
-		towns[1].name="The Dreadfort";
 		
 		towns[2].x=69;
 		towns[2].y=242;
@@ -1800,6 +1744,7 @@ function army() {
     this.ali=50;
     this.basex=12;
     this.basey=12;
+	this.baseName="Oldtown";
     this.opinion=50;
 	this.numItems=5;
 	this.items=new Array(99);
@@ -3304,71 +3249,17 @@ function initArmies(){
 	armies[0].squads[0].smartRow();
 	armies[0].squads[1].smartRow();
 	for (var i=0;i<armies[0].numSquads;i++){
-		if(MAPNAME=="map3"){
-			armies[0].squads[i].basex=35;
-			armies[0].squads[i].basey=35;
-			armies[0].squads[i].x=35;
-			armies[0].squads[i].y=35;
-		}else 	if(MAPNAME=="map1"){
-			armies[0].squads[i].basex=55;
-			armies[0].squads[i].basey=52;
-			armies[0].squads[i].x=55;
-			armies[0].squads[i].y=52;
-		}else 	if(MAPNAME=="map4"){
-			armies[0].squads[i].basex=49;
-			armies[0].squads[i].basey=59;
-			armies[0].squads[i].x=49;
-			armies[0].squads[i].y=59;
-		}else 	if(MAPNAME=="map6"){
-			armies[0].squads[i].basex=12;
-			armies[0].squads[i].basey=12;
-			armies[0].squads[i].x=12;
-			armies[0].squads[i].y=12;
-		}else 	if(MAPNAME=="map5"){
-			armies[0].squads[i].basex=55;
-			armies[0].squads[i].basey=52;
-			armies[0].squads[i].x=55;
-			armies[0].squads[i].y=52;
-		}else 	if(MAPNAME=="map7"){
-			armies[0].squads[i].basex=362;
-			armies[0].squads[i].basey=456;
-			armies[0].squads[i].x=362;
-			armies[0].squads[i].y=456;
-		}else 	if(MAPNAME=="map8"){
-			armies[0].squads[i].basex=100;
-			armies[0].squads[i].basey=124;
-			armies[0].squads[i].x=100;
-			armies[0].squads[i].y=124;
-		}
+			armies[0].squads[i].basex=armies[0].basex;
+			armies[0].squads[i].basey=armies[0].basey;
 	}
 
 	//armies[0].name = "Lannisters";
 	armies[0].name = "The Kingsguard";
 	armies[1].name = "The Bastard Boys";
 	armies[1].leader.name="Roose";
-	armies[1].basex=180;
-	armies[1].basey=256;
-	if(MAPNAME=="map3"){
-		armies[1].basex=157;
-		armies[1].basey=225;
-	}else if(MAPNAME=="map1"){
-		armies[1].basex=151;
-		armies[1].basey=230;
-	}else if(MAPNAME=="map4"){
-		armies[1].basex=174;
-		armies[1].basey=164;
-	}else if(MAPNAME=="map6"){
-		armies[1].basex=71;
-		armies[1].basey=71;
-	}else if(MAPNAME=="map5"){
-		armies[1].basex=151;
-		armies[1].basey=230;
-	}else if(MAPNAME=="map7"){
-		armies[1].basex=103;
-		armies[1].basey=132;
-	}else if(MAPNAME=="map8"){
-		armies[1].basex=153;
-		armies[1].basey=124;
+	for (var i=0;i<armies[1].numSquads;i++){
+			armies[1].squads[i].basex=armies[1].basex;
+			armies[1].squads[i].basey=armies[1].basey;
 	}
 
 
@@ -3382,30 +3273,6 @@ function initArmies(){
 
 	for (var i=0;i<armies[1].numSquads;i++){
 		armies[1].squads[i].leader.class=SEEAss.HulkBear;
-		armies[1].squads[i].basex=180;
-		armies[1].squads[i].basey=256;
-		if(MAPNAME=="map3"){
-			armies[1].squads[i].basex=157;
-			armies[1].squads[i].basey=225;
-		}else if(MAPNAME=="map1"){
-			armies[1].squads[i].basex=151;
-			armies[1].squads[i].basey=230;
-		}else if(MAPNAME=="map4"){
-			armies[1].squads[i].basex=174;
-			armies[1].squads[i].basey=164;
-		}else if(MAPNAME=="map6"){
-			armies[1].squads[i].basex=71;
-			armies[1].squads[i].basey=71;
-		}else if(MAPNAME=="map5"){
-			armies[1].squads[i].basex=151;
-			armies[1].squads[i].basey=230;
-		}else if(MAPNAME=="map7"){
-			armies[1].squads[i].basex=103;
-			armies[1].squads[i].basey=132;
-		}else if(MAPNAME=="map8"){
-			armies[1].squads[i].basex=153;
-			armies[1].squads[i].basey=199;
-		}
 		armies[1].squads[i].leader.setClass();
 		armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
 		armies[1].squads[i].team=1;
@@ -3457,130 +3324,22 @@ function initArmies(){
 
 function mapInitArmies(){
 	for (var i=0;i<armies[0].numSquads;i++){
-		if(MAPNAME=="map3"){
-			armies[0].squads[i].basex=35;
-			armies[0].squads[i].basey=35;
-			armies[0].squads[i].x=35;
-			armies[0].squads[i].y=35;
-		}else 	if(MAPNAME=="map1"){
-			armies[0].squads[i].basex=55;
-			armies[0].squads[i].basey=52;
-			armies[0].squads[i].x=55;
-			armies[0].squads[i].y=52;
-		}else 	if(MAPNAME=="map4"){
-			armies[0].squads[i].basex=49;
-			armies[0].squads[i].basey=59;
-			armies[0].squads[i].x=49;
-			armies[0].squads[i].y=59;
-		}else 	if(MAPNAME=="map6"){
-			armies[0].squads[i].basex=12;
-			armies[0].squads[i].basey=12;
-			armies[0].squads[i].x=12;
-			armies[0].squads[i].y=12;
-		}else 	if(MAPNAME=="map5"){
-			armies[0].squads[i].basex=55;
-			armies[0].squads[i].basey=52;
-			armies[0].squads[i].x=55;
-			armies[0].squads[i].y=52;
-		}else 	if(MAPNAME=="map7"){
-			armies[0].squads[i].basex=362;
-			armies[0].squads[i].basey=456;
-			armies[0].squads[i].x=362;
-			armies[0].squads[i].y=456;
-		}else 	if(MAPNAME=="map8"){
-			armies[0].squads[i].basex=100;
-			armies[0].squads[i].basey=124;
-			armies[0].squads[i].x=100;
-			armies[0].squads[i].y=124;
-		}
+			armies[0].squads[i].basex=armies[0].basex;
+			armies[0].squads[i].basey=armies[0].basey;
+			armies[0].squads[i].x=armies[0].basex;
+			armies[0].squads[i].y=armies[0].basey;
 	}
-	
 	for (var i=0;i<armies[1].numSquads;i++){
-
-		if(MAPNAME=="map3"){
-			armies[1].squads[i].basex=157;
-			armies[1].squads[i].basey=225;
-		}else if(MAPNAME=="map1"){
-			armies[1].squads[i].basex=151;
-			armies[1].squads[i].basey=230;
-		}else if(MAPNAME=="map4"){
-			armies[1].squads[i].basex=174;
-			armies[1].squads[i].basey=164;
-		}else if(MAPNAME=="map6"){
-			armies[1].squads[i].basex=71;
-			armies[1].squads[i].basey=71;
-		}else if(MAPNAME=="map5"){
-			armies[1].squads[i].basex=151;
-			armies[1].squads[i].basey=230;
-		}else if(MAPNAME=="map7"){
-			armies[1].squads[i].basex=103;
-			armies[1].squads[i].basey=132;
-		}else if(MAPNAME=="map8"){
-			armies[1].squads[i].basex=153;
-			armies[1].squads[i].basey=199;
-		}else if(MAPNAME=="map"){
-			armies[1].squads[i].basex=192;
-			armies[1].squads[i].basey=251;
-		}
+			armies[1].squads[i].basex=armies[1].basex;
+			armies[1].squads[i].basey=armies[1].basey;
+			armies[1].squads[i].x=armies[1].basex;
+			armies[1].squads[i].y=armies[1].basey;
 	}
+
 	//armies[0].name = "Lannisters";
 	armies[0].name = "The Kingsguard";
 	armies[1].name = "The Bastard Boys";
 	armies[1].leader.name="Roose";
-	armies[1].basex=180;
-	armies[1].basey=256;
-	if(MAPNAME=="map3"){
-		armies[1].basex=157;
-		armies[1].basey=225;
-	}else if(MAPNAME=="map1"){
-		armies[1].basex=151;
-		armies[1].basey=230;
-	}else if(MAPNAME=="map4"){
-		armies[1].basex=174;
-		armies[1].basey=164;
-	}else if(MAPNAME=="map6"){
-		armies[1].basex=71;
-		armies[1].basey=71;
-	}else if(MAPNAME=="map5"){
-		armies[1].basex=151;
-		armies[1].basey=230;
-	}else if(MAPNAME=="map7"){
-		armies[1].basex=103;
-		armies[1].basey=132;
-	}else if(MAPNAME=="map8"){
-		armies[1].basex=153;
-		armies[1].basey=124;
-	}
-
-
-
-	for (var i=0;i<armies[1].numSquads;i++){
-		armies[1].squads[i].leader.class=SEEAss.HulkBear;
-		armies[1].squads[i].basex=180;
-		armies[1].squads[i].basey=256;
-		if(MAPNAME=="map3"){
-			armies[1].squads[i].basex=157;
-			armies[1].squads[i].basey=225;
-		}else if(MAPNAME=="map1"){
-			armies[1].squads[i].basex=151;
-			armies[1].squads[i].basey=230;
-		}else if(MAPNAME=="map4"){
-			armies[1].squads[i].basex=174;
-			armies[1].squads[i].basey=164;
-		}else if(MAPNAME=="map6"){
-			armies[1].squads[i].basex=71;
-			armies[1].squads[i].basey=71;
-		}else if(MAPNAME=="map5"){
-			armies[1].squads[i].basex=151;
-			armies[1].squads[i].basey=230;
-		}else if(MAPNAME=="map7"){
-			armies[1].squads[i].basex=103;
-			armies[1].squads[i].basey=132;
-		}else if(MAPNAME=="map8"){
-			armies[1].squads[i].basex=153;
-			armies[1].squads[i].basey=199;
-		}
-	}
 
 };
 setInterval(function() {
@@ -3866,18 +3625,52 @@ function worldMapUpdate(){
 		if(mapSelected==0){
 			maps[mapSelected].buildMap("map1");
 			MAPNAME="map1";
+			armies[0].basex=55;
+			armies[0].basey=52;
+			armies[1].basex=151;
+			armies[1].basey=230;
+			armies[0].baseName="Winterfell";
+			armies[1].baseName="The Vale";
 		}else if(mapSelected==1){
 			maps[mapSelected].buildMap("map3");
 			MAPNAME="map3";
+			armies[0].basex=35;
+			armies[0].basey=35;
+			armies[1].basex=157;
+			armies[1].basey=225;
+			armies[0].baseName="Mereen";
+			armies[1].baseName="Yunkai";
 		}else if(mapSelected==2){
 			maps[mapSelected].buildMap("map7");
 			MAPNAME="map7";
+			armies[0].basex=362;
+			armies[0].basey=456;
+			armies[0].baseName="Sunspear";
+
+			armies[1].basex=103;
+			armies[1].basey=132;
+			armies[1].baseName="Highgarden";
 		}else if(mapSelected==3){
 			maps[mapSelected].buildMap("map");
 			MAPNAME="map";
+			armies[0].basex=23;
+			armies[0].basey=25;
+			armies[0].baseName="Lys";
+
+			armies[1].basex=177;
+			armies[1].basey=253;
+			armies[1].baseName="Volantis";
 		} else if(mapSelected==4){
 			maps[mapSelected].buildMap("map4");
 			MAPNAME="map4";
+			armies[0].basex=49;
+			armies[0].basey=59;
+			armies[0].baseName="Riverrun";
+
+			armies[1].basex=174;
+			armies[1].basey=164;
+			armies[1].baseName="Harrenhall";
+		
 		}
 		initTowns();
 		mapInitArmies();
@@ -4327,28 +4120,8 @@ function update() {
         }else
         {
             armies[0].squads[armies[0].lastDeployed].deploy();
-			if(MAPNAME=="map3")
-			{	armies[0].squads[armies[0].lastDeployed].x=35;
-				armies[0].squads[armies[0].lastDeployed].y=35;
-			}else if(MAPNAME=="map1")
-			{	armies[0].squads[armies[0].lastDeployed].x=55;
-				armies[0].squads[armies[0].lastDeployed].y=52;
-			}else if(MAPNAME=="map4")
-			{	armies[0].squads[armies[0].lastDeployed].x=49;
-				armies[0].squads[armies[0].lastDeployed].y=59;
-			}else if(MAPNAME=="map6")
-			{	armies[0].squads[armies[0].lastDeployed].x=12;
-				armies[0].squads[armies[0].lastDeployed].y=12;
-			}else if(MAPNAME=="map5")
-			{	armies[0].squads[armies[0].lastDeployed].x=55;
-				armies[0].squads[armies[0].lastDeployed].y=52;
-			}else if(MAPNAME=="map7")
-			{	armies[0].squads[armies[0].lastDeployed].x=362;
-				armies[0].squads[armies[0].lastDeployed].y=456;
-			}else if(MAPNAME=="map8")
-			{	armies[0].squads[armies[0].lastDeployed].x=100;
-				armies[0].squads[armies[0].lastDeployed].y=124;
-			}
+			armies[0].squads[armies[0].lastDeployed].x=armies[0].basex;
+			armies[0].squads[armies[0].lastDeployed].y=armies[0].basey;
             armies[0].lastDeployed++; 
         }
         /*      if (armies[0].lastDeployed>armies[0].numSquads-1) {
