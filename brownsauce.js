@@ -3678,8 +3678,22 @@ function worldMapUpdate(){
 		camera.center(bot);
 		initTowns();
 		mapInitArmies();
-		//set map!
 	
+			//give units initial paths.
+		 /*for(var i=0;i<armies[1].numSquads;i++){ 
+			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
+            //armies[1].squads[i].update(curMap);
+			if(armies[1].squads[i].path!=null) {continue;}
+            if(armies[1].fieldAI==AITypes.Random)
+			{
+                if( (!armies[1].squads[i].path) && (i != 0 )) {
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+
+                    armies[1].squads[i].setDestination(cx,cy,curMap); 
+				}
+			}	
+		}*/
 	}
 };
 //------------MAIN LOOP-----------------------------------------
