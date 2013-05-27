@@ -233,7 +233,8 @@ var soundsplaying ="";
 var timestamp = new Date(); 
 var milliseconds = timestamp.getTime();
 var lasttime=0;
-
+var enemyDeployCount=1;
+var deployRate=200;
 var battlespeed=100;
 var battleRate=2;
 var paused=false;

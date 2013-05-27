@@ -3257,6 +3257,8 @@ function initArmies(){
 	for (var i=0;i<armies[0].numSquads;i++){
 			armies[0].squads[i].basex=armies[0].basex;
 			armies[0].squads[i].basey=armies[0].basey;
+			armies[0].squads[i].x=armies[0].basex;
+			armies[0].squads[i].y=armies[0].basey;
 	}
 
 	//armies[0].name = "Lannisters";
@@ -3266,6 +3268,8 @@ function initArmies(){
 	for (var i=0;i<armies[1].numSquads;i++){
 			armies[1].squads[i].basex=armies[1].basex;
 			armies[1].squads[i].basey=armies[1].basey;
+			armies[1].squads[i].x=armies[1].basex;
+			armies[1].squads[i].y=armies[1].basey;
 	}
 
 
@@ -3285,8 +3289,8 @@ function initArmies(){
 		armies[1].squads[i].x=armies[1].squads[i].basex;
 		armies[1].squads[i].y=armies[1].squads[i].basey;
 		armies[1].squads[i].smartRow();
-		armies[1].squads[i].deploy();//TODO delay between deployment 
-		armies[1].lastDeployed++;
+		//armies[1].squads[i].deploy();//TODO delay between deployment 
+		//armies[1].lastDeployed++;
 		for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
 		{
 			armies[1].squads[i].addUnit(new unit());
@@ -3709,6 +3713,17 @@ function update() {
     }
     if (tileani>3) {tileani=0} //tile animations
 	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
+	if(armies[1].lastDeployed<armies[1].numSquads-1)
+	{
+		enemyDeployCount++;
+		if(enemyDeployCount>deployRate){
+			enemyDeployCount=0;
+			armies[1].squads[armies[1].lastDeployed].deploy();
+			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
+			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
+            armies[1].lastDeployed++; 
+		}
+	}
     if(menukey.check()) {
         if(!isBattle) 
         {
