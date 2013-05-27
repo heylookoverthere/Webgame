@@ -15,6 +15,8 @@ var radarCanvas = radarElement.get(0).getContext("2d");
 
 var mapElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var mapCanvas = mapElement.get(0).getContext("2d");
+
+
 canvasElement.appendTo('body');
 //radarElement.appendTo('body');
 
