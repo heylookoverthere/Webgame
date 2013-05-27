@@ -2454,21 +2454,27 @@ function squad() {
         if((terrain==4) &&(this.units[0].class==SEEAss.Frog)) {speed=4};
 
         //speed = speed / Math.pow(2, curMap.zoom-1);
+		var stamp = new Date();
+		var milli=stamp.getTime();
+		//speed=(speed * delta) * (60 / 1000);
 
-        if( this.nextMove.x > this.x ) {
-            this.bx += speed;
-			this.encounterCounter++;
-        } else if( this.nextMove.x < this.x ) {
-            this.bx -= speed;
-			this.encounterCounter++;
-        }
-        if( this.nextMove.y > this.y ) {
-            this.by += speed;
-			this.encounterCounter++;
-        } else if( this.nextMove.y < this.y ) {
-            this.by -= speed;
-			this.encounterCounter++;
-        }
+		if(milli-lastmove>30){
+			if( this.nextMove.x > this.x ) {
+				this.bx += speed;
+				this.encounterCounter++;
+			} else if( this.nextMove.x < this.x ) {
+				this.bx -= speed;
+				this.encounterCounter++;
+			}
+			if( this.nextMove.y > this.y ) {
+				this.by += speed;
+				this.encounterCounter++;
+			} else if( this.nextMove.y < this.y ) {
+				this.by -= speed;
+				this.encounterCounter++;
+			}
+			lastmove=stamp.getTime();
+		}
 
         if( !this.inNextTile && ( this.bx <= 0 || this.bx >= 16 || this.by <= 0 || this.by >= 16 )) {
             this.nextTile = {};
