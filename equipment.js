@@ -242,6 +242,28 @@ var healcount=0;
 var healrate=140;
 var numTowns=6;
 var CSELECTED=0;
+var maps=new Array(5);
+maps[0]=[];
+maps[0].x=200;
+maps[0].y=150;
+//maps[1].buildMap("map3");
+maps[1]=[];
+maps[1].x=345;
+maps[1].y=216;
+
+maps[2]=[];
+maps[2].x=443;
+maps[2].y=174;
+//maps[3].buildMap("map");
+
+maps[3]=[];
+maps[3].x=594;
+maps[3].y=360;
+//maps[4].buildMap("map4");
+
+maps[4]=[];
+maps[4].x=708;
+maps[4].y=434;
 
 function equipment() {
     this.name="none";

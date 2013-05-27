@@ -1516,12 +1516,8 @@ function numArmyUnits(team){
     return count;
 }
 
-maps = [];
-maps.push(Map());
-maps.push(Map());
-maps.push(Map());
-maps.push(Map());
-maps.push(Map());
+curMap = new Map();
+
 
 function town() {
     this.x = 1;
@@ -1544,30 +1540,30 @@ function town() {
     };
     this.draw=function(cam)
     {
-        if(maps[mapSelected].zoom<2) {
+        if(curMap.zoom<2) {
             if(this.team===0)
             {
                 this.bsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
             }else if(this.team===1)
             {
                 this.rsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
             }
         }else
         {
             if(this.team===0)
             {
                 this.bsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
             }else if(this.team===1)
             {
                 this.rsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
             }
         }
     };
@@ -1753,7 +1749,7 @@ function army() {
 		this.items[i]=randomItem();
 	}
 
-    this.fieldAI=AITypes.Rush;
+    this.fieldAI=AITypes.Random;
     this.cards=new Array(5);
     this.cards[0]=new card();
     this.cards[1]=new card();
@@ -2282,7 +2278,7 @@ function squad() {
 			if(this.path){
 				this.clearDestination();
 			}
-            //this.setDestination(this.basex,this.basey,maps[mapSelected]);
+            //this.setDestination(this.basex,this.basey,curMap);
         }
         return ;
     };
@@ -2370,35 +2366,35 @@ function squad() {
 			press=this.leader.nightSprite;
 		}
 		press.draw(canvas,
-                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
-                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1));
         if (this.leaderless){
             noleader.draw(canvas,
-                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), 
-                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1));
         }
-	    if(maps[mapSelected].tiles[this.x][this.y+2].data==TileType.Forest) {
-			var gx=(this.x-cam.x)*16/Math.pow(2, maps[mapSelected].zoom-1);
-			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[mapSelected].zoom-1);
-			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, maps[mapSelected].zoom-1)-1));
-			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, maps[mapSelected].zoom-1)-1));//todo
+	    if(curMap.tiles[this.x][this.y+2].data==TileType.Forest) {
+			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
+			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
+			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, curMap.zoom-1)-1));
+			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, curMap.zoom-1)-1));//todo
 	
-		}else if((maps[mapSelected].tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
-			var gx=(this.x-cam.x)*16/Math.pow(2, maps[mapSelected].zoom-1);
-			var gy=(this.y-cam.y+1)*16/Math.pow(2, maps[mapSelected].zoom-1);
+		}else if((curMap.tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
+			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
+			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
 			canvas.save();
 			canvas.globalAlpha=0.80;
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(maps[mapSelected].zoom-1));
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(maps[mapSelected].zoom-1));//todo
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(maps[mapSelected].zoom-1));
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(maps[mapSelected].zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(curMap.zoom-1));
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(curMap.zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(curMap.zoom-1));
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(curMap.zoom-1));//todo
 			canvas.restore();
 		}
     };
 
     this.drawdest = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} 
-        flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, maps[mapSelected].zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, maps[mapSelected].zoom-1));
+        flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, curMap.zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, curMap.zoom-1));
     };
     
     this.checkcollision= function() {
@@ -2430,7 +2426,7 @@ function squad() {
             console.log(tmpstr);//todo MONSOLEreturn;
         };
         if((this.leaderless===true) && (this.path==null)){
-            this.setDestination(this.basex,this.basey,maps[mapSelected])}
+            this.setDestination(this.basex,this.basey,curMap)}
         for(var i=0;i<numTowns;i++)
         {
             if(towns[i].checkCollision(this)) 
@@ -2457,7 +2453,7 @@ function squad() {
         if (this.leaderless) {speed=3;} //PROBLEM?
         if((terrain==4) &&(this.units[0].class==SEEAss.Frog)) {speed=4};
 
-        //speed = speed / Math.pow(2, maps[mapSelected].zoom-1);
+        //speed = speed / Math.pow(2, curMap.zoom-1);
 
         if( this.nextMove.x > this.x ) {
             this.bx += speed;
@@ -2552,9 +2548,9 @@ function squad() {
 
 	function booTile(x, y,sqd) {
 		if(sqd.getFlightHeight()>1) {return false;}
-		if((sqd.getFlightHeight()>0) && (maps[mapSelected].tiles[x][y].data!=TileType.Mountains)){return false;}
-		if((sqd.canSwim()) && (maps[mapSelected].tiles[x][y].data==TileType.Water)) {return false;}
-	    return ((maps[mapSelected].tiles[x][y].data==TileType.Mountains) || (maps[mapSelected].tiles[x][y].data==TileType.Ocean)||(maps[mapSelected].tiles[x][y].data==TileType.Lava));
+		if((sqd.getFlightHeight()>0) && (curMap.tiles[x][y].data!=TileType.Mountains)){return false;}
+		if((sqd.canSwim()) && (curMap.tiles[x][y].data==TileType.Water)) {return false;}
+	    return ((curMap.tiles[x][y].data==TileType.Mountains) || (curMap.tiles[x][y].data==TileType.Ocean)||(curMap.tiles[x][y].data==TileType.Lava));
 	};
 
 	var newX, newY;
@@ -2739,7 +2735,7 @@ function drawmousetext(targ,cam) { //draws unit status info
     if(targ.team==1) {  canvas.fillStyle = "red";}
 
     tempstr = targ.leader.name+": "+targ.getHP()+ " / " +targ.getMaxHP();
-    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[mapSelected].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[mapSelected].zoom+targ.height+8);
+    canvas.fillText(tempstr, (targ.x-cam.x)*16/curMap.zoom+(targ.width/2), (targ.y-cam.y)*16/curMap.zoom+targ.height+8);
     
     canvas.fillStyle = "#5F9EA0";
 };
@@ -2752,13 +2748,13 @@ function drawtowntext(targ,cam) { //draws town name
     //if(targ.team==1) {        canvas.fillStyle = "red";}
 
     tempstr = targ.name;
-    canvas.fillText(tempstr, (targ.x-cam.x)*16/maps[mapSelected].zoom+(targ.width/2), (targ.y-cam.y)*16/maps[mapSelected].zoom+targ.height-4);
+    canvas.fillText(tempstr, (targ.x-cam.x)*16/curMap.zoom+(targ.width/2), (targ.y-cam.y)*16/curMap.zoom+targ.height-4);
     
     canvas.fillStyle = "#5F9EA0";
 };
 
 isOver= function(targ,cam){ //is the mouse over the player/object 
-    if((mX>(targ.x-cam.x)*16/maps[mapSelected].zoom) && (mX<((targ.x-cam.x)*16+targ.width*maps[mapSelected].zoom)/maps[mapSelected].zoom) &&(mY>((targ.y-cam.y)*16)/maps[mapSelected].zoom) &&(mY<((targ.y-cam.y)*16+targ.height)/maps[mapSelected].zoom)) {return true;}
+    if((mX>(targ.x-cam.x)*16/curMap.zoom) && (mX<((targ.x-cam.x)*16+targ.width*curMap.zoom)/curMap.zoom) &&(mY>((targ.y-cam.y)*16)/curMap.zoom) &&(mY<((targ.y-cam.y)*16+targ.height)/curMap.zoom)) {return true;}
     return false;
 };
 
@@ -2769,8 +2765,8 @@ function mouseClick(e) {  //represents the mouse
     mY = e.pageY - canvasElement.get(0).offsetTop;
     switch (e.which) {
         case 1:
-            	tx=Math.floor(mX/16) * Math.pow(2, maps[mapSelected].zoom-1);
-				ty=Math.floor(mY/16) * Math.pow(2, maps[mapSelected].zoom-1);
+            	tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+				ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
 
 				onSomething=null;
 				for(var i=0;i<armies[0].numSquads;i++)
@@ -2779,7 +2775,7 @@ function mouseClick(e) {  //represents the mouse
 				}
 				if (onSomething==null){
 					if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
-					armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,maps[mapSelected]); 
+					armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
 				}
             break;
         case 2:
@@ -3006,7 +3002,7 @@ function Map(I) { //map object
 	I.walkable=function(x,y,sqd){
 		if(sqd.getFlightHeight()>1) {return true;}
 		if((sqd.getFlightHeight()>0) && (I.tiles[x][y].data!=TileType.Mountains)){return true;}
-		if((sqd.canSwim()) && (maps[mapSelected].tiles[x][y].data==TileType.Water)) {return true;}
+		if((sqd.canSwim()) && (curMap.tiles[x][y].data==TileType.Water)) {return true;}
 		if((I.tiles[x][y].data!=TileType.Mountains) &&(I.tiles[x][y].data!=TileType.Ocean) &&(I.tiles[x][y].data!=TileType.Lava)) {return true;}
 		return false;
 	}
@@ -3176,7 +3172,7 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
-		maps[mapSelected].buildRadar();
+		curMap.buildRadar();
 
       };
 	imageObj.src = "images/"+name+".png";
@@ -3558,22 +3554,6 @@ initArmies();
 initTowns();
 //maps[0].buildMap("map1");
 
-maps[0].x=200;
-maps[0].y=150;
-//maps[1].buildMap("map3");
-maps[1].x=345;
-maps[1].y=216;
-
-maps[2].x=443;
-maps[2].y=174;
-//maps[3].buildMap("map");
-
-maps[3].x=594;
-maps[3].y=360;
-//maps[4].buildMap("map4");
-
-maps[4].x=708;
-maps[4].y=434;
 camera.center(armies[0].squads[0]);
 function mainMenuUpdate(){
 	lasttime=milliseconds;
@@ -3623,9 +3603,9 @@ function worldMapUpdate(){
 	if(startkey.check()){
 		mode=2;
 		worldmapsprite=null;
-		maps[mapSelected].buildRadar();
+		curMap.buildRadar();
 		if(mapSelected==0){
-			maps[mapSelected].buildMap("map1");
+			curMap.buildMap("map1");
 			MAPNAME="map1";
 			armies[0].basex=55;
 			armies[0].basey=52;
@@ -3634,7 +3614,7 @@ function worldMapUpdate(){
 			armies[0].baseName="Winterfell";
 			armies[1].baseName="The Vale";
 		}else if(mapSelected==1){
-			maps[mapSelected].buildMap("map3");
+			curMap.buildMap("map3");
 			MAPNAME="map3";
 			armies[0].basex=35;
 			armies[0].basey=35;
@@ -3643,7 +3623,7 @@ function worldMapUpdate(){
 			armies[0].baseName="Mereen";
 			armies[1].baseName="Yunkai";
 		}else if(mapSelected==2){
-			maps[mapSelected].buildMap("map7");
+			curMap.buildMap("map7");
 			MAPNAME="map7";
 			armies[0].basex=362;
 			armies[0].basey=456;
@@ -3653,7 +3633,7 @@ function worldMapUpdate(){
 			armies[1].basey=132;
 			armies[1].baseName="Highgarden";
 		}else if(mapSelected==3){
-			maps[mapSelected].buildMap("map");
+			curMap.buildMap("map");
 			MAPNAME="map";
 			armies[0].basex=23;
 			armies[0].basey=25;
@@ -3663,7 +3643,7 @@ function worldMapUpdate(){
 			armies[1].basey=253;
 			armies[1].baseName="Volantis";
 		} else if(mapSelected==4){
-			maps[mapSelected].buildMap("map4");
+			curMap.buildMap("map4");
 			MAPNAME="map4";
 			armies[0].basex=49;
 			armies[0].basey=59;
@@ -3694,7 +3674,7 @@ function update() {
 		lastani=milliseconds;
 		anicount=0;
     }
-    if (tileani>2) {tileani=0} //tile animations
+    if (tileani>4) {tileani=0} //tile animations
 	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
     if(menukey.check()) {
         if(!isBattle) 
@@ -3965,9 +3945,9 @@ function update() {
 		return;
 	}
     if(zoomkey.check()) {
-        maps[mapSelected].setZoom(camera);
+        curMap.setZoom(camera);
     }
-    maps[mapSelected].draw(camera);
+    curMap.draw(camera);
     for(var i=0;i<numTowns;i++)
     {
         towns[i].draw(camera);
@@ -3993,40 +3973,40 @@ function update() {
 
         for (var i=0;i<armies[0].numSquads;i++) {
 			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
-            armies[0].squads[i].update(maps[mapSelected]);
+            armies[0].squads[i].update(curMap);
 			if(armies[0].squads[i].path!=null) {continue;}
             if(armies[0].fieldAI==AITypes.Random){
                 if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) {
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!maps[mapSelected].walkable(cx,cy,armies[0].squads[i])){
+					/*while(!curMap.walkable(cx,cy,armies[0].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					}*/
-                    armies[0].squads[i].setDestination(cx,cy,maps[mapSelected]); };
+                    armies[0].squads[i].setDestination(cx,cy,curMap); };
             }else if(armies[0].fieldAI==AITypes.Rush){
                 if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
-                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,maps[mapSelected]); 
+                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
                 }
             }
         }
         
         for(var i=0;i<armies[1].numSquads;i++){ 
 			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
-            armies[1].squads[i].update(maps[mapSelected]);
+            armies[1].squads[i].update(curMap);
 			if(armies[1].squads[i].path!=null) {continue;}
             if(armies[1].fieldAI==AITypes.Random){
                 if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!maps[mapSelected].walkable(cx,cy,armies[1].squads[i])){
+					/*while(!curMap.walkable(cx,cy,armies[1].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					}*/
-                    armies[1].squads[i].setDestination(cx,cy,maps[mapSelected]); };
+                    armies[1].squads[i].setDestination(cx,cy,curMap); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
-                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,maps[mapSelected]); };
+                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
             }
         }
     }
@@ -4065,27 +4045,27 @@ function update() {
     canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
     canvas.restore();
     //todo error
-    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, maps[mapSelected].zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, maps[mapSelected].zoom-1));
+    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
     //camera controls
-    //if(maps[mapSelected].zoom<3){
+    //if(curMap.zoom<3){
     if(keydown.left) {
-        camera.x -= 1*maps[mapSelected].zoom;
+        camera.x -= 1*curMap.zoom;
         if (camera.x<0) {camera.x=0;}
     }
     
     if(keydown.right) {
-        camera.x += 1*maps[mapSelected].zoom;
-        if (camera.x>(MAP_WIDTH-(camera.width*maps[mapSelected].zoom))) {camera.x=MAP_WIDTH-(camera.width*maps[mapSelected].zoom);}
+        camera.x += 1*curMap.zoom;
+        if (camera.x>(MAP_WIDTH-(camera.width*curMap.zoom))) {camera.x=MAP_WIDTH-(camera.width*curMap.zoom);}
     }
     
     if(keydown.up) {
-        camera.y -= 1*maps[mapSelected].zoom;
+        camera.y -= 1*curMap.zoom;
         if (camera.y<0) {camera.y=0;}
     }
     
     if(keydown.down) {
-        camera.y += 1*maps[mapSelected].zoom;
-        if (camera.y>(MAP_HEIGHT-(camera.height*maps[mapSelected].zoom))) {(camera.y=MAP_HEIGHT-(camera.height*maps[mapSelected].zoom));}
+        camera.y += 1*curMap.zoom;
+        if (camera.y>(MAP_HEIGHT-(camera.height*curMap.zoom))) {(camera.y=MAP_HEIGHT-(camera.height*curMap.zoom));}
     }
     //}
     if (ksavekey.check()) {randomwalk=!randomwalk;}
@@ -4145,7 +4125,7 @@ function update() {
     
     
     if(zoomkey.check()) {
-        maps[mapSelected].setZoom(camera);
+        curMap.setZoom(camera);
     }
     
     if(aikey.check()) {
@@ -4222,15 +4202,15 @@ function update() {
 	for(var i=0;i<numClouds;i++)
 	{
 		clouds[i].update();
-		if((maps[mapSelected].zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
+		if((curMap.zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
 		{
 		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
 		}
 	}
 	if((radar) && (!isBattle)&&(!battleReport)&&(!preBattle))
     {
-        //maps[mapSelected].drawRadar(camera, 660, 340,armies);
-		maps[mapSelected].drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
+        //curMap.drawRadar(camera, 660, 340,armies);
+		curMap.drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
     }
 	canvas.restore();
 	if(preBattle)
