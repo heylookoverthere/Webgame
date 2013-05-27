@@ -231,6 +231,7 @@ var soundsplaying ="";
 var timestamp = new Date(); 
 var milliseconds = timestamp.getTime();
 var lasttime=0;
+var lastmove=0;
 var battlespeed=100;
 var battleRate=2;
 var paused=false;
