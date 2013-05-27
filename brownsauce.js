@@ -3680,7 +3680,7 @@ function update() {
 		lastani=milliseconds;
 		anicount=0;
     }
-    if (tileani>2) {tileani=0} //tile animations
+    if (tileani>3) {tileani=0} //tile animations
 	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
     if(menukey.check()) {
         if(!isBattle) 
