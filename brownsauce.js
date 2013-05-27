@@ -2477,7 +2477,7 @@ function squad() {
         targ=this.checkcollision();
         if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
-            mode=1; preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
+             preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
 			battleBox.msg=tmpstr;
@@ -2890,6 +2890,7 @@ var speedkey=new akey("x");
 var statuskey=new akey("s");
 var rowkey=new akey("r");
 var enterkey=new akey("space");
+var startkey=new akey("return");
 var menukey=new akey("esc");
 var fleekey=new akey("f");
 var aikey=new akey("a");
@@ -3450,7 +3451,13 @@ armies[1].squads[0].units[1].row=1;
 
 setInterval(function() {
 
-    update();
+	if(mode==0){
+		mainMenuUpdate();
+	}else if(mode==1){
+		worldMapUpdate();
+	}else if(mode==2){
+		update();
+	}
 }, 1000/FPS);
 
 
@@ -3652,6 +3659,51 @@ function battleDraw()
 initTowns();
 maps[0].buildMap(MAPNAME);
 camera.center(armies[0].squads[0]);
+function mainMenuUpdate(){
+	lasttime=milliseconds;
+    timestamp = new Date();
+    milliseconds = timestamp.getTime();
+    tick++;
+	canvas.fillStyle = "black";
+	canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+	titlesprite.draw(canvas,150,50);
+	canvas.fillStyle = "white";
+	canvas.font = "16pt Calibri";
+	canvas.fillText("Press Enter",400,500);
+	canvas.fillText("  New Game",415,550);
+	canvas.fillStyle = "grey";
+	canvas.fillText("  Load Game",415,575);
+	if(mmcur){
+		canvas.fillText("-",400,550);
+	}else	{
+		canvas.fillText("-",400,575);
+
+	}
+	if(startkey.check()){
+		mode=1;
+	}
+	if(downkey.check()){
+		mmcur=!mmcur;
+	}
+	if(upkey.check()){
+		mmcur=!mmcur;
+	}
+};
+
+function worldMapUpdate(){
+	lasttime=milliseconds;
+    timestamp = new Date();
+    milliseconds = timestamp.getTime();
+    tick++;
+	worldmapsprite.draw(canvas,0,0);
+	armies[0].leader.sprite.draw(canvas,200,150);
+	//check for clicks on maps, move there or close as possible.
+	//check for key for menu
+	if(startkey.check()){
+		mode=2;
+		//set map!
+	}
+};
 //------------MAIN LOOP-----------------------------------------
 function update() {
     lasttime=milliseconds;
