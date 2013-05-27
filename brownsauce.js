@@ -216,7 +216,7 @@ function unit() {
     this.maxhp=40;
     this.maxmp=40;
 	this.flightHeight=-1;
-	this.SwimCarry=-1;
+	this.swimCarry=-1;
 	this.statusTrack=0;
 	this.whichBuff=0;
 	this.whichDebuff=0;
@@ -761,11 +761,11 @@ function unit() {
 
 
         if(this.hasStatus(Status.Haste)){
-            this.atb+=(this.speed*2);
+            this.atb+=(this.speed*2*battleRate);
         }else if(this.hasStatus(Status.Slow)){
-            this.atb+=(this.speed/2);
+            this.atb+=(this.speed/2*battleRate);
         }else {
-            this.atb+=this.speed;
+            this.atb+=this.speed*battleRate;
         }
     };
     
@@ -1753,7 +1753,7 @@ function army() {
 		this.items[i]=randomItem();
 	}
 
-    this.fieldAI=AITypes.Random;
+    this.fieldAI=AITypes.Rush;
     this.cards=new Array(5);
     this.cards[0]=new card();
     this.cards[1]=new card();
@@ -2611,7 +2611,7 @@ function endBattle(usqd,esqd){
     isBattle=false;
     battleReport=true;
     battleendtick=100;
-	
+	cardUsed=false;
 	
 	
     if(usqd.damaged>=esqd.damaged) //win
@@ -2843,6 +2843,7 @@ var addkey=aikey;
 var removekey="d";
 var unitinfokey=new akey("u");
 var cardkey=new akey("c");
+var cardcyclekey=new akey("v");
 var deploykey=new akey("d");
 var removekey=deploykey;
 var newkey=new akey("n");
@@ -3596,6 +3597,7 @@ function mainMenuUpdate(){
 	}
 	if(startkey.check()){
 		mode=1;
+		titlesprite=null;
 	}
 	if(downkey.check()){
 		mmcur=!mmcur;
@@ -3620,7 +3622,7 @@ function worldMapUpdate(){
 	}
 	if(startkey.check()){
 		mode=2;
-
+		worldmapsprite=null;
 		maps[mapSelected].buildRadar();
 		if(mapSelected==0){
 			maps[mapSelected].buildMap("map1");
@@ -3672,6 +3674,10 @@ function worldMapUpdate(){
 			armies[1].baseName="Harrenhall";
 		
 		}
+		var bot=[];
+		bot.x=armies[0].basex;
+		bot.y=armies[0].basey;
+		camera.center(bot);
 		initTowns();
 		mapInitArmies();
 		//set map!
@@ -4156,15 +4162,18 @@ function update() {
     }
 
     if(cardkey.check()) {
-        if(isBattle)
+        if((isBattle) && (!cardUsed))
         {
             armies[0].cards[CSELECTED].type=CSELECTED;
             armies[0].cards[CSELECTED].setSprite();
             armies[0].cards[CSELECTED].use(combatants[0],combatants[1]);
-        }else {
+			cardUsed=true;
+        }
+    }
+	
+	if(cardcyclekey.check()){
             CSELECTED++;
             if(CSELECTED>4) { CSELECTED=0;}
-        }
     }
     
     if(fleekey.check()) {
@@ -4173,7 +4182,7 @@ function update() {
 
     armyInfo();
     
-    armies[0].cards[CSELECTED].sprite.draw(canvas,300, 5);
+    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 550);}
 
     if(radarkey.check())
     {

@@ -46,7 +46,10 @@ damage numbers drawn on sprites in battle. -meh
  -knockback
  fog of war/view range
  
-
+ maybe we could pre-plot the enemy squads intial movement assignment and lump that hang in with the map load
+ 
+ -keep list of tiles covered by squads, one frame behind
+ 
 
 different weapon for front/back row
 .getspeed (equip)
