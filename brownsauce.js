@@ -1579,18 +1579,6 @@ function town() {
 
 
 function initTowns(){
-
-
-
-   /* towns[0].x=armies[0].basex;
-    towns[0].y=armies[0].basey;
-    towns[0].team=0;
-    towns[0].name=armies[0].baseName;
-
-    towns[1].x=armies[1].basex;
-    towns[1].y=armies[1].basey;
-    towns[1].team=1;
-    towns[1].name=armies[1].baseName;*/
 	
 	towns[2].x=45;
     towns[2].y=138;
@@ -3627,6 +3615,14 @@ function worldMapUpdate(){
     milliseconds = timestamp.getTime();
     tick++;
 	worldmapsprite.draw(canvas,0,0);
+	for(var i=0;i<5;i++){
+		if(maps[i].team==0){
+			bluelocationsprite.draw(canvas,maps[i].x,maps[i].y);
+		}else
+		{
+			redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
+		}
+	}
 	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x,maps[mapSelected].y);
 	canvas.font = "19pt Algerian";
 	canvas.textAlign = "center";
@@ -3637,7 +3633,9 @@ function worldMapUpdate(){
 	//check for clicks on maps, move there or close as possible.
 	//check for key for menu
 	if(tabkey.check()){
-		mapSelected++;
+		//if(maps(mapSelected+1).team==0){ todo
+			mapSelected++;
+		//}	
 		if(mapSelected>numMaps-1){mapSelected=0;}
 	}
 	if(startkey.check()){
