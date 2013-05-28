@@ -1639,14 +1639,14 @@ function initTowns(){
 		towns[2].x=42;
 		towns[2].y=179;
 		
-		towns[3].x=84;
-		towns[3].y=234;
+		towns[3].x=64;
+		towns[3].y=191;
 		
 		towns[4].x=126;
 		towns[4].y=72;
 		
-		towns[5].x=41;
-		towns[5].y=179;
+		towns[5].x=44;
+		towns[5].y=101;
 	
 	}else if(MAPNAME=="map6"){
 
