@@ -2499,8 +2499,8 @@ function squad() {
             {
                 if(towns[i].team!=this.team){
                     towns[i].team=this.team;
-                    if(towns[i].team==0) {armies[0].opinion+=5;console.log(this.leader.name+"'s unit liberated " + towns[i].name);}
-                    if(towns[i].team==1) {armies[0].opinion-=10; console.warn(this.leader.name+"'s unit captured " + towns[i].name);} //TODO bConsoleStr
+                    if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);}
+                    if(towns[i].team==1) {armies[0].opinion-=10; var tmpsrt=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); bConsoleStr.push(tmpstr);} //TODO bConsoleStr
                 }
                 this.heal();
             }
@@ -4579,7 +4579,7 @@ function update() {
 	{	
 		bConsoleBox.draw(canvas);
 	}
-	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 550);}
+	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 560);}
     endgame();
 }
 
