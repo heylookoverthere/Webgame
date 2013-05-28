@@ -2851,7 +2851,7 @@ function mouseWheel(e){
 				var blob=[];
 				blob.x=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
 				blob.y=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
-				camera.center(blob);
+				//camera.center(blob);
 				camera.check();
 			}
 			if(curMap.zoom>3) {curMap.zoom=3;}
@@ -2976,8 +2976,18 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 
     center: function(targ) {
         //if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
-        tx=targ.x-26;// * Math.pow(2, curMap.zoom-1);
-        ty=targ.y-20;// * Math.pow(2, curMap.zoom-1);
+        if(this.zoom==1)
+		{
+			tx=targ.x-26;// * Math.pow(2, curMap.zoom-1);
+			ty=targ.y-20;// * Math.pow(2, curMap.zoom-1);
+		}
+		else if(this.zoom==2){
+			 tx=targ.x-46;// * Math.pow(2, curMap.zoom-1);
+			ty=targ.y-40;
+		}else if(this.zoom==3){
+			 tx=targ.x-78;// * Math.pow(2, curMap.zoom-1);
+			ty=targ.y-60;
+		}
         if (tx<0) {tx=0;}
         if (ty<0) {ty=0;}
         if (tx>MAP_WIDTH-this.width) {tx=MAP_WIDTH-this.width;}
@@ -3178,7 +3188,7 @@ function Map(I) { //map object
 
 		} else 
 		{
-			I.zoom=2;cam.x-=30;cam.y-=20;			
+			I.zoom=2;cam.x+=30;cam.y+=20;			
 		}
 		if(cam.x<0)
 		{
