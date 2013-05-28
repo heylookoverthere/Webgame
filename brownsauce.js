@@ -1,6 +1,7 @@
 $(document).bind("contextmenu",function(e){
+	alert(e.pageY);
     return false;
-}); 
+});
 
 
 
@@ -2536,6 +2537,7 @@ function squad() {
 			bloke.setClass();
 			var tmpstr=this.leader.name + "'s squad encountered a wild "+bloke.getClassName();
 			console.log(tmpstr);
+			bConsoleStr.push(tmpstr);
 			var blokeSquad=new squad();
 			blokeSquad.numUnits=1;
 			blokeSquad.units[0]=bloke;
@@ -2827,35 +2829,51 @@ function mouseWheel(e){
 	//if (delta)
 	if((mode==2))
 	{ //&& (!isMenu)){
-		var targ=bConsoleBox;
-		if((mX>targ.x) && (mX<(targ.x+targ.width)) &&(mY>targ.y) &&(mY<(targ.y+targ.height))) 
+	
+		if(isMenu==1)
 		{
+			if((mX>300) && (mX<850) &&(mY>175) &&(mY<645)) 
+			{
 
-			if(delta>0)
-				bConsoleBox.scroll++;
-			if(delta<0)
-				bConsoleBox.scroll--;
-
-				if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
-				if(bConsoleBox.scroll>bConsoleStr.length-4) {bConsolebox.scroll=bConsoleStr.length-5;}
+				if(delta>0){
+					if (pageCount>0){ pageCount--;}
+				}
+				if(delta<0){
+					if (pageCount<3){ pageCount++;}
+				}
+			}
 		}else
 		{
-			if(delta<0)
+			var targ=bConsoleBox;
+			if((mX>targ.x) && (mX<(targ.x+targ.width)) &&(mY>targ.y) &&(mY<(targ.y+targ.height))) 
 			{
-				
-				curMap.setZoom(camera);
-				camera.check();
-			}else if(delta>0){
 
-				curMap.minusZoom(camera);
-				var blob=[];
-				blob.x=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
-				blob.y=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
-				//camera.center(blob);
-				camera.check();
+				if(delta>0)
+					bConsoleBox.scroll++;
+				if(delta<0)
+					bConsoleBox.scroll--;
+
+					if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
+					if(bConsoleBox.scroll>bConsoleStr.length-4) {bConsolebox.scroll=bConsoleStr.length-5;}
+			}else
+			{
+				if(delta<0)
+				{
+					
+					curMap.setZoom(camera);
+					camera.check();
+				}else if(delta>0){
+
+					curMap.minusZoom(camera);
+					var blob=[];
+					blob.x=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+					blob.y=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
+					//camera.center(blob);
+					camera.check();
+				}
+				if(curMap.zoom>3) {curMap.zoom=3;}
+				if(curMap.zoom<1) {curMap.zoom=1;}
 			}
-			if(curMap.zoom>3) {curMap.zoom=3;}
-			if(curMap.zoom<1) {curMap.zoom=1;}
 		}
 	}
 
@@ -2922,7 +2940,7 @@ mouseXY= function(e) {
 
 document.body.addEventListener("click", mouseClick, false);
 document.body.addEventListener("mousewheel",mouseWheel,false);
-//document.body.addEventListener("DOMMouseScroll", mouseWheel, false);
+document.body.addEventListener("DOMMouseScroll", mouseWheel, false);
 
 
 var ksavekey=new akey("o"); //define the different keys
@@ -4443,7 +4461,7 @@ function update() {
 
     armyInfo();
     
-    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 550);}
+
 
     if(radarkey.check())
     {
@@ -4510,6 +4528,7 @@ function update() {
 	{	
 		bConsoleBox.draw(canvas);
 	}
+	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 550);}
     endgame();
 }
 
