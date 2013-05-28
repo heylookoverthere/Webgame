@@ -20,8 +20,7 @@ storm god - lightning
 great other - ice attack
 ---------------------
 -map object=name, num towns, towm locations,base locations,
-the vale /mountain clans
-north / ramsey/dreadfort
+
 
 -cards -animations, more types needed animationpause? attack queue wait for animation to finish?
 damage numbers drawn on sprites in battle. -meh
@@ -183,3 +182,15 @@ bear->polarbead->cyborg bear
 chemist->alchemist->apocothary
 helear->cleric->priest
 shoe->boot-pegasusboot
+
+the vale /mountain clans
+north / ramsey/dreadfort
+
+North:
+"Winterfell",Dreadfort","Last Hearth","Deepwood Motte","Karhold","Tohhren's Square","Barrowton","Hornwood","White Harbor","Castle Black"
+
+The Neck: "Greywater Watch","Flint's Finger","Moat Cailin","Seaguard","oldstones","The Twins"
+riverlands "Fairmarket","Riverrun","High Heart","Acorn hall","Pinkmaiden","Harrenhall"
+vale: "Eyrie","Longbow Hall","Old Anchor","Runestone","Coldwater","Snakewoods","Saltpans"
+crownlands: "King's Landing","Maidenpool","Rosby","Duskendale","Dragonstone", "Crackclaw Point"
+Dorne:"Starfell","Blackmont","Kingsgrave","Wyl","Yornwood","Godsgrace","SunSpear",Saltshore","Lemonwood"

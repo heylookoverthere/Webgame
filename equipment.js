@@ -57,7 +57,7 @@ TileType.Lava=28;
 TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
-
+var towns=new Array();
 var radarBitmap=[];
 var mapBitmap=[];
 var sideBar=false;
@@ -118,7 +118,18 @@ var mX=120;
 var mY=320;
 var townnames=new Array(40);
 townnames= ["Qarth","Meereen","Myr","Pentos","Ashford","Ashemark","Gulltown","Pyke","Lordsport","Lannisport","Lys","Tyrosh","Iben","New Ghis","Astapor","Yunkai","Qohor","Lorath","Volantis","Braavos","Vaes Dothrak","White Harbor","Maidenpool","Oldstones","Harrenhal","Riverrun","Seaguard","Winterfell","Saltpans","Castamere","Oxcross","Crakehall","The Crag","Duskendale","Dragonstone","Rosby","Highgarden","Oldtown","Grimston","Hardhome"];
-
+tname=new Array(5);
+/*tname[0]=new Array(10);
+tname[1]=new Array(10);
+tname[2]=new Array(10);
+tname[3]=new Array(10);
+tname[4]=new Array(10);
+tname[5]=new Array(10);*/
+tname[0]=["Last Hearth","Deepwood Motte","Karhold","Tohhren's Square","Barrowton","Hornwood","White Harbor","Castle Black"];
+tname[1]=["Flint's Finger","Moat Cailin","Seaguard","oldstones"];
+tname[2]=["Fairmarket","Stoney Sept","High Heart","Acorn hall","Pinkmaiden"];
+tname[3]=["Maidenpool","Duskendale","Dragonstone", "Crackclaw Point"];
+tname[4]=["Blackmont","Kingsgrave","Wyl","Yornwood","Godsgrace","Saltshore","Lemonwood"];
 names[0]= ["Eddard", "Theon","Bealor", "Aerys", "Aemon", "Aemond", "Fletcher Dick", "Beardless Dick", "Valarr", "Hot Pie", "Lommy", "Jon", "Matarys", "Dunk", "Egg", "Aerion","Bran","Bronn","Robb","Tyrion","Jamie","Tywin","Jeor","Jorah","Mero","Stannis","Gendrey","Yoren","Rickard","Drogo","Brandon","Gregor","Sandor","Polliver","Allister","Barristan","Jeoffery","Robert","Symon","Dolorous Edd","Podrick","Renly","Illyn","Aurane","Regular Ed","Merret","Walder","HODOR","Luwin","Cressen","Janos","Tytos","Garion","Willas","Garlan","Viserys","Loras","Willem","Martyn","Illyrio","Xaro Xhoan Ducksauce","Cleon","Aegon","Emmon","Skahaz","Cleos","Tygett","Vargo","Pono","Nimble Dick","Iron Emmett","Mance","Tormund","Varamyr","Orell","Jaquen","Wease","The Tickler","Dareon","Morroqo","Marwyn","Pate","Davos","Axel","Wyman","Pyter","Varys","Arnolf","Sigorn","Hoster","Tion","Helman","Torrhen","Yohn","Lyn","Nestor","Doran","Oberyn","Qyburn","Howland","Daario","Xhondo","Yellow Dick","Zachery","Zekko","Zollo","Will","Willbert","Wendel","Wendamyr","The Weeper","Wat","Walton","Vardis","Urrigon","Ulmer","Tobho","Timett","Syrio","Styr"];
 names[1]= ["Alysane", "Lyra", "Naerys", "Pia", "Lynesse", "Maege", "Rhaenyra", "Kyra", "Rhae", "Tanselle", "Daena", "Elaena", "Myriah", "Aelinor","Arya","Sansa","Shae","Meera","Mina","Gilly","Ygritte","Ami","Cersei","Tanda","Lollys","Mya","Alayne","Myrcella","Lyanna","Lemore","Jayne","Talisa","Ros","Margery", "Catlyen", "Brienne", "Olenna", "Roslin", "Lysa", "Taena","Senelle","Falyse","Barra","Bella","Joanna","Joy","Janei","Dorna","Ashara","Allyria","Asha","Osha","Rhonda","Rhea","Alerie","Alysanne","Malora","Daenerys","Irri","Rhaella","Ellia","Illyrio","Quaithe", "Missandei", "Shireen","Mezzara","Kezmya","Qezza","Jhezene","Miklaz","Arianne","Shella","Mellario","Obara","Nymeria","Tyene","Obella","Dorea","Loreza","Myranda","Thistle","Alannys","Alla ","Alia","Alyce","Minisa","Meris","Wenda","Anya","Doreah","Horma","Weasel","Tysha","Sarella","Maggi","Jenny","Barbrey","Bethany","Wylla","Leona","Alys","Amarei","Old Nan","Yna","Ysilla","Victaria","Visenya","Val","The Waif","Tya","Tysane","Tansey","Talla","Taela","Squirrel","Shiera","Sharna","Scolera","Sarra","Sallei","S'vrone","Rhea","Rhialta"];
 var namesused=new Array(2);
@@ -244,22 +255,25 @@ var battlePause=false;
 var unitinfo=false;
 var healcount=0;
 var healrate=140;
-var numTowns=6;
+//var numTowns=6;
 var CSELECTED=0;
 var maps=new Array(5);
 maps[0]=[];
 maps[0].x=236;
 maps[0].y=124;
+maps[0].numTowns=6;
 maps[0].name="The North";
 //maps[1].buildMap("map3");
 maps[1]=[];
 maps[1].x=220;
 maps[1].y=209;
+maps[1].numTowns=6;
 maps[1].name="The Neck";
 
 maps[2]=[];
 maps[2].x=236;
 maps[2].y=283;
+maps[2].numTowns=6;
 maps[2].name="The Riverlands";
 
 
@@ -268,12 +282,14 @@ maps[2].name="The Riverlands";
 maps[3]=[];
 maps[3].x=102;
 maps[3].y=361;
+maps[3].numTowns=6;
 maps[3].name="Kings Landing";
 //maps[4].buildMap("map4");
 
 maps[4]=[];
 maps[4].x=240;
 maps[4].y=488;
+maps[4].numTowns=6;
 maps[4].name="The Dornish Marches";
 function equipment() {
     this.name="none";
