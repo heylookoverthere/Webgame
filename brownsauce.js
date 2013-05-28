@@ -1577,12 +1577,12 @@ function town() {
     };
 };
 
-towns=new Array(numTowns+1);
+
 function initTowns(){
 
 
 
-    towns[0].x=armies[0].basex;
+   /* towns[0].x=armies[0].basex;
     towns[0].y=armies[0].basey;
     towns[0].team=0;
     towns[0].name=armies[0].baseName;
@@ -1590,7 +1590,7 @@ function initTowns(){
     towns[1].x=armies[1].basex;
     towns[1].y=armies[1].basey;
     towns[1].team=1;
-    towns[1].name=armies[1].baseName;
+    towns[1].name=armies[1].baseName;*/
 	
 	towns[2].x=45;
     towns[2].y=138;
@@ -1721,14 +1721,14 @@ function endgame(){
     }else if(winmode==1)
     {
         var toaster=true;
-        for(var i=0;i<numTowns;i++)
+        for(var i=0;i<maps[mapSelected].numTowns;i++)
         {
             if(towns[i].team!=0) {toaster=false;}
         }
         //if(toaster) {console.log("A WINNER IS YOU");}
         
         toaster=true;
-        for(var i=0;i<numTowns;i++)
+        for(var i=0;i<maps[mapSelected].numTowns;i++)
         {
             if(towns[i].team!=1) {toaster=false;}
         }
@@ -2445,7 +2445,7 @@ function squad() {
         };
         if((this.leaderless===true) && (this.path==null)){
             this.setDestination(this.basex,this.basey,curMap)}
-        for(var i=0;i<numTowns;i++)
+        for(var i=0;i<maps[mapSelected].numTowns;i++)
         {
             if(towns[i].checkCollision(this)) 
             {
@@ -2772,7 +2772,7 @@ function drawtowntext(targ,cam) { //draws town name
     //if(targ.team==1) {        canvas.fillStyle = "red";}
 
     tempstr = targ.name;
-    canvas.fillText(tempstr, (targ.x-cam.x)*16/curMap.zoom+(targ.width/2), (targ.y-cam.y)*16/curMap.zoom+targ.height-4);
+    canvas.fillText(tempstr, (targ.x-cam.x)*16/curMap.zoom+(targ.width/2)-5, (targ.y-cam.y)*16/curMap.zoom+targ.height+12);
     
     canvas.fillStyle = "#5F9EA0";
 };
@@ -2800,7 +2800,7 @@ function mouseClick(e) {  //represents the mouse
 				if (onSomething==null){
 					if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
 					var onTown=null;
-					for(var j=0;j<numTowns;j++)
+					for(var j=0;j<maps[mapSelected].numTowns;j++)
 					{
 						if (isOver(towns[j],camera)) {onTown=towns[j];}
 					}
@@ -3237,7 +3237,7 @@ function Map(I) { //map object
         canvas.putImageData(radarBitmap,x,y);
 		//canvas.drawImage(radarCanvas,x,y);
         
-        for(var i=0;i<numTowns;i++)
+        for(var i=0;i<maps[mapSelected].numTowns;i++)
         {
             canvas.fillStyle = "blue";
             if(towns[i].team==1){ canvas.fillStyle = "#FF2C85";}
@@ -3585,12 +3585,7 @@ function battleDraw()
 }
 initArmies();
 //document.getElementById("myAudio").play(); //starts music
-    for(var i=0;i<numTowns;i++)
-    {
-        towns[i] =new town();
-        towns[i].name=townnames[Math.floor(Math.random()*40)];
-    }
-initTowns();
+//initTowns();
 //maps[0].buildMap("map1");
 
 camera.center(armies[0].squads[0]);
@@ -3667,6 +3662,7 @@ function worldMapUpdate(){
 			armies[1].basey=230;
 			armies[0].baseName="Winterfell";
 			armies[1].baseName="The Dreadfort";
+
 		}else if(mapSelected==1){
 			curMap.buildMap("map3");
 			MAPNAME="map3";
@@ -3708,6 +3704,21 @@ function worldMapUpdate(){
 			armies[1].baseName="Sunspear";
 		
 		}
+		for(var p=0;p<maps[0].numTowns;p++)
+			{
+				towns[p]=new town();
+				if(p>1){
+					towns[p].name=tname[mapSelected][p-2];
+				}
+			}
+			
+			towns[0].x=armies[0].basex;
+			towns[0].y=armies[0].basey;
+			towns[0].team=0;
+			towns[0].name=armies[0].baseName;
+			towns[1].x=armies[1].basex
+			towns[1].y=armies[1].basey
+			towns[1].name=armies[1].baseName;
 		var bot=[];
 		bot.x=armies[0].basex;
 		bot.y=armies[0].basey;
@@ -4028,7 +4039,7 @@ function update() {
         curMap.setZoom(camera);
     }
     curMap.draw(camera);
-    for(var i=0;i<numTowns;i++)
+    for(var i=0;i<maps[mapSelected].numTowns;i++)
     {
         towns[i].draw(camera);
     }
@@ -4109,7 +4120,7 @@ function update() {
 			
 		}
     }
-    for (var i=0;i<numTowns;i++) {
+    for (var i=0;i<maps[mapSelected].numTowns;i++) {
         if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
     if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
