@@ -1528,7 +1528,7 @@ function town() {
     this.name="Qarth";
     this.team=1;
     this.pop=2;
-    this.width=32;
+    this.width=64;
     this.height=32;
     //this.sprite = Sprite("town");
     this.bsprite=new Array(2);
@@ -1540,6 +1540,12 @@ function town() {
     this.checkCollision=function(squd){
         return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+2) && (squd.y>this.y-1) && (squd.y<this.y+2)); 
     };
+	this.getTileX=function(cam){
+		return Math.floor((this.x+cam.x)/16);
+	};
+	this.getTileY=function(cam){
+		return Math.floor((this.y+cam.y)/16);
+	};
     this.draw=function(cam)
     {
         if(curMap.zoom<2) {
@@ -2365,16 +2371,25 @@ function squad() {
     this.draw = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} //TODO: also check visual range for enemies
         var press=this.leader.sprite;
+		var xm=0;
+		var ym=0;
+		if(cam.zoom==2){
+			//xm=8;
+			//ym=8;
+		}else if(cam.zoom==3){
+			//xm=16;
+			//ym=16;
+		}
 		if((this.leader.class==SEEAss.Werewolf) && (theTime.hours>12)) {
 			press=this.leader.nightSprite;
 		}
 		press.draw(canvas,
-                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
-                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1));
+                         (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1)-xm, 
+                         (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1)-ym);
         if (this.leaderless){
             noleader.draw(canvas,
-                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
-                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1));
+                          (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1)-xm, 
+                          (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1)-ym);
         }
 	    if(curMap.tiles[this.x][this.y+2].data==TileType.Forest) {
 			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
@@ -2780,11 +2795,22 @@ function mouseClick(e) {  //represents the mouse
 				onSomething=null;
 				for(var i=0;i<armies[0].numSquads;i++)
 				{
-					if (isOver(armies[0].squads[i],camera)) {onSomething=armies[0].squads[i];SELECTED=i;}
+					if ((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) {onSomething=armies[0].squads[i];SELECTED=i;}
 				}
 				if (onSomething==null){
 					if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
-					armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
+					var onTown=null;
+					for(var j=0;j<numTowns;j++)
+					{
+						if (isOver(towns[j],camera)) {onTown=towns[j];}
+					}
+					if(onTown==null)
+					{
+						armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
+					}else{
+						//armies[0].squads[SELECTED].setDestination(onTown.getTileX(camera), onTown.getTileY(camera),curMap); 
+						armies[0].squads[SELECTED].setDestination(onTown.x, onTown.y,curMap); 
+					}
 				}
             break;
         case 2:
@@ -4061,7 +4087,7 @@ function update() {
 
     for (var i=0;i<armies[0].numSquads;i++) {//save and load canvas.
         armies[0].squads[i].draw(camera);
-        if(isOver(armies[0].squads[i],camera)) { drawmousetext(armies[0].squads[i],camera); };
+        if((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) { drawmousetext(armies[0].squads[i],camera); };
         if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
     }
     /*for (var i=0;i<armies[1].numSquads;i++) {
