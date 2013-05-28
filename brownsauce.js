@@ -2814,34 +2814,55 @@ isOver= function(targ,cam){ //is the mouse over the player/object
 };
 
 function mouseWheel(e){
-                var delta = 0;
-                if (e.wheelDelta) {
-                        delta = e.wheelDelta/120;
-                } else if (event.detail) { /** Mozilla case. */
-                        delta = -e.detail/3;
-                }
-				mX = e.pageX - canvasElement.get(0).offsetLeft;
-				mY = e.pageY - canvasElement.get(0).offsetTop;
-                //if (delta)
-                if((mode==2)){ //&& (!isMenu)){
-				var targ=bConsoleBox;
-				if((mX>targ.x) && (mX<(targ.x+targ.width)) &&(mY>targ.y) &&(mY<(targ.y+targ.height))) 
-				{
+	var delta = 0;
+	if (e.wheelDelta)
+	{
+			delta = e.wheelDelta/120;
+	} else if (event.detail) 
+	{ /** Mozilla case. */
+			delta = -e.detail/3;
+	}
+	mX = e.pageX - canvasElement.get(0).offsetLeft;
+	mY = e.pageY - canvasElement.get(0).offsetTop;
+	//if (delta)
+	if((mode==2))
+	{ //&& (!isMenu)){
+		var targ=bConsoleBox;
+		if((mX>targ.x) && (mX<(targ.x+targ.width)) &&(mY>targ.y) &&(mY<(targ.y+targ.height))) 
+		{
 
-					if(delta>0)
-						bConsoleBox.scroll++;
-					if(delta<0)
-						bConsoleBox.scroll--;
+			if(delta>0)
+				bConsoleBox.scroll++;
+			if(delta<0)
+				bConsoleBox.scroll--;
 
-						if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
-						if(bConsoleBox.scroll>bConsoleStr.length-4) {bconsolebox.scroll=bConsoleStr.length-5;}
-					}
-				}
+				if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
+				if(bConsoleBox.scroll>bConsoleStr.length-4) {bConsolebox.scroll=bConsoleStr.length-5;}
+		}else
+		{
+			if(delta<0)
+			{
+				
+				curMap.setZoom(camera);
+				camera.check();
+			}else if(delta>0){
 
-                if (e.preventDefault)
-                        e.preventDefault();
-            e.returnValue = false;
-        };
+				curMap.minusZoom(camera);
+				var blob=[];
+				blob.x=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+				blob.y=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
+				camera.center(blob);
+				camera.check();
+			}
+			if(curMap.zoom>3) {curMap.zoom=3;}
+			if(curMap.zoom<1) {curMap.zoom=1;}
+		}
+	}
+
+	if (e.preventDefault)
+			e.preventDefault();
+	e.returnValue = false;
+};
 
 function mouseClick(e) {  //represents the mouse
 	if(mode==2){
@@ -2954,9 +2975,9 @@ var camera = {  //represents the camera, aka what part of the map is on screen
     zoom: 1,
 
     center: function(targ) {
-        if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
-        tx=targ.x-26;
-        ty=targ.y-20;
+        //if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
+        tx=targ.x-26;// * Math.pow(2, curMap.zoom-1);
+        ty=targ.y-20;// * Math.pow(2, curMap.zoom-1);
         if (tx<0) {tx=0;}
         if (ty<0) {ty=0;}
         if (tx>MAP_WIDTH-this.width) {tx=MAP_WIDTH-this.width;}
@@ -3144,9 +3165,64 @@ function Map(I) { //map object
         }
     };
     I.zoom = 1;
+	
+	
+	I.minusZoom = function(cam) {
+        if (I.zoom == 1)
+		{
+			//I.zoom=3;cam.x-=20;cam.y-=13;
+			
+		} else if (I.zoom==2) 
+		{
+			I.zoom=1;cam.x+=50;cam.y+=33;
 
+		} else 
+		{
+			I.zoom=2;cam.x-=30;cam.y-=20;			
+		}
+		if(cam.x<0)
+		{
+			cam.x=0;
+		}
+		if(cam.y<0)
+		{
+			cam.y=0;
+		}
+		if(I.zoom==0)
+		{
+			if(cam.x>MAP_WIDTH-60)
+			{
+				cam.x=MAP_WIDTH-60;
+			}
+			if(cam.y>MAP_HEIGHT-40)
+			{
+				cam.y=MAP_HEIGHT-40;
+			}
+		}else if(I.zoom==2)
+		{
+			if(cam.x>MAP_WIDTH-30)
+			{
+				cam.x=MAP_WIDTH-30;
+			}
+			if(cam.y>MAP_HEIGHT-20)
+			{
+				cam.y=MAP_HEIGHT-20;
+			}
+		}
+        cam.zoom=I.zoom;
+		cam.check();
+    };
+	
     I.setZoom = function(cam) {
-        if (I.zoom == 1) {I.zoom=2;cam.x-=30;cam.y-=20;} else if (I.zoom==2) {I.zoom=3;cam.x-=20;cam.y-=13;} else {I.zoom=1;cam.x+=50;cam.y+=33;}
+        if (I.zoom == 1) 
+		{
+			I.zoom=2;cam.x-=30;cam.y-=20;
+		} else if (I.zoom==2) 
+		{
+			I.zoom=3;cam.x-=20;cam.y-=13;
+		} else {
+			//I.zoom=1;cam.x+=50;cam.y+=33;
+		}
 		if(cam.x<0)
 		{
 			cam.x=0;
