@@ -59,12 +59,17 @@ TileType.Road=8;
 TileType.Sand=9;
 
 var bConsoleStr=new Array();
+bConsoleClr=new Array();
 var bConsoleBox;
 var bMenuBox;
 bConsoleStr.push("");
 bConsoleStr.push("");
 bConsoleStr.push("");
 bConsoleStr.push("Game Start!");
+bConsoleClr.push("white");
+bConsoleClr.push("white");
+bConsoleClr.push("white");
+bConsoleClr.push("white");
 var towns=new Array();
 var radarBitmap=[];
 var mapBitmap=[];
