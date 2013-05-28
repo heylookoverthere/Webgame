@@ -3184,11 +3184,11 @@ function Map(I) { //map object
 			
 		} else if (I.zoom==2) 
 		{
-			I.zoom=1;cam.x+=50;cam.y+=33;
+			I.zoom=1;cam.x+=30*Math.pow(2, I.zoom-1);cam.y+=20*Math.pow(2, I.zoom-1);
 
 		} else 
 		{
-			I.zoom=2;cam.x+=30;cam.y+=20;			
+			I.zoom=2;cam.x+=30*Math.pow(2, I.zoom-1);cam.y+=20*Math.pow(2, I.zoom-1);			
 		}
 		if(cam.x<0)
 		{
@@ -3226,10 +3226,10 @@ function Map(I) { //map object
     I.setZoom = function(cam) {
         if (I.zoom == 1) 
 		{
-			I.zoom=2;cam.x-=30;cam.y-=20;
+			I.zoom=2;cam.x-=30*Math.pow(2, I.zoom-1);cam.y-=20*Math.pow(2, I.zoom-1);
 		} else if (I.zoom==2) 
 		{
-			I.zoom=3;cam.x-=20;cam.y-=13;
+			I.zoom=3;cam.x-=30*Math.pow(2, I.zoom-1);cam.y-=20*Math.pow(2, I.zoom-1);
 		} else {
 			//I.zoom=1;cam.x+=50;cam.y+=33;
 		}
