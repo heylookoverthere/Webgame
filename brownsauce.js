@@ -3633,6 +3633,12 @@ function worldMapUpdate(){
     tick++;
 	worldmapsprite.draw(canvas,0,0);
 	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x,maps[mapSelected].y);
+	canvas.font = "19pt Algerian";
+	canvas.textAlign = "center";
+	canvas.textBaseline = "middle";
+	canvas.fillStyle = "black";
+	canvas.fillText(maps[mapSelected].name,600,100);
+	canvas.font = "16pt Calibri";
 	//check for clicks on maps, move there or close as possible.
 	//check for key for menu
 	if(tabkey.check()){
@@ -3642,7 +3648,7 @@ function worldMapUpdate(){
 	if(startkey.check()){
 		canvas.font = "16pt Calibri";
 		canvas.fillStyle = "white";
-		canvas.fillText("LOADING....", 700, 600);
+		canvas.fillText("LOADING....", 740, 627);
 		starting=true;
 		return;
 	}
@@ -3660,7 +3666,7 @@ function worldMapUpdate(){
 			armies[1].basex=151;
 			armies[1].basey=230;
 			armies[0].baseName="Winterfell";
-			armies[1].baseName="The Vale";
+			armies[1].baseName="The Dreadfort";
 		}else if(mapSelected==1){
 			curMap.buildMap("map3");
 			MAPNAME="map3";
@@ -3668,38 +3674,38 @@ function worldMapUpdate(){
 			armies[0].basey=35;
 			armies[1].basex=157;
 			armies[1].basey=225;
-			armies[0].baseName="Mereen";
-			armies[1].baseName="Yunkai";
+			armies[0].baseName="Greywater Watch";
+			armies[1].baseName="The Twins";
 		}else if(mapSelected==2){
 			curMap.buildMap("map7");
 			MAPNAME="map7";
 			armies[0].basex=362;
 			armies[0].basey=456;
-			armies[0].baseName="Sunspear";
+			armies[0].baseName="Riverrunn";
 
 			armies[1].basex=103;
 			armies[1].basey=132;
-			armies[1].baseName="Highgarden";
+			armies[1].baseName="Harrenhall";
 		}else if(mapSelected==3){
 			curMap.buildMap("map");
 			MAPNAME="map";
 			armies[0].basex=23;
 			armies[0].basey=25;
-			armies[0].baseName="Lys";
+			armies[0].baseName="Rosby";
 
 			armies[1].basex=177;
 			armies[1].basey=253;
-			armies[1].baseName="Volantis";
+			armies[1].baseName="King's Landing";
 		} else if(mapSelected==4){
 			curMap.buildMap("map4");
 			MAPNAME="map4";
 			armies[0].basex=49;
 			armies[0].basey=59;
-			armies[0].baseName="Riverrun";
+			armies[0].baseName="Starfall";
 
 			armies[1].basex=174;
 			armies[1].basey=164;
-			armies[1].baseName="Harrenhall";
+			armies[1].baseName="Sunspear";
 		
 		}
 		var bot=[];

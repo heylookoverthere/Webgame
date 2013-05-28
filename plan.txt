@@ -20,6 +20,8 @@ storm god - lightning
 great other - ice attack
 ---------------------
 -map object=name, num towns, towm locations,base locations,
+the vale /mountain clans
+north / ramsey/dreadfort
 
 -cards -animations, more types needed animationpause? attack queue wait for animation to finish?
 damage numbers drawn on sprites in battle. -meh
