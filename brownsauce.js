@@ -84,6 +84,7 @@ function card(){
         //console.log("Played the " + this.name+ " card!");
         if (this.type===0){
             console.log("Played the Mother card!");
+			bConsoleStr.push("Played the Mother card!");
             for(var i=0;i<usqd.numUnits;i++){
                 if (usqd.units[i].alive) {
                     usqd.units[i].hp+=25;
@@ -93,6 +94,7 @@ function card(){
         }else if(this.type===1)
         {
             console.log("Played the Drowned God card!");
+			bConsoleStr.push("Played the Drowned God card!");
             for(var i=0;i<esqd.numUnits;i++){
                 if (esqd.units[i].alive) {
                     esqd.units[i].hurt(15);
@@ -101,15 +103,18 @@ function card(){
         }else if(this.type===2)
         {
             console.log("Played The Father card!");
+			bConsoleStr.push("Played The Father card!");
             esqd.turns=20;
             esqd.damaged=-1; //flee
         }else if(this.type===3)
         {
             console.log("Played The Stranger card!");
+			bConsoleStr.push("Played The Stranger card");
             esqd.row();
         }else if(this.type===5)
         {
             console.log("Played the R'hllor card!");
+			bConsoleStr.push("Played the R'hllor card!");
             for(var i=0;i<usqd.numUnits;i++){
                 if (!usqd.units[i].alive) {
                     usqd.units[i].hp+=25;
@@ -119,6 +124,7 @@ function card(){
             }
         }else if(this.type===3) {
             console.log("Played The Crone card!");
+			bConsoleStr.push("Played The Crone card!");
             usqd.healStatus();
         }
     };
@@ -468,6 +474,7 @@ function unit() {
         this.attack+=1;
         var tmpstr=this.name+ " gained a level!";
         console.log(tmpstr);
+		bConsoleStr.push(tmpstr);
         //playSound("level");
     };
     
@@ -512,7 +519,8 @@ function unit() {
         this.hp-=dmg;
         this.damagetaken+=dmg;
         if (this.hp<0) {this.hp=0; this.alive=false;                    var tmpstr=this.name + " died.";
-                        console.log(tmpstr);//todo MONSOLE
+                        console.log(tmpstr);
+						bConsoleStr.push(tmpstr);
                        }
     }; 
     
@@ -601,10 +609,12 @@ function unit() {
                         this.giveExp(this.mag);
                         var tmpstr=this.name + " revived " +deadguy.name;
                         console.log(tmpstr);
+						bConsoleStr.push(tmpstr);
                     }else  if (this.class==SEEAss.Angel) 
                     {
                         var tmpstr=this.name + " healed the party" ;
                         console.log(tmpstr);
+						bConsoleStr.push(tmpstr);
                         for(var i=0;i<usqd.numUnits;i++){
                             if (usqd.units[i].alive) {
                                 usqd.units[i].heal(20);
@@ -619,6 +629,7 @@ function unit() {
                         this.giveExp(this.mag);
                         var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
                         console.log(tmpstr);
+						bConsoleStr.push(tmpstr);
                     }
                 }else 
                 {
@@ -628,6 +639,7 @@ function unit() {
                     this.giveExp(this.mag);
                     var tmpstr=this.name + " healed " +targe.name+ " " +this.mag+ " points.";
                     console.log(tmpstr);
+					bConsoleStr.push(tmpstr);
                 }
             }else if(this.getAttackType()==AttackTypes.GiveStatus){
 				targe=usqd.units[this.statusTrack];
@@ -647,7 +659,9 @@ function unit() {
 				{
 					stsu="Cloaked";
 				}
-				console.log(this.name+" cast "+stsu+" on "+ usqd.units[this.statusTrack].name);
+				var tmpstr=this.name+" cast "+stsu+" on "+ usqd.units[this.statusTrack].name;
+				console.log(tmpstr);
+				bConsoleStr.push(tmpstr);
 				this.statusTrack++;//todo: change
 				if (this.statusTrack>usqd.numUnits-1) 
 				{
@@ -676,9 +690,12 @@ function unit() {
                                 var tmpstr=this.name + temper+" hit " +targe.name+ " for " +delt+ " damage.";
                                 if(usqd.team===0) {
                                     console.log(tmpstr);//todo MONSOLE
+									bConsoleStr.push(tmpstr);
                                 }else
                                 {
                                     console.warn(tmpstr);
+									//todo set color
+									bConsoleStr.push(tmpstr);
                                 }
                                 this.giveExp(delt);
                                 this.damagedelt+=delt;
@@ -723,9 +740,11 @@ function unit() {
                             var tmpstr=this.name + temper+" hit " +targe.name+ " for " +delt+ " damage.";
                             if(usqd.team===0) {
                                 console.log(tmpstr);//todo MONSOLE
+								bConsoleStr.push(tmpstr);
                             }else
                             {
                                 console.warn(tmpstr);
+								bConsoleStr.push(tmpstr);
                             }
                             this.giveExp(delt); //todo exp based on levels
                             this.damagedelt+=delt;
@@ -746,6 +765,7 @@ function unit() {
 			    this.attacking=10; 
 			    var tmpstr = this.name + " missed "+ targe.name; 
 			    console.log(tmpstr);
+				bConsoleStr.push(tmpstr);
 			} //miss
                     } else { endBattle(usqd,esqd); }
                 }
@@ -757,6 +777,7 @@ function unit() {
             this.alive=false;
             var tmpstr=this.name + " died.";
             console.log(tmpstr);//todo MONSOLE
+			bConsoleStr.push(tmpstr);
             //usqd.checkSurvivors();
         }
 
@@ -1704,8 +1725,8 @@ function initTowns(){
 function endgame(){
     if(winmode==0)
     {
-        if(towns[0].team==1) { console.log("YOU LOSE");}
-        if(towns[1].team==0) { console.log("A WINNER IS YOU");}
+        if(towns[0].team==1) { console.log("YOU LOSE");bConsoleStr.push("YOU LOSE");}
+        if(towns[1].team==0) { console.log("A WINNER IS YOU");bConsoleStr.push("A WINNER IS YOU");}
     }else if(winmode==1)
     {
         var toaster=true;
@@ -1788,6 +1809,7 @@ function army() {
 			if(this.looseUnits[i].name==nme) {
 				
 				console.log("unit is not assigned to a squad.");
+				bConsoleStr.push("unit is not assigned to a squad.");
 				return this.looseUnits[i];
 			}
 		}
@@ -1797,7 +1819,9 @@ function army() {
 			{
 				if(this.squads[i].units[j].name==nme)
 				{
-					console.log("unit is in " + this.squads[i].leader.name+ "'s squad.");
+					var tmpstr="unit is in " + this.squads[i].leader.name+ "'s squad."
+					console.log(tmpstr);
+					bConsoleStr.push(tmpstr);
 					return this.squads[i].units[j];
 				}
 			}
@@ -1935,7 +1959,7 @@ function army() {
     };
 	
 	this.addSquad=function(uknit){
-		    if(this.numSquads>TEAM_SIZE) {console.log("You have too many squads already!");return false;}
+		    if(this.numSquads>TEAM_SIZE) {console.log("You have too many squads already!");bConsoleStr.push("You have too many squads already!");return false;}
 			this.numSquads++;
             this.squads[this.numSquads-1]=new squad();
 			this.squads[this.numSquads-1].numUnits=1;
@@ -2155,7 +2179,7 @@ function squad() {
     this.deploy=function()
     {
         var cst = this.getCost();
-        if (armies[this.team].gold<cst) {  console.log("Not enough gold to deploy"+ this.leader.name+ "'s unit."); return;}
+        if (armies[this.team].gold<cst) {  var tmpstr="Not enough gold to deploy"+ this.leader.name+ "'s unit."; console.log(tmpstr);bConsoleStr.push(tmpstr); return;}
         armies[this.team].gold-=cst;
         //revive and heal all just in case.
         this.deployed=true;
@@ -2229,6 +2253,7 @@ function squad() {
         }else
         {
             console.log("Couldn't escape!");
+			bConsoleStr.push("Couldn't escape!");
         }
     };
     this.getHP=function(){
@@ -2265,12 +2290,16 @@ function squad() {
         {       
             if((this.units[i].alive) && (this.units[i].canlead)) {
                 this.leader=this.units[i];
-                console.log(this.leader.name + " took over " + oldlead.name+"'s squad" );
+				var tmpstr=this.leader.name + " took over " + oldlead.name+"'s squad";
+                console.log(tmpstr);
+				bConsoleStr.push(tmpstr);
                 return;
             }
         }
         if(this.alive===true){
-            console.log(this.leader.name + "'s squad has no qualified leader! returning to base!" );
+			var tmpstr=this.leader.name + "'s squad has no qualified leader! returning to base!" 
+            console.log(tmpstr);
+			bConsoleStr.push(tmpstr);
             this.leaderless=true;
 			if(this.path){
 				this.clearDestination();
@@ -2427,9 +2456,10 @@ function squad() {
              preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
-			battleBox.msg=tmpstr;
+			battleBox.msg[0]=tmpstr;
 			battleBox.exists=true;
             console.log(tmpstr);//todo MONSOLEreturn;
+			bConsoleStr.push(tmpstr);
         };
         if((this.leaderless===true) && (this.path==null)){
             this.setDestination(this.basex,this.basey,curMap)}
@@ -2440,7 +2470,7 @@ function squad() {
                 if(towns[i].team!=this.team){
                     towns[i].team=this.team;
                     if(towns[i].team==0) {armies[0].opinion+=5;console.log(this.leader.name+"'s unit liberated " + towns[i].name);}
-                    if(towns[i].team==1) {armies[0].opinion-=10; console.warn(this.leader.name+"'s unit captured " + towns[i].name);}
+                    if(towns[i].team==1) {armies[0].opinion-=10; console.warn(this.leader.name+"'s unit captured " + towns[i].name);} //TODO bConsoleStr
                 }
                 this.heal();
             }
@@ -2512,7 +2542,7 @@ function squad() {
 			combatants[0]=this;
 			combatants[1]=blokeSquad;
 			preBattle=preBattleLength;
-			battleBox.msg=tmpstr;
+			battleBox.msg[0]=tmpstr;
 			battleBox.exists=true;
             console.log(tmpstr);//todo MONSOLEreturn;
 		}
@@ -2685,9 +2715,13 @@ function textbox() {  //draws a text box
 	this.exists=false;
 	this.x=140;
 	this.y=370;
+	this.lines=1;
+	this.scroll=0;
 	this.width=600;
 	this.height=55;
-	this.msg="Msg";
+	this.msg=new Array(5);
+	this.msg[0]="Msg";
+	this.msg[1]="msg";
 	this.draw=function(can){
 		can.save();
 		can.globalAlpha=0.80;
@@ -2701,8 +2735,15 @@ function textbox() {  //draws a text box
 		can.textAlign = "left";
 		can.textBaseline = "middle";
 		can.fillStyle = "white";
-		can.fillText(this.msg, this.x+10,this.y+24);
-		
+		if(this.lines==1){
+			can.fillText(this.msg[0], this.x+10,this.y+8+(14));
+		}else
+		{
+			for(var i=0;i<this.lines;i++){
+				//if (i>bConsoleStr.length) {break;}
+				can.fillText(this.msg[i], this.x+10,this.y+4+(15*(i+1)));
+			}	
+		}
 		can.restore();
 	};
 };
@@ -2712,7 +2753,7 @@ function armyInfo(sq){
     canvas.textAlign = "left";
     canvas.textBaseline = "middle";
     canvas.fillStyle = "white";
-    canvas.fillText(armies[0].name, 360, 8);
+    canvas.fillText(armies[0].name, 515, 70);
     canvas.fillText("Gold: "+armies[0].gold, 515, 8);
 
     canvas.fillText("Wins/losses: " +armies[0].wins+ " / " + armies[0].losses, 515, 24);
@@ -2770,48 +2811,71 @@ isOver= function(targ,cam){ //is the mouse over the player/object
     return false;
 };
 
+function mouseWheel(e){
+                var delta = 0;
+                if (e.wheelDelta) {
+                        delta = e.wheelDelta/120;
+                } else if (event.detail) { /** Mozilla case. */
+                        delta = -e.detail/3;
+                }
+                //if (delta)
+                if((mode==2)){ //&& (!isMenu)){
+				if(delta>0)
+					bConsoleBox.scroll++;
+				if(delta<0)
+					bConsoleBox.scroll--;
+
+					if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
+					if(bConsoleBox.scroll>bConsoleStr.length-4) {bconsolebox.scroll=bConsoleStr.length-5;}
+				}
+
+                if (e.preventDefault)
+                        e.preventDefault();
+            e.returnValue = false;
+        };
+
 function mouseClick(e) {  //represents the mouse
+	if(mode==2){
+		e.preventDefault();    
+		mX = e.pageX - canvasElement.get(0).offsetLeft;
+		mY = e.pageY - canvasElement.get(0).offsetTop;
+		switch (e.which) {
+			case 1:
+					tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+					ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
 
-    e.preventDefault();    
-    mX = e.pageX - canvasElement.get(0).offsetLeft;
-    mY = e.pageY - canvasElement.get(0).offsetTop;
-    switch (e.which) {
-        case 1:
-            	tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
-				ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
-
-				onSomething=null;
-				for(var i=0;i<armies[0].numSquads;i++)
-				{
-					if ((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) {onSomething=armies[0].squads[i];SELECTED=i;}
-				}
-				if (onSomething==null){
-					if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
-					var onTown=null;
-					for(var j=0;j<maps[mapSelected].numTowns;j++)
+					onSomething=null;
+					for(var i=0;i<armies[0].numSquads;i++)
 					{
-						if (isOver(towns[j],camera)) {onTown=towns[j];}
+						if ((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) {onSomething=armies[0].squads[i];SELECTED=i;}
 					}
-					if(onTown==null)
-					{
-						armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
-					}else{
-						//armies[0].squads[SELECTED].setDestination(onTown.getTileX(camera), onTown.getTileY(camera),curMap); 
-						armies[0].squads[SELECTED].setDestination(onTown.x, onTown.y,curMap); 
+					if (onSomething==null){
+						if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
+						var onTown=null;
+						for(var j=0;j<maps[mapSelected].numTowns;j++)
+						{
+							if (isOver(towns[j],camera)) {onTown=towns[j];}
+						}
+						if(onTown==null)
+						{
+							armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
+						}else{
+							//armies[0].squads[SELECTED].setDestination(onTown.getTileX(camera), onTown.getTileY(camera),curMap); 
+							armies[0].squads[SELECTED].setDestination(onTown.x, onTown.y,curMap); 
+						}
 					}
-				}
-            break;
-        case 2:
-            alert('Middle mouse button pressed');
-            break;
-        case 3:
-            alert('Right mouse button pressed');
-            break;
-        default:
-            alert('You have a strange mouse');
-    }
+				break;
+			case 2:
+				alert('Middle mouse button pressed');
+				break;
+			case 3:
+				alert('Right mouse button pressed');
+				break;
+			default:
+				alert('You have a strange mouse');
+		}
 
-		
+	}
 
 
 
@@ -2827,6 +2891,9 @@ mouseXY= function(e) {
 
 
 document.body.addEventListener("click", mouseClick, false);
+document.body.addEventListener("mousewheel",mouseWheel,false);
+//document.body.addEventListener("DOMMouseScroll", mouseWheel, false);
+
 
 var ksavekey=new akey("o"); //define the different keys
 var loadkey=new akey("l");
@@ -3401,8 +3468,20 @@ function menuDraw()
     
 }
 	bmenuBox=new textbox();
-	bmenuBox.msg="                     A=AI  C=Card  F=Flee R=Row swap T=Tame";
+	bmenuBox.msg[0]="                     A=AI  C=Card  F=Flee R=Row swap T=Tame";
 	bmenuBox.y=570;
+	bmenuBox.lines=1;
+	bConsoleBox=new textbox();
+	bConsoleBox.width=460;
+	bConsoleBox.height=90;
+	
+	bConsoleBox.msg[0]=bConsoleStr[0+bConsoleBox.scroll];//[bConsoleStr.length-4];
+	bConsoleBox.msg[1]=bConsoleStr[1+bConsoleBox.scroll];//[bConsoleStr.length-3];
+	bConsoleBox.msg[2]=bConsoleStr[2+bConsoleBox.scroll];//[bConsoleStr.length-2];
+	bConsoleBox.msg[3]=bConsoleStr[3+bConsoleBox.scroll];//[bConsoleStr.length-1];
+	bConsoleBox.y=15;
+	bConsoleBox.x=30;
+	bConsoleBox.lines=4;
 function battleDraw()
 {
 	bmenuBox.exists=true;
@@ -3424,6 +3503,13 @@ function battleDraw()
     if (combatants[0].battleAI==1) {texticles="Strongest";}
     if (combatants[0].battleAI==2) {texticles="Leader";}
     canvas.fillText(texticles, 515, 132);
+	
+	//update console
+	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
+	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
+	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
+	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
+	
     for(var i=0;i<combatants[0].numUnits;i++)
     {
         if(!combatants[0].units[i].alive) {continue;}
@@ -3527,6 +3613,7 @@ function battleDraw()
     if((combatants[0].alive)&& (!combatants[0].checkSurvivors()))   { 
         var tmpstr=combatants[0].leader.name + "'s squad was eliminated.";
         console.log(tmpstr); 
+		bConsoleStr.push(tmpstr);
         combatants[0].damaged=0;
         combatants[1].damaged=10;
         endBattle(combatants[0],combatants[1]);
@@ -3536,10 +3623,13 @@ function battleDraw()
     { 
         var tmpstr=combatants[1].leader.name + "'s squad was eliminated.";
         console.log(tmpstr); 
+		bConsoleStr.push(tmpstr);
 		var ods=combatants[0].getLuck()+30;
 		if(Math.floor(Math.random()*100)<ods){
 			var dong=randomItem();
-			console.log( combatants[0].leader.name+ " found a " +dong.name);
+			var tmpstr=combatants[0].leader.name+ " found a " +dong.name;
+			console.log(tmpstr);
+			bConsoleStr.push(tmpstr);
 			armies[0].addItem(dong);
 			
 		}
@@ -3552,7 +3642,9 @@ function battleDraw()
     if((tamekey.check()) && (combatants[0].hasTamer())){
 		var meth=Math.floor(Math.random()*TAME_CHANCE);
 		if(meth<10){
-			console.log("Tamed the "+combatants[1].units[0].getClassName());
+			var tmpstr="Tamed the "+combatants[1].units[0].getClassName()
+			console.log(tmpstr);
+			bConsoleStr.push(tmpstr);
 			armies[0].addLoose(combatants[1].units[0]);
 			combatants[0].turns=10;
 			combatants[0].damaged=400;
@@ -3578,7 +3670,6 @@ initArmies();
 
 camera.center(armies[0].squads[0]);
 function mainMenuUpdate(){
-	var titlesprite = Sprite("title");
 	lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
@@ -3611,7 +3702,6 @@ function mainMenuUpdate(){
 };
 
 function worldMapUpdate(){
-	var worldmapsprite = Sprite("worldmap");
 	lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
@@ -3910,8 +4000,8 @@ function update() {
 				if((armies[0].numLooseUnits>0) && (looseY<armies[0].numLooseUnits) &&(armies[0].looseUnits[looseIndex]!=null)){
 					if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseIndex])){ //TODO
 						armies[0].removeLoose(looseIndex);
-					}else {console.log("Could not add unit, no free slots.");}
-				}else {console.log("No unit to add!");}
+					}else {console.log("Could not add unit, no free slots.");bConsoleStr.push("Could not add unit, no free slots.");}
+				}else {console.log("No unit to add!"); bConsoleStr.push("No unit to add!");}
             }
         }
 		if(newkey.check()){
@@ -3919,12 +4009,15 @@ function update() {
 				if((looseY>armies[0].numLooseUnits-1) || (armies[0].looseUnits[looseIndex]==null)){ console.log("select a leader!");}
 				else if(!armies[0].looseUnits[looseIndex].canlead){
 					console.log("This unit cannot lead!");
+					bConsoleStr.push("This unit cannot lead!");
 				}else
 				{
 					if((armies[0].looseUnits[looseIndex]!=null)&&(armies[0].addSquad(armies[0].looseUnits[looseIndex]))){
 						armies[0].removeLoose(looseIndex);
-						console.log(armies[0].squads[armies[0].numSquads-1].leader.name + " 's squad has been created");
-					}else {console.log("Select a unit!");}
+						var tmpstr=armies[0].squads[armies[0].numSquads-1].leader.name + " 's squad has been created";
+						console.log(tmpstr);
+						bConsoleStr.push(tmpstr);
+					}else {console.log("Select a unit!");bConsoleStr.push("Select a unit!");}
 				}
 			}
 		}
@@ -3933,9 +4026,11 @@ function update() {
 				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].leader)
 				{
 					console.log("Cannot disband this squad.");
+					bConsoleStr.push("Cannot disband this squad.");
 				}else if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
 				{
 					console.log("Squad disbanded.");
+					bConsoleStr.push("Squad disbanded.");
 					for (var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
 					{
 						armies[0].addLoose(armies[0].squads[MSELECTED].units[i]);
@@ -3945,7 +4040,7 @@ function update() {
 					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY])){
 						armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
 						looseY=0;
-					}else {console.log("Could not remove unit, no free slots.");}
+					}else {console.log("Could not remove unit, no free slots.");bConsoleStr.push("Could not remove unit, no free slots.");}
 				}
             }
         }
@@ -4310,6 +4405,15 @@ function update() {
 	if(preBattle)
 	{
 		battleBox.draw(canvas);
+	}
+	//if((isBattle) && (battleReport))
+		//update console
+	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
+	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
+	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
+	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
+	{	
+		bConsoleBox.draw(canvas);
 	}
     endgame();
 }
