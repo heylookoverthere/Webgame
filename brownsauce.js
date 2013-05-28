@@ -2658,7 +2658,8 @@ function endBattle(usqd,esqd){
 		esqd.kickBack(usqd);
         //esqd.path=null;
         esqd.clearDestination();
-        console.log("win @", usqd.x,usqd.y) 
+        console.log("win @", usqd.x,usqd.y);
+		bConsoleSrt.push("Victory!");
         won="Victory!";
         armies[1].losses++;
         armies[0].wins++;
@@ -2675,6 +2676,7 @@ function endBattle(usqd,esqd){
         usqd.kickBack(esqd);
         usqd.clearDestination();
         console.log("loss");
+		bConsoleSrt.push("Defeat");
         usqd.cohesion--;
         won="Defeat!"
         armies[0].losses++;
@@ -2818,15 +2820,22 @@ function mouseWheel(e){
                 } else if (event.detail) { /** Mozilla case. */
                         delta = -e.detail/3;
                 }
+				mX = e.pageX - canvasElement.get(0).offsetLeft;
+				mY = e.pageY - canvasElement.get(0).offsetTop;
                 //if (delta)
                 if((mode==2)){ //&& (!isMenu)){
-				if(delta>0)
-					bConsoleBox.scroll++;
-				if(delta<0)
-					bConsoleBox.scroll--;
+				var targ=bConsoleBox;
+				if((mX>targ.x) && (mX<(targ.x+targ.width)) &&(mY>targ.y) &&(mY<(targ.y+targ.height))) 
+				{
 
-					if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
-					if(bConsoleBox.scroll>bConsoleStr.length-4) {bconsolebox.scroll=bConsoleStr.length-5;}
+					if(delta>0)
+						bConsoleBox.scroll++;
+					if(delta<0)
+						bConsoleBox.scroll--;
+
+						if(bConsoleBox.scroll<0) {bConsoleBox.scroll=0;}
+						if(bConsoleBox.scroll>bConsoleStr.length-4) {bconsolebox.scroll=bConsoleStr.length-5;}
+					}
 				}
 
                 if (e.preventDefault)
