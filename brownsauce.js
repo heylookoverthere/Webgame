@@ -3578,6 +3578,7 @@ initArmies();
 
 camera.center(armies[0].squads[0]);
 function mainMenuUpdate(){
+	var titlesprite = Sprite("title");
 	lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
@@ -3610,6 +3611,7 @@ function mainMenuUpdate(){
 };
 
 function worldMapUpdate(){
+	var worldmapsprite = Sprite("worldmap");
 	lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
