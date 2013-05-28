@@ -2659,7 +2659,7 @@ function endBattle(usqd,esqd){
         //esqd.path=null;
         esqd.clearDestination();
         console.log("win @", usqd.x,usqd.y);
-		bConsoleSrt.push("Victory!");
+		bConsoleStr.push("Victory!");
         won="Victory!";
         armies[1].losses++;
         armies[0].wins++;
@@ -2676,7 +2676,7 @@ function endBattle(usqd,esqd){
         usqd.kickBack(esqd);
         usqd.clearDestination();
         console.log("loss");
-		bConsoleSrt.push("Defeat");
+		bConsoleStr.push("Defeat");
         usqd.cohesion--;
         won="Defeat!"
         armies[0].losses++;
