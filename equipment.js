@@ -248,27 +248,33 @@ var numTowns=6;
 var CSELECTED=0;
 var maps=new Array(5);
 maps[0]=[];
-maps[0].x=200;
-maps[0].y=150;
+maps[0].x=236;
+maps[0].y=124;
+maps[0].name="The North";
 //maps[1].buildMap("map3");
 maps[1]=[];
-maps[1].x=345;
-maps[1].y=216;
+maps[1].x=220;
+maps[1].y=209;
+maps[1].name="The Neck";
 
 maps[2]=[];
-maps[2].x=443;
-maps[2].y=174;
+maps[2].x=236;
+maps[2].y=283;
+maps[2].name="The Riverlands";
+
+
 //maps[3].buildMap("map");
 
 maps[3]=[];
-maps[3].x=594;
-maps[3].y=360;
+maps[3].x=102;
+maps[3].y=361;
+maps[3].name="Kings Landing";
 //maps[4].buildMap("map4");
 
 maps[4]=[];
-maps[4].x=708;
-maps[4].y=434;
-
+maps[4].x=240;
+maps[4].y=488;
+maps[4].name="The Dornish Marches";
 function equipment() {
     this.name="none";
     this.hitAll=false;
