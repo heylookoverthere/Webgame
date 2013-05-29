@@ -6,13 +6,20 @@ $(document).bind("contextmenu",function(e){
     return false;
 });
 
-
+requestAnimationFrame = window.requestAnimationFrame || 
+                        window.mozRequestAnimationFrame || 
+                        window.webkitRequestAnimationFrame || 
+                        window.msRequestAnimationFrame || 
+                        setTimeout; 
 
 
 
 
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var canvas = canvasElement.get(0).getContext("2d");
+
+var osCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
+var osCanvas = osCanvasElement.get(0).getContext("2d");
 
 var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var radarCanvas = radarElement.get(0).getContext("2d");
@@ -3657,6 +3664,8 @@ setInterval(function() {
 	}else if(mode==2){
 		update();
 	}
+	//canvas.beginPath();
+	//osCanvas.drawImage(canvasElement,0,0);
 }, 1000/FPS);
 
 
