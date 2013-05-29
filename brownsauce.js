@@ -3655,8 +3655,8 @@ function mapInitArmies(){
 	armies[1].leader.name="Roose";
 
 };
-setInterval(function() {
-
+function merp() {
+requestAnimationFrame(merp,canvas);
 	if(mode==0){
 		mainMenuUpdate();
 	}else if(mode==1){
@@ -3666,7 +3666,8 @@ setInterval(function() {
 	}
 	//canvas.beginPath();
 	//osCanvas.drawImage(canvasElement,0,0);
-}, 1000/FPS);
+}
+
 
 
 canvasElement.get(0).addEventListener("mousemove", mouseXY, false);
@@ -4659,4 +4660,4 @@ function update() {
 	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 560);}
     endgame();
 }
-
+merp();
