@@ -57,7 +57,7 @@ TileType.Lava=28;
 TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
-
+var mmcur=false;
 var bConsoleStr=new Array();
 bConsoleClr=new Array();
 var bConsoleBox;
