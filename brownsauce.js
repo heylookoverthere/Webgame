@@ -1,5 +1,5 @@
 $(document).bind("contextmenu",function(e){
-	alert(e.pageY);
+	alert(e.pageX);
     return false;
 });
 
@@ -2922,11 +2922,12 @@ function mouseWheel(e){
 };
 
 function mouseClick(e) {  //represents the mouse
+	e.preventDefault();    
+	mX = e.pageX - canvasElement.get(0).offsetLeft;
+	mY = e.pageY - canvasElement.get(0).offsetTop;
 	if(mode==2){
-		e.preventDefault();    
-		mX = e.pageX - canvasElement.get(0).offsetLeft;
-		mY = e.pageY - canvasElement.get(0).offsetTop;
-		switch (e.which) {
+		switch (e.which)
+		{
 			case 1:
 					tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
 					ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
@@ -2962,6 +2963,17 @@ function mouseClick(e) {  //represents the mouse
 				alert('You have a strange mouse');
 		}
 
+	}else if (mode==0)
+	{
+		if((mX>434) && (mX<550) &&(mY>600) &&(mY<620)) {
+		mmcur=false;
+		alert("pigger");
+		}
+		if((mX>434) && (mX<550) &&(mY>628) &&(mY<645)) 
+		{
+		mmcur=true;
+		alert("pigger nat");
+		}
 	}
 
 
