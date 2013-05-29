@@ -1,5 +1,8 @@
 $(document).bind("contextmenu",function(e){
-	alert(e.pageX);
+	if(mode==1){
+		mode=0;
+		mmcur=true;
+	}
     return false;
 });
 
@@ -2925,7 +2928,65 @@ function mouseClick(e) {  //represents the mouse
 	e.preventDefault();    
 	mX = e.pageX - canvasElement.get(0).offsetLeft;
 	mY = e.pageY - canvasElement.get(0).offsetTop;
-	if(mode==2){
+	var tm=new Date();
+	var mili=tm.getTime();
+	tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+	ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
+	if (mode==0)
+	{
+		switch (e.which)
+		{
+			case 1:
+				tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+				ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
+
+				if((mX>434) && (mX<550) &&(mY>534) &&(mY<551)) 
+				{
+					mmcur=true;
+					mode=1;
+					
+				}
+				if((mX>434) && (mX<550) &&(mY>561) &&(mY<576)) 
+				{
+					mmcur=false;
+				}
+			break;
+		}
+	}else if (mode==1)
+	{
+		switch (e.which)
+		{
+			case 1:
+				
+				if(mili-lastClick>dblClickRate){
+					for(var i=0;i<numMapPoints;i++)
+					{	
+						if((mX>maps[i].x) && (mX<maps[i].x+mapIconWidth) &&(mY>maps[i].y) && (mY<maps[i].y+mapIconHeight)) {
+							mapSelected=i;
+						}
+					}
+				}else{
+					for(var i=0;i<numMapPoints;i++)
+					{	
+						if((mX>maps[i].x) && (mX<maps[i].x+mapIconWidth) &&(mY>maps[i].y) && (mY<maps[i].y+mapIconHeight)) {
+							mapSelected=i;
+							canvas.font = "16pt Calibri";
+							canvas.fillStyle = "white";
+							canvas.fillText("LOADING....", 740, 627);
+							starting=true;
+						}
+					}
+				
+				}
+
+			lastClick=mili;
+			break;
+			case 2:
+				mode=0;
+			break;
+			
+		}
+	}else if(mode==2){
 		switch (e.which)
 		{
 			case 1:
@@ -2963,17 +3024,6 @@ function mouseClick(e) {  //represents the mouse
 				alert('You have a strange mouse');
 		}
 
-	}else if (mode==0)
-	{
-		if((mX>434) && (mX<550) &&(mY>600) &&(mY<620)) {
-		mmcur=false;
-		alert("pigger");
-		}
-		if((mX>434) && (mX<550) &&(mY>628) &&(mY<645)) 
-		{
-		mmcur=true;
-		alert("pigger nat");
-		}
 	}
 
 
@@ -2990,6 +3040,7 @@ mouseXY= function(e) {
 
 
 document.body.addEventListener("click", mouseClick, false);
+//document.body.addEventListener("dblclick", mouseDblClick, false);
 document.body.addEventListener("mousewheel",mouseWheel,false);
 document.body.addEventListener("DOMMouseScroll", mouseWheel, false);
 
@@ -3863,7 +3914,7 @@ function mainMenuUpdate(){
 	}
 	if(startkey.check()){
 		mode=1;
-		titlesprite=null;
+		//titlesprite=null;
 	}
 	if(downkey.check()){
 		mmcur=!mmcur;
@@ -3879,7 +3930,12 @@ function worldMapUpdate(){
     milliseconds = timestamp.getTime();
     tick++;
 	worldmapsprite.draw(canvas,0,0);
-	for(var i=0;i<5;i++){
+	if(starting) {
+		canvas.font = "16pt Calibri";
+		canvas.fillStyle = "white";
+		canvas.fillText("LOADING....", 740, 627);
+	}
+	for(var i=0;i<numMapPoints;i++){
 		if(maps[i].team==0){
 			bluelocationsprite.draw(canvas,maps[i].x,maps[i].y);
 		}else
