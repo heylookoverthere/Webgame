@@ -1,61 +1,62 @@
-6
-"Gregor Clegane:"
-"Growl...."
-362
-456
-"Riverrun"
-"Yar."
-" "
-" "
-" "
-25
+{"numtowns":"6","startspeaker":"Gregor Clegane:",
+"starttext":"....",
+"town0":{
+"x":"362","y":"456",
+"name":"Riverrun",
+"speaker":"",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-103
-132
-"Harrenhall"
-"The Mountain:"
-"I am a large cunt."
-" "
-" "
-" "
-75
+"town1": {
+"x":"103","y":"132",
+"name":"Harrenhall",
+"Speaker":"The Mountain:",
+"text1":"I will cut your horse in half and rape you",
+"text1":" with it's dick.",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"75"},
 
-69
-242
-"Fairmarket"
-"Villager:"
-"Welcome to Fairmarket"
-" "
-" "
-" "
-25
+"town2": {
+"x":"69","y":"242",
+"name":"Fairmarket",
+"speaker":"Villager:",
+"text1":"Welcome to Fairmarket",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-233
-300
-"Stoney Sept"
-"Septon:"
-"Welcome to Stoney Sept"
-" "
-" "
-" "
-25
+"town3": {
+"x":"233","y":"300",
+"name":"Stony Sept",
+"speaker":"Septon:",
+"text1":"Welcome to Stony Sept",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-278
-89
-"Hight Heart"
-"Ghost:"
-"boo"
-" "
-" "
-" "
-25
+"town4": {
+"x":"278","y":"89",
+"name":"High Heart",
+"speaker":"Ghost:",
+"text1":"Boo.",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-158
-244
-"Acorn Hall"
-"Guard:"
-"Welcome to Acorn Hall"
-" "
-" "
-" "
-25
+"town5": {
+"x":"158","y":"244",
+"name":"Acorn Hall",
+"speaker":"Guard:",
+"text1":"Welcome to Acorn Hall",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"}}

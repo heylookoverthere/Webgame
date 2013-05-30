@@ -1,63 +1,62 @@
-6
-"Walder Frey:"
-"Kill the frog eaters!"
-35
-35
-"Greywater Watch"
-"none"
-" "
-" "
-" "
-" "
-25
+{"numtowns":"6","startspeaker":"Walder Frey:",
+"starttext":"Kill the frog eaters!",
+"town0":{
+"x":"35","y":"35",
+"name":"Greywater Watch",
+"speaker":"",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
+"town1": {
+"x":"157","y":"225",
+"name":"The Twins",
+"Speaker":"Walder Frey:",
+"text1":"Mayhaps I will fuck your corpse. heh..",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"75"},
 
-157
-225
-"The Twins"
-"Walder Frey:"
-"Eat shit and die!"
-" "
-" "
-" "
-75
-	
-156
-82
-"Flint's Finger"
-"Villager:"
-"Welcome to Flint's Finger"
-" "
-" "
-" "
-25
+"town2": {
+"x":"156","y":"82",
+"name":"Flint's Finger",
+"speaker":"Villager:",
+"text1":"Welcome to Flint's Finger",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-164
-121
-"Moat Cailin"
-"Villager:"
-"Welcome to Moat Cailin"
-" "
-" "
-" "
-25
+"town3": {
+"x":"164","y":"121",
+"name":"Moat Cailin",
+"speaker":"Villager:",
+"text1":"Welcome to Moat Cailin",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-39
-191
-"Seaguard"
-"Guard:"
-"Welcome to Seaguard."
-" "
-" "
-" "
-25
+"town4": {
+"x":"39","y":"191",
+"name":"Seaguard",
+"speaker":"Guard:",
+"text1":"Welcome to Seaguard.  Guarding the Sea",
+"text2":"for 500 years.",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-84
-63
-"Oldstones"
-"Old Woman:"
-"Welcome to Oldstones"
-" "
-" "
-" "
-25
+"town5": {
+"x":"84","y":"63",
+"name":"Oldstones",
+"speaker":"Old Woman:",
+"text1":"Welcome to Oldstones",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"75"}}
