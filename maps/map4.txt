@@ -1,0 +1,72 @@
+6	
+49
+59
+"Starfall"
+"Yar."
+" "
+" "
+" "
+" "
+25
+
+174
+164
+"Sunspear"
+"Oberyn Martell:"
+"I am the Viper.  I come to Vipe the Vindows"
+" "
+" "
+" "
+75
+	
+24
+179
+"Blackmont"
+"Villager:"
+"Welcome to Blackmont"
+" "
+" "
+" "
+25
+
+64
+191
+"Yornwood"
+"Villager:"
+"Welcome to Yornwood"
+" "
+" "
+" "
+25
+
+126
+72
+"Godsgrace"
+"Guard:"
+"Welcome to Godsgrace"
+" "
+" "
+" "
+25
+
+44
+101
+"Lemonwood"
+"Old Woman:"
+"Welcome to Lemonwood"
+" "
+" "
+" "
+25
+
+		towns[2].x=42;
+		towns[2].y=179;
+		
+		towns[3].x=64;
+		towns[3].y=191;
+		
+		towns[4].x=126;
+		towns[4].y=72;
+		
+		towns[5].x=44;
+		towns[5].y=101;

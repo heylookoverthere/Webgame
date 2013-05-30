@@ -1584,6 +1584,13 @@ function town() {
     this.pop=2;
     this.width=64;
     this.height=32;
+	this.speaker="Villager:";
+	this.plotText=new Array(4);
+	this.plotText[0]="Bears are the best!";
+	this.plotText[1]="Bears are the best!";
+	this.plotText[2]="Bears are the best!";
+	this.plotText[3]="Bears are the best!";
+	this.spouted=false;
     //this.sprite = Sprite("town");
     this.bsprite=new Array(2);
     this.bsprite[0] = Sprite("townblue");
@@ -1822,6 +1829,19 @@ function army() {
     this.getOpinion=function(){
         return this.opinion;
     };
+	
+	this.toggleSelected=function()
+	{
+		SELECTED++; 
+		if(SELECTED>this.numSquads-1) 
+		{
+			SELECTED=0;
+		}
+		if((this.squads[SELECTED].alive) && (this.squads[SELECTED].deployed)) {	camera.center(this.squads[SELECTED]);return true;}
+		return false;
+
+		
+	}
 	this.getVisible=function(enemyarmy){
 		//this.visibleEnemies=null;
 		for(var i=0;i<enemyarmy.numSquads;i++)
@@ -2511,6 +2531,15 @@ function squad() {
                     towns[i].team=this.team;
                     if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);}
                     if(towns[i].team==1) {armies[0].opinion-=10; var tmpsrt=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); bConsoleStr.push(tmpstr);} //TODO bConsoleStr
+					if((this.team==0) && (!towns[i].spouted)){
+						towns[i].spouted=true;
+						townbox.lines=4;
+						townbox.msg[0]=towns[i].speaker;
+						townbox.msg[1]=towns[i].plotText[0];
+						townbox.msg[2]=towns[i].plotText[1];
+						townbox.msg[3]=towns[i].plotText[2];
+						townbox.exists=true;
+					}
                 }
                 this.heal();
             }
@@ -2559,6 +2588,7 @@ function squad() {
             //           if( this.bx == 0 ) { this.bx = 16 } else if( this.bx == 16 ) { this.bx = 0; } 
             //           if( this.by == 0 ) { this.by = 16 } else if( this.by == 16 ) { this.by = 0; }          
             this.inNextTile = true;
+
         }
         if(( this.bx >= 24 || this.bx <= -8 ) || ( this.by <= -8 || this.by >= 24 )) {
             this.bx = this.by = 8;
@@ -2566,7 +2596,6 @@ function squad() {
             this.x = this.nextMove.x;
             this.y = this.nextMove.y;
             this.nextTile = {x: this.x, y: this.y};
-
             this.nextMove = null;
 
         }
@@ -2611,6 +2640,14 @@ function squad() {
         }
         this.nextMove = this.path.shift();
         if( !this.nextMove ) {
+			if(this.team==0){
+				var tmpstr=this.leader.name + "'s squad reached their destination.";
+				bConsoleStr.push(tmpstr);
+				bConsoleClr.push("white");
+			}else
+			{
+				//todo give enemy squads new destination now.
+			}
             this.path = null; return;
         }
     };
@@ -2801,6 +2838,11 @@ function textbox() {  //draws a text box
 	};
 };
 var battleBox=new textbox();
+var townbox=new textbox();
+townbox.x=100;
+townbox.width=600;
+townbox.y=300;
+townbox.height=200;
 function armyInfo(sq){
     canvas.font = "14pt Calibri";
     canvas.textAlign = "left";
@@ -4047,6 +4089,13 @@ function worldMapUpdate(){
 			towns[1].x=armies[1].basex
 			towns[1].y=armies[1].basey
 			towns[1].name=armies[1].baseName;
+			if(towns[1].name=="The Dreadfort") {
+				towns[1].speaker="Ramsey Bolton:"
+				towns[1].plotText[0]="Mwa Ha Ha Ha, I'm gonna flay you and make";
+				towns[1].plotText[1]="a coat!";
+				towns[1].plotText[2]="";
+				towns[1].plotText[3]="";
+			}
 		var bot=[];
 		bot.x=armies[0].basex;
 		bot.y=armies[0].basey;
@@ -4501,7 +4550,7 @@ function update() {
     if(isBattle){
         if (tabkey.check()) {BSELECTED++; if(BSELECTED>armies[0].squads[SELECTED].numUnits-1) {BSELECTED=0;}}
     }else{
-        if (tabkey.check()) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0; camera.center(armies[0].squads[SELECTED]);}camera.center(armies[0].squads[SELECTED]);}
+        if (tabkey.check()) {armies[0].toggleSelected();}
     }
 
     if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
@@ -4657,6 +4706,14 @@ function update() {
 	{	
 		bConsoleBox.draw(canvas);
 	}
+	if(townbox.exists)
+	{
+		townbox.draw(canvas);
+		if((startkey.check())|| (escapekey.check())){
+			townbox.exists=false;
+		}
+	}
+
 	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 560);}
     endgame();
 }

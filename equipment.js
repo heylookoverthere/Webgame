@@ -57,6 +57,9 @@ TileType.Lava=28;
 TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
+
+
+
 var numMapPoints=5;
 var mmcur=false;
 var bConsoleStr=new Array();
@@ -135,7 +138,7 @@ townnames= ["Qarth","Meereen","Myr","Pentos","Ashford","Ashemark","Gulltown","Py
 tname=new Array(5);
 
 tname[0]=["Last Hearth","Deepwood Motte","Karhold","Tohhren's Square","Barrowton","Hornwood","White Harbor","Castle Black"];
-tname[1]=["Flint's Finger","Moat Cailin","Seaguard","oldstones"];
+tname[1]=["Flint's Finger","Moat Cailin","Seaguard","Oldstones"];
 tname[2]=["Fairmarket","Stoney Sept","High Heart","Acorn hall","Pinkmaiden"];
 tname[3]=["Maidenpool","Duskendale","Dragonstone", "Crackclaw Point"];
 tname[4]=["Blackmont","Kingsgrave","Wyl","Yornwood","Godsgrace","Saltshore","Lemonwood"];
@@ -182,6 +185,8 @@ tileColors[TileType.Plains] = "#FF9966";
 tileColors[TileType.Road] = "#CCCCCC";
 tileColors[TileType.Sand] = "#999966";
 tileColors[TileType.Lava] = "#FF0000";
+
+
 
 var poisonsprite = Sprite("poison");
 var protectsprite = Sprite("protect");
