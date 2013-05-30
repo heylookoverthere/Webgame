@@ -3409,6 +3409,7 @@ function Map(I) { //map object
 		}
         cam.zoom=I.zoom;
 		cam.check();
+		mapDirty=true;
     };
 	
     I.setZoom = function(cam) {
@@ -3452,9 +3453,11 @@ function Map(I) { //map object
 		}
         cam.zoom=I.zoom;
 		cam.check();
+		mapDirty=true;
     };
 
     I.draw = function(cam) {
+		if(!mapDirty) {return;}
         cam.zoom=I.zoom;
         cam.check();
         for (i=cam.x;i<cam.x+cam.width*Math.pow(2, I.zoom-1); i+=I.zoom){
@@ -3492,6 +3495,7 @@ function Map(I) { //map object
 				}
             }
         }
+		mapDirty=false;
     };
     I.clear =function(){
         for (i=0;i<MAP_WIDTH; i++){
@@ -4563,21 +4567,25 @@ function mapUpdate() {
     if(keydown.left) {
         camera.x -= 1*curMap.zoom;
         if (camera.x<0) {camera.x=0;}
+		mapDirty=true;
     }
     
     if(keydown.right) {
         camera.x += 1*curMap.zoom;
         if (camera.x>(MAP_WIDTH-(camera.width*curMap.zoom))) {camera.x=MAP_WIDTH-(camera.width*curMap.zoom);}
+		mapDirty=true;
     }
     
     if(keydown.up) {
         camera.y -= 1*curMap.zoom;
         if (camera.y<0) {camera.y=0;}
+		mapDirty=true;
     }
     
     if(keydown.down) {
         camera.y += 1*curMap.zoom;
         if (camera.y>(MAP_HEIGHT-(camera.height*curMap.zoom))) {(camera.y=MAP_HEIGHT-(camera.height*curMap.zoom));}
+		mapDirty=true;
     }
     //}
     if (ksavekey.check()) {randomwalk=!randomwalk;}
