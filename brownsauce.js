@@ -18,19 +18,16 @@ requestAnimationFrame = window.requestAnimationFrame ||
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var canvas = canvasElement.get(0).getContext("2d");
 
-var sillycanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
-var sillycanvas = sillycanvasElement.get(0).getContext("2d");
-
 var osCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var osCanvas = osCanvasElement.get(0).getContext("2d");
 
 var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var radarCanvas = radarElement.get(0).getContext("2d");
 
-var mapCanvasElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
+var mapCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var mapCanvas = mapCanvasElement.get(0).getContext("2d");
 
-canvasElement.css("position", "absolute").css("z-index", "1").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
+canvasElement.css("position", "absolute").css("z-index", "1");
 canvasElement.appendTo('body');
 mapCanvasElement.css("position", "absolute").css("z-index", "0").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
 mapCanvasElement.appendTo('body');
