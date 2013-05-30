@@ -1591,6 +1591,8 @@ function town() {
     this.base=false;
     this.name="Qarth";
     this.team=1;
+	this.alive=true;
+	this.deployed=true;
     this.pop=2;
     this.width=64;
     this.height=32;
@@ -2887,6 +2889,7 @@ function armyInfo(sq){
 
 
 function drawmousetext(targ,cam) { //draws unit status info
+	if((!targ.alive) || (!targ.deployed)) {return;}
     canvas.font = "14pt Calibri";
     canvas.textAlign = "center";
     canvas.textBaseline = "middle";
