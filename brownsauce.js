@@ -1849,7 +1849,7 @@ function army() {
 		{
 			SELECTED=0;
 		}
-		if((this.squads[SELECTED].alive) && (this.squads[SELECTED].deployed)) {	camera.center(this.squads[SELECTED]);return true;}
+		if(this.squads[SELECTED].isViable()) {	camera.center(this.squads[SELECTED]);return true;}
 		return false;
 
 		
@@ -1858,12 +1858,15 @@ function army() {
 		//this.visibleEnemies=null;
 		for(var i=0;i<enemyarmy.numSquads;i++)
 		{
-			for( var j=0;j<this.numSquads;j++)
+			if(enemyarmy.squads[i].isViable())
 			{
-				if(distance(enemyarmy.squads[i],this.squads[j])<Math.pow(this.squads[j].viewRange,2))
+				for( var j=0;j<this.numSquads;j++)
 				{
-					this.visibleEnemies.push(enemyarmy.squads[i]);
-					break;
+					if((this.squads[i].isViable()) && (distance(enemyarmy.squads[i],this.squads[j])<Math.pow(this.squads[j].viewRange,2)))
+					{
+						this.visibleEnemies.push(enemyarmy.squads[i]);
+						break;
+					}
 				}
 			}
 		}
@@ -2426,6 +2429,7 @@ squad.prototype.flee= function(c)
         }
         if (anylife===false) { 
             this.alive=false;
+			this.deployed=false;
             return false;
         }
         return true;
@@ -2455,6 +2459,12 @@ squad.prototype.flee= function(c)
         }
         return weakest;
     };
+	
+	squad.prototype.isViable=function()
+	{
+		if((this.alive) && (this.deployed)) {return true;}
+		return false;
+	}
 
     squad.prototype.draw = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} //TODO: also check visual range for enemies
@@ -2499,7 +2509,7 @@ squad.prototype.flee= function(c)
     };
 
     squad.prototype.drawdest = function(cam) {
-        if ((!this.alive) ||(!this.deployed)){return;} 
+        if (!this.isViable()){return;} 
         flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, curMap.zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, curMap.zoom-1));
     };
     
@@ -2507,11 +2517,11 @@ squad.prototype.flee= function(c)
 
         if (this.team==0) {
             for(var i=0;i<armies[1].numSquads;i++){
-                if ((this.alive)&&(armies[1].squads[i].x+2>this.x) && (armies[1].squads[i].x-2<this.x) && (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<=this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
+                if ((this.isViable()) &&(armies[1].squads[i].isViable())&& (armies[1].squads[i].x-2<this.x) && (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<=this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
             }
         }else if(this.team==1) {
             for(var i=0;i<armies[0].numSquads;i++){
-                if ((this.alive)&&(armies[0].squads[i].x+2>this.x) && (armies[0].squads[i].x-2<this.x) && (armies[0].squads[i].y+2>this.y) && (armies[0].squads[i].y-2<=this.y)) {return armies[0].squads[i];}
+                if ((this.isViable()) &&(armies[0].squads[i].isViable())&&(armies[0].squads[i].x+2>this.x) && (armies[0].squads[i].x-2<this.x) && (armies[0].squads[i].y+2>this.y) && (armies[0].squads[i].y-2<=this.y)) {return armies[0].squads[i];}
             }
         }
 
@@ -3106,7 +3116,7 @@ document.body.addEventListener("click", mouseClick, false);
 //document.body.addEventListener("dblclick", mouseDblClick, false);
 document.body.addEventListener("mousewheel",mouseWheel,false);
 document.body.addEventListener("DOMMouseScroll", mouseWheel, false);
-
+canvasElement.get(0).addEventListener("mousemove", mouseXY, false);
 
 var ksavekey=new akey("o"); //define the different keys
 var loadkey=new akey("l");
@@ -3719,7 +3729,7 @@ requestAnimationFrame(merp,canvas);
 
 
 
-canvasElement.get(0).addEventListener("mousemove", mouseXY, false);
+
 document.getElementById("myAudio").addEventListener('ended', function() { //loops music
     this.currentTime = 0;
     this.play();
