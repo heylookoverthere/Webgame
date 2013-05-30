@@ -89,7 +89,7 @@ var MAP_HEIGHT = 999;
 var CRIT_CHANCE=100;
 var FPS = 30;
 var LAVA_RATE=2000;
-var WATER_RATE=1000;
+var WATER_RATE=2000;
 var BURN_RATE=100;
 var CHARANI_RATE= 200;
 var FALL_DMG=900;
@@ -255,7 +255,7 @@ for(var i=0;i<numClouds;i++)
 var tileani=0;
   
 var anicount=0;
-var anirate=1000;
+var anirate=4000;
 var lastani=0;
 var gotall=false;
 var numsounds=0;
