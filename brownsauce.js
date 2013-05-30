@@ -847,7 +847,7 @@ function unit() {
             this.hp=60;
             this.attack=14
             this.maxmp=40;
-            this.speed=0;
+            this.speed=1;
             this.luck=5;
             this.ali=50;
             this.viewRange=5;
@@ -3063,30 +3063,35 @@ function mouseClick(e) {  //represents the mouse
 		switch (e.which)
 		{
 			case 1:
-					tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
-					ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
+					if(isBattle)
+					{ break;
+					
+					}else{
+						tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+						ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
 
-					onSomething=null;
-					for(var i=0;i<armies[0].numSquads;i++)
-					{
-						if ((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) {onSomething=armies[0].squads[i];SELECTED=i;}
-					}
-					if (onSomething==null){
-						if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
-						var onTown=null;
-						for(var j=0;j<maps[mapSelected].numTowns;j++)
+						onSomething=null;
+						for(var i=0;i<armies[0].numSquads;i++)
 						{
-							if (isOver(towns[j],camera)) {onTown=towns[j];}
+							if ((armies[0].squads[i].isViable())&&(isOver(armies[0].squads[i],camera))) {onSomething=armies[0].squads[i];SELECTED=i;}
 						}
-						if(onTown==null)
-						{
-							armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
-						}else{
-							//armies[0].squads[SELECTED].setDestination(onTown.getTileX(camera), onTown.getTileY(camera),curMap); 
-							armies[0].squads[SELECTED].setDestination(onTown.x, onTown.y,curMap); 
+						if (onSomething==null){
+							if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
+							var onTown=null;
+							for(var j=0;j<maps[mapSelected].numTowns;j++)
+							{
+								if (isOver(towns[j],camera)) {onTown=towns[j];}
+							}
+							if(onTown==null)
+							{
+								armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
+							}else{
+								//armies[0].squads[SELECTED].setDestination(onTown.getTileX(camera), onTown.getTileY(camera),curMap); 
+								armies[0].squads[SELECTED].setDestination(onTown.x, onTown.y,curMap); 
+							}
 						}
+					break;
 					}
-				break;
 			case 2:
 				alert('Middle mouse button pressed');
 				break;
@@ -3721,7 +3726,7 @@ requestAnimationFrame(merp,canvas);
 	}else if(mode==1){
 		worldMapUpdate();
 	}else if(mode==2){
-		update();
+		mapUpdate();
 	}
 	//canvas.beginPath();
 	//osCanvas.drawImage(canvasElement,0,0);
@@ -3962,6 +3967,7 @@ initArmies();
 
 camera.center(armies[0].squads[0]);
 function mainMenuUpdate(){
+	var tick=0;
 	lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
@@ -3994,6 +4000,7 @@ function mainMenuUpdate(){
 };
 
 function worldMapUpdate(){
+	var tick=0;
 	lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
@@ -4049,7 +4056,6 @@ function worldMapUpdate(){
 			armies[1].basey=230;
 			armies[0].baseName="Winterfell";
 			armies[1].baseName="The Dreadfort";
-
 		}else if(mapSelected==1){
 			curMap.buildMap("map3");
 			MAPNAME="map3";
@@ -4074,11 +4080,20 @@ function worldMapUpdate(){
 			MAPNAME="map";
 			armies[0].basex=23;
 			armies[0].basey=25;
-			armies[0].baseName="Rosby";
+			armies[0].baseName="Penis";
 
 			armies[1].basex=177;
 			armies[1].basey=253;
 			armies[1].baseName="King's Landing";
+
+			$.getJSON("/maps/map.txt", function(data) 
+			{
+
+				//alert (data.town0.name);
+				alert(data.town1.name);
+					armies[0].baseName=data.town0.name;
+			})
+
 		} else if(mapSelected==4){
 			curMap.buildMap("map4");
 			MAPNAME="map4";
@@ -4138,12 +4153,13 @@ function worldMapUpdate(){
 	}
 };
 //------------MAIN LOOP-----------------------------------------
-function update() {
+function mapUpdate() {
+	var tick=0;	
     lasttime=milliseconds;
     timestamp = new Date();
     milliseconds = timestamp.getTime();
     tick++;
-	if (milliseconds-lastani>WATER_RATE) {
+	if ((milliseconds-lastani>WATER_RATE) &&(!isBattle)){
 		tileani++;
 		lastani=milliseconds;
 		anicount=0;
@@ -4186,6 +4202,7 @@ function update() {
 		}else {
 			alert("M=exit menu,Shift=cycle squads, Arrow keys=cursor, space=select unit/toggle menues, N = form new squad, D=remove unit from squad, A= add unit too squad. Pageup/down scroll pages.");
 		}
+		
 	}
     if(isMenu==1) 
     {
