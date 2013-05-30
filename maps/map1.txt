@@ -1,4 +1,6 @@
-6	
+6
+"Ramsey Bolton:"
+"Sorry, we're taking the north from you."
 55
 52
 "Winterfell"
@@ -20,9 +22,9 @@
 
 163
 40
-"Fairmarket"
+"Last Hearth"
 "Villager:"
-"Welcome to Fairmarket"
+"Welcome to Last Hearth."
 " "
 " "
 " "
@@ -30,9 +32,9 @@
 
 62
 126
-"Stoney Sept"
+"Deepwood Motte"
 "Septon:"
-"Welcome to Stoney Sept"
+"Welcome to Deepwood Motte"
 " "
 " "
 " "
@@ -40,9 +42,9 @@
 
 80
 193
-"Hight Heart"
-"Ghost:"
-"boo"
+"Karhold"
+"Some Karstark:"
+"hello!"
 " "
 " "
 " "
@@ -50,9 +52,9 @@
 
 78
 263
-"Acorn Hall"
+"White Harbor"
 "Guard:"
-"Welcome to Acorn Hall"
+"Welcome to White Harbor."
 " "
 " "
 " "

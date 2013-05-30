@@ -29,6 +29,7 @@ var mapCanvas = mapElement.get(0).getContext("2d");
 
 
 canvasElement.appendTo('body');
+//osCanvasElement.appendTo('body');
 //radarElement.appendTo('body');
 
 
@@ -3707,7 +3708,8 @@ requestAnimationFrame(merp,canvas);
 		update();
 	}
 	//canvas.beginPath();
-	//osCanvas.drawImage(canvasElement,0,0);
+	//osCanvas.drawImage(v,0,0);
+	//worldmapsprite.draw(osCanvas,0,0);
 }
 
 
