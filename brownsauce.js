@@ -3184,49 +3184,43 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 
 var bColors = ["#008000","#006400", "#FF4500", "#000080", "#696969", "#800080", "#808000", "#A52A2A", "#8B4513", "#FFDEAD", "#FFFF40","#000080" , "#FFFF80"]; //list of colors for radar/a few other things
 
-function makeNewTile() { //the Map is made of a 2D array of tiles.
-    var tile = {
-        width: 16,
-        height: 16,
-        x: 0,
-        y: 0,
-
-        ani:0,
-        color: "#FFC020",
-        data: 0,
-        draw: function(cam) { 
-            if(this.data==TileType.Grass){
-                tileSprite[TileType.Grass].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==TileType.Mountains){
-				tileSprite[TileType.Mountains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==TileType.Swamp){
-                tileSprite[TileType.Swamp].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==TileType.Forest){
-                tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
-            }else if(this.data==TileType.Water){
-                tileSprite[TileType.Water+tileani].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==TileType.Plains){
-                tileSprite[TileType.Plains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else if(this.data==TileType.Ocean){
-                tileSprite[TileType.Ocean+tileani].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-
-            }else if(this.data==42){
-                watersprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }else{  //if strange data, draw a solid color
-                canvas.fillStyle = bColors[0]; 
-                canvas.fillRect((this.x-cam.x)*this.width, (this.y-cam.y)*this.height, this.width, this.height);
-            }
-            if(this.cracked==1){
-                crackedsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }
-            if(this.platform==1){
-                platformsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
-            }
-            
-        }
-    };
+function Tile() { //the Map is made of a 2D array of tiles.
+    this.width = 16;
+    this.height = 16;
+    this.x = 0;
+    this.y = 0;
+    this.ani = 0;
+    this.color = "#FFC020";
+    this.data=  0;
+}
+Tile.prototype.draw = function(cam) { 
+    if(this.data==TileType.Grass){
+        tileSprite[TileType.Grass].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else if(this.data==TileType.Mountains){
+	tileSprite[TileType.Mountains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else if(this.data==TileType.Swamp){
+        tileSprite[TileType.Swamp].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else if(this.data==TileType.Forest){
+        tileSprite[TileType.Forest].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16); 
+    }else if(this.data==TileType.Water){
+        tileSprite[TileType.Water+tileani].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else if(this.data==TileType.Plains){
+        tileSprite[TileType.Plains].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else if(this.data==TileType.Ocean){
+        tileSprite[TileType.Ocean+tileani].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else if(this.data==42){
+        watersprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }else{  //if strange data, draw a solid color
+        canvas.fillStyle = bColors[0]; 
+        canvas.fillRect((this.x-cam.x)*this.width, (this.y-cam.y)*this.height, this.width, this.height);
+    }
+    if(this.cracked==1){
+        crackedsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }
+    if(this.platform==1){
+        platformsprite.draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
+    }
     
-    return tile;
 };
 
 function tileToCost(data, sqd) {
@@ -3286,7 +3280,7 @@ function Map(I) { //map object
     for( i=0; i<MAP_WIDTH; i++ ) { I.tiles[i] = new Array(MAP_HEIGHT);  }
     for (i=0;i<MAP_WIDTH; i++){
         for (j=0;j<MAP_HEIGHT; j++){
-            I.tiles[i][j]= makeNewTile();
+            I.tiles[i][j]= new Tile();
             I.tiles[i][j].x=i;
             I.tiles[i][j].y=j;
         }
@@ -3478,7 +3472,7 @@ function Map(I) { //map object
     I.clear =function(){
         for (i=0;i<MAP_WIDTH; i++){
             for (j=0;j<MAP_HEIGHT; j++){
-                I.tiles[i][j]= makeNewTile();
+                I.tiles[i][j]= new Tile();
                 I.tiles[i][j].x=i;
                 I.tiles[i][j].y=j;
             }
