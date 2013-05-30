@@ -1,0 +1,60 @@
+6	
+23
+25
+"Rosby"
+"Yar."
+" "
+" "
+" "
+" "
+25
+
+177
+253
+"Kings Landing"
+"Jeoffery:"
+"I am a little cunt."
+" "
+" "
+" "
+75
+
+45
+138
+"Maidenpool"
+"Villager:"
+"Welcome to Maidenpool"
+" "
+" "
+" "
+25
+
+39
+230
+"Duskendale"
+"Villager:"
+"Welcome to Duskendale"
+" "
+" "
+" "
+25
+
+177
+48
+"Dragonstone"
+"Guard:"
+"Welcome to Dragonstone"
+" "
+" "
+" "
+25
+
+99
+189
+"Crackclaw Point"
+"Old Woman:"
+"Welcome to Crackclaw Point"
+" "
+" "
+" "
+25

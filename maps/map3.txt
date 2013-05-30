@@ -1,0 +1,61 @@
+6	
+35
+35
+"Greywater Watch"
+"none"
+" "
+" "
+" "
+" "
+25
+
+
+157
+225
+"The Twins"
+"Walder Frey:"
+"Eat shit and die!"
+" "
+" "
+" "
+75
+	
+156
+82
+"Flint's Finger"
+"Villager:"
+"Welcome to Flint's Finger"
+" "
+" "
+" "
+25
+
+164
+121
+"Moat Cailin"
+"Villager:"
+"Welcome to Moat Cailin"
+" "
+" "
+" "
+25
+
+39
+191
+"Seaguard"
+"Guard:"
+"Welcome to Seaguard"
+" "
+" "
+" "
+25
+
+84
+63
+"Oldstones"
+"Old Woman:"
+"Welcome to Oldstones"
+" "
+" "
+" "
+25

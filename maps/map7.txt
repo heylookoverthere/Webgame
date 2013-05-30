@@ -1,0 +1,59 @@
+6	
+362
+456
+"Riverrun"
+"Yar."
+" "
+" "
+" "
+25
+
+103
+132
+"Harrenhall"
+"The Mountain:"
+"I am a large cunt."
+" "
+" "
+" "
+75
+
+69
+242
+"Fairmarket"
+"Villager:"
+"Welcome to Fairmarket"
+" "
+" "
+" "
+25
+
+233
+300
+"Stoney Sept"
+"Septon:"
+"Welcome to Stoney Sept"
+" "
+" "
+" "
+25
+
+278
+89
+"Hight Heart"
+"Ghost:"
+"boo"
+" "
+" "
+" "
+25
+
+158
+244
+"Acorn Hall"
+"Guard:"
+"Welcome to Acorn Hall"
+" "
+" "
+" "
+25

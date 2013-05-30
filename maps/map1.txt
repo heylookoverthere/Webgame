@@ -1,0 +1,59 @@
+6	
+55
+52
+"Winterfell"
+"Yar."
+" "
+" "
+" "
+25
+
+151
+230
+"The Dreadfort"
+"Ramsey Bolton:"
+"I'm gonna skin you!"
+" "
+" "
+" "
+75
+
+163
+40
+"Fairmarket"
+"Villager:"
+"Welcome to Fairmarket"
+" "
+" "
+" "
+25
+
+62
+126
+"Stoney Sept"
+"Septon:"
+"Welcome to Stoney Sept"
+" "
+" "
+" "
+25
+
+80
+193
+"Hight Heart"
+"Ghost:"
+"boo"
+" "
+" "
+" "
+25
+
+78
+263
+"Acorn Hall"
+"Guard:"
+"Welcome to Acorn Hall"
+" "
+" "
+" "
+25
