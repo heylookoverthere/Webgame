@@ -1,74 +1,62 @@
-6
-"Oberyn Martell:"
-"I am the Viper.  I come to Vipe the Vindows"
-49
-59
-"Starfall"
-"Yar."
-" "
-" "
-" "
-" "
-25
+{"numtowns":"6","startspeaker":"Oberyn Martell:",
+"starttext":"I am the Viper.  I come to Vipe the Vindows",
+"town0":{
+"x":"49","y":"59",
+"name":"Starfall",
+"speaker":"",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-174
-164
-"Sunspear"
-"Oberyn Martell:"
-"I am the Viper.  I come to Vipe the Vindows"
-" "
-" "
-" "
-75
-	
-24
-179
-"Blackmont"
-"Villager:"
-"Welcome to Blackmont"
-" "
-" "
-" "
-25
+"town1": {
+"x":"174","y":"164",
+"name":"Sunspear",
+"Speaker":"Oberyn Martell:",
+"text1":"I am the Viper.  I come to Vipe the Vindows",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"75"},
 
-64
-191
-"Yornwood"
-"Villager:"
-"Welcome to Yornwood"
-" "
-" "
-" "
-25
+"town2": {
+"x":"24","y":"179",
+"name":"Blackmont",
+"speaker":"Villager:",
+"text1":"Welcome to Blackmont",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-126
-72
-"Godsgrace"
-"Guard:"
-"Welcome to Godsgrace"
-" "
-" "
-" "
-25
+"town3": {
+"x":"64","y":"191",
+"name":"Yornwood",
+"speaker":"Villager:",
+"text1":"Welcome to yornwood",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-44
-101
-"Lemonwood"
-"Old Woman:"
-"Welcome to Lemonwood"
-" "
-" "
-" "
-25
+"town4": {
+"x":"126","y":"72",
+"name":"Godsgrace",
+"speaker":"Guard:",
+"text1":"Welcome to Godsgrace",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-		towns[2].x=42;
-		towns[2].y=179;
-		
-		towns[3].x=64;
-		towns[3].y=191;
-		
-		towns[4].x=126;
-		towns[4].y=72;
-		
-		towns[5].x=44;
-		towns[5].y=101;
+"town5": {
+"x":"44","y":"101",
+"name":"Lemonwood",
+"speaker":"Old Woman:",
+"text1":"Welcome to Lemonwood",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"75"}}
