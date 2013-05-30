@@ -27,16 +27,14 @@ var osCanvas = osCanvasElement.get(0).getContext("2d");
 var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var radarCanvas = radarElement.get(0).getContext("2d");
 
-var mapElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
-var mapCanvas = mapElement.get(0).getContext("2d");
+var mapCanvasElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
+var mapCanvas = mapCanvasElement.get(0).getContext("2d");
 
-
+canvasElement.css("position", "absolute").css("z-index", "1").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
 canvasElement.appendTo('body');
-sillycanvasElement.css("position", "absolute").css("z-index", "99").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
-sillycanvasElement.appendTo('body');
+mapCanvasElement.css("position", "absolute").css("z-index", "0").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
+mapCanvasElement.appendTo('body');
 
-sillycanvas.globalAlpha=0.80;
-sillycanvas.fillStyle =  "red";
 //sillycanvas.fillRect(25,95,850,500);
 
 //radarElement.appendTo('body');
@@ -3483,14 +3481,14 @@ function Map(I) { //map object
                     }
                 }
                 if(dominantType.type && dominantType.type <20) {
-					tileSprite[dominantType.type].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[dominantType.type].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                 }else if(dominantType.type&& dominantType.type<24){
-					tileSprite[20+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[20+tileani].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}else if (dominantType.type&& dominantType.type<28) {
-					tileSprite[24+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[24+tileani].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}else 
 				{
-					tileSprite[TileType.Lava+tileani].draw(canvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[TileType.Lava+tileani].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}
             }
         }
@@ -3773,6 +3771,7 @@ function menuDraw()
 	bConsoleBox.lines=4;
 function battleDraw()
 {
+	canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	bmenuBox.exists=true;
     battletick++;
     canvas.save();
@@ -4134,6 +4133,7 @@ function worldMapUpdate(){
 		camera.center(bot);
 		initTowns();
 		mapInitArmies();
+		canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	
 			//give units initial paths.
 		 /*for(var i=0;i<armies[1].numSquads;i++){ 
@@ -4154,6 +4154,7 @@ function worldMapUpdate(){
 };
 //------------MAIN LOOP-----------------------------------------
 function mapUpdate() {
+	canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	var tick=0;	
     lasttime=milliseconds;
     timestamp = new Date();
