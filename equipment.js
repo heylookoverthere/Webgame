@@ -110,7 +110,6 @@ var preBattleLength=100;
 var MAPNAME ="map3";
 var pageCount=0;
 var cardUsed=false;
-var tick=0;
 var gamespeed=0;//2;
 var isBattle=false;
 var isMenu=0;

@@ -1,62 +1,62 @@
-6
-"Jeoffery:"
-"Fucking rebels! Deal with them ser Bearistan!"	
-23
-25
-"Rosby"
-"none!"
-" "
-" "
-" "
-" "
-25
+{"numtowns":"6","startspeaker":"Jeoffery:",
+"starttext":"Fucking rebels! Deal with them ser Bearistan!",
+"town0":{
+"x":"23","y":"25",
+"name":"Rosby",
+"speaker":"",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-177
-253
-"Kings Landing"
-"Ser Bearistan:"
-"I bear you no ill will, but I must defend my king!"
-" "
-" "
-" "
-75
+"town1": {
+"x":"177","y":"253",
+"name":"Kings Landing",
+"Speaker":"Ser Bearistan:",
+"text1":"I bear you no ill will, but I must defend my king!",
+"text1":" ",
+"text2":" ",
+"text3":" ",
+"text4":" ",
+"itemchance":"75"},
 
-45
-138
-"Maidenpool"
-"Villager:"
-"Ser Bearistan is an honerable man..er..bear."
-"Please do him no harm!  The king on the other hand..."
-" "
-" "
-25
+"town2": {
+"x":"45","y":"138",
+"name":"Maidenpool",
+"speaker":"Villager:",
+"text1":"Ser Bearistan is an honerable man..er..bear.",
+"text2":"Please do him no harm!  The king on the other hand...",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-39
-230
-"Duskendale"
-"Villager:"
-"Welcome to Duskendale.  This village isn't much."
-"We are still rebuilding."
-" "
-" "
-25
+"town3": {
+"x":"39","y":"230",
+"name":"Duskendale",
+"speaker":"Villager:",
+"text1":"Welcome to Duskendale.  This village isn't much.",
+"text2":"We are still rebuilding.",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-177
-48
-"Dragonstone"
-"Guard:"
-"Welcome to Dragonstone, the ancestrial"
-" seat of house Targaryen."
-" "
-" "
-25
+"town4": {
+"x":"177","y":"48",
+"name":"Dragonstone",
+"speaker":"Guard:",
+"text1":"Welcome to Dragonstone, the ancestrial",
+"text2":" seat of house Targaryen.",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"},
 
-99
-189
-"Crackclaw Point"
-"Old Woman:"
-"Welcome to Crackclaw Point"
-"Please kill our terrible king."
-" "
-" "
-25
+"town5": {
+"x":"99","y":"189",
+"name":"Crackclaw Point",
+"speaker":"Old Woman:",
+"text1":"Welcome to Crackclaw Point",
+"text2":"Please kill our terrible king.",
+"text3":" ",
+"text4":" ",
+"itemchance":"25"}}
