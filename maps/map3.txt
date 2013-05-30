@@ -1,4 +1,6 @@
-6	
+6
+"Walder Frey:"
+"Kill the frog eaters!"
 35
 35
 "Greywater Watch"
@@ -44,7 +46,7 @@
 191
 "Seaguard"
 "Guard:"
-"Welcome to Seaguard"
+"Welcome to Seaguard."
 " "
 " "
 " "

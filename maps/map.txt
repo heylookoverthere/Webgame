@@ -1,8 +1,10 @@
-6	
+6
+"Jeoffery:"
+"Fucking rebels! Deal with them ser Bearistan!"	
 23
 25
 "Rosby"
-"Yar."
+"none!"
 " "
 " "
 " "
@@ -12,8 +14,8 @@
 177
 253
 "Kings Landing"
-"Jeoffery:"
-"I am a little cunt."
+"Ser Bearistan:"
+"I bear you know ill will, but I must defend my king!"
 " "
 " "
 " "
@@ -23,8 +25,8 @@
 138
 "Maidenpool"
 "Villager:"
-"Welcome to Maidenpool"
-" "
+"Ser Bearistan is an honerable man..er..bear."
+"Please do him no harm!  The king on the other hand..."
 " "
 " "
 25
@@ -33,8 +35,8 @@
 230
 "Duskendale"
 "Villager:"
-"Welcome to Duskendale"
-" "
+"Welcome to Duskendale.  This village isn't much."
+"We are still rebuilding."
 " "
 " "
 25
@@ -43,8 +45,8 @@
 48
 "Dragonstone"
 "Guard:"
-"Welcome to Dragonstone"
-" "
+"Welcome to Dragonstone, the ancestrial"
+" seat of house Targaryen."
 " "
 " "
 25
@@ -54,7 +56,7 @@
 "Crackclaw Point"
 "Old Woman:"
 "Welcome to Crackclaw Point"
-" "
+"Please kill our terrible king."
 " "
 " "
 25
