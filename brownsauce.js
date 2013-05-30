@@ -4168,6 +4168,7 @@ function mapUpdate() {
 		tileani++;
 		lastani=milliseconds;
 		anicount=0;
+		mapDirty=true;
     }
     if (tileani>3) {tileani=0} //tile animations
 	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
