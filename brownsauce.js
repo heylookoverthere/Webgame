@@ -1584,13 +1584,13 @@ function town() {
     this.pop=2;
     this.width=64;
     this.height=32;
-	this.speaker="Villager:";
-	this.plotText=new Array(4);
-	this.plotText[0]="Bears are the best!";
-	this.plotText[1]="Bears are the best!";
-	this.plotText[2]="Bears are the best!";
-	this.plotText[3]="Bears are the best!";
-	this.spouted=false;
+    this.speaker="Villager:";
+    this.plotText=new Array(4);
+    this.plotText[0]="Bears are the best!";
+    this.plotText[1]="Bears are the best!";
+    this.plotText[2]="Bears are the best!";
+    this.plotText[3]="Bears are the best!";
+    this.spouted=false;
     //this.sprite = Sprite("town");
     this.bsprite=new Array(2);
     this.bsprite[0] = Sprite("townblue");
@@ -1598,44 +1598,44 @@ function town() {
     this.rsprite=new Array(2);
     this.rsprite[0] = Sprite("townred");
     this.rsprite[1] = Sprite("townreds");
-    this.checkCollision=function(squd){
-        return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+2) && (squd.y>this.y-1) && (squd.y<this.y+2)); 
-    };
-	this.getTileX=function(cam){
-		return Math.floor((this.x+cam.x)/16);
-	};
-	this.getTileY=function(cam){
-		return Math.floor((this.y+cam.y)/16);
-	};
-    this.draw=function(cam)
-    {
-        if(curMap.zoom<2) {
-            if(this.team===0)
-            {
-                this.bsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
-            }else if(this.team===1)
-            {
-                this.rsprite[0].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
-            }
-        }else
+}
+town.prototype.checkCollision=function(squd){
+    return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+2) && 
+	    (squd.y>this.y-1) && (squd.y<this.y+2)); 
+};
+town.prototype.getTileX=function(cam){
+    return Math.floor((this.x+cam.x)/16);
+};
+town.prototype.getTileY=function(cam){
+    return Math.floor((this.y+cam.y)/16);
+};
+town.prototype.draw=function(cam) {
+    if(curMap.zoom<2) {
+        if(this.team===0)
         {
-            if(this.team===0)
-            {
-                this.bsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
-            }else if(this.team===1)
-            {
-                this.rsprite[1].draw(canvas,
-                                     (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
-                                     (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
-            }
+            this.bsprite[0].draw(canvas,
+                                 (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                 (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
+        }else if(this.team===1)
+        {
+            this.rsprite[0].draw(canvas,
+                                 (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                 (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
         }
-    };
+    }else
+    {
+        if(this.team===0)
+        {
+            this.bsprite[1].draw(canvas,
+                                 (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                 (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
+        }else if(this.team===1)
+        {
+            this.rsprite[1].draw(canvas,
+                                 (this.x * 16  - 8 - cam.x * 16) / Math.pow(2, curMap.zoom-1), 
+                                 (this.y * 16  - 8- cam.y * 16) / Math.pow(2, curMap.zoom-1));
+        }
+    }
 };
 
 
@@ -3224,16 +3224,16 @@ Tile.prototype.draw = function(cam) {
 };
 
 function tileToCost(data, sqd) {
-	if(sqd.getFlightHeight()>2) {return 2;}
+    if(sqd.getFlightHeight()>2) {return 2;}
     if(( data == TileType.Mountains ) ||( data == TileType.Ocean )) return 0;
-	if(sqd.getFlightHeight()>1) {return 2;}
-	if(( data == TileType.Water ) && sqd.canSwim()){ return 2;}
-	if( data == TileType.Water ) {return 0;}
-	if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
+    if(sqd.getFlightHeight()>1) {return 2;}
+    if(( data == TileType.Water ) && sqd.canSwim()){ return 2;}
+    if( data == TileType.Water ) {return 0;}
+    if((data==TileType.Swamp ) &&(sqd.leader.class==SEEAss.Frog)) {return 2};
     if( data == TileType.Swamp  ) return 5;
-	if( data == TileType.Forest  ) return 3;
-	if( data == TileType.Sand  ) return 2;
-	if( data == TileType.Road  ) return 1;
+    if( data == TileType.Forest  ) return 3;
+    if( data == TileType.Sand  ) return 2;
+    if( data == TileType.Road  ) return 1;
     return 2;
 };
 
