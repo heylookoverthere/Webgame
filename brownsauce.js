@@ -29,7 +29,6 @@ var mapCanvas = mapElement.get(0).getContext("2d");
 
 
 canvasElement.appendTo('body');
-//osCanvasElement.appendTo('body');
 //radarElement.appendTo('body');
 
 
@@ -2115,12 +2114,12 @@ function squad() {
     //AI 
     //target
     //waypoints?
-	this.flightHeight=0;
-	this.swimCarry=0;
+    this.flightHeight=0;
+    this.swimCarry=0;
     this.x = 12;
     this.y = 12;
     this.army=0;
-	this.lastmove=0;
+    this.lastmove=0;
     this.basex=12;
     this.basey=12;
     this.battleAI=0;
@@ -2154,11 +2153,12 @@ function squad() {
     this.nextMove = null;
     this.nextTile = {x: this.x, y: this.y};
     this.inNextTile = false;
-	this.viewRange=50;
-	this.encounterCounter=0;
-	this.encounterPoint=Math.floor(Math.random()*400)+200;
-	
-	 this.classFromTerrain=function(map){
+    this.viewRange=50;
+    this.encounterCounter=0;
+    this.encounterPoint=Math.floor(Math.random()*400)+200;
+}
+
+squad.prototype.classFromTerrain=function(map){
 		if(map.tiles[this.x][this.y].data==TileType.Swamp) {return SEEAss.Frog;}
 		if(map.tiles[this.x][this.y].data==TileType.Water) {return SEEAss.Octopus;}
 		if(map.tiles[this.x][this.y].data==TileType.Forest) {return SEEAss.Tiger;}
@@ -2170,8 +2170,7 @@ function squad() {
 		return SEEAss.Shoe;
 	};
 	
-	this.getViewRange=function()
-	{
+squad.prototype.getViewRange=function() {
 		var feight=0;
 		for(var i=0;i<this.numUnits;i++)
 		{
@@ -2180,7 +2179,7 @@ function squad() {
 		return Math.floor(feight/this.numUnits);
 	};	
     
-	this.getFlightHeight=function()
+squad.prototype.getFlightHeight=function()
 	{
 		var feight=0;
 		for(var i=0;i<this.numUnits;i++)
@@ -2193,7 +2192,7 @@ function squad() {
 	};	
 	
 	
-	this.canSwim=function()
+	squad.prototype.canSwim=function()
 	{
 		var feight=0;
 		for(var i=0;i<this.numUnits;i++)
@@ -2206,7 +2205,7 @@ function squad() {
 		return false;
 	};	
     
-	this.addUnit=function(uknit)
+squad.prototype.addUnit=function(uknit)
     {
         if (this.numUnits>4) {return false;}
         this.units[this.numUnits]=uknit;//new unit();
@@ -2214,7 +2213,7 @@ function squad() {
 		return true;
     };
     
-    this.removeUnit=function(id)
+squad.prototype.removeUnit=function(id)
     {
         if (this.numUnits<1) {return false;}
         this.units[id].exists=false;
@@ -2232,7 +2231,7 @@ function squad() {
 		return true;
     };
     
-    this.deploy=function()
+    squad.prototype.deploy=function()
     {
         var cst = this.getCost();
         if (armies[this.team].gold<cst) {  var tmpstr="Not enough gold to deploy"+ this.leader.name+ "'s unit."; console.log(tmpstr);bConsoleStr.push(tmpstr);bConsoleClr.push("red"); return;}
@@ -2241,13 +2240,13 @@ function squad() {
         this.deployed=true;
     }
     
-    this.healStatus=function(){
+    squad.prototype.healStatus=function(){
         for(var i=0;i<numUnits;i++){
             this.units[i].esuna();
         }
     };
     
-    this.refresh=function(){
+    squad.prototype.refresh=function(){
         for(var i=0;i<numUnits;i++){
             this.units[i].alive=true;
             this.units[i].hp=this.units[i].maxhp;
@@ -2256,16 +2255,16 @@ function squad() {
             //reset stats?
         }
         this.healStatus();
-    }
+    };
     
-    this.row=function(){
+    squad.prototype.row=function(){
         for (var i=0;i<this.numUnits;i++)
         {
             if (this.units[i].row===0) { this.units[i].row=1;}
             else if (this.units[i].row===1) { this.units[i].row=0;}
         }
     };
-    this.heal=function(){
+    squad.prototype.heal=function(){
         if (healcount<healrate) {healcount++; return;}
         healcount=0;
         for(var i=0;i<this.numUnits;i++){
@@ -2274,9 +2273,9 @@ function squad() {
                 if (this.units[i].hp>this.units[i].maxhp) {this.units[i].hp=this.units[i].maxhp;}
             }
         }
-    }
+    };
     
-    this.getCost=function(){
+    squad.prototype.getCost=function(){
         var cst=0;
 		for(var i=0;i<this.numUnits;i++)
 		{
@@ -2284,7 +2283,7 @@ function squad() {
 		}
 		return cst;
     };
-	this.getAli=function(){
+	squad.prototype.getAli=function(){
         var cst=0;
 		for(var i=0;i<this.numUnits;i++)
 		{
@@ -2293,7 +2292,7 @@ function squad() {
 		return Math.floor(cst/this.numUnits);
     };
 	
-	this.getLuck=function(){
+	squad.prototype.getLuck=function(){
         var cst=0;
 		for(var i=0;i<this.numUnits;i++)
 		{
@@ -2301,7 +2300,7 @@ function squad() {
 		}
 		return Math.floor(cst);
     };
-    this.flee= function(c)
+squad.prototype.flee= function(c)
     {
 		if(!isBattle) {return;}
         if(Math.floor(Math.random()*30) > (15)) {
@@ -2314,7 +2313,7 @@ function squad() {
 			bConsoleClr.push("red");
         }
     };
-    this.getHP=function(){
+    squad.prototype.getHP=function(){
         var herbert=0;
         for (var i=0;i<this.numUnits;i++) {
             if(this.units[i].alive) {
@@ -2323,7 +2322,7 @@ function squad() {
         }
         return herbert;
     };
-    this.getMaxHP=function(){
+    squad.prototype.getMaxHP=function(){
         var herbert=0;
         for (var i=0;i<this.numUnits;i++) {
             if(this.units[i].alive) {
@@ -2332,7 +2331,7 @@ function squad() {
         }
         return herbert;
     };
-    this.getMP=function(){
+    squad.prototype.getMP=function(){
         var herbert=0;
         for (var i=0;i<this.numUnits;i++) {
             if(this.units[i].alive) {
@@ -2342,7 +2341,7 @@ function squad() {
         return herbert;
     };
     
-    this.pickNewLeader=function() { 
+    squad.prototype.pickNewLeader=function() { 
         var oldlead=this.leader;
         for(var i=0;i<this.numUnits;i++)
         {       
@@ -2369,7 +2368,7 @@ function squad() {
         return ;
     };
     
-    this.smartRow=function()
+    squad.prototype.smartRow=function()
     {
         for(var j=0;j<this.numUnits;j++)
         {
@@ -2383,7 +2382,7 @@ function squad() {
         }
     };
     
-    this.numSquadUnits=function() {
+    squad.prototype.numSquadUnits=function() {
         var count=0;
         if(this.alive) 
         {
@@ -2395,7 +2394,7 @@ function squad() {
         return count;
     };
 
-    this.getStrongest=function(){
+    squad.prototype.getStrongest=function(){
         var strongest=null;
         var h=0;
         for(var i=0;i<this.numUnits;i++){
@@ -2407,7 +2406,7 @@ function squad() {
         return strongest;
     };
     
-    this.checkSurvivors=function() {    //check for any living units if not kill squad.
+    squad.prototype.checkSurvivors=function() {    //check for any living units if not kill squad.
         var anylife=false;
         for(var j=0;j<this.numUnits;j++)
         {
@@ -2420,7 +2419,7 @@ function squad() {
         return true;
     };
 
-    this.getWeakest=function() {
+    squad.prototype.getWeakest=function() {
         var weakest=null;
         var h=999;
         for(var i=0;i<this.numUnits;i++){
@@ -2433,7 +2432,7 @@ function squad() {
     };
     
     
-    this.getWeakestHeal=function() {
+    squad.prototype.getWeakestHeal=function() {
         var weakest=this.leader;
         var h=999;
         for(var i=0;i<this.numUnits;i++){
@@ -2445,7 +2444,7 @@ function squad() {
         return weakest;
     };
 
-    this.draw = function(cam) {
+    squad.prototype.draw = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} //TODO: also check visual range for enemies
         var press=this.leader.sprite;
 		var xm=0;
@@ -2487,12 +2486,12 @@ function squad() {
 		}
     };
 
-    this.drawdest = function(cam) {
+    squad.prototype.drawdest = function(cam) {
         if ((!this.alive) ||(!this.deployed)){return;} 
         flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, curMap.zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, curMap.zoom-1));
     };
     
-    this.checkcollision= function() {
+    squad.prototype.checkcollision= function() {
 
         if (this.team==0) {
             for(var i=0;i<armies[1].numSquads;i++){
@@ -2507,7 +2506,7 @@ function squad() {
         return null;
     };
 
-    this.update = function(map) {
+    squad.prototype.update = function(map) {
 		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle) ||(preBattle)) {return;}
         targ=this.checkcollision();
@@ -2619,13 +2618,13 @@ function squad() {
             console.log(tmpstr);//todo MONSOLEreturn;
 		}
     };
-	this.hasTamer=function(){
+	squad.prototype.hasTamer=function(){
 		for(var i=0;i<this.numUnits;i++){
 			if (this.units[i].class==SEEAss.BeastTamer) {return true;}
 		}
 		return false;
 	};
-	this.randomEncounter=function(){
+	squad.prototype.randomEncounter=function(){
 		if(this.team==1) {return false;}
 		if(!this.hasTamer()) {return false;}
 		if(this.encounterCounter>this.encounterPoint){
@@ -2635,7 +2634,7 @@ function squad() {
 		}
 		return false;
 	};
-    this.updateNextMove = function() {
+    squad.prototype.updateNextMove = function() {
         if( !this.path ) {
             return;
         }
@@ -2652,13 +2651,13 @@ function squad() {
             this.path = null; return;
         }
     };
-    this.isWalking = function() {
+    squad.prototype.isWalking = function() {
         return this.path != null;
     };
-    this.clearDestination=function(){
+    squad.prototype.clearDestination=function(){
         this.path=null; this.dx = 0; this.dy = 0; this.nextMove = null;
     };
-    this.setDestination = function(x, y, map) {
+    squad.prototype.setDestination = function(x, y, map) {
 		if(!map.walkable(x,y,this)) {return;}
         this.clearDestination();
         this.path = map.getPath(this.x, this.y, x, y,this);
@@ -2666,7 +2665,7 @@ function squad() {
         this.dy=y;
     };
 	
-    this.kickBack=function(esqd){
+    squad.prototype.kickBack=function(esqd){
 
 	function booTile(x, y,sqd) {
 		if(sqd.getFlightHeight()>1) {return false;}
@@ -2702,27 +2701,28 @@ function squad() {
 	    }
 	}
 	adjust(this, theKnock);
-    };
-}
+    }
+
 function time(){
     this.hours=0; 
     this.minutes=0;
     this.seconds=0;
     this.days=0;
-    this.update=function(){
-        this.seconds++;
-        if(this.seconds>60){
-            this.seconds=0;
-            this.minutes++;
-            if (this.minutes>60){
-                this.hours++;
-                if(this.hours>24) {this.hours=0; this.days++;} 
-                this.minutes=0;
-                this.seconds=0;
-            }
-        }
-    };
 }
+time.prototype.update=function(){
+    this.seconds++;
+    if(this.seconds>60){
+        this.seconds=0;
+        this.minutes++;
+        if (this.minutes>60){
+            this.hours++;
+            if(this.hours>24) {this.hours=0; this.days++;} 
+            this.minutes=0;
+            this.seconds=0;
+        }
+    }
+};
+
 var theTime=new time();
 
 function endBattle(usqd,esqd){
@@ -3708,8 +3708,7 @@ requestAnimationFrame(merp,canvas);
 		update();
 	}
 	//canvas.beginPath();
-	//osCanvas.drawImage(v,0,0);
-	//worldmapsprite.draw(osCanvas,0,0);
+	//osCanvas.drawImage(canvasElement,0,0);
 }
 
 
