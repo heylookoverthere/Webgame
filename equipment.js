@@ -239,10 +239,13 @@ function cloud(){
 	}   if(rnd>8){
 		this.sprite=Sprite("cloud9");
 	}
-	this.update=function(){
-		this.y-=this.layer*wind;
-		if (this.y<-200) {this.y=Math.floor(Math.random()*300)+4480;this.x=Math.floor(Math.random()*3420)+100;}
-	};
+}
+cloud.prototype.update = function() {
+    this.y-=this.layer*wind;
+    if (this.y<-200) {
+	this.y=Math.floor(Math.random()*300)+4480;
+	this.x=Math.floor(Math.random()*3420)+100;
+    }
 };
 var clouds=new Array(numClouds);
 for(var i=0;i<numClouds;i++)
