@@ -125,6 +125,7 @@ var winmode=1;
 var mode=0;
 var looseX=0;
 var looseY=0;
+var mapDirty=true;
 var mmcur=true;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 var names= new Array (2);
