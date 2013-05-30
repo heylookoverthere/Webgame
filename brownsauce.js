@@ -37,7 +37,7 @@ sillycanvasElement.appendTo('body');
 
 sillycanvas.globalAlpha=0.80;
 sillycanvas.fillStyle =  "red";
-sillycanvas.fillRect(25,95,850,500);
+//sillycanvas.fillRect(25,95,850,500);
 
 //radarElement.appendTo('body');
 
@@ -3681,6 +3681,7 @@ function initArmies(){
 	armies[1].squads[0].units[1].maxhp+=25;
 	armies[1].squads[0].units[1].hp=armies[1].leader.maxhp;
 	armies[1].squads[0].units[1].row=1;
+	armies[1].squads[0].deploy();
 };
 
 function mapInitArmies(){
@@ -4142,13 +4143,13 @@ function update() {
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
-		if(enemyDeployCount>deployRate){
+		/*if(enemyDeployCount>deployRate){
 			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
             armies[1].lastDeployed++; 
-		}
+		}*/
 	}
     if(menukey.check()) {
         if(!isBattle) 
