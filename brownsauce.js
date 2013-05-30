@@ -1787,7 +1787,7 @@ function endgame(){
 
 
 distance=function(one,two){
-	return(Math.sqrt(Math.pow(one.x-two.x,2)+Math.pow(one.y-two.y,2)));
+	return(Math.pow(one.x-two.x,2)+Math.pow(one.y-two.y,2));
 };
 
 
@@ -1848,7 +1848,7 @@ function army() {
 		{
 			for( var j=0;j<this.numSquads;j++)
 			{
-				if(distance(enemyarmy.squads[i],this.squads[j])<this.squads[j].viewRange)
+				if(distance(enemyarmy.squads[i],this.squads[j])<Math.pow(this.squads[j].viewRange,2))
 				{
 					this.visibleEnemies.push(enemyarmy.squads[i]);
 					break;

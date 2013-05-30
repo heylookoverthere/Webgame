@@ -15,7 +15,7 @@
 253
 "Kings Landing"
 "Ser Bearistan:"
-"I bear you know ill will, but I must defend my king!"
+"I bear you no ill will, but I must defend my king!"
 " "
 " "
 " "
