@@ -3172,6 +3172,7 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 
     center: function(targ) {
         //if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
+		mapDirty=true;
         if(this.zoom==1)
 		{
 			tx=targ.x-26;// * Math.pow(2, curMap.zoom-1);
@@ -4175,13 +4176,13 @@ function mapUpdate() {
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
-		/*if(enemyDeployCount>deployRate){
+		if(enemyDeployCount>deployRate){
 			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
             armies[1].lastDeployed++; 
-		}*/
+		}
 	}
     if(menukey.check()) {
         if(!isBattle) 
