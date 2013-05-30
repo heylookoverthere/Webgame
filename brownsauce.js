@@ -18,6 +18,9 @@ requestAnimationFrame = window.requestAnimationFrame ||
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var canvas = canvasElement.get(0).getContext("2d");
 
+var sillycanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
+var sillycanvas = sillycanvasElement.get(0).getContext("2d");
+
 var osCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var osCanvas = osCanvasElement.get(0).getContext("2d");
 
@@ -29,6 +32,13 @@ var mapCanvas = mapElement.get(0).getContext("2d");
 
 
 canvasElement.appendTo('body');
+sillycanvasElement.css("position", "absolute").css("z-index", "99").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
+sillycanvasElement.appendTo('body');
+
+sillycanvas.globalAlpha=0.80;
+sillycanvas.fillStyle =  "red";
+sillycanvas.fillRect(25,95,850,500);
+
 //radarElement.appendTo('body');
 
 
