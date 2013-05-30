@@ -3185,14 +3185,12 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 var bColors = ["#008000","#006400", "#FF4500", "#000080", "#696969", "#800080", "#808000", "#A52A2A", "#8B4513", "#FFDEAD", "#FFFF40","#000080" , "#FFFF80"]; //list of colors for radar/a few other things
 
 function Tile() { //the Map is made of a 2D array of tiles.
-    this.width = 16;
-    this.height = 16;
     this.x = 0;
     this.y = 0;
-    this.ani = 0;
-    this.color = "#FFC020";
-    this.data=  0;
+    this.data =  0;
 }
+Tile.prototype.width = 16;
+Tile.prototype.height = 16;
 Tile.prototype.draw = function(cam) { 
     if(this.data==TileType.Grass){
         tileSprite[TileType.Grass].draw(canvas, (this.x-cam.x)*16, (this.y-cam.y)*16);
