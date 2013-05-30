@@ -1860,7 +1860,7 @@ function army() {
 			{
 				for( var j=0;j<this.numSquads;j++)
 				{
-					if((this.squads[i].isViable()) && (distance(enemyarmy.squads[i],this.squads[j])<Math.pow(this.squads[j].viewRange,2)))
+					if((this.squads[j].isViable()) && (distance(enemyarmy.squads[i],this.squads[j])<Math.pow(this.squads[j].viewRange,2)))
 					{
 						this.visibleEnemies.push(enemyarmy.squads[i]);
 						break;
