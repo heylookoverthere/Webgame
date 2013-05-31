@@ -4098,7 +4098,24 @@ function worldMapUpdate(){
 
 				//alert (data.town0.name);
 				alert(data.town1.name);
-					armies[0].baseName=data.town0.name;
+				armies[0].baseName=data.town0.name;
+				initTowns();
+				for(var p=0;p<maps[0].numTowns;p++)
+				{
+					towns[p]=new town();
+					if(p>1){
+					towns[p].name=tname[mapSelected][p-2];
+					}	
+			}
+			
+			towns[0].x=armies[0].basex;
+			towns[0].y=armies[0].basey;
+			towns[0].team=0;
+			towns[0].name=armies[0].baseName;
+			towns[1].x=armies[1].basex
+			towns[1].y=armies[1].basey
+			towns[1].name=armies[1].baseName;
+				
 			})
 
 		} else if(mapSelected==4){
@@ -4113,33 +4130,12 @@ function worldMapUpdate(){
 			armies[1].baseName="Sunspear";
 		
 		}
-		for(var p=0;p<maps[0].numTowns;p++)
-			{
-				towns[p]=new town();
-				if(p>1){
-					towns[p].name=tname[mapSelected][p-2];
-				}
-			}
-			
-			towns[0].x=armies[0].basex;
-			towns[0].y=armies[0].basey;
-			towns[0].team=0;
-			towns[0].name=armies[0].baseName;
-			towns[1].x=armies[1].basex
-			towns[1].y=armies[1].basey
-			towns[1].name=armies[1].baseName;
-			if(towns[1].name=="The Dreadfort") {
-				towns[1].speaker="Ramsey Bolton:"
-				towns[1].plotText[0]="Mwa Ha Ha Ha, I'm gonna flay you and make";
-				towns[1].plotText[1]="a coat!";
-				towns[1].plotText[2]="";
-				towns[1].plotText[3]="";
-			}
+		
 		var bot=[];
 		bot.x=armies[0].basex;
 		bot.y=armies[0].basey;
 		camera.center(bot);
-		initTowns();
+
 		mapInitArmies();
 		canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	
