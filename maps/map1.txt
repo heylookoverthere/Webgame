@@ -15,7 +15,6 @@
 "name":"The Dreadfort",
 "Speaker":"Roose Bolton:",
 "text1":"I will make a coat from your skin.",
-"text1":" ",
 "text2":" ",
 "text3":" ",
 "text4":" ",

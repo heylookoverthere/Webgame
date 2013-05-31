@@ -1597,6 +1597,7 @@ function town() {
     this.width=64;
     this.height=32;
     this.speaker="Villager:";
+	this.itemChance=0;
     this.plotText=new Array(4);
     this.plotText[0]="Bears are the best!";
     this.plotText[1]="Bears are the best!";
@@ -2535,7 +2536,7 @@ squad.prototype.flee= function(c)
 			targ=this.checkcollision();
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
-             preBattle=preBattleLength; /*isBattle=true;*/ battleCanvas.show(); combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
+             preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
 			battleBox.msg[0]=tmpstr;
@@ -3555,7 +3556,7 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
-		curMap.buildRadar();
+
 
       };
 	imageObj.src = "images/"+name+".png";
@@ -3972,8 +3973,7 @@ function battleDraw()
 }
 initArmies();
 //document.getElementById("myAudio").play(); //starts music
-//initTowns();
-//maps[0].buildMap("map1");
+
 
 camera.center(armies[0].squads[0]);
 function mainMenuUpdate(){
@@ -4059,88 +4059,105 @@ function worldMapUpdate(){
 		curMap.buildRadar();
 		if(mapSelected==0){
 			curMap.buildMap("map1");
-			MAPNAME="map1";
-			armies[0].basex=55;
-			armies[0].basey=52;
-			armies[1].basex=151;
-			armies[1].basey=230;
-			armies[0].baseName="Winterfell";
-			armies[1].baseName="The Dreadfort";
+			MAPNAME="map1.txt";
 		}else if(mapSelected==1){
 			curMap.buildMap("map3");
-			MAPNAME="map3";
-			armies[0].basex=35;
-			armies[0].basey=35;
-			armies[1].basex=157;
-			armies[1].basey=225;
-			armies[0].baseName="Greywater Watch";
-			armies[1].baseName="The Twins";
+			MAPNAME="map3.txt";
 		}else if(mapSelected==2){
 			curMap.buildMap("map7");
-			MAPNAME="map7";
-			armies[0].basex=362;
-			armies[0].basey=456;
-			armies[0].baseName="Riverrunn";
-
-			armies[1].basex=103;
-			armies[1].basey=132;
-			armies[1].baseName="Harrenhall";
+			MAPNAME="map7.txt";
 		}else if(mapSelected==3){
 			curMap.buildMap("map");
-			MAPNAME="map";
-			armies[0].basex=23;
-			armies[0].basey=25;
-			armies[0].baseName="Penis";
-
-			armies[1].basex=177;
-			armies[1].basey=253;
-			armies[1].baseName="King's Landing";
-
-			$.getJSON("/maps/map.txt", function(data) 
+			MAPNAME="map.txt";
+		} else if(mapSelected==4){
+			curMap.buildMap("map4");
+			MAPNAME="map4.txt";
+		
+		}
+		
+		$.getJSON("/maps/"+MAPNAME, function(data) 
 			{
 
 
 				armies[0].baseName=data.town0.name;
+				armies[0].basex=data.town0.x;
+				armies[0].basey=data.town0.y;
 				armies[1].basename=data.town1.name;
+				armies[1].basex=data.town1.x;
+				armies[1].basey=data.town1.y;
 				
 				for(var p=0;p<maps[0].numTowns;p++)
 				{
 					towns[p]=new town();
-					if(p>1){
-					towns[p].name=tname[mapSelected][p-2];
-					}	
+					//if(p>1){
+					//towns[p].name=tname[mapSelected][p-2];
+					//}	
 				}
 			
-			towns[0].x=armies[0].basex;
-			towns[0].y=armies[0].basey;
-			towns[0].team=0;
-			towns[0].name=armies[0].baseName;
-			towns[1].x=armies[1].basex
-			towns[1].y=armies[1].basey
-			towns[1].name=armies[1].baseName;
-			initTowns();
+				towns[0].x=armies[0].basex;
+				towns[0].y=armies[0].basey;
+				towns[0].team=0;
+				towns[0].name=armies[0].baseName;
+				towns[1].x=armies[1].basex
+				towns[1].y=armies[1].basey
+				towns[1].name=armies[1].baseName;
+				towns[1].speaker=data.town1.speaker;
+				towns[1].plotText[0]=data.town1.text1;
+				towns[1].plotText[1]=data.town1.text2;
+				towns[1].plotText[2]=data.town1.text3;
+				towns[1].plotText[3]=data.town1.text4;
+				towns[1].itemChance=data.town1.itemchance;
 				
+				towns[2].x=data.town2.x;
+				towns[2].y=data.town2.y;
+				towns[2].name=data.town2.name;
+				towns[2].speaker=data.town2.speaker;
+				towns[2].plotText[0]=data.town2.text1;
+				towns[2].plotText[1]=data.town2.text2;
+				towns[2].plotText[2]=data.town2.text3;
+				towns[2].plotText[3]=data.town2.text4;
+				towns[2].itemChance=data.town2.itemchance;
+				
+				towns[3].x=data.town3.x;
+				towns[3].y=data.town3.y;
+				towns[3].name=data.town3.name;
+				towns[3].speaker=data.town3.speaker;
+				towns[3].plotText[0]=data.town3.text1;
+				towns[3].plotText[1]=data.town3.text2;
+				towns[3].plotText[2]=data.town3.text3;
+				towns[3].plotText[3]=data.town3.text4;
+				towns[3].itemChance=data.town3.itemchance;
+				
+				towns[4].x=data.town4.x;
+				towns[4].y=data.town4.y;
+				towns[4].name=data.town4.name;
+				towns[4].speaker=data.town4.speaker;
+				towns[4].plotText[0]=data.town4.text1;
+				towns[4].plotText[1]=data.town4.text2;
+				towns[4].plotText[2]=data.town4.text3;
+				towns[4].plotText[3]=data.town4.text4;
+				towns[4].itemChance=data.town4.itemchance;
+				
+				towns[5].x=data.town5.x;
+				towns[5].y=data.town5.y;
+				towns[5].name=data.town5.name;
+				towns[5].speaker=data.town4.speaker;
+				towns[5].plotText[0]=data.town5.text1;
+				towns[5].plotText[1]=data.town5.text2;
+				towns[5].plotText[2]=data.town5.text3;
+				towns[5].plotText[3]=data.town5.text4;
+				towns[5].itemChance=data.town5.itemchance;
+				//initTowns();
+				mapInitArmies();
+				curMap.buildRadar();
 			})
-
-		} else if(mapSelected==4){
-			curMap.buildMap("map4");
-			MAPNAME="map4";
-			armies[0].basex=49;
-			armies[0].basey=59;
-			armies[0].baseName="Starfall";
-
-			armies[1].basex=174;
-			armies[1].basey=164;
-			armies[1].baseName="Sunspear";
-		
-		}
 		
 		var bot=[];
 		bot.x=armies[0].basex;
 		bot.y=armies[0].basey;
 		camera.center(bot);
 
-		mapInitArmies();
+		
 		canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	
 			//give units initial paths.
@@ -4478,7 +4495,7 @@ function mapUpdate() {
             if (preBattle<1){
 				preBattle=0;
 				isBattle=true;
-				battleCanvas.show();
+				//battleCanvas.show(); todo
                 //paused=true;
             }
         }

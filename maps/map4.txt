@@ -15,7 +15,6 @@
 "name":"Sunspear",
 "Speaker":"Oberyn Martell:",
 "text1":"I am the Viper.  I come to Vipe the Vindows",
-"text1":" ",
 "text2":" ",
 "text3":" ",
 "text4":" ",

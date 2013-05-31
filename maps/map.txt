@@ -15,7 +15,6 @@
 "name":"Kings Landing",
 "Speaker":"Ser Bearistan:",
 "text1":"I bear you no ill will, but I must defend my king!",
-"text1":" ",
 "text2":" ",
 "text3":" ",
 "text4":" ",

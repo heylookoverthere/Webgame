@@ -15,7 +15,6 @@
 "name":"The Twins",
 "Speaker":"Walder Frey:",
 "text1":"Mayhaps I will fuck your corpse. heh..",
-"text1":" ",
 "text2":" ",
 "text3":" ",
 "text4":" ",
