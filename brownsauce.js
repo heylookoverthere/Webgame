@@ -1653,129 +1653,6 @@ town.prototype.draw=function(cam) {
 };
 
 
-function initTowns(){
-	
-	towns[2].x=45;
-    towns[2].y=138;
-	
-	towns[3].x=39;
-    towns[3].y=230;
-	
-	towns[4].x=177;
-    towns[4].y=48;
-	
-	towns[5].x=99;
-    towns[5].y=189;
-	if(MAPNAME=="map3"){
-
-		
-		towns[2].x=156;
-		towns[2].y=82;
-		
-		towns[3].x=164;
-		towns[3].y=121;
-		
-		towns[4].x=39;
-		towns[4].y=191;
-		
-		towns[5].x=84;
-		towns[5].y=63;
-	
-	}else if(MAPNAME=="map1"){
-
-		
-		towns[2].x=163;
-		towns[2].y=40;
-		
-		towns[3].x=62;
-		towns[3].y=126;
-		
-		towns[4].x=80;
-		towns[4].y=193;
-		
-		towns[5].x=78;
-		towns[5].y=263;
-	
-	}else if(MAPNAME=="map4"){
-
-		
-		towns[2].x=42;
-		towns[2].y=179;
-		
-		towns[3].x=64;
-		towns[3].y=191;
-		
-		towns[4].x=126;
-		towns[4].y=72;
-		
-		towns[5].x=44;
-		towns[5].y=101;
-	
-	}else if(MAPNAME=="map6"){
-
-		
-		towns[2].x=8;
-		towns[2].y=8;
-		
-		towns[3].x=8;
-		towns[3].y=8;
-		
-		towns[4].x=8;
-		towns[4].y=8;
-		
-		towns[5].x=8;
-		towns[5].y=8;
-		//numTowns=2;
-	
-	}else if(MAPNAME=="map5"){
-
-		
-		towns[2].x=163;
-		towns[2].y=40;
-		
-		towns[3].x=62;
-		towns[3].y=126;
-		
-		towns[4].x=80;
-		towns[4].y=193;
-		
-		towns[5].x=78;
-		towns[5].y=263;
-	
-	}else if(MAPNAME=="map7"){
-
-		
-		towns[2].x=69;
-		towns[2].y=242;
-		
-		towns[3].x=233;
-		towns[3].y=300;
-		
-		towns[4].x=278;
-		towns[4].y=89;
-		
-		towns[5].x=158;
-		towns[5].y=244;
-	
-	}else if(MAPNAME=="map8"){
-
-		
-		towns[2].x=69;
-		towns[2].y=242;
-		
-		towns[3].x=233;
-		towns[3].y=300;
-		
-		towns[4].x=278;
-		towns[4].y=89;
-		
-		towns[5].x=158;
-		towns[5].y=244;
-	
-	}
-	
-}
-
 function endGame(win){
 	if (win==0){
 		mode=1;
@@ -1785,12 +1662,29 @@ function endGame(win){
 		{
 			armies[0].squads[i].healStatus();
 			armies[0].squads[i].refresh();
+			armies[0].squads[i].deployed=false;
+			armies[0].squads[i].clearDestination();
+			armies[0].squads[i].bx=8;
+			armies[0].squads[i].by=8;
 		}
 		for( i=0; i<armies[1].numSquads;i++)
 		{
 			armies[1].squads[i].healStatus();
 			armies[1].squads[i].refresh();
+			armies[1].squads[i].deployed=false;
+			armies[1].squads[i].clearDestination();
+			armies[1].squads[i].bx=8;
+			armies[1].squads[i].by=8;
 		}
+		armies[0].lastDeployed=1;//1?
+		armies[1].lastDeployed=1;
+		isBattle=false;
+		preBattle=0;
+		battletick=0;
+		looseX=0;
+		looseY=0;
+		SELECTED=0;
+		MSELECTED=0;
 		//heal all squads and units
 	}
 };
@@ -2279,7 +2173,7 @@ squad.prototype.removeUnit=function(id)
     squad.prototype.deploy=function()
     {
         var cst = this.getCost();
-        if (armies[this.team].gold<cst) {  var tmpstr="Not enough gold to deploy"+ this.leader.name+ "'s unit."; console.log(tmpstr);bConsoleStr.push(tmpstr);bConsoleClr.push("red"); return;}
+        if ((this.team==0) &&(armies[this.team].gold<cst)) {  var tmpstr="Not enough gold to deploy "+ this.leader.name+ "'s unit."; console.log(tmpstr);bConsoleStr.push(tmpstr);bConsoleClr.push("red"); return;}
         armies[this.team].gold-=cst;
         //revive and heal all just in case.
         this.deployed=true;
@@ -3652,7 +3546,7 @@ function Map(I) { //map object
 function initArmies(){
 	armies[0].init(0);
 	armies[1].init(1);
-	armies[0].squads[0].deploy();
+
 	armies[0].squads[1].leader.class=SEEAss.IronBear;
 	armies[0].squads[1].leader.setClass();
 	armies[0].squads[1].leader.name="Iron Bear"
@@ -3735,7 +3629,7 @@ function initArmies(){
 	armies[1].squads[0].units[1].maxhp+=25;
 	armies[1].squads[0].units[1].hp=armies[1].leader.maxhp;
 	armies[1].squads[0].units[1].row=1;
-	armies[1].squads[0].deploy();
+
 };
 
 function mapInitArmies(){
@@ -3756,6 +3650,8 @@ function mapInitArmies(){
 	armies[0].name = "The Kingsguard";
 	armies[1].name = "The Bastard Boys";
 	armies[1].leader.name="Roose";
+	armies[0].squads[0].deploy();
+	armies[1].squads[0].deploy();
 
 };
 function merp() {
@@ -4185,6 +4081,7 @@ function worldMapUpdate(){
 				camera.center(armies[0].squads[0]);
 				gamestart=true;
 				starting=false;
+				mapDirty=true;
 			})
 		
 		var bot=[];
