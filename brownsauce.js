@@ -1776,11 +1776,39 @@ function initTowns(){
 	
 }
 
-function endgame(){
+function endGame(win){
+	if (win==0){
+		mode=1;
+		maps[mapSelected].team=0;
+		//comeback
+		for(var i=0; i<armies[0].numSquads;i++)
+		{
+			armies[0].squads[i].healStatus();
+			armies[0].squads[i].refresh();
+		}
+		for( i=0; i<armies[1].numSquads;i++)
+		{
+			armies[1].squads[i].healStatus();
+			armies[1].squads[i].refresh();
+		}
+		//heal all squads and units
+	}
+};
+
+function checkEndGame(){
     if(winmode==0)
     {
-        if(towns[0].team==1) { console.log("YOU LOSE");bConsoleStr.push("YOU LOSE");bConsoleClr.push("red");}
-        if(towns[1].team==0) { console.log("A WINNER IS YOU");bConsoleStr.push("A WINNER IS YOU");bConsoleClr.push("green");}
+        if(towns[0].team==1) { 
+			/*console.log("YOU LOSE");
+			bConsoleStr.push("YOU LOSE");
+			bConsoleClr.push("red");*/
+		}
+        if(towns[1].team==0) { 
+			/*console.log("A WINNER IS YOU");
+			bConsoleStr.push("A WINNER IS YOU");
+			bConsoleClr.push("green");*/
+			endGame(0);
+		}
     }else if(winmode==1)
     {
         var toaster=true;
@@ -2258,13 +2286,13 @@ squad.prototype.removeUnit=function(id)
     }
     
     squad.prototype.healStatus=function(){
-        for(var i=0;i<numUnits;i++){
+        for(var i=0;i<this.numUnits;i++){
             this.units[i].esuna();
         }
     };
     
     squad.prototype.refresh=function(){
-        for(var i=0;i<numUnits;i++){
+        for(var i=0;i<this.numUnits;i++){
             this.units[i].alive=true;
             this.units[i].hp=this.units[i].maxhp;
             this.units[i].mp=this.units[i].maxmp;
@@ -3140,6 +3168,7 @@ var gamestart=false;
 var radar=true;
 
 var pausekey=new akey("space");
+var debugkey=new akey("l");
 var escapekey=new akey("esc");
 var pageupkey=new akey("pageup");
 var pagedownkey=new akey("pagedown");
@@ -4054,7 +4083,7 @@ function worldMapUpdate(){
 	}
 	if(starting)
 	{
-		starting=false;
+		
 
 		//curMap.buildRadar();
 		if(mapSelected==0){
@@ -4155,6 +4184,7 @@ function worldMapUpdate(){
 				mode=2;
 				camera.center(armies[0].squads[0]);
 				gamestart=true;
+				starting=false;
 			})
 		
 		var bot=[];
@@ -4631,6 +4661,8 @@ function mapUpdate() {
 
     if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
 
+	 if(debugkey.check()) {endGame(0);}
+	
     if(pausekey.check()) {
         if(isBattle){
             battlePause=!battlePause;
@@ -4791,6 +4823,6 @@ function mapUpdate() {
 	}
 
 	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
-    endgame();
+    checkEndGame();
 }
 merp();
