@@ -18,22 +18,19 @@ requestAnimationFrame = window.requestAnimationFrame ||
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var canvas = canvasElement.get(0).getContext("2d");
 
-var sillycanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
-var sillycanvas = sillycanvasElement.get(0).getContext("2d");
-
 var osCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var osCanvas = osCanvasElement.get(0).getContext("2d");
 
 var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var radarCanvas = radarElement.get(0).getContext("2d");
 
-var mapCanvasElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
+var mapCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var mapCanvas = mapCanvasElement.get(0).getContext("2d");
 
 canvasElement.css("position", "absolute").css("z-index", "1");
 canvasElement.appendTo('body');
-sillycanvasElement.css("position", "absolute").css("z-index", "0").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
-sillycanvasElement.appendTo('body');
+mapCanvasElement.css("position", "absolute").css("z-index", "0").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
+mapCanvasElement.appendTo('body');
 
 //sillycanvas.fillRect(25,95,850,500);
 
@@ -3485,14 +3482,14 @@ function Map(I) { //map object
                     }
                 }
                 if(dominantType.type && dominantType.type <20) {
-					tileSprite[dominantType.type].draw(sillycanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[dominantType.type].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
                 }else if(dominantType.type&& dominantType.type<24){
-					tileSprite[20+tileani].draw(sillycanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[20+tileani].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}else if (dominantType.type&& dominantType.type<28) {
-					tileSprite[24+tileani].draw(sillycanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[24+tileani].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}else 
 				{
-					tileSprite[TileType.Lava+tileani].draw(sillycanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
+					tileSprite[TileType.Lava+tileani].draw(mapCanvas, (i-cam.x)*16/Math.pow(2,I.zoom-1), (j-cam.y)*16/Math.pow(2,I.zoom-1));
 				}
             }
         }
