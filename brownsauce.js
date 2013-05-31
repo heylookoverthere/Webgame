@@ -21,8 +21,8 @@ var canvas = canvasElement.get(0).getContext("2d");
 var sillycanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
 var sillycanvas = sillycanvasElement.get(0).getContext("2d");
 
-var osCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
-var osCanvas = osCanvasElement.get(0).getContext("2d");
+var battleCanvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
+var battleCanvas = battleCanvasElement.get(0).getContext("2d");
 
 var radarElement = $("<canvas width='" + MAP_WIDTH + "' height='" + MAP_HEIGHT + "'></canvas");
 var radarCanvas = radarElement.get(0).getContext("2d");
@@ -33,7 +33,9 @@ var mapCanvas = mapCanvasElement.get(0).getContext("2d");
 canvasElement.css("position", "absolute").css("z-index", "1");
 canvasElement.appendTo('body');
 sillycanvasElement.css("position", "absolute").css("z-index", "0").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
+battleCanvasElement.css("position", "absolute").css("z-index", "2").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
 sillycanvasElement.appendTo('body');
+battleCanvasElement.appendTo('body');
 
 //sillycanvas.fillRect(25,95,850,500);
 
@@ -2812,7 +2814,7 @@ function endBattle(usqd,esqd){
         esqd.units[i].hurting=0;
     }
     paused=battlePause;
-    
+    battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 };
 
 function textbox() {  //draws a text box
@@ -3777,26 +3779,26 @@ function menuDraw()
 function battleDraw()
 {
 	//enus pump
-	canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+	battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	bmenuBox.exists=true;
     battletick++;
-    canvas.save();
-    canvas.globalAlpha=0.60;
-    canvas.fillStyle =  "#DCDCDC";
-    canvas.fillRect(25,95,820,500);
-    canvas.fillStyle =bColors[6];//Math.floor(Math.random()*5)];// "#483D8B ";
-    canvas.fillRect(40,110,790,470);
-    canvas.restore();
-    canvas.font = "14pt Calibri";
-    canvas.textAlign = "left";
-    canvas.textBaseline = "middle";
+    battleCanvas.save();
+    battleCanvas.globalAlpha=0.60;
+    battleCanvas.fillStyle =  "#DCDCDC";
+    battleCanvas.fillRect(25,95,820,500);
+    battleCanvas.fillStyle =bColors[6];//Math.floor(Math.random()*5)];// "#483D8B ";
+    battleCanvas.fillRect(40,110,790,470);
+    battleCanvas.restore();
+    battleCanvas.font = "14pt Calibri";
+    battleCanvas.textAlign = "left";
+    battleCanvas.textBaseline = "middle";
 
-    canvas.fillStyle = "blue";
+    battleCanvas.fillStyle = "blue";
     var texticles= "";
     if (combatants[0].battleAI==0) {texticles="Weakest";}
     if (combatants[0].battleAI==1) {texticles="Strongest";}
     if (combatants[0].battleAI==2) {texticles="Leader";}
-    canvas.fillText(texticles, 515, 132);
+    battleCanvas.fillText(texticles, 515, 132);
 	
 	//update console
 	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
@@ -3807,7 +3809,7 @@ function battleDraw()
 	bConsoleBox.colors[2]=bConsoleClr[bConsoleStr.length-2-bConsoleBox.scroll];
 	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
 	bConsoleBox.colors[3]=bConsoleClr[bConsoleStr.length-1-bConsoleBox.scroll];
-	
+	battleCanvas.globalAlpha=1;
     for(var i=0;i<combatants[0].numUnits;i++)
     {
         if(!combatants[0].units[i].alive) {continue;}
@@ -3818,51 +3820,51 @@ function battleDraw()
 		}
 		var closs=combatants[0].units[i].getClassName();
         var xp=600+combatants[0].units[i].row*40;
-        canvas.fillText("HP:"+combatants[0].units[i].hp +"/"+combatants[0].units[i].maxhp, xp, 130+i*2*45);
-        canvas.fillText("Lvl: "+ combatants[0].units[i].level, xp+100, 130+i*2*45);
+        battleCanvas.fillText("HP:"+combatants[0].units[i].hp +"/"+combatants[0].units[i].maxhp, xp, 130+i*2*45);
+        battleCanvas.fillText("Lvl: "+ combatants[0].units[i].level, xp+100, 130+i*2*45);
  
-        canvas.fillText("ATB:", xp, 145+i*2*45);
-        canvas.fillStyle =  "#DCDCDC";
-        canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
+        battleCanvas.fillText("ATB:", xp, 145+i*2*45);
+        battleCanvas.fillStyle =  "#DCDCDC";
+        battleCanvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
         if(combatants[0].units[i].hasStatus(Status.Haste)){
-            canvas.fillStyle =  "green";
+            battleCanvas.fillStyle =  "green";
         }else if(combatants[0].units[i].hasStatus(Status.Slow)){
-            canvas.fillStyle =  "red";
+            battleCanvas.fillStyle =  "red";
         }else
         {
-            canvas.fillStyle =  "yellow";
+            battleCanvas.fillStyle =  "yellow";
         }
-        canvas.fillRect(xp+60+1,144+(i*45*2),combatants[0].units[i].atb,13);
+        battleCanvas.fillRect(xp+60+1,144+(i*45*2),combatants[0].units[i].atb,13);
 
-        canvas.fillStyle = "blue";
-        canvas.fillText("Name:", xp, 172+i*2*45);
-        canvas.fillText(combatants[0].units[i].name, xp+52, 172+i*2*45);
-        canvas.fillText(closs, xp, 158+i*2*45);
+        battleCanvas.fillStyle = "blue";
+        battleCanvas.fillText("Name:", xp, 172+i*2*45);
+        battleCanvas.fillText(combatants[0].units[i].name, xp+52, 172+i*2*45);
+        battleCanvas.fillText(closs, xp, 158+i*2*45);
 
-        if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-        if(i==BSELECTED) {selector.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+        if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+        if(i==BSELECTED) {selector.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 
 				
         if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
-            sevenup.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
+            sevenup.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
         }
         if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
-		canvas.save();
-		canvas.globalAlpha=0.60;
-        if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-		if(combatants[0].units[i].hasStatus(Status.Protect)) {protectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-        if(combatants[0].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-		if(combatants[0].units[i].hasStatus(Status.Regen)) {regensprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-		canvas.restore();
+		battleCanvas.save();
+		battleCanvas.globalAlpha=0.60;
+        if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		if(combatants[0].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+        if(combatants[0].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		if(combatants[0].units[i].hasStatus(Status.Regen)) {regensprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		battleCanvas.restore();
         if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
         if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
     }
 
-    canvas.fillStyle = "red";
+    battleCanvas.fillStyle = "red";
     if (combatants[1].battleAI==0) {texticles="Weakest";}
     if (combatants[1].battleAI==1) {texticles="Strongest";}
     if (combatants[1].battleAI==2) {texticles="Leader";}
-    canvas.fillText(texticles, 275, 132);
+    battleCanvas.fillText(texticles, 275, 132);
     for(var i=0;i<combatants[1].numUnits;i++)
     {
 		var sevenup=combatants[1].units[i].sprite;
@@ -3873,40 +3875,40 @@ function battleDraw()
         if(!combatants[1].units[i].alive) {continue;}
         var closs=combatants[1].units[i].getClassName();
         var xp=135-combatants[1].units[i].row*40;
-        canvas.fillText("HP:"+combatants[1].units[i].hp +"/"+combatants[1].units[i].maxhp, xp, 130+i*2*45);
-        canvas.fillText("Lvl: "+ combatants[1].units[i].level, xp+100, 130+i*2*45);
-        canvas.fillText("ATB:", xp, 143+i*2*45);
-        canvas.fillStyle =  "#DCDCDC";
-        canvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
-        canvas.fillStyle =  "yellow";
-        canvas.fillRect(xp+60+1,144+(i*45*2),combatants[1].units[i].atb,13);
+        battleCanvas.fillText("HP:"+combatants[1].units[i].hp +"/"+combatants[1].units[i].maxhp, xp, 130+i*2*45);
+        battleCanvas.fillText("Lvl: "+ combatants[1].units[i].level, xp+100, 130+i*2*45);
+        battleCanvas.fillText("ATB:", xp, 143+i*2*45);
+        battleCanvas.fillStyle =  "#DCDCDC";
+        battleCanvas.fillRect(xp+60,143+(i*45*2),battlespeed+3,15);
+        battleCanvas.fillStyle =  "yellow";
+        battleCanvas.fillRect(xp+60+1,144+(i*45*2),combatants[1].units[i].atb,13);
 
-        canvas.fillStyle = "red";
-        canvas.fillText(closs, xp, 158+i*2*45);
-        canvas.fillText("Name:", xp, 172+i*2*45);
-        canvas.fillText(combatants[1].units[i].name, xp+80, 172+i*2*45);
+        battleCanvas.fillStyle = "red";
+        battleCanvas.fillText(closs, xp, 158+i*2*45);
+        battleCanvas.fillText("Name:", xp, 172+i*2*45);
+        battleCanvas.fillText(combatants[1].units[i].name, xp+80, 172+i*2*45);
 
         if((combatants[1].units[i].attacking>0) && (combatants[1].units[i].hurting<1)) {combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);}
         
         if((combatants[1].units[i].hurting<1) || (combatants[1].units[i].hurting%2==0)) {
-           sevenup.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
+           sevenup.draw(battleCanvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
         }
         if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
-		canvas.save();
-		canvas.globalAlpha=0.60;
-        if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-	    if(combatants[1].units[i].hasStatus(Status.Protect)) {protectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-	    if(combatants[1].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-	    if(combatants[1].units[i].hasStatus(Status.Regen)) {regensprite.draw(canvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-		canvas.restore();
+		battleCanvas.save();
+		battleCanvas.globalAlpha=0.60;
+        if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+	    if(combatants[1].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+	    if(combatants[1].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+	    if(combatants[1].units[i].hasStatus(Status.Regen)) {regensprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+		battleCanvas.restore();
         if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
         if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
     }
-    canvas.fillStyle = "white";
+    battleCanvas.fillStyle = "white";
     var texticle= "Turns:" +(combatants[0].turns+combatants[1].turns) + "/"+battlelength;
-    canvas.fillText(texticle, 360, 132);
+    battleCanvas.fillText(texticle, 360, 132);
     if(battlePause) {//in battle menu
-        canvas.fillText("battle pause!", 350, 432);
+        battleCanvas.fillText("battle pause!", 350, 432);
     }
     if((combatants[0].alive)&& (!combatants[0].checkSurvivors()))   { 
         var tmpstr=combatants[0].leader.name + "'s squad was eliminated.";
@@ -3962,7 +3964,7 @@ function battleDraw()
 		
 	}
 
-	bmenuBox.draw(canvas);
+	bmenuBox.draw(battleCanvas);
 	if(battletick>battledelay) {battletick=0;}
 }
 initArmies();
