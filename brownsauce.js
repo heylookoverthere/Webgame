@@ -1613,8 +1613,9 @@ function town() {
     this.rsprite[1] = Sprite("townreds");
 }
 town.prototype.checkCollision=function(squd){
-    return ((squd.alive)&&(squd.x>this.x-1) && (squd.x<this.x+2) && 
+    return ((squd.isViable())&&(squd.x>this.x-1) && (squd.x<this.x+2) && 
 	    (squd.y>this.y-1) && (squd.y<this.y+2)); 
+		//return false;
 };
 town.prototype.getTileX=function(cam){
     return Math.floor((this.x+cam.x)/16);
@@ -2058,7 +2059,7 @@ function army() {
     this.init=function(side){
         //this.numSquads=8;
         this.team=side;
-        this.gold=4000;
+        this.gold=6000;
         this.name="Fighting Mongooses"
         for(var i=0;i<this.numSquads;i++){
             //if(i=0) { this.squads[i].numUnits=5;}
@@ -2531,6 +2532,7 @@ squad.prototype.flee= function(c)
 
     squad.prototype.update = function(map) {
 		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
+		if(!gamestart) {return;}
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle) ||(preBattle)) {return;}
         if(this.team==0){
 			targ=this.checkcollision();
@@ -2547,14 +2549,16 @@ squad.prototype.flee= function(c)
         };
         if((this.leaderless===true) && (this.path==null)){
             this.setDestination(this.basex,this.basey,curMap)}
-        for(var i=0;i<maps[mapSelected].numTowns;i++)
+        for(var i=0;i<towns.length;i++)//maps[mapSelected].numTowns;i++) //balls
         {
-            if(towns[i].checkCollision(this)) 
+			if(towns[i].checkCollision(this)) 
             {
+				//if(this.leader.name=="Bearistan"){
+				//console.log(towns[i].team,this.team);}
                 if(towns[i].team!=this.team){
                     towns[i].team=this.team;
-                    if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);}
-                    if(towns[i].team==1) {armies[0].opinion-=10; var tmpsrt=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); bConsoleStr.push(tmpstr);} //TODO bConsoleStr
+					//if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white")}
+                    if(towns[i].team==1) {armies[0].opinion-=10; var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; /*console.warn(tmpstr);*/ bConsoleStr.push(tmpstr);bConsoleClr.push("white");} //TODO bConsoleStr
 					if((this.team==0) && (!towns[i].spouted)){
 						towns[i].spouted=true;
 						townbox.lines=4;
@@ -2567,6 +2571,7 @@ squad.prototype.flee= function(c)
                 }
                 this.heal();
             }
+		
         }
 		
 		if(armies[0].opinion<0) {armies[0].opinion=0;}
@@ -3629,23 +3634,18 @@ function initArmies(){
 	armies[0].squads[2].smartRow();
 	armies[0].squads[0].smartRow();
 	armies[0].squads[1].smartRow();
-	for (var i=0;i<armies[0].numSquads;i++){
-			armies[0].squads[i].basex=armies[0].basex;
-			armies[0].squads[i].basey=armies[0].basey;
-			armies[0].squads[i].x=armies[0].basex;
-			armies[0].squads[i].y=armies[0].basey;
-	}
+	
 
 	//armies[0].name = "Lannisters";
 	armies[0].name = "The Kingsguard";
 	armies[1].name = "The Bastard Boys";
 	armies[1].leader.name="Roose";
-	for (var i=0;i<armies[1].numSquads;i++){
+	/*for (var i=0;i<armies[1].numSquads;i++){
 			armies[1].squads[i].basex=armies[1].basex;
 			armies[1].squads[i].basey=armies[1].basey;
 			armies[1].squads[i].x=armies[1].basex;
 			armies[1].squads[i].y=armies[1].basey;
-	}
+	}*/
 
 
 
@@ -3661,8 +3661,8 @@ function initArmies(){
 		armies[1].squads[i].leader.setClass();
 		armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
 		armies[1].squads[i].team=1;
-		armies[1].squads[i].x=armies[1].squads[i].basex;
-		armies[1].squads[i].y=armies[1].squads[i].basey;
+		//armies[1].squads[i].x=armies[1].squads[i].basex;
+		//armies[1].squads[i].y=armies[1].squads[i].basey;
 		armies[1].squads[i].smartRow();
 		//armies[1].squads[i].deploy();//TODO delay between deployment 
 		//armies[1].lastDeployed++;
@@ -3975,7 +3975,7 @@ initArmies();
 //document.getElementById("myAudio").play(); //starts music
 
 
-camera.center(armies[0].squads[0]);
+
 function mainMenuUpdate(){
 	var tick=0;
 	lasttime=milliseconds;
@@ -4054,8 +4054,7 @@ function worldMapUpdate(){
 	if(starting)
 	{
 		starting=false;
-		mode=2;
-		worldmapsprite=null;
+
 		//curMap.buildRadar();
 		if(mapSelected==0){
 	
@@ -4082,11 +4081,11 @@ function worldMapUpdate(){
 				armies[0].baseName=data.town0.name;
 				armies[0].basex=data.town0.x;
 				armies[0].basey=data.town0.y;
-				armies[1].basename=data.town1.name;
+				armies[1].baseName=data.town1.name;
 				armies[1].basex=data.town1.x;
 				armies[1].basey=data.town1.y;
 				
-				for(var p=0;p<maps[0].numTowns;p++)
+				for(var p=0;p<maps[mapSelected].numTowns;p++)
 				{
 					towns[p]=new town();
 					//if(p>1){
@@ -4097,6 +4096,7 @@ function worldMapUpdate(){
 				towns[0].x=armies[0].basex;
 				towns[0].y=armies[0].basey;
 				towns[0].team=0;
+				towns[0].spouted=true;
 				towns[0].name=armies[0].baseName;
 				towns[1].x=armies[1].basex
 				towns[1].y=armies[1].basey
@@ -4151,6 +4151,9 @@ function worldMapUpdate(){
 				curMap.buildMap(MAPNAME);
 				mapInitArmies();
 				//curMap.buildRadar();
+				mode=2;
+				camera.center(armies[0].squads[0]);
+				gamestart=true;
 			})
 		
 		var bot=[];
@@ -4181,6 +4184,7 @@ function worldMapUpdate(){
 //------------MAIN LOOP-----------------------------------------
 function mapUpdate() {
 	canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+	if(!gamestart) return;
 	var tick=0;	
     lasttime=milliseconds;
     timestamp = new Date();
@@ -4193,7 +4197,7 @@ function mapUpdate() {
 		mapDirty=true;
     }
     if (tileani>3) {tileani=0} //tile animations
-	if (theTime.minutes>2) {gamestart=true;} //todo WTF?
+	//if (theTime.minutes>2) {gamestart=true;} //todo WTF?
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
