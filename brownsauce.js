@@ -1676,7 +1676,9 @@ function endGame(win){
 			armies[1].squads[i].bx=8;
 			armies[1].squads[i].by=8;
 		}
+		sillyCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 		armies[0].lastDeployed=1;//1?
+		//armies[0].
 		armies[1].lastDeployed=1;
 		isBattle=false;
 		preBattle=0;
@@ -3560,7 +3562,7 @@ function initArmies(){
 	armies[0].squads[1].smartRow();
 	
 
-	//armies[0].name = "Lannisters";
+	/*armies[0].name = "Lannisters";
 	armies[0].name = "The Kingsguard";
 	armies[1].name = "The Bastard Boys";
 	armies[1].leader.name="Roose";
@@ -3649,7 +3651,7 @@ function mapInitArmies(){
 	//armies[0].name = "Lannisters";
 	armies[0].name = "The Kingsguard";
 	armies[1].name = "The Bastard Boys";
-	armies[1].leader.name="Roose";
+	//armies[1].leader.name="Roose";
 	armies[0].squads[0].deploy();
 	armies[1].squads[0].deploy();
 
@@ -4082,12 +4084,14 @@ function worldMapUpdate(){
 				gamestart=true;
 				starting=false;
 				mapDirty=true;
+				armies[1].leader.name=towns[1].speaker;
 			})
 		
 		var bot=[];
 		bot.x=armies[0].basex;
 		bot.y=armies[0].basey;
 		camera.center(bot);
+
 
 		
 		canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
@@ -4129,13 +4133,13 @@ function mapUpdate() {
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
-		if(enemyDeployCount>deployRate){
+		/*if(enemyDeployCount>deployRate){
 			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
             armies[1].lastDeployed++; 
-		}
+		}*/
 	}
     if(menukey.check()) {
         if(!isBattle) 

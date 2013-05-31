@@ -13,7 +13,7 @@
 "town1": {
 "x":157,"y":225,
 "name":"The Twins",
-"Speaker":"Walder Frey:",
+"speaker":"Walder Frey",
 "text1":"Mayhaps I will fuck your corpse. heh..",
 "text2":" ",
 "text3":" ",

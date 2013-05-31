@@ -13,7 +13,7 @@
 "town1": {
 "x":177,"y":253,
 "name":"Kings Landing",
-"Speaker":"Ser Bearistan:",
+"speaker":"Ser Bearistan",
 "text1":"I bear you no ill will, but I must defend my king!",
 "text2":" ",
 "text3":" ",

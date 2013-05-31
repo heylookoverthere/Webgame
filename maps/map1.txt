@@ -13,7 +13,7 @@
 "town1": {
 "x":151,"y":230,
 "name":"The Dreadfort",
-"Speaker":"Roose Bolton:",
+"speaker":"Roose Bolton",
 "text1":"I will make a coat from your skin.",
 "text2":" ",
 "text3":" ",

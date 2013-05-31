@@ -13,7 +13,7 @@
 "town1": {
 "x":103,"y":132,
 "name":"Harrenhall",
-"Speaker":"The Mountain:",
+"speaker":"The Mountain",
 "text1":"I will cut your horse in half and rape you",
 "text2":" with it's dick.",
 "text3":" ",

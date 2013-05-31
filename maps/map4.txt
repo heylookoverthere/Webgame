@@ -13,7 +13,7 @@
 "town1": {
 "x":174,"y":164,
 "name":"Sunspear",
-"Speaker":"Oberyn Martell:",
+"speaker":"Oberyn Martell",
 "text1":"I am the Viper.  I come to Vipe the Vindows",
 "text2":" ",
 "text3":" ",
@@ -33,7 +33,7 @@
 "town3": {
 "x":64,"y":191,
 "name":"Yornwood",
-"speaker":"Villager:",
+"speaker":"Villager",
 "text1":"Welcome to yornwood",
 "text2":" ",
 "text3":" ",
@@ -43,7 +43,7 @@
 "town4": {
 "x":126,"y":72,
 "name":"Godsgrace",
-"speaker":"Guard:",
+"speaker":"Guard",
 "text1":"Welcome to Godsgrace",
 "text2":" ",
 "text3":" ",
@@ -53,7 +53,7 @@
 "town5": {
 "x":44,"y":101,
 "name":"Lemonwood",
-"speaker":"Old Woman:",
+"speaker":"Old Woman",
 "text1":"Welcome to Lemonwood",
 "text2":" ",
 "text3":" ",
