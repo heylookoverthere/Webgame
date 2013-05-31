@@ -4099,14 +4099,14 @@ function worldMapUpdate(){
 				//alert (data.town0.name);
 				alert(data.town1.name);
 				armies[0].baseName=data.town0.name;
-				initTowns();
+				
 				for(var p=0;p<maps[0].numTowns;p++)
 				{
 					towns[p]=new town();
 					if(p>1){
 					towns[p].name=tname[mapSelected][p-2];
 					}	
-			}
+				}
 			
 			towns[0].x=armies[0].basex;
 			towns[0].y=armies[0].basey;
@@ -4115,6 +4115,7 @@ function worldMapUpdate(){
 			towns[1].x=armies[1].basex
 			towns[1].y=armies[1].basey
 			towns[1].name=armies[1].baseName;
+			initTowns();
 				
 			})
 
