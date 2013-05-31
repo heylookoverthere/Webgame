@@ -2535,7 +2535,7 @@ squad.prototype.flee= function(c)
 			targ=this.checkcollision();
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
-             preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
+             preBattle=preBattleLength; /*isBattle=true;*/ battleCanvas.show(); combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
 			battleBox.msg[0]=tmpstr;
@@ -2816,7 +2816,7 @@ function endBattle(usqd,esqd){
     }
     paused=battlePause;
     battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-	battleCavnas.hide();
+	battleCanvas.hide();
 };
 
 function textbox() {  //draws a text box
@@ -3463,6 +3463,7 @@ function Map(I) { //map object
 
     I.draw = function(cam) {
 		if(!mapDirty) {return;}
+		if((isBattle) ||(preBattle)||(battleReport)){return;}
         cam.zoom=I.zoom;
         cam.check();
         for (i=cam.x;i<cam.x+cam.width*Math.pow(2, I.zoom-1); i+=I.zoom){
@@ -4571,30 +4572,31 @@ function mapUpdate() {
     selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
     //camera controls
     //if(curMap.zoom<3){
-    if(keydown.left) {
-        camera.x -= 1*curMap.zoom;
-        if (camera.x<0) {camera.x=0;}
-		mapDirty=true;
+	if(!isBattle){
+		if(keydown.left) {
+			camera.x -= 1*curMap.zoom;
+			if (camera.x<0) {camera.x=0;}
+			mapDirty=true;
+		}
+		
+		if(keydown.right) {
+			camera.x += 1*curMap.zoom;
+			if (camera.x>(MAP_WIDTH-(camera.width*curMap.zoom))) {camera.x=MAP_WIDTH-(camera.width*curMap.zoom);}
+			mapDirty=true;
+		}
+		
+		if(keydown.up) {
+			camera.y -= 1*curMap.zoom;
+			if (camera.y<0) {camera.y=0;}
+			mapDirty=true;
+		}
+		
+		if(keydown.down) {
+			camera.y += 1*curMap.zoom;
+			if (camera.y>(MAP_HEIGHT-(camera.height*curMap.zoom))) {(camera.y=MAP_HEIGHT-(camera.height*curMap.zoom));}
+			mapDirty=true;
+		}
     }
-    
-    if(keydown.right) {
-        camera.x += 1*curMap.zoom;
-        if (camera.x>(MAP_WIDTH-(camera.width*curMap.zoom))) {camera.x=MAP_WIDTH-(camera.width*curMap.zoom);}
-		mapDirty=true;
-    }
-    
-    if(keydown.up) {
-        camera.y -= 1*curMap.zoom;
-        if (camera.y<0) {camera.y=0;}
-		mapDirty=true;
-    }
-    
-    if(keydown.down) {
-        camera.y += 1*curMap.zoom;
-        if (camera.y>(MAP_HEIGHT-(camera.height*curMap.zoom))) {(camera.y=MAP_HEIGHT-(camera.height*curMap.zoom));}
-		mapDirty=true;
-    }
-    //}
     if (ksavekey.check()) {randomwalk=!randomwalk;}
 
     if(isBattle){
