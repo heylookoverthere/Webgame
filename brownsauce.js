@@ -256,7 +256,7 @@ function unit() {
 	this.whichBuff=0;
 	this.whichDebuff=0;
 	this.undead=false;
-    this.nextLevel=20;
+    this.nextLevel=60;
     this.speed=1;
     this.evade=1;
 	this.team=0;
@@ -2534,10 +2534,12 @@ squad.prototype.flee= function(c)
 		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
 		if(!gamestart) {return;}
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle) ||(preBattle)) {return;}
+		var targ=null;
         if(this.team==0){
 			targ=this.checkcollision();
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
+			console.log(targ);
              preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
@@ -2821,7 +2823,7 @@ function endBattle(usqd,esqd){
     }
     paused=battlePause;
     battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-	battleCanvas.hide();
+	//battleCanvas.hide();
 };
 
 function textbox() {  //draws a text box
@@ -3692,7 +3694,7 @@ function initArmies(){
 	}
 
 
-	armies[1].leader.maxhp+=150;
+	armies[1].leader.maxhp+=100;
 	armies[1].leader.hp=armies[1].leader.maxhp
 	armies[1].leader.equipment[0]=swords[2];
 	armies[1].leader.equipment[1]=breastplate;
@@ -4499,6 +4501,7 @@ function mapUpdate() {
             if (preBattle<1){
 				preBattle=0;
 				isBattle=true;
+				battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 				//battleCanvas.show(); todo
                 //paused=true;
             }
@@ -4739,7 +4742,7 @@ function mapUpdate() {
         alert(texticle);
     }
     if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
-    if(battleReport) {canvas.fillText(won, 430, 370);}
+    if(battleReport) {battleCanvas.fillText(won, 430, 370);}
     if(unitinfo) {
         if((isBattle) || (battleReport)){
             armies[0].squads[SELECTED].units[BSELECTED].drawInfo();
@@ -4787,7 +4790,7 @@ function mapUpdate() {
 		}
 	}
 
-	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(canvas,760, 560);}
+	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
     endgame();
 }
 merp();
