@@ -3776,6 +3776,7 @@ function menuDraw()
 	bConsoleBox.lines=4;
 function battleDraw()
 {
+	//enus pump
 	canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	bmenuBox.exists=true;
     battletick++;
