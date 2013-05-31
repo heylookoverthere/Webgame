@@ -2549,16 +2549,14 @@ squad.prototype.flee= function(c)
         };
         if((this.leaderless===true) && (this.path==null)){
             this.setDestination(this.basex,this.basey,curMap)}
-        for(var i=0;i<towns.length;i++)//maps[mapSelected].numTowns;i++) //balls
+        for(var i=0;i<maps[mapSelected].numTowns;i++) 
         {
 			if(towns[i].checkCollision(this)) 
             {
-				//if(this.leader.name=="Bearistan"){
-				//console.log(towns[i].team,this.team);}
                 if(towns[i].team!=this.team){
                     towns[i].team=this.team;
-					//if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white")}
-                    if(towns[i].team==1) {armies[0].opinion-=10; var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; /*console.warn(tmpstr);*/ bConsoleStr.push(tmpstr);bConsoleClr.push("white");} //TODO bConsoleStr
+					if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white")}
+                    if(towns[i].team==1) {armies[0].opinion-=10; var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white");} //TODO bConsoleStr
 					if((this.team==0) && (!towns[i].spouted)){
 						towns[i].spouted=true;
 						townbox.lines=4;
@@ -2642,6 +2640,7 @@ squad.prototype.flee= function(c)
 			combatants[0]=this;
 			combatants[1]=blokeSquad;
 			preBattle=preBattleLength;
+			camera.center(this);
 			battleBox.msg[0]=tmpstr;
 			battleBox.exists=true;
             console.log(tmpstr);//todo MONSOLEreturn;
@@ -4594,7 +4593,7 @@ function mapUpdate() {
     selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
     //camera controls
     //if(curMap.zoom<3){
-	if(!isBattle){
+	if((!isBattle) &&(!preBattle)){
 		if(keydown.left) {
 			camera.x -= 1*curMap.zoom;
 			if (camera.x<0) {camera.x=0;}

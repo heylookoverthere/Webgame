@@ -1,27 +1,27 @@
-{"numtowns":"6","startspeaker":"Roose Bolton:",
+{"numtowns":6,"startspeaker":"Roose Bolton:",
 "starttext":"Sorry, we're taking the north from you.",
 "town0":{
-"x":"55","y":"52",
+"x":55,"y":52,
 "name":"Winterfell",
 "speaker":"",
 "text1":" ",
 "text2":" ",
 "text3":" ",
 "text4":" ",
-"itemchance":"25"},
+"itemchance":25},
 
 "town1": {
-"x":"151","y":"230",
+"x":151,"y":230,
 "name":"The Dreadfort",
 "Speaker":"Roose Bolton:",
 "text1":"I will make a coat from your skin.",
 "text2":" ",
 "text3":" ",
 "text4":" ",
-"itemchance":"75"},
+"itemchance":75},
 
 "town2": {
-"x":"163","y":"40",
+"x":163,"y":40,
 "name":"Last Hearth",
 "speaker":"Villager:",
 "text1":"Welcome to Last Hearth",
@@ -31,31 +31,31 @@
 "itemchance":"25"},
 
 "town3": {
-"x":"62","y":"126",
+"x":62,"y":126,
 "name":"Deepwood Motte",
 "speaker":"Villager:",
 "text1":"Welcome to Deepwood Motte",
 "text2":" ",
 "text3":" ",
 "text4":" ",
-"itemchance":"25"},
+"itemchance":25},
 
 "town4": {
-"x":"80","y":"193",
+"x":80,"y":193,
 "name":"Karhold",
 "speaker":"Guard:",
 "text1":"Welcome to Karhold",
 "text2":" ",
 "text3":" ",
 "text4":" ",
-"itemchance":"25"},
+"itemchance":25},
 
 "town5": {
-"x":"78","y":"263",
+"x":78,"y":263,
 "name":"White Harbor",
 "speaker":"Guard:",
 "text1":"Welcome to White Harbor",
 "text2":" ",
 "text3":" ",
 "text4":" ",
-"itemchance":"25"}}
+"itemchance":25}}
