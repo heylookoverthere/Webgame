@@ -1623,6 +1623,12 @@ town.prototype.getTileX=function(cam){
 town.prototype.getTileY=function(cam){
     return Math.floor((this.y+cam.y)/16);
 };
+
+town.prototype.getItem=function(){
+	if(this.itemChance>Math.random()*100){
+		return randomItem();
+	}
+};
 town.prototype.draw=function(cam) {
     if(curMap.zoom<2) {
         if(this.team===0)
@@ -2481,7 +2487,18 @@ squad.prototype.flee= function(c)
             {
                 if(towns[i].team!=this.team){
                     towns[i].team=this.team;
-					if(towns[i].team==0) {armies[0].opinion+=5;var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name; console.log(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white")}
+					if(towns[i].team==0) 
+					{
+						armies[0].opinion+=5;
+						var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name;
+						console.log(tmpstr); 
+						bConsoleStr.push(tmpstr);
+						bConsoleClr.push("white");
+						var lenny=towns[i].getItem();
+						armies[0].addItem(lenny);
+						bConsoleStr.push("you got a "+lenny.name);
+						bConsoleClr.push("white");
+					}
                     if(towns[i].team==1) {armies[0].opinion-=10; var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white");} //TODO bConsoleStr
 					if((this.team==0) && (!towns[i].spouted)){
 						towns[i].spouted=true;
