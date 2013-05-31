@@ -3556,7 +3556,7 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
-
+		I.buildRadar();
 
       };
 	imageObj.src = "images/"+name+".png";
@@ -4056,26 +4056,26 @@ function worldMapUpdate(){
 		starting=false;
 		mode=2;
 		worldmapsprite=null;
-		curMap.buildRadar();
+		//curMap.buildRadar();
 		if(mapSelected==0){
-			curMap.buildMap("map1");
-			MAPNAME="map1.txt";
+	
+			MAPNAME="map1";
 		}else if(mapSelected==1){
-			curMap.buildMap("map3");
-			MAPNAME="map3.txt";
+			//curMap.buildMap("map3");
+			MAPNAME="map3";
 		}else if(mapSelected==2){
-			curMap.buildMap("map7");
-			MAPNAME="map7.txt";
+			//curMap.buildMap("map7");
+			MAPNAME="map7";
 		}else if(mapSelected==3){
-			curMap.buildMap("map");
-			MAPNAME="map.txt";
+			//curMap.buildMap("map");
+			MAPNAME="map";
 		} else if(mapSelected==4){
-			curMap.buildMap("map4");
-			MAPNAME="map4.txt";
+			//curMap.buildMap("map4");
+			MAPNAME="map4";
 		
 		}
 		
-		$.getJSON("/maps/"+MAPNAME, function(data) 
+		$.getJSON("/maps/"+MAPNAME+".txt", function(data) 
 			{
 
 
@@ -4148,8 +4148,9 @@ function worldMapUpdate(){
 				towns[5].plotText[3]=data.town5.text4;
 				towns[5].itemChance=data.town5.itemchance;
 				//initTowns();
+				curMap.buildMap(MAPNAME);
 				mapInitArmies();
-				curMap.buildRadar();
+				//curMap.buildRadar();
 			})
 		
 		var bot=[];
