@@ -2531,8 +2531,9 @@ squad.prototype.flee= function(c)
     squad.prototype.update = function(map) {
 		//if(milliseconds-this.timelastmoved<this.speed){ return; }//todo
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle) ||(preBattle)) {return;}
-        targ=this.checkcollision();
-        if(this.team==1) {targ=null;} 
+        if(this.team==0){
+			targ=this.checkcollision();
+		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
              preBattle=preBattleLength; /*isBattle=true;*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
