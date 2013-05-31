@@ -2815,6 +2815,7 @@ function endBattle(usqd,esqd){
     }
     paused=battlePause;
     battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+	battleCavnas.hide();
 };
 
 function textbox() {  //draws a text box
@@ -4096,9 +4097,9 @@ function worldMapUpdate(){
 			$.getJSON("/maps/map.txt", function(data) 
 			{
 
-				//alert (data.town0.name);
-				alert(data.town1.name);
+
 				armies[0].baseName=data.town0.name;
+				armies[1].basename=data.town1.name;
 				
 				for(var p=0;p<maps[0].numTowns;p++)
 				{
@@ -4475,6 +4476,7 @@ function mapUpdate() {
             if (preBattle<1){
 				preBattle=0;
 				isBattle=true;
+				battleCanvas.show();
                 //paused=true;
             }
         }
@@ -4485,6 +4487,8 @@ function mapUpdate() {
             if (battleendtick>200){
                 battleReport=false;
                 //paused=true;
+				//battleCanvas.hide();
+				battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
                 battleendtick=0;
             }
         }
