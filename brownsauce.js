@@ -1664,6 +1664,7 @@ function endGame(win){
 		mode=1;
 		maps[mapSelected].team=0;
 		//comeback
+	
 		for(var i=0; i<armies[0].numSquads;i++)
 		{
 			armies[0].squads[i].healStatus();
@@ -1802,6 +1803,17 @@ function army() {
 				}
 			}
 		}
+	};
+	this.getCost=function(){
+		var ca=0;
+		for( var j=0;j<this.numSquads;j++)
+				{
+					if(this.squads[j].deployed)
+					{
+						ca+=this.squads[j].getCost();
+					}
+				}
+				return ca;
 	};
 	this.call=function (nme){
 		for(var i=0;i<this.numLooseUnits;i++)
@@ -2063,23 +2075,51 @@ function army() {
         var texticles= "Name: " + this.name;
         canvas.fillText(texticles, 360, 122);
         
-        texticles= "Unit's Lost: " ;
+        texticles= "Unit's Lost: who knows" ;
         canvas.fillText(texticles, 360, 137);
         
-        texticles= "Unit's Killed:";
+        texticles= "Unit's Killed: who knows";
         canvas.fillText(texticles, 60, 152);
+		
+		canvas.fillText("Squads surviving: "+armies[0].numSquadsAlive(), 360, 152);
         
         texticles= "Day's Past:" + theTime.days;
         canvas.fillText(texticles, 60, 172);
         
-        texticles= "Wins: ";
+        texticles= "Wins/losses: " +armies[0].wins+ " / " + armies[0].losses;
         canvas.fillText(texticles, 60, 192);
- 
-		texticles="Losses";
-        canvas.fillText(texticles, 360, 172);
        
-        var texticles= "You have defeated some douche!";
+        var texticles= "You have defeated "+ towns[1].speaker;
 		canvas.fillText(texticles, 60, 122);
+		//gold earned/lost?
+		canvas.fillText("Squads: "+armies[0].numSquadsAlive(), 680, 24);
+		canvas.fillText("Units: " + numArmyUnits(0), 680, 38);
+    };
+	
+	this.drawProjections=function(){
+        
+        canvas.save();
+        canvas.globalAlpha=0.60;
+        canvas.fillStyle =  "#DCDCDC";
+        canvas.fillRect(250,195,420,400);
+        canvas.fillStyle =bColors[4];//Math.floor(Math.random()*5)];// "#483D8B ";
+        canvas.fillRect(265,210,390,370);
+        canvas.restore();
+        canvas.font = "14pt Calibri";
+        canvas.textAlign = "left";
+        canvas.textBaseline = "middle";
+
+        canvas.fillStyle = "white";
+        var texticles= "Gold: " + this.gold;
+        canvas.fillText(texticles, 310, 242);
+		
+		var texticles= "Daily Expenses: " + this.getCost();
+        canvas.fillText(texticles, 310, 282);
+		
+		var texticles= "Daily Income: about tree fiddy.";
+        canvas.fillText(texticles, 310, 322);
+        
+
     };
 }
 
@@ -4001,12 +4041,18 @@ function worldMapUpdate(){
 		canvas.fillStyle = "white";
 		canvas.fillText("LOADING....", 740, 627);
 	}
-	for(var i=0;i<numMapPoints;i++){
-		if(maps[i].team==0){
+	for(var i=0;i<numMapPoints;i++)
+	{
+
+		if(maps[i].team==0)
+		{
 			bluelocationsprite.draw(canvas,maps[i].x,maps[i].y);
 		}else
 		{
-			redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
+			if((i==0) || (maps[maps[i].preReq].team==0))
+				{
+					redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
+				}
 		}
 	}
 	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x,maps[mapSelected].y);
@@ -4779,7 +4825,7 @@ function mapUpdate() {
     checkEndGame();
 	if(victory){
 		canvas.fillStyle = "white";
-		armies[0].drawResults();
+		armies[0].drawProjections();//drawResults();
 		victoryCount++;
 		if(victoryCount>victoryLap){
 			victoryCount=0;
