@@ -3765,6 +3765,7 @@ requestAnimationFrame(merp,canvas);
 		worldMapUpdate();
 	}else if(mode==2){
 		mapUpdate();
+		mapDraw();
 	}
 	//canvas.beginPath();
 	//osCanvas.drawImage(canvasElement,0,0);
@@ -4023,7 +4024,7 @@ function battleDraw()
    
 
 	bmenuBox.draw(battleCanvas);
-
+	if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
 }
 initArmies();
 //document.getElementById("myAudio").play(); //starts music
@@ -4295,62 +4296,12 @@ function worldMapUpdate(){
 		}*/
 	}
 };
-//------------MAIN LOOP-----------------------------------------
-function mapUpdate() {
+
+//------------MAIN DRAW-----------------------------------------
+function mapDraw() {
 	canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-	if(!gamestart) return;
-	var tick=0;	
-    lasttime=milliseconds;
-    timestamp = new Date();
-    milliseconds = timestamp.getTime();
-    tick++;
-	if ((milliseconds-lastani>WATER_RATE) &&(!isBattle)){
-		tileani++;
-		lastani=milliseconds;
-		anicount=0;
-		mapDirty=true;
-    }
-    if (tileani>3) {tileani=0} //tile animations
-	//if (theTime.minutes>2) {gamestart=true;} //todo WTF?
-	if(armies[1].lastDeployed<armies[1].numSquads-1)
-	{
-		enemyDeployCount++;
-		if(enemyDeployCount>deployRate){
-			enemyDeployCount=0;
-			armies[1].squads[armies[1].lastDeployed].deploy();
-			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
-			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
-            armies[1].lastDeployed++; 
-		}
-	}
-    if(menukey.check()) {
-        if(!isBattle) 
-        {
-            if(isMenu==1) 
-            {   
-                isMenu=0;
-            }else if(isMenu==2)
-            {
-                isMenu=0;
-            }else if(isMenu==3)
-            {
-                isMenu=0;
-            }else
-            {
-                isMenu=1;
-            }
-            
-        }
-    }
-	if(helpkey.check()){
-		if(isMenu==0){
-			alert("Arrow keys=move camera, Z=zoom, X=cycle gamespeed,O=toggle ally AI,S=get squad status,shift=cycle units, space = pause, R=row,A=change AI,F=Flee");
-		}else {
-			alert("M=exit menu,Shift=cycle squads, Arrow keys=cursor, space=select unit/toggle menues, N = form new squad, D=remove unit from squad, A= add unit too squad. Pageup/down scroll pages.");
-		}
-		
-	}
-    if(isMenu==1) 
+	curMap.draw(camera);
+	if(isMenu==1) 
     {
         var looseIndex=0;
 		menuDraw();
@@ -4417,116 +4368,13 @@ function mapUpdate() {
             if(armies[0].looseUnits[i].hasStatus(Status.Poison)) {poisonsprite.draw(canvas, xp-40-armies[0].looseUnits[i].attacking/2, yp+5);}
 
         }
-        if(tabkey.check())
-        {
-            MSELECTED++;
-			looseY=0;
-            if(MSELECTED>armies[0].numSquads-1)
-            {
-                MSELECTED=0;
-            }
-            
-        }
-        if(downkey.check())
-        {
-            looseY++;
-            if((looseY>armies[0].squads[MSELECTED].numUnits-1)&&(sideBar)) { looseY=armies[0].squads[MSELECTED].numUnits-1;}
-			if(looseY>4) looseY=0;
-        }else if(upkey.check())
-        {
-            looseY--;
-            if(looseY<1) { looseY=0;}
-            
-        }else if(leftkey.check())
-        {
-            looseX--;
-            if(looseX<0) { looseX=0;sideBar=true;if(looseY>armies[0].squads[MSELECTED].numUnits) {looseY=armies[0].squads[MSELECTED].numUnits-1;}}
-            
-        }else if(rightkey.check())
-        {
-            if(!sideBar){
-                looseX++;
-                if(looseX>1) { looseX=1;}
-            }else
-            {
-                sideBar=false;
-            }
-            
-        }
-		if(pageupkey.check())
-		{
-			if (pageCount>0){ pageCount--;}
-		}
-		if(pagedownkey.check())
-		{
-			if (pageCount<3){ pageCount++;}
-		}
-		looseIndex= (pageCount*10)+(looseX*5)+looseY;
-        if(addkey.check()){
-            if(!sideBar){
-				if((armies[0].numLooseUnits>0) && (looseY<armies[0].numLooseUnits) &&(armies[0].looseUnits[looseIndex]!=null)){
-					if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseIndex])){ //TODO
-						armies[0].removeLoose(looseIndex);
-					}else {console.log("Could not add unit, no free slots.");bConsoleClr.push("red");bConsoleStr.push("Could not add unit, no free slots.");}
-				}else {console.log("No unit to add!");bConsoleClr.push("red"); bConsoleStr.push("No unit to add!");}
-            }
-        }
-		if(newkey.check()){
-			if(!sideBar){
-				if((looseY>armies[0].numLooseUnits-1) || (armies[0].looseUnits[looseIndex]==null)){ console.log("select a leader!");}
-				else if(!armies[0].looseUnits[looseIndex].canlead){
-					console.log("This unit cannot lead!");
-					bConsoleStr.push("This unit cannot lead!");
-					bConsoleClr.push("red");
-				}else
-				{
-					if((armies[0].looseUnits[looseIndex]!=null)&&(armies[0].addSquad(armies[0].looseUnits[looseIndex]))){
-						armies[0].removeLoose(looseIndex);
-						var tmpstr=armies[0].squads[armies[0].numSquads-1].leader.name + " 's squad has been created";
-						console.log(tmpstr);
-						bConsoleStr.push(tmpstr);
-						bConsoleClr.push("white");
-					}else {console.log("Select a unit!");bConsoleStr.push("Select a unit!");bConsoleClr.push("red");}
-				}
-			}
-		}
-        if(removekey.check()){
-            if(sideBar){
-				if(armies[0].squads[MSELECTED].units[looseY]==armies[0].leader)
-				{
-					console.log("Cannot disband this squad.");
-					bConsoleStr.push("Cannot disband this squad.");
-					bConsoleClr.push("red");
-				}else if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
-				{
-					console.log("Squad disbanded.");
-					bConsoleStr.push("Squad disbanded.");
-					bConsoleClr.push("white");
-					for (var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
-					{
-						armies[0].addLoose(armies[0].squads[MSELECTED].units[i]);
-					}
-					armies[0].removeSquad(armies[0].squads[MSELECTED].ID);
-				}else{
-					if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY])){
-						armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
-						looseY=0;
-					}else {console.log("Could not remove unit, no free slots.");bConsoleClr.push("red");bConsoleStr.push("Could not remove unit, no free slots.");}
-				}
-            }
-        }
-        if(!sideBar){
+	if(!sideBar){
 			xp=360;
 			if(looseX>1) {xp=540;}
             selector.draw(canvas, xp-40+looseX*200, looseY*2*45+84+45);
         }else
         {
             selector.draw(canvas, 40, looseY*2*45+92+45);
-        }
-        if(enterkey.check())
-        {
-            isMenu=2;
-			
         }
 		var txte="";
 		if (armies[0].squads[MSELECTED].canSwim()) {txte="Can Swim";}
@@ -4535,7 +4383,7 @@ function mapUpdate() {
 		canvas.fillText(txte,460,570);
 		canvas.fillText("Page: "+ (pageCount+1)+ "/4",760,570);
         return;
-    }else if (isMenu==2)
+	}else if (isMenu==2)
     {
         //menuDraw();
 		if(!sideBar) {
@@ -4549,6 +4397,319 @@ function mapUpdate() {
 		{
 			if(armies[0].squads[MSELECTED].numUnits>looseY){
 				armies[0].squads[MSELECTED].units[looseY].drawInfo();
+			}
+		}
+		return;
+	}else if (isMenu==3)
+	{
+		armies[0].drawEquipScreen();
+		return;
+	}
+
+	armies[0].getVisible(armies[1]);
+	if(armies[0].visibleEnemies!=null){
+		for (var i=0;i<armies[0].visibleEnemies.length;i++) {
+			armies[0].visibleEnemies[i].draw(camera);
+			if(isOver(armies[0].visibleEnemies[i],camera)) { drawmousetext(armies[0].visibleEnemies[i],camera); };
+			
+		}
+    }
+	    if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
+        theTime.update();
+    }
+	for (var i=0;i<maps[mapSelected].numTowns;i++) {
+        if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
+    }
+    //canvas.save();
+    canvas.globalAlpha=0.00;
+    if(theTime.hours>8){canvas.globalAlpha=0.20;}
+    if(theTime.hours>12){canvas.globalAlpha=0.30;}
+    if(theTime.hours>16){canvas.globalAlpha=0.40;}
+    if(theTime.hours>20){canvas.globalAlpha=0.50;}
+    canvas.fillStyle="#1B1733 ";//"#483D8B ";
+    canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+    canvas.globalAlpha=1;
+	//canvas.restore();
+    //todo error
+	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
+	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
+	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
+	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
+	{	
+		bConsoleBox.draw(canvas);
+	}
+	for(var i=0;i<maps[mapSelected].numTowns;i++)
+    {
+        towns[i].draw(camera);
+    }
+	for (var i=0;i<armies[0].numSquads;i++) {
+        armies[0].squads[i].draw(camera);
+		if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
+    }
+	if(armies[0].squads[SELECTED])//TODO: fuck selected.
+	{
+		selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
+    }
+	if((isBattle) || (battleReport)) {
+		//battleDo();
+        battleDraw();
+        //if (escapekey.check()) {isBattle=false;}
+    }
+	    if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
+    if(battleReport) {battleCanvas.fillText(won, 430, 370);}
+    if(unitinfo) {
+        if((isBattle) || (battleReport)){
+            armies[0].squads[SELECTED].units[BSELECTED].drawInfo();
+        }else {
+            armies[0].squads[SELECTED].leader.drawInfo();
+        }
+    }
+	//canvas.save();
+	canvas.globalAlpha=0.60;
+	for(var i=0;i<numClouds;i++)
+	{
+		clouds[i].update();
+		if((curMap.zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
+		{
+		//canvas.save();
+		//canvas.rotate(clouds[i].ang*Math.PI/180);
+		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
+		//canvas.restore();
+		}
+	}
+	if((radar) && (!isBattle)&&(!battleReport)&&(!preBattle))
+    {
+        //curMap.drawRadar(camera, 660, 340,armies);
+		curMap.drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
+    }
+	//canvas.restore();
+	canvas.globalAlpha=1;
+	if(preBattle)
+	{
+		battleBox.draw(canvas);
+	}
+	//if((isBattle) && (battleReport))
+		//update console
+
+	if(townbox.exists)
+	{
+		townbox.draw(canvas);
+		if((startkey.check())|| (escapekey.check())){
+			townbox.exists=false;
+		}
+	}
+
+	armyInfo();
+   
+};
+//------------MAIN LOOP-----------------------------------------
+function mapUpdate() {
+
+	if(!gamestart) return;
+	var tick=0;	
+    lasttime=milliseconds;
+    timestamp = new Date();
+    milliseconds = timestamp.getTime();
+    tick++;
+	if ((milliseconds-lastani>WATER_RATE) &&(!isBattle))
+	{
+		tileani++;
+		lastani=milliseconds;
+		anicount=0;
+		mapDirty=true;
+    }
+    if (tileani>3) {tileani=0} //tile animations
+	//if (theTime.minutes>2) {gamestart=true;} //todo WTF?
+	if(armies[1].lastDeployed<armies[1].numSquads-1)
+	{
+		enemyDeployCount++;
+		if(enemyDeployCount>deployRate)
+		{
+			enemyDeployCount=0;
+			armies[1].squads[armies[1].lastDeployed].deploy();
+			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
+			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
+            armies[1].lastDeployed++; 
+		}
+	}
+	if((deploykey.check())&&(isMenu==0))
+	{ 
+        if (armies[0].lastDeployed>armies[0].numSquads-1)
+		{
+            //return;
+        }else
+        {
+            armies[0].squads[armies[0].lastDeployed].deploy();
+			armies[0].squads[armies[0].lastDeployed].x=armies[0].basex;
+			armies[0].squads[armies[0].lastDeployed].y=armies[0].basey;
+            armies[0].lastDeployed++; 
+        }
+    }
+    if(menukey.check()) 
+	{
+        if(!isBattle) 
+        {
+            if(isMenu==1) 
+            {   
+                isMenu=0;
+            }else if(isMenu==2)
+            {
+                isMenu=0;
+            }else if(isMenu==3)
+            {
+                isMenu=0;
+            }else
+            {
+                isMenu=1;
+            }
+            
+        }
+    }
+	if(helpkey.check())
+	{
+		if(isMenu==0)
+		{
+			alert("Arrow keys=move camera, Z=zoom, X=cycle gamespeed,O=toggle ally AI,S=get squad status,shift=cycle units, space = pause, R=row,A=change AI,F=Flee");
+		}else 
+		{
+			alert("M=exit menu,Shift=cycle squads, Arrow keys=cursor, space=select unit/toggle menues, N = form new squad, D=remove unit from squad, A= add unit too squad. Pageup/down scroll pages.");
+		}
+		
+	}
+
+	if(tabkey.check())
+	{
+		MSELECTED++;
+		looseY=0;
+		if(MSELECTED>armies[0].numSquads-1)
+		{
+			MSELECTED=0;
+		}
+		
+	}
+	if(downkey.check())
+	{
+		looseY++;
+		if((looseY>armies[0].squads[MSELECTED].numUnits-1)&&(sideBar)) { looseY=armies[0].squads[MSELECTED].numUnits-1;}
+		if(looseY>4) looseY=0;
+	}else if(upkey.check())
+	{
+		looseY--;
+		if(looseY<1) { looseY=0;}
+		
+	}else if(leftkey.check())
+	{
+		looseX--;
+		if(looseX<0) { looseX=0;sideBar=true;if(looseY>armies[0].squads[MSELECTED].numUnits) {looseY=armies[0].squads[MSELECTED].numUnits-1;}}
+		
+	}else if(rightkey.check())
+	{
+		if(!sideBar){
+			looseX++;
+			if(looseX>1) { looseX=1;}
+		}else
+		{
+			sideBar=false;
+		}
+            
+   }
+	if(pageupkey.check())
+	{
+		if (pageCount>0){ pageCount--;}
+	}
+	if(pagedownkey.check())
+	{
+		if (pageCount<3){ pageCount++;}
+	}
+	looseIndex= (pageCount*10)+(looseX*5)+looseY;
+	if(addkey.check())
+	{
+		if(!sideBar)
+		{
+			if((armies[0].numLooseUnits>0) && (looseY<armies[0].numLooseUnits) &&(armies[0].looseUnits[looseIndex]!=null))
+			{
+				if(armies[0].squads[MSELECTED].addUnit(armies[0].looseUnits[looseIndex]))
+				{ //TODO
+					armies[0].removeLoose(looseIndex);
+				}else {console.log("Could not add unit, no free slots.");bConsoleClr.push("red");bConsoleStr.push("Could not add unit, no free slots.");}
+			}else {console.log("No unit to add!");bConsoleClr.push("red"); bConsoleStr.push("No unit to add!");}
+		}
+	}
+	if(newkey.check())
+	{
+		if(!sideBar)
+		{
+			if((looseY>armies[0].numLooseUnits-1) || (armies[0].looseUnits[looseIndex]==null)){ console.log("select a leader!");}
+			else if(!armies[0].looseUnits[looseIndex].canlead)
+			{
+				console.log("This unit cannot lead!");
+				bConsoleStr.push("This unit cannot lead!");
+				bConsoleClr.push("red");
+			}else
+			{
+				if((armies[0].looseUnits[looseIndex]!=null)&&(armies[0].addSquad(armies[0].looseUnits[looseIndex])))
+				{
+					armies[0].removeLoose(looseIndex);
+					var tmpstr=armies[0].squads[armies[0].numSquads-1].leader.name + " 's squad has been created";
+					console.log(tmpstr);
+					bConsoleStr.push(tmpstr);
+					bConsoleClr.push("white");
+				}else {console.log("Select a unit!");bConsoleStr.push("Select a unit!");bConsoleClr.push("red");}
+			}
+		}
+	}
+	if(removekey.check())
+	{
+		if(sideBar){
+			if(armies[0].squads[MSELECTED].units[looseY]==armies[0].leader)
+			{
+				console.log("Cannot disband this squad.");
+				bConsoleStr.push("Cannot disband this squad.");
+				bConsoleClr.push("red");
+			}else if(armies[0].squads[MSELECTED].units[looseY]==armies[0].squads[MSELECTED].leader)
+			{
+				console.log("Squad disbanded.");
+				bConsoleStr.push("Squad disbanded.");
+				bConsoleClr.push("white");
+				for (var i=0;i<armies[0].squads[MSELECTED].numUnits;i++)
+				{
+					armies[0].addLoose(armies[0].squads[MSELECTED].units[i]);
+				}
+				armies[0].removeSquad(armies[0].squads[MSELECTED].ID);
+			}else{
+				if(armies[0].addLoose(armies[0].squads[MSELECTED].units[looseY]))
+				{
+					armies[0].squads[MSELECTED].removeUnit(looseY); //TODO
+					looseY=0;
+				}else {console.log("Could not remove unit, no free slots.");bConsoleClr.push("red");bConsoleStr.push("Could not remove unit, no free slots.");}
+			}
+		}
+	}
+       
+	if(enterkey.check())
+	{
+		isMenu=2;
+		
+	}
+	if(isMenu==1) 
+    {
+
+    }else if (isMenu==2)
+    {
+        //menuDraw();
+		if(!sideBar) {
+			if(armies[0].looseUnits[pageCount*10+looseX*5+looseY]!=null)
+			{
+				//armies[0].looseUnits[pageCount*10+looseX*5+looseY].drawInfo();
+			}else
+			{
+				isMenu=1;
+			}
+		}else
+		{
+			if(armies[0].squads[MSELECTED].numUnits>looseY)
+			{
+				//armies[0].squads[MSELECTED].units[looseY].drawInfo();
 			}
 		}
         if(removekey.check())
@@ -4593,7 +4754,7 @@ function mapUpdate() {
         return;
     }else if (isMenu==3)
 	{
-		armies[0].drawEquipScreen();
+		//armies[0].drawEquipScreen();
 		
 		if(enterkey.check())
         {
@@ -4604,12 +4765,10 @@ function mapUpdate() {
     if(zoomkey.check()) {
         curMap.setZoom(camera);
     }
-    curMap.draw(camera);
-    for(var i=0;i<maps[mapSelected].numTowns;i++)
-    {
-        towns[i].draw(camera);
-    }
-	if((preBattle) &&(!paused)&&(!isMenu)){
+
+
+	if((preBattle) &&(!paused)&&(!isMenu))
+	{
             preBattle--; 
             if (preBattle<1){
 				preBattle=0;
@@ -4618,35 +4777,30 @@ function mapUpdate() {
 				//battleCanvas.show(); todo
                 //paused=true;
             }
-        }
-    if ((tick>gamespeed) && (!isBattle)&&(!preBattle)){
-        tick=0;
-        if(battleReport) {
-            battleendtick++; 
-            if (battleendtick>200){
-                battleReport=false;
-                //paused=true;
-				//battleCanvas.hide();
-				battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-                battleendtick=0;
-            }
-        }
+	}
 
-        for (var i=0;i<armies[0].numSquads;i++) {
+
+        for (var i=0;i<armies[0].numSquads;i++) 
+		{
 			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
             armies[0].squads[i].update(curMap);
 			if(armies[0].squads[i].path!=null) {continue;}
-            if(armies[0].fieldAI==AITypes.Random){
-                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) {
+            if(armies[0].fieldAI==AITypes.Random)
+			{
+                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
+				{
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					/*while(!curMap.walkable(cx,cy,armies[0].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
 					}*/
-                    armies[0].squads[i].setDestination(cx,cy,curMap); };
-            }else if(armies[0].fieldAI==AITypes.Rush){
-                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey)))) {
+                    armies[0].squads[i].setDestination(cx,cy,curMap); 
+				}
+            }else if(armies[0].fieldAI==AITypes.Rush)
+			{
+                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
+				{
                     armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
                 }
             }
@@ -4670,51 +4824,27 @@ function mapUpdate() {
                     armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
             }
         }
-    }
+    
 
-    for (var i=0;i<armies[0].numSquads;i++) {//save and load canvas.
-        armies[0].squads[i].draw(camera);
-        if((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) { drawmousetext(armies[0].squads[i],camera); };
-        if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
+    for (var i=0;i<armies[0].numSquads;i++) {
+        //armies[0].squads[i].draw(camera);
+        if((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) { drawmousetext(armies[0].squads[i],camera); }
+
     }
     /*for (var i=0;i<armies[1].numSquads;i++) {
 		armies[1].squads[i].draw(camera);
         if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
         
     }*/
-	armies[0].getVisible(armies[1]);
-	if(armies[0].visibleEnemies!=null){
-		for (var i=0;i<armies[0].visibleEnemies.length;i++) {
-			armies[0].visibleEnemies[i].draw(camera);
-			if(isOver(armies[0].visibleEnemies[i],camera)) { drawmousetext(armies[0].visibleEnemies[i],camera); };
-			
-		}
-    }
-    for (var i=0;i<maps[mapSelected].numTowns;i++) {
-        if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
-    }
-    if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
-        theTime.update();
-    }
-    //canvas.save();
-    canvas.globalAlpha=0.00;
-    if(theTime.hours>8){canvas.globalAlpha=0.20;}
-    if(theTime.hours>12){canvas.globalAlpha=0.30;}
-    if(theTime.hours>16){canvas.globalAlpha=0.40;}
-    if(theTime.hours>20){canvas.globalAlpha=0.50;}
-    canvas.fillStyle="#1B1733 ";//"#483D8B ";
-    canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    canvas.globalAlpha=1;
-	//canvas.restore();
-    //todo error
-	if(armies[0].squads[SELECTED])//TODO: fuck selected.
-	{
-		selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
-    }
+	
+   
+
 	//camera controls
     //if(curMap.zoom<3){
-	if((!isBattle) &&(!preBattle)){
-		if(keydown.left) {
+	if((!isBattle) &&(!preBattle))
+	{
+		if(keydown.left)
+		{
 			camera.x -= 1*curMap.zoom;
 			if (camera.x<0) {camera.x=0;}
 			mapDirty=true;
@@ -4740,7 +4870,8 @@ function mapUpdate() {
     }
     if (ksavekey.check()) {randomwalk=!randomwalk;}
 
-    if(isBattle){
+    if(isBattle)
+	{
         if (tabkey.check()) {BSELECTED++; if(BSELECTED>armies[0].squads[SELECTED].numUnits-1) {BSELECTED=0;}}
     }else{
         if (tabkey.check()) {armies[0].toggleSelected();}
@@ -4750,8 +4881,10 @@ function mapUpdate() {
 
 	 if(debugkey.check()) {victory=true;}//endGame(0);}
 	
-    if(pausekey.check()) {
-        if(isBattle){
+    if(pausekey.check()) 
+	{
+        if(isBattle)
+		{
             battlePause=!battlePause;
         }else
         {
@@ -4760,8 +4893,10 @@ function mapUpdate() {
         }
     }
     
-    if(createkey.check()){
-        if (armies[0].numSquads>TEAM_SIZE-1) {
+    if(createkey.check())
+	{
+        if (armies[0].numSquads>TEAM_SIZE-1)
+		{
             //return;
         }else
         {
@@ -4772,40 +4907,23 @@ function mapUpdate() {
             armies[0].squads[armies[0].numSquads-1].deployed=false;
         }
     }
-    if((deploykey.check())&&(isMenu==0)){
-        if (armies[0].lastDeployed>armies[0].numSquads-1) {
-            //return;
-        }else
-        {
-            armies[0].squads[armies[0].lastDeployed].deploy();
-			armies[0].squads[armies[0].lastDeployed].x=armies[0].basex;
-			armies[0].squads[armies[0].lastDeployed].y=armies[0].basey;
-            armies[0].lastDeployed++; 
-        }
-        /*      if (armies[0].lastDeployed>armies[0].numSquads-1) {
-                if (armies[0].numSquads>TEAM_SIZE-1) {
-                
-                return;
-                }       
-                armies[0].numSquads++;
-                }else
-                {
-                armies[0].squads[armies[0].lastDeployed].deploy();
-                armies[0].lastDeployed++; 
-                }*/
-    }
+
     
     
     if(zoomkey.check()) {
         curMap.setZoom(camera);
     }
     
-    if(aikey.check()) {
+
+	
+    if(aikey.check())
+	{
         armies[0].squads[SELECTED].battleAI++;
         if (armies[0].squads[SELECTED].battleAI>2) {armies[0].squads[SELECTED].battleAI=0;}
     }
     
-    if(rowkey.check()) {
+    if(rowkey.check()) 
+	{
         if(!isBattle)
         {
             armies[0].squads[SELECTED].row();
@@ -4813,7 +4931,8 @@ function mapUpdate() {
             armies[0].squads[SELECTED].units[BSELECTED].rowswap();
     }
 
-    if(cardkey.check()) {
+    if(cardkey.check()) 
+	{
         if((isBattle) && (!cardUsed))
         {
             armies[0].cards[CSELECTED].type=CSELECTED;
@@ -4823,18 +4942,16 @@ function mapUpdate() {
         }
     }
 	
-	if(cardcyclekey.check()){
+	if(cardcyclekey.check())
+	{
             CSELECTED++;
             if(CSELECTED>4) { CSELECTED=0;}
     }
     
-    if(fleekey.check()) {
+    if(fleekey.check())
+	{
         armies[0].squads[SELECTED].flee();
     }
-
-    armyInfo();
-    
-
 
     if(radarkey.check())
     {
@@ -4843,81 +4960,57 @@ function mapUpdate() {
     
 
     
-    if((isBattle) || (battleReport)) {
+    if((isBattle) || (battleReport)) 
+	{
 		battleDo();
-        battleDraw();
+       // battleDraw();
         //if (escapekey.check()) {isBattle=false;}
     }
 
-    if(speedkey.check()){
+    if(speedkey.check())
+	{
         gamespeed++;
         if (gamespeed>2) {gamespeed=0;}
     }
     
-    if(unitinfokey.check()){
+    if(unitinfokey.check())
+	{
+	
         unitinfo=!unitinfo;
     }
-    if(statuskey.check()){
+    if(statuskey.check())
+	{
         var texticle = "Units:" + armies[0].squads[SELECTED].numSquadUnits() + " / " + armies[0].squads[SELECTED].numUnits;
         alert(texticle);
     }
-    if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
-    if(battleReport) {battleCanvas.fillText(won, 430, 370);}
-    if(unitinfo) {
-        if((isBattle) || (battleReport)){
-            armies[0].squads[SELECTED].units[BSELECTED].drawInfo();
-        }else {
-            armies[0].squads[SELECTED].leader.drawInfo();
-        }
-    }
-	//canvas.save();
-	canvas.globalAlpha=0.60;
-	for(var i=0;i<numClouds;i++)
+	
+	if ((tick>gamespeed) && (!isBattle)&&(!preBattle))
 	{
-		clouds[i].update();
-		if((curMap.zoom>1) &&(!isBattle)&&(!isMenu)&&(!battleReport)&&(!preBattle))
+	
+        tick=0;
+        if(battleReport)
 		{
-		//canvas.save();
-		//canvas.rotate(clouds[i].ang*Math.PI/180);
-		clouds[i].sprite.draw(canvas, clouds[i].x-camera.x*16, clouds[i].y-camera.y*16);
-		//canvas.restore();
-		}
-	}
-	if((radar) && (!isBattle)&&(!battleReport)&&(!preBattle))
-    {
-        //curMap.drawRadar(camera, 660, 340,armies);
-		curMap.drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
-    }
-	//canvas.restore();
-	canvas.globalAlpha=1;
-	if(preBattle)
-	{
-		battleBox.draw(canvas);
-	}
-	//if((isBattle) && (battleReport))
-		//update console
-	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
-	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
-	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
-	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
-	{	
-		bConsoleBox.draw(canvas);
-	}
-	if(townbox.exists)
-	{
-		townbox.draw(canvas);
-		if((startkey.check())|| (escapekey.check())){
-			townbox.exists=false;
-		}
+            battleendtick++; 
+            if (battleendtick>200)
+			{
+                battleReport=false;
+                //paused=true;
+				//battleCanvas.hide();
+				battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+                battleendtick=0;
+            }
+        }
 	}
 
-	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
+	
     checkEndGame();
-	if(victory){
+	if(victory)
+	{
 		canvas.fillStyle = "white";
 		armies[0].drawResults();
 		victoryCount++;
-		if(victoryCount>victoryLap){
+		if(victoryCount>victoryLap)
+		{
 			victoryCount=0;
 			endGame(0);
 			victory=false;
