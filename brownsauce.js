@@ -4503,7 +4503,8 @@ function mapDraw() {
    
 };
 //------------MAIN LOOP-----------------------------------------
-function mapUpdate() {
+function mapUpdate()
+{
 
 	if(!gamestart) return;
 	var tick=0;	
@@ -4576,6 +4577,8 @@ function mapUpdate() {
 		}
 		
 	}
+	if(isMenu==1) 
+    {
 
 	if(tabkey.check())
 	{
@@ -4691,8 +4694,6 @@ function mapUpdate() {
 		isMenu=2;
 		
 	}
-	if(isMenu==1) 
-    {
 
     }else if (isMenu==2)
     {
