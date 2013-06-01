@@ -4052,20 +4052,35 @@ function worldMapUpdate(){
 		canvas.fillStyle = "white";
 		canvas.fillText("LOADING....", 740, 627);
 	}
+	var prevPoint=maps[0];
+	canvas.beginPath();
+	canvas.lineWidth = 2;
 	for(var i=0;i<numMapPoints;i++)
 	{
 
 		if(maps[i].team==0)
 		{
 			bluelocationsprite.draw(canvas,maps[i].x,maps[i].y);
+			
 		}else
 		{
 			if((i==0) || (maps[maps[i].preReq].team==0))
 				{
-					redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
+
+					canvas.moveTo(prevPoint.x+14,prevPoint.y+17);
+					canvas.lineTo(maps[i].x+14,maps[i].y+17);
+						canvas.closePath();
+					canvas.stroke();
+										redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
+
 				}
+				
+
 		}
+							prevPoint=maps[i];
+		
 	}
+
 	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x-1,maps[mapSelected].y+2);
 	canvas.font = "19pt Algerian";
 	canvas.textAlign = "center";

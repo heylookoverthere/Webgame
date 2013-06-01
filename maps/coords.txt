@@ -1,0 +1,13 @@
+330,64: the wall
+176,93: Bear Island
+424,70: SKAGOS
+270,140:north
+230,281: neck
+373,305:vale
+241,343:the Riverlands
+333,418:The Crownlands
+296,379: The God's Eye
+125,403: Lannisport
+253,545: Dorne/marches
+587,520: The Disputed Lands
+558:256: Braavos
