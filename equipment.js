@@ -129,6 +129,8 @@ var mmcur=true;
 var victoryCount=0;
 var victoryLap=200;
 var victory=false;
+var projectionCount=0;
+var projectionLength=200;
 //var keychart = ["w","a","d","s","up","right","down","left","m","n","shift"];
 var names= new Array (2);
 names[0]=new Array(120);
@@ -312,7 +314,7 @@ maps[2].preReq=1;
 
 maps[3]=[];
 maps[3].x=333;
-maps[3].y=418;
+maps[3].y=400;
 maps[3].team=1;
 maps[3].numTowns=6;
 maps[3].name="Kings Landing";

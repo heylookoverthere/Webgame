@@ -1683,7 +1683,7 @@ function endGame(win){
 			armies[1].squads[i].bx=8;
 			armies[1].squads[i].by=8;
 		}
-		sillyCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+		sillycanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 		armies[0].lastDeployed=1;//1?
 		//armies[0].
 		armies[1].lastDeployed=1;
