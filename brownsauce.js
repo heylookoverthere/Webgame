@@ -3765,7 +3765,13 @@ requestAnimationFrame(merp,canvas);
 		worldMapUpdate();
 	}else if(mode==2){
 		mapUpdate();
-		mapDraw();
+		if((!isBattle) && (!battleReport))
+		{
+			mapDraw();
+		}else
+		{
+			battleDraw();
+		}
 	}
 	//canvas.beginPath();
 	//osCanvas.drawImage(canvasElement,0,0);
@@ -4431,13 +4437,7 @@ function mapDraw() {
     canvas.globalAlpha=1;
 	//canvas.restore();
     //todo error
-	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
-	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
-	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
-	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
-	{	
-		bConsoleBox.draw(canvas);
-	}
+
 	for(var i=0;i<maps[mapSelected].numTowns;i++)
     {
         towns[i].draw(camera);
@@ -4450,9 +4450,16 @@ function mapDraw() {
 	{
 		selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
     }
+	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
+	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
+	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
+	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
+	{	
+		bConsoleBox.draw(canvas);
+	}
 	if((isBattle) || (battleReport)) {
 		//battleDo();
-        battleDraw();
+        //battleDraw();
         //if (escapekey.check()) {isBattle=false;}
     }
 	    if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
