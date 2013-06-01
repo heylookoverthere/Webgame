@@ -3761,8 +3761,10 @@ function merp() {
 requestAnimationFrame(merp,canvas);
 	if(mode==0){
 		mainMenuUpdate();
+		mainMenuDraw();
 	}else if(mode==1){
 		worldMapUpdate();
+		worldMapDraw();
 	}else if(mode==2){
 		mapUpdate();
 		if((!isBattle) && (!battleReport))
@@ -4035,14 +4037,7 @@ function battleDraw()
 initArmies();
 //document.getElementById("myAudio").play(); //starts music
 
-
-
-function mainMenuUpdate(){
-	var tick=0;
-	lasttime=milliseconds;
-    timestamp = new Date();
-    milliseconds = timestamp.getTime();
-    tick++;
+function mainMenuDraw(){
 	canvas.fillStyle = "black";
 	canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	titlesprite.draw(canvas,150,50);
@@ -4057,7 +4052,7 @@ function mainMenuUpdate(){
 		projectionCount--;
 		if (projectionCount==0)
 		{
-			
+			//???!
 		
 		}
 		
@@ -4068,6 +4063,15 @@ function mainMenuUpdate(){
 		canvas.fillText("-",400,575);
 
 	}
+};
+
+function mainMenuUpdate(){
+	var tick=0;
+	lasttime=milliseconds;
+    timestamp = new Date();
+    milliseconds = timestamp.getTime();
+    tick++;
+
 	if(startkey.check()){
 		mode=1;
 		//titlesprite=null;
@@ -4092,13 +4096,9 @@ function reqsMet(dex){
 	return true;
 };
 
-function worldMapUpdate(){
-	var tick=0;
-	lasttime=milliseconds;
-    timestamp = new Date();
-    milliseconds = timestamp.getTime();
-    tick++;
-	worldmapsprite.draw(canvas,0,0);
+
+function worldMapDraw(){
+worldmapsprite.draw(canvas,0,0);
 	if(starting) {
 		canvas.font = "16pt Calibri";
 		canvas.fillStyle = "white";
@@ -4151,6 +4151,23 @@ function worldMapUpdate(){
 	canvas.fillStyle = "black";
 	canvas.fillText(maps[mapSelected].name,600,100);
 	canvas.font = "16pt Calibri";
+	
+	if(((reqsMet(mapSelected)))&&(startkey.check())){
+		canvas.font = "16pt Calibri";
+		canvas.fillStyle = "white";
+		canvas.fillText("LOADING....", 740, 627);
+		starting=true;
+		return;
+	}
+};
+
+function worldMapUpdate(){
+	var tick=0;
+	lasttime=milliseconds;
+    timestamp = new Date();
+    milliseconds = timestamp.getTime();
+    tick++;
+	
 	//check for clicks on maps, move there or close as possible.
 	//check for key for menu
 	if(tabkey.check()){
@@ -4161,13 +4178,7 @@ function worldMapUpdate(){
 		}	
 		if(mapSelected>numMapPoints-1){mapSelected=0;}
 	}
-	if(((reqsMet(mapSelected)))&&(startkey.check())){
-		canvas.font = "16pt Calibri";
-		canvas.fillStyle = "white";
-		canvas.fillText("LOADING....", 740, 627);
-		starting=true;
-		return;
-	}
+
 	if(starting)
 	{
 		
@@ -4281,9 +4292,9 @@ function worldMapUpdate(){
 		bot.y=armies[0].basey;
 		camera.center(bot);
 
-
-		
 		canvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+		
+
 	
 			//give units initial paths.
 		 /*for(var i=0;i<armies[1].numSquads;i++){ 
@@ -4300,6 +4311,8 @@ function worldMapUpdate(){
 				}
 			}	
 		}*/
+
+
 	}
 };
 
@@ -4420,12 +4433,7 @@ function mapDraw() {
 			
 		}
     }
-	    if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
-        theTime.update();
-    }
-	for (var i=0;i<maps[mapSelected].numTowns;i++) {
-        if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
-    }
+
     //canvas.save();
     canvas.globalAlpha=0.00;
     if(theTime.hours>8){canvas.globalAlpha=0.20;}
@@ -4441,6 +4449,9 @@ function mapDraw() {
 	for(var i=0;i<maps[mapSelected].numTowns;i++)
     {
         towns[i].draw(camera);
+    }
+	for (var i=0;i<maps[mapSelected].numTowns;i++) {
+        if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
 	for (var i=0;i<armies[0].numSquads;i++) {
         armies[0].squads[i].draw(camera);
@@ -4459,7 +4470,7 @@ function mapDraw() {
 	}
 	if((isBattle) || (battleReport)) {
 		//battleDo();
-        //battleDraw();
+        battleDraw();
         //if (escapekey.check()) {isBattle=false;}
     }
 	    if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
@@ -4512,8 +4523,10 @@ function mapDraw() {
 //------------MAIN LOOP-----------------------------------------
 function mapUpdate()
 {
-
 	if(!gamestart) return;
+	if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
+        theTime.update();
+    }
 	var tick=0;	
     lasttime=milliseconds;
     timestamp = new Date();
