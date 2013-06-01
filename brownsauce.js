@@ -4148,7 +4148,7 @@ function worldMapUpdate(){
 	//check for key for menu
 	if(tabkey.check()){
 		//if(maps(mapSelected+1).team==0){ todo
-		if((mapSelected<1) || (reqsMet(mapSelected+1)))
+		if((true/*mapSelected<1*/) && (reqsMet(mapSelected+1)))
 		{
 			mapSelected++;
 		}	
@@ -4707,8 +4707,11 @@ function mapUpdate() {
     canvas.globalAlpha=1;
 	//canvas.restore();
     //todo error
-    selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
-    //camera controls
+	if(armies[0].squads[SELECTED])//TODO: fuck selected.
+	{
+		selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
+    }
+	//camera controls
     //if(curMap.zoom<3){
 	if((!isBattle) &&(!preBattle)){
 		if(keydown.left) {
