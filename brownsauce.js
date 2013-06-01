@@ -4066,7 +4066,7 @@ function worldMapUpdate(){
 				}
 		}
 	}
-	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x,maps[mapSelected].y);
+	armies[0].leader.sprite.draw(canvas,maps[mapSelected].x-1,maps[mapSelected].y+2);
 	canvas.font = "19pt Algerian";
 	canvas.textAlign = "center";
 	canvas.textBaseline = "middle";
@@ -4077,8 +4077,10 @@ function worldMapUpdate(){
 	//check for key for menu
 	if(tabkey.check()){
 		//if(maps(mapSelected+1).team==0){ todo
+		if((mapSelected<1) || (maps[maps[mapSelected+1].preReq].team==0))
+		{
 			mapSelected++;
-		//}	
+		}	
 		if(mapSelected>numMaps-1){mapSelected=0;}
 	}
 	if(startkey.check()){
