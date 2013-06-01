@@ -1709,7 +1709,7 @@ function checkEndGame(){
 			/*console.log("A WINNER IS YOU");
 			bConsoleStr.push("A WINNER IS YOU");
 			bConsoleClr.push("green");*/
-			endGame(0);
+			victory=true;
 		}
     }else if(winmode==1)
     {
@@ -2046,6 +2046,41 @@ function army() {
 			
 		}
 	};
+	this.drawResults=function(){
+        
+        canvas.save();
+        canvas.globalAlpha=0.60;
+        canvas.fillStyle =  "#DCDCDC";
+        canvas.fillRect(25,95,820,500);
+        canvas.fillStyle =bColors[1];//Math.floor(Math.random()*5)];// "#483D8B ";
+        canvas.fillRect(40,110,790,470);
+        canvas.restore();
+        canvas.font = "14pt Calibri";
+        canvas.textAlign = "left";
+        canvas.textBaseline = "middle";
+
+        canvas.fillStyle = "white";
+        var texticles= "Name: " + this.name;
+        canvas.fillText(texticles, 360, 122);
+        
+        texticles= "Unit's Lost: " ;
+        canvas.fillText(texticles, 360, 137);
+        
+        texticles= "Unit's Killed:";
+        canvas.fillText(texticles, 60, 152);
+        
+        texticles= "Day's Past:" + theTime.days;
+        canvas.fillText(texticles, 60, 172);
+        
+        texticles= "Wins: ";
+        canvas.fillText(texticles, 60, 192);
+ 
+		texticles="Losses";
+        canvas.fillText(texticles, 360, 172);
+       
+        var texticles= "You have defeated some douche!";
+		canvas.fillText(texticles, 60, 122);
+    };
 }
 
 
@@ -4018,7 +4053,7 @@ function worldMapUpdate(){
 			MAPNAME="map4";
 		
 		}
-		
+		victory=false;
 		$.getJSON("/maps/"+MAPNAME+".txt", function(data) 
 			{
 
@@ -4579,7 +4614,7 @@ function mapUpdate() {
 
     if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
 
-	 if(debugkey.check()) {endGame(0);}
+	 if(debugkey.check()) {victory=true;}//endGame(0);}
 	
     if(pausekey.check()) {
         if(isBattle){
@@ -4742,5 +4777,15 @@ function mapUpdate() {
 
 	    if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
     checkEndGame();
+	if(victory){
+		canvas.fillStyle = "white";
+		armies[0].drawResults();
+		victoryCount++;
+		if(victoryCount>victoryLap){
+			victoryCount=0;
+			endGame(0);
+			victory=false;
+		}
+	}
 }
 merp();
