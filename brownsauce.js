@@ -394,13 +394,14 @@ function unit() {
     
     this.drawInfo=function(){
         
-        canvas.save();
+        //canvas.save();
         canvas.globalAlpha=0.60;
         canvas.fillStyle =  "#DCDCDC";
         canvas.fillRect(25,95,820,500);
         canvas.fillStyle =bColors[1];//Math.floor(Math.random()*5)];// "#483D8B ";
         canvas.fillRect(40,110,790,470);
-        canvas.restore();
+       // canvas.restore();
+		canvas.globalAlpha=1;
         canvas.font = "14pt Calibri";
         canvas.textAlign = "left";
         canvas.textBaseline = "middle";
@@ -2019,13 +2020,14 @@ function army() {
 	this.drawEquipScreen=function()
 	{
 
-    canvas.save();
+    //canvas.save();
     canvas.globalAlpha=0.80;
     canvas.fillStyle =  "#DCDCDC";
     canvas.fillRect(25,95,790,500);
     canvas.fillStyle =bColors[5];//Math.floor(Math.random()*5)];// "#483D8B ";
     canvas.fillRect(40,110,760,470);
-    canvas.restore();
+	canvas.globalAlpha=1;
+    //canvas.restore();
     canvas.font = "14pt Calibri";
     canvas.textAlign = "left";
     canvas.textBaseline = "middle";
@@ -2060,13 +2062,14 @@ function army() {
 	};
 	this.drawResults=function(){
         
-        canvas.save();
+        //canvas.save();
         canvas.globalAlpha=0.60;
         canvas.fillStyle =  "#DCDCDC";
         canvas.fillRect(25,95,820,500);
         canvas.fillStyle =bColors[1];//Math.floor(Math.random()*5)];// "#483D8B ";
         canvas.fillRect(40,110,790,470);
-        canvas.restore();
+        canvas.globalAlpha=1;
+		//canvas.restore();
         canvas.font = "14pt Calibri";
         canvas.textAlign = "left";
         canvas.textBaseline = "middle";
@@ -2098,13 +2101,14 @@ function army() {
 	
 	this.drawProjections=function(){
         
-        canvas.save();
+        //canvas.save();
         canvas.globalAlpha=0.60;
         canvas.fillStyle =  "#DCDCDC";
         canvas.fillRect(250,195,420,400);
         canvas.fillStyle =bColors[4];//Math.floor(Math.random()*5)];// "#483D8B ";
         canvas.fillRect(265,210,390,370);
-        canvas.restore();
+        //canvas.restore();
+		canvas.globalAlpha=1;
         canvas.font = "14pt Calibri";
         canvas.textAlign = "left";
         canvas.textBaseline = "middle";
@@ -2505,13 +2509,14 @@ squad.prototype.flee= function(c)
 		}else if((curMap.tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
 			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
 			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
-			canvas.save();
+			//canvas.save();
 			canvas.globalAlpha=0.80;
 			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(curMap.zoom-1));
 			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(curMap.zoom-1));//todo
 			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(curMap.zoom-1));
 			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(curMap.zoom-1));//todo
-			canvas.restore();
+			//canvas.restore();
+			canvas.globalAlpha=1;
 		}
     };
 
@@ -3607,7 +3612,7 @@ function Map(I) { //map object
 		
 	
         cam.check();
-        canvas.save();
+        //canvas.save();
         canvas.globalAlpha = 0.75;
         canvas.putImageData(radarBitmap,x,y);
 		//canvas.drawImage(radarCanvas,x,y);
@@ -3634,7 +3639,8 @@ function Map(I) { //map object
         canvas.globalAlpha = 0.35;
         canvas.fillStyle = "white";
         canvas.fillRect(x+cam.x, y+cam.y, cam.width*I.zoom, cam.height*I.zoom);
-        canvas.restore();
+		canvas.globalAlpha=1;
+	   // canvas.restore();
     };
     return I;
 }
@@ -3776,13 +3782,14 @@ function menuDraw()
 {
 
     battletick++;
-    canvas.save();
+    //canvas.save();
     canvas.globalAlpha=0.80;
     canvas.fillStyle =  "#DCDCDC";
     canvas.fillRect(25,95,850,500);
     canvas.fillStyle =bColors[6];//Math.floor(Math.random()*5)];// "#483D8B ";
     canvas.fillRect(40,110,820,470);
-    canvas.restore();
+    //canvas.restore();
+	canvas.globalAlpha=1;
     canvas.font = "14pt Calibri";
     canvas.textAlign = "left";
     canvas.textBaseline = "middle";
@@ -3884,13 +3891,14 @@ function battleDraw()
 	battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 	bmenuBox.exists=true;
     battletick++;
-    battleCanvas.save();
+    //battleCanvas.save();
     battleCanvas.globalAlpha=0.60;
     battleCanvas.fillStyle =  "#DCDCDC";
     battleCanvas.fillRect(25,95,820,500);
     battleCanvas.fillStyle =bColors[6];//Math.floor(Math.random()*5)];// "#483D8B ";
     battleCanvas.fillRect(40,110,790,470);
-    battleCanvas.restore();
+    //battleCanvas.restore();
+	canvas.globalAlpha=1;
     battleCanvas.font = "14pt Calibri";
     battleCanvas.textAlign = "left";
     battleCanvas.textBaseline = "middle";
@@ -4688,7 +4696,7 @@ function mapUpdate() {
     if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
         theTime.update();
     }
-    canvas.save();
+    //canvas.save();
     canvas.globalAlpha=0.00;
     if(theTime.hours>8){canvas.globalAlpha=0.20;}
     if(theTime.hours>12){canvas.globalAlpha=0.30;}
@@ -4696,7 +4704,8 @@ function mapUpdate() {
     if(theTime.hours>20){canvas.globalAlpha=0.50;}
     canvas.fillStyle="#1B1733 ";//"#483D8B ";
     canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    canvas.restore();
+    canvas.globalAlpha=1;
+	//canvas.restore();
     //todo error
     selector.draw(canvas, (armies[0].squads[SELECTED].x * 16 + (Math.round(armies[0].squads[SELECTED].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[SELECTED].y * 16 + (Math.round(armies[0].squads[SELECTED].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
     //camera controls
@@ -4858,7 +4867,7 @@ function mapUpdate() {
             armies[0].squads[SELECTED].leader.drawInfo();
         }
     }
-	canvas.save();
+	//canvas.save();
 	canvas.globalAlpha=0.60;
 	for(var i=0;i<numClouds;i++)
 	{
@@ -4876,7 +4885,8 @@ function mapUpdate() {
         //curMap.drawRadar(camera, 660, 340,armies);
 		curMap.drawRadar(camera, CANVAS_WIDTH-MAP_WIDTH-10, CANVAS_HEIGHT-MAP_HEIGHT-10,armies);
     }
-	canvas.restore();
+	//canvas.restore();
+	canvas.globalAlpha=1;
 	if(preBattle)
 	{
 		battleBox.draw(canvas);
