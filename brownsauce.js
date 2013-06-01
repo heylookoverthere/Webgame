@@ -4054,10 +4054,23 @@ function worldMapUpdate(){
 	}
 	var prevPoint=maps[0];
 	canvas.beginPath();
-	canvas.lineWidth = 2;
+	canvas.lineWidth = 7;
+	canvas.moveTo(maps[0].x+14,maps[0].y+17);
+	for(var i=0;i<numMapPoints;i++)
+	{
+		if((i==0) || (maps[maps[i].preReq].team==0))
+		{
+			canvas.lineTo(maps[i].x+14,maps[i].y+17);
+			prevPoint=maps[i];
+		}
+	}
+	
+	canvas.stroke();
+	canvas.closePath();//todo multiple lines?
 	for(var i=0;i<numMapPoints;i++)
 	{
 
+		
 		if(maps[i].team==0)
 		{
 			bluelocationsprite.draw(canvas,maps[i].x,maps[i].y);
@@ -4067,17 +4080,15 @@ function worldMapUpdate(){
 			if((i==0) || (maps[maps[i].preReq].team==0))
 				{
 
-					canvas.moveTo(prevPoint.x+14,prevPoint.y+17);
-					canvas.lineTo(maps[i].x+14,maps[i].y+17);
-						canvas.closePath();
-					canvas.stroke();
-										redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
+					//canvas.moveTo(prevPoint.x+14,prevPoint.y+17);
+
+					redlocationsprite.draw(canvas,maps[i].x,maps[i].y);
 
 				}
 				
 
 		}
-							prevPoint=maps[i];
+
 		
 	}
 
