@@ -2762,7 +2762,8 @@ time.prototype.update=function(){
         this.minutes++;
         if (this.minutes>60){
             this.hours++;
-            if(this.hours>24) {this.hours=0; this.days++;} 
+            if(this.hours>24) {this.hours=0; this.days++;projectionCount=projectionLength//todo
+			} 
             this.minutes=0;
             this.seconds=0;
         }
@@ -4011,6 +4012,16 @@ function mainMenuUpdate(){
 	canvas.fillText("  New Game",415,550);
 	canvas.fillStyle = "grey";
 	canvas.fillText("  Load Game",415,575);
+	if(projectionCount>0)
+	{
+		projectionCount--;
+		if (projectionCount==0)
+		{
+			
+		
+		}
+		
+	}
 	if(mmcur){
 		canvas.fillText("-",400,550);
 	}else	{
@@ -4825,7 +4836,7 @@ function mapUpdate() {
     checkEndGame();
 	if(victory){
 		canvas.fillStyle = "white";
-		armies[0].drawProjections();//drawResults();
+		armies[0].drawResults();
 		victoryCount++;
 		if(victoryCount>victoryLap){
 			victoryCount=0;

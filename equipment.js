@@ -294,7 +294,7 @@ maps[0].preReq.push(0);*/
 //maps[1].buildMap("map3");
 maps[1]=[];
 maps[1].x=230;
-maps[1].y=281;
+maps[1].y=251;
 maps[1].team=1;
 maps[1].numTowns=6;
 maps[1].name="The Neck";
