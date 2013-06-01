@@ -1626,9 +1626,7 @@ town.prototype.getTileY=function(cam){
 };
 
 town.prototype.getItem=function(){
-	if(this.itemChance>Math.random()*100){
 		return randomItem();
-	}
 };
 town.prototype.draw=function(cam) {
     if(curMap.zoom<2) {
@@ -2565,7 +2563,8 @@ squad.prototype.flee= function(c)
         {
 			if(towns[i].checkCollision(this)) 
             {
-                if(towns[i].team!=this.team){
+                if(towns[i].team!=this.team)
+				{
                     towns[i].team=this.team;
 					if(towns[i].team==0) 
 					{
@@ -2574,20 +2573,32 @@ squad.prototype.flee= function(c)
 						console.log(tmpstr); 
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
-						var lenny=towns[i].getItem();
-						armies[0].addItem(lenny);
-						bConsoleStr.push("you got a "+lenny.name);
-						bConsoleClr.push("white");
+						if(this.itemChance>Math.random()*100)
+						{
+							var lenny=towns[i].getItem();
+							armies[0].addItem(lenny);
+							bConsoleStr.push("you got a "+lenny.name);
+							bConsoleClr.push("white");
+						}
+						
+						if((this.team==0)&& (!towns[i].spouted)){
+							towns[i].spouted=true;
+							townbox.lines=4;
+							townbox.msg[0]=towns[i].speaker;
+							townbox.msg[1]=towns[i].plotText[0];
+							townbox.msg[2]=towns[i].plotText[1];
+							townbox.msg[3]=towns[i].plotText[2];
+							townbox.exists=true;
+						}
 					}
-                    if(towns[i].team==1) {armies[0].opinion-=10; var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); bConsoleStr.push(tmpstr);bConsoleClr.push("white");} //TODO bConsoleStr
-					if((this.team==0) && (!towns[i].spouted)){
-						towns[i].spouted=true;
-						townbox.lines=4;
-						townbox.msg[0]=towns[i].speaker;
-						townbox.msg[1]=towns[i].plotText[0];
-						townbox.msg[2]=towns[i].plotText[1];
-						townbox.msg[3]=towns[i].plotText[2];
-						townbox.exists=true;
+                    if(towns[i].team==1)
+					{
+						armies[0].opinion-=10; 
+						var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); 
+						bConsoleStr.push(tmpstr);
+						bConsoleClr.push("white");
+					
+
 					}
                 }
                 this.heal();
@@ -4546,11 +4557,11 @@ function mapUpdate()
 		enemyDeployCount++;
 		if(enemyDeployCount>deployRate)
 		{
-			enemyDeployCount=0;
+			/*enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
-            armies[1].lastDeployed++; 
+            armies[1].lastDeployed++; */
 		}
 	}
 	if((deploykey.check())&&(isMenu==0))
