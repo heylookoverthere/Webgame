@@ -4040,6 +4040,17 @@ function mainMenuUpdate(){
 	}
 };
 
+function reqsMet(dex){
+	for(var i=0;i<maps[dex].numReqs;i++)
+	{
+		if(maps[maps[dex].preReq[i]].team==1)
+		{
+			return false;
+		}
+	}
+	return true;
+};
+
 function worldMapUpdate(){
 	var tick=0;
 	lasttime=milliseconds;
@@ -4058,7 +4069,7 @@ function worldMapUpdate(){
 	canvas.moveTo(maps[0].x+14,maps[0].y+17);
 	for(var i=0;i<numMapPoints;i++)
 	{
-		if((i==0) || (maps[maps[i].preReq].team==0))
+		if((i==0) || (reqsMet(i)))
 		{
 			canvas.lineTo(maps[i].x+14,maps[i].y+17);
 			prevPoint=maps[i];
@@ -4077,7 +4088,7 @@ function worldMapUpdate(){
 			
 		}else
 		{
-			if((i==0) || (maps[maps[i].preReq].team==0))
+			if((i==0) || (reqsMet(i)))
 				{
 
 					//canvas.moveTo(prevPoint.x+14,prevPoint.y+17);
@@ -4103,7 +4114,7 @@ function worldMapUpdate(){
 	//check for key for menu
 	if(tabkey.check()){
 		//if(maps(mapSelected+1).team==0){ todo
-		if((mapSelected<1) || (maps[maps[mapSelected+1].preReq].team==0))
+		if((mapSelected<1) || (reqsMet(mapSelected)))
 		{
 			mapSelected++;
 		}	
@@ -4270,13 +4281,13 @@ function mapUpdate() {
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
-		/*if(enemyDeployCount>deployRate){
+		if(enemyDeployCount>deployRate){
 			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
             armies[1].lastDeployed++; 
-		}*/
+		}
 	}
     if(menukey.check()) {
         if(!isBattle) 
