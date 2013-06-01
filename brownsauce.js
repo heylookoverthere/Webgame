@@ -3803,6 +3803,81 @@ function menuDraw()
 	bConsoleBox.y=15;
 	bConsoleBox.x=30;
 	bConsoleBox.lines=4;
+	
+function battleDo()
+{
+	for(var i=0;i<combatants[0].numUnits;i++)
+    {
+		if(!combatants[0].units[i].alive) {continue;}
+		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
+		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
+        if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
+	}
+
+	
+	for(var i=0;i<combatants[1].numUnits;i++)
+    {
+		if(!combatants[1].units[i].alive) {continue;}
+		if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
+		if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
+        if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
+	}
+	if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
+    if((tamekey.check()) && (combatants[0].hasTamer())){
+		var meth=Math.floor(Math.random()*TAME_CHANCE);
+		if(meth<10){
+			var tmpstr="Tamed the "+combatants[1].units[0].getClassName()
+			console.log(tmpstr);
+			bConsoleStr.push(tmpstr);
+			bConsoleClr.push("white");
+			armies[0].addLoose(combatants[1].units[0]);
+			combatants[0].turns=10;
+			combatants[0].damaged=400;
+		}else
+		{
+			console.log("Monster bit you!");
+			//todo hurt tamer?
+			var turtle=Math.floor(Math.random()*combatants[0].numUnits)
+
+			combatants[0].units[turtle].hurt(combatants[1].units[0].attack*2);
+			if((combatants[0].units[turtle]==combatants[0].leader) &&(!combatants[0].units[turtle].alive)) {combatants[0].pickNewLeader();}
+		}
+		
+	}
+	 if((combatants[0].alive)&& (!combatants[0].checkSurvivors()))   { 
+        var tmpstr=combatants[0].leader.name + "'s squad was eliminated.";
+        console.log(tmpstr); 
+		bConsoleStr.push(tmpstr);
+		bConsoleClr.push("red");
+        combatants[0].damaged=0;
+        combatants[1].damaged=10;
+        endBattle(combatants[0],combatants[1]);
+		armies[0].removeSquad(combatants[0].ID);
+    }
+    if((combatants[1].alive)&& (!combatants[1].checkSurvivors()))   
+    { 
+        var tmpstr=combatants[1].leader.name + "'s squad was eliminated.";
+        console.log(tmpstr); 
+		bConsoleStr.push(tmpstr);
+		bConsoleClr.push("green");
+		var ods=combatants[0].getLuck()+30;
+		if(Math.floor(Math.random()*100)<ods){
+			var dong=randomItem();
+			var tmpstr=combatants[0].leader.name+ " found a " +dong.name;
+			console.log(tmpstr);
+			bConsoleStr.push(tmpstr);
+			bConsoleClr.push("white");
+			armies[0].addItem(dong);
+			
+		}
+        combatants[1].damaged=0;
+        combatants[0].damaged=10;
+        endBattle(combatants[0],combatants[1]);
+		armies[1].removeSquad(combatants[1].ID);
+    }
+
+		if(battletick>battledelay) {battletick=0;}
+};
 function battleDraw()
 {
 	//enus pump
@@ -3875,16 +3950,16 @@ function battleDraw()
         if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
             sevenup.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
         }
-        if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
-		battleCanvas.save();
+        //if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
+		//battleCanvas.save();
 		battleCanvas.globalAlpha=0.60;
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		if(combatants[0].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
         if(combatants[0].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		if(combatants[0].units[i].hasStatus(Status.Regen)) {regensprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-		battleCanvas.restore();
-        if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
-        if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
+		battleCanvas.globalAlpha=1;
+		//battleCanvas.restore();
+
     }
 
     battleCanvas.fillStyle = "red";
@@ -3920,16 +3995,16 @@ function battleDraw()
         if((combatants[1].units[i].hurting<1) || (combatants[1].units[i].hurting%2==0)) {
            sevenup.draw(battleCanvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
         }
-        if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
-		battleCanvas.save();
+        //if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
+		//battleCanvas.save();
 		battleCanvas.globalAlpha=0.60;
         if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 	    if(combatants[1].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 	    if(combatants[1].units[i].hasStatus(Status.Reflect)) {reflectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 	    if(combatants[1].units[i].hasStatus(Status.Regen)) {regensprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
-		battleCanvas.restore();
-        if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
-        if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
+		battleCanvas.globalAlpha=1;
+		//battleCanvas.restore();
+
     }
     battleCanvas.fillStyle = "white";
     var texticle= "Turns:" +(combatants[0].turns+combatants[1].turns) + "/"+battlelength;
@@ -3937,62 +4012,10 @@ function battleDraw()
     if(battlePause) {//in battle menu
         battleCanvas.fillText("battle pause!", 350, 432);
     }
-    if((combatants[0].alive)&& (!combatants[0].checkSurvivors()))   { 
-        var tmpstr=combatants[0].leader.name + "'s squad was eliminated.";
-        console.log(tmpstr); 
-		bConsoleStr.push(tmpstr);
-		bConsoleClr.push("red");
-        combatants[0].damaged=0;
-        combatants[1].damaged=10;
-        endBattle(combatants[0],combatants[1]);
-		armies[0].removeSquad(combatants[0].ID);
-    }
-    if((combatants[1].alive)&& (!combatants[1].checkSurvivors()))   
-    { 
-        var tmpstr=combatants[1].leader.name + "'s squad was eliminated.";
-        console.log(tmpstr); 
-		bConsoleStr.push(tmpstr);
-		bConsoleClr.push("green");
-		var ods=combatants[0].getLuck()+30;
-		if(Math.floor(Math.random()*100)<ods){
-			var dong=randomItem();
-			var tmpstr=combatants[0].leader.name+ " found a " +dong.name;
-			console.log(tmpstr);
-			bConsoleStr.push(tmpstr);
-			bConsoleClr.push("white");
-			armies[0].addItem(dong);
-			
-		}
-        combatants[1].damaged=0;
-        combatants[0].damaged=10;
-        endBattle(combatants[0],combatants[1]);
-		armies[1].removeSquad(combatants[1].ID);
-    }
-    if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
-    if((tamekey.check()) && (combatants[0].hasTamer())){
-		var meth=Math.floor(Math.random()*TAME_CHANCE);
-		if(meth<10){
-			var tmpstr="Tamed the "+combatants[1].units[0].getClassName()
-			console.log(tmpstr);
-			bConsoleStr.push(tmpstr);
-			bConsoleClr.push("white");
-			armies[0].addLoose(combatants[1].units[0]);
-			combatants[0].turns=10;
-			combatants[0].damaged=400;
-		}else
-		{
-			console.log("Monster bit you!");
-			//todo hurt tamer?
-			var turtle=Math.floor(Math.random()*combatants[0].numUnits)
-
-			combatants[0].units[turtle].hurt(combatants[1].units[0].attack*2);
-			if((combatants[0].units[turtle]==combatants[0].leader) &&(!combatants[0].units[turtle].alive)) {combatants[0].pickNewLeader();}
-		}
-		
-	}
+   
 
 	bmenuBox.draw(battleCanvas);
-	if(battletick>battledelay) {battletick=0;}
+
 }
 initArmies();
 //document.getElementById("myAudio").play(); //starts music
@@ -4809,6 +4832,7 @@ function mapUpdate() {
 
     
     if((isBattle) || (battleReport)) {
+		battleDo();
         battleDraw();
         //if (escapekey.check()) {isBattle=false;}
     }
