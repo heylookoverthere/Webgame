@@ -3068,11 +3068,13 @@ function mouseClick(e) {  //represents the mouse
 					for(var i=0;i<numMapPoints;i++)
 					{	
 						if((mX>maps[i].x) && (mX<maps[i].x+mapIconWidth) &&(mY>maps[i].y) && (mY<maps[i].y+mapIconHeight)) {
-							mapSelected=i;
-							canvas.font = "16pt Calibri";
-							canvas.fillStyle = "white";
-							canvas.fillText("LOADING....", 740, 627);
-							starting=true;
+							if(reqsMet(mapSelected)){
+								mapSelected=i;
+								canvas.font = "16pt Calibri";
+								canvas.fillStyle = "white";
+								canvas.fillText("LOADING....", 740, 627);
+								starting=true;
+							}
 						}
 					}
 				
@@ -4041,6 +4043,7 @@ function mainMenuUpdate(){
 };
 
 function reqsMet(dex){
+	if(dex==0) {return true;}
 	for(var i=0;i<maps[dex].numReqs;i++)
 	{
 		if(maps[maps[dex].preReq[i]].team==1)
@@ -4114,13 +4117,13 @@ function worldMapUpdate(){
 	//check for key for menu
 	if(tabkey.check()){
 		//if(maps(mapSelected+1).team==0){ todo
-		if((mapSelected<1) || (reqsMet(mapSelected)))
+		if((mapSelected<1) || (reqsMet(mapSelected+1)))
 		{
 			mapSelected++;
 		}	
-		if(mapSelected>numMaps-1){mapSelected=0;}
+		if(mapSelected>numMapPoints-1){mapSelected=0;}
 	}
-	if(startkey.check()){
+	if(((reqsMet(mapSelected)))&&(startkey.check())){
 		canvas.font = "16pt Calibri";
 		canvas.fillStyle = "white";
 		canvas.fillText("LOADING....", 740, 627);

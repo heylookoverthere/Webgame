@@ -60,7 +60,7 @@ TileType.Sand=9;
 
 
 
-var numMapPoints=5;
+var numMapPoints=6;
 var mmcur=false;
 var bConsoleStr=new Array();
 var bConsoleClr=new Array();
@@ -282,7 +282,7 @@ var healcount=0;
 var healrate=140;
 //var numTowns=6;
 var CSELECTED=0;
-var maps=new Array(5);
+var maps=new Array(6);
 var mapIconWidth=32;
 var mapIconHeight=45;
 maps[0]=[];
@@ -336,6 +336,17 @@ maps[4].name="The Dornish Marches";
 maps[4].preReq=new Array();
 maps[4].preReq.push(3);
 maps[4].numReqs=1;
+
+maps[5]=[];
+maps[5].x=161;
+maps[5].y=77;
+maps[5].team=1;
+maps[5].numTowns=6;
+maps[5].name="Bear Island";
+maps[5].preReq=new Array();
+maps[5].preReq.push(0);
+maps[5].preReq.push(3);
+maps[5].numReqs=2;
 function equipment() {
     this.name="none";
     this.hitAll=false;
