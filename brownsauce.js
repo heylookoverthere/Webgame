@@ -4435,7 +4435,10 @@ function mapDraw() {
 		armies[0].drawEquipScreen();
 		return;
 	}
-
+	for(var i=0;i<maps[mapSelected].numTowns;i++)
+    {
+        towns[i].draw(camera);
+    }
 	armies[0].getVisible(armies[1]);
 	if(armies[0].visibleEnemies!=null){
 		for (var i=0;i<armies[0].visibleEnemies.length;i++) {
@@ -4445,6 +4448,58 @@ function mapDraw() {
 		}
     }
 
+	 for (var i=0;i<armies[0].numSquads;i++) 
+		{
+			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
+            armies[0].squads[i].update(curMap);
+			if(armies[0].squads[i].path!=null) {continue;}
+            if(armies[0].fieldAI==AITypes.Random)
+			{
+                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
+				{
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					/*while(!curMap.walkable(cx,cy,armies[0].squads[i])){
+						cx=Math.floor(Math.random()*(MAP_WIDTH));
+						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					}*/
+                    armies[0].squads[i].setDestination(cx,cy,curMap); 
+				}
+            }else if(armies[0].fieldAI==AITypes.Rush)
+			{
+                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
+				{
+                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
+                }
+            }
+        }
+        
+        for(var i=0;i<armies[1].numSquads;i++){ 
+			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
+            armies[1].squads[i].update(curMap);
+			if(armies[1].squads[i].path!=null) {continue;}
+            if(armies[1].fieldAI==AITypes.Random){
+                if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					/*while(!curMap.walkable(cx,cy,armies[1].squads[i])){
+						cx=Math.floor(Math.random()*(MAP_WIDTH));
+						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					}*/
+                    armies[1].squads[i].setDestination(cx,cy,curMap); };
+            }else if(armies[1].fieldAI==AITypes.Rush){
+                if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
+                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
+            }
+        }
+    
+
+    for (var i=0;i<armies[0].numSquads;i++) {
+        //armies[0].squads[i].draw(camera);
+        if((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) { drawmousetext(armies[0].squads[i],camera); }
+
+    }
+	
     //canvas.save();
     canvas.globalAlpha=0.00;
     if(theTime.hours>8){canvas.globalAlpha=0.20;}
@@ -4456,11 +4511,8 @@ function mapDraw() {
     canvas.globalAlpha=1;
 	//canvas.restore();
     //todo error
+	
 
-	for(var i=0;i<maps[mapSelected].numTowns;i++)
-    {
-        towns[i].draw(camera);
-    }
 	for (var i=0;i<maps[mapSelected].numTowns;i++) {
         if (isOver(towns[i],camera)){drawtowntext(towns[i],camera);}
     }
@@ -4812,57 +4864,7 @@ function mapUpdate()
 	}
 
 
-        for (var i=0;i<armies[0].numSquads;i++) 
-		{
-			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
-            armies[0].squads[i].update(curMap);
-			if(armies[0].squads[i].path!=null) {continue;}
-            if(armies[0].fieldAI==AITypes.Random)
-			{
-                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
-				{
-					var cx=Math.floor(Math.random()*(MAP_WIDTH));
-					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!curMap.walkable(cx,cy,armies[0].squads[i])){
-						cx=Math.floor(Math.random()*(MAP_WIDTH));
-						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}*/
-                    armies[0].squads[i].setDestination(cx,cy,curMap); 
-				}
-            }else if(armies[0].fieldAI==AITypes.Rush)
-			{
-                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
-				{
-                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
-                }
-            }
-        }
-        
-        for(var i=0;i<armies[1].numSquads;i++){ 
-			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
-            armies[1].squads[i].update(curMap);
-			if(armies[1].squads[i].path!=null) {continue;}
-            if(armies[1].fieldAI==AITypes.Random){
-                if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
-					var cx=Math.floor(Math.random()*(MAP_WIDTH));
-					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!curMap.walkable(cx,cy,armies[1].squads[i])){
-						cx=Math.floor(Math.random()*(MAP_WIDTH));
-						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}*/
-                    armies[1].squads[i].setDestination(cx,cy,curMap); };
-            }else if(armies[1].fieldAI==AITypes.Rush){
-                if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
-                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
-            }
-        }
-    
-
-    for (var i=0;i<armies[0].numSquads;i++) {
-        //armies[0].squads[i].draw(camera);
-        if((isOver(armies[0].squads[i],camera))&&(armies[0].squads[i].alive)&&(armies[0].squads[i].deployed)) { drawmousetext(armies[0].squads[i],camera); }
-
-    }
+       
     /*for (var i=0;i<armies[1].numSquads;i++) {
 		armies[1].squads[i].draw(camera);
         if(isOver(armies[1].squads[i],camera)) { drawmousetext(armies[1].squads[i],camera); };
