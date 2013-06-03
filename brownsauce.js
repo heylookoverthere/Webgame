@@ -2576,11 +2576,11 @@ squad.prototype.flee= function(c)
 						console.log(tmpstr); 
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
-						if(this.itemChance>Math.random()*100)
+						if(towns[i].itemChance>(Math.random()*99))
 						{
 							var lenny=towns[i].getItem();
 							armies[0].addItem(lenny);
-							bConsoleStr.push("you got a "+lenny.name);
+							bConsoleStr.push("The townsfolk give you a "+lenny.name);
 							bConsoleClr.push("white");
 						}
 						
@@ -2592,6 +2592,7 @@ squad.prototype.flee= function(c)
 							townbox.msg[2]=towns[i].plotText[1];
 							townbox.msg[3]=towns[i].plotText[2];
 							townbox.exists=true;
+							paused=true;
 						}
 					}
                     if(towns[i].team==1)
@@ -2830,6 +2831,7 @@ function endBattle(usqd,esqd){
         {
             usqd.units[i].battleswon++;
         }
+
     }else if(usqd.damaged<esqd.damaged) {//lose
         usqd.kickBack(esqd);
         usqd.clearDestination();
@@ -3201,7 +3203,8 @@ var upkey=new akey("up");
 var rightkey=new akey("right");
 var downkey=new akey("down");
 var leftkey=new akey("left");
-var tabkey=new akey("shift");
+var tabkey=new akey("capslock");
+var camspeedkey=new akey("shift");
 var zoomkey=new akey("z");
 var helpkey=new akey("h");
 var speedkey=new akey("x");
@@ -3902,15 +3905,14 @@ function battleDo()
 		bConsoleStr.push(tmpstr);
 		bConsoleClr.push("green");
 		var ods=combatants[0].getLuck()+30;
-		if(Math.floor(Math.random()*100)<ods){
-			var dong=randomItem();
-			var tmpstr=combatants[0].leader.name+ " found a " +dong.name;
-			console.log(tmpstr);
-			bConsoleStr.push(tmpstr);
+		if((usqd.getLuck()*2)>(Math.random()*99))
+		{
+			var lenny=randomItem();
+			armies[0].addItem(lenny);
+			bConsoleStr.push("Found a "+lenny.name+" on the enemy squad.");
 			bConsoleClr.push("white");
-			armies[0].addItem(dong);
-			
 		}
+
         combatants[1].damaged=0;
         combatants[0].damaged=10;
         endBattle(combatants[0],combatants[1]);
@@ -3954,6 +3956,13 @@ function battleDraw()
 	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
 	//bConsoleBox.colors[3]=bConsoleClr[bConsoleStr.length-1-bConsoleBox.scroll];
 	battleCanvas.globalAlpha=1;
+	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
+	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
+	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
+	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
+	{	
+		bConsoleBox.draw(canvas);
+	}
     for(var i=0;i<combatants[0].numUnits;i++)
     {
         if(!combatants[0].units[i].alive) {continue;}
@@ -4542,7 +4551,7 @@ function mapDraw() {
 	}
 	if((isBattle) || (battleReport)) {
 		//battleDo();
-        battleDraw();
+        //battleDraw();
         //if (escapekey.check()) {isBattle=false;}
     }
 	    if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
@@ -4586,6 +4595,7 @@ function mapDraw() {
 		townbox.draw(canvas);
 		if((startkey.check())|| (escapekey.check())){
 			townbox.exists=false;
+			paused=false;
 		}
 	}
 
@@ -4631,11 +4641,11 @@ function mapUpdate()
 		enemyDeployCount++;
 		if(enemyDeployCount>deployRate)
 		{
-			/*enemyDeployCount=0;
+			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
-            armies[1].lastDeployed++; */
+            armies[1].lastDeployed++; 
 		}
 	}
 	if((deploykey.check())&&(isMenu==0))
@@ -4897,29 +4907,33 @@ function mapUpdate()
 
 	//camera controls
     //if(curMap.zoom<3){
+	var cspd=1;
+	if(keydown["shift"]){
+		cspd=5;
+	}
 	if((!isBattle) &&(!preBattle) &&(!isMenu))
 	{
 		if(keydown.left)
 		{
-			camera.x -= 1*curMap.zoom;
+			camera.x -= cspd*curMap.zoom;
 			if (camera.x<0) {camera.x=0;}
 			mapDirty=true;
 		}
 		
 		if(keydown.right) {
-			camera.x += 1*curMap.zoom;
+			camera.x += cspd*curMap.zoom;
 			if (camera.x>(MAP_WIDTH-(camera.width*curMap.zoom))) {camera.x=MAP_WIDTH-(camera.width*curMap.zoom);}
 			mapDirty=true;
 		}
 		
 		if(keydown.up) {
-			camera.y -= 1*curMap.zoom;
+			camera.y -= cspd*curMap.zoom;
 			if (camera.y<0) {camera.y=0;}
 			mapDirty=true;
 		}
 		
 		if(keydown.down) {
-			camera.y += 1*curMap.zoom;
+			camera.y += cspd*curMap.zoom;
 			if (camera.y>(MAP_HEIGHT-(camera.height*curMap.zoom))) {(camera.y=MAP_HEIGHT-(camera.height*curMap.zoom));}
 			mapDirty=true;
 		}
