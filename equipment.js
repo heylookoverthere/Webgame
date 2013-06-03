@@ -209,6 +209,7 @@ var thingysprite = Sprite("thingy");
 var titlesprite = Sprite("title");
 var worldmapsprite = Sprite("worldmap");
 var clocksprite=new Array(6);
+var RGB_THRESHOLD=15;
 clocksprite[0] = Sprite("clock0");
 clocksprite[1] = Sprite("clock1");
 clocksprite[2] = Sprite("clock2");

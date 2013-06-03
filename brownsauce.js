@@ -3584,7 +3584,21 @@ function Map(I) { //map object
         I.tiles[x][y].data = data;
     };
     
-	        
+	closeEnough=function(dba,tgb){
+		if(Math.abs(dba[0]-tgb[0])>RGB_THRESHOLD)
+		{
+			return false;
+		}
+		if(Math.abs(dba[1]-tgb[1])>RGB_THRESHOLD)
+		{
+			return false;
+		}
+		if(Math.abs(dba[2]-tgb[2])>RGB_THRESHOLD)
+		{
+			return false;
+		}
+		return true;
+	};
 
 	I.buildMap= function(name){
         
@@ -3596,30 +3610,40 @@ function Map(I) { //map object
 				mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
 		for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
 		  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
+		  var mountainrgb =[0,0,0,0];
+		  var oceanrgb =[0,0,255,0];
+		  var forestrgb =[0,255,0,0];
+		  var sandrgb =[255,255,0,0];
+		  var roadrgb =[195,195,195,0];
+		  var swamprgb =[0,255,64,0];
+		  var plainsrgb =[128,128,64,0];
+		  var snowrgb =[230,230,230,0];
+		  var waterrgb =[0,100,255,0];
+		  var lavargb =[255,0,0,0];
+		  var grassrgb=[255,255,255,0];
 		  var yPos = Math.floor(i / 4 / MAP_WIDTH);
 		  var xPos = (i / 4) % MAP_WIDTH;
-		if(( rgba[0]==0) && (rgba[1]==0) && (rgba[2]==0)) {
-
+		if(closeEnough(rgba,mountainrgb)) {
 			I.setTile(xPos, yPos, TileType.Mountains);
-		  } else if (( rgba[0]<10) && (rgba[1]>245) && (rgba[2]<10)){
+		  } else if (closeEnough(rgba,forestrgb)){
 			I.setTile(xPos, yPos, TileType.Forest);
-		  } else if (( rgba[0]<10) && (rgba[1]<10) && (rgba[2]>245)){
+		  } else if (closeEnough(rgba,oceanrgb)){
 			I.setTile(xPos, yPos, TileType.Ocean);
-		  } else if (( rgba[0]>245) && (rgba[1]>245) && (rgba[2]<10)){
+		  } else if (closeEnough(rgba,sandrgb)){
 			I.setTile(xPos, yPos, TileType.Sand);
-		  } else if (( rgba[0]==195) && (rgba[1]==195) && (rgba[2]==195)){
+		  } else if (closeEnough(rgba,roadrgb)){
 			I.setTile(xPos, yPos, TileType.Road);
-		  } else if (( rgba[0]<10) && (rgba[1]==100) && (rgba[2]>245)){
+		  } else if (closeEnough(rgba,waterrgb)){
 			I.setTile(xPos, yPos, TileType.Water);
-		  } else if (( rgba[0]==128) && (rgba[1]==64) && (rgba[2]==64)){
+		  } else if (closeEnough(rgba,plainsrgb)){
 			I.setTile(xPos, yPos, TileType.Plains);
-		  } else if (( rgba[0]>245) && (rgba[1]<10) && (rgba[2]<10)){
+		  } else if (closeEnough(rgba,lavargb)){
 			I.setTile(xPos, yPos, TileType.Lava);
-		  } else if (( rgba[0]<10) && (rgba[1]>245) && (rgba[2]==64)){
+		  } else if (closeEnough(rgba,swamprgb)){
 			I.setTile(xPos, yPos, TileType.Swamp);
-		  }else if (( rgba[0]<10) && (rgba[1]<10) && (rgba[2]<10)){
+		  }else if (closeEnough(rgba,snowrgb)){
 			I.setTile(xPos, yPos, TileType.Snow);
-		  }else {
+		  }else if (closeEnough(rgba,grassrgb)) {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
