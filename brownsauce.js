@@ -1624,7 +1624,10 @@ town.prototype.getTileX=function(cam){
 town.prototype.getTileY=function(cam){
     return Math.floor((this.y+cam.y)/16);
 };
-
+town.prototype.getIncome=function(arm){
+	return 2000; 
+	//TODO:factor in opinion, subtract from opinion if hella days.
+};
 town.prototype.getItem=function(){
 		return randomItem();
 };
@@ -1741,6 +1744,7 @@ function army() {
     this.ali=50;
     this.basex=12;
     this.basey=12;
+	this.dailyIncome=0;
 	this.baseName="Oldtown";
     this.opinion=50;
 	this.numItems=5;
@@ -2118,13 +2122,12 @@ function army() {
 		var texticles= "Daily Expenses: " + this.getCost();
         canvas.fillText(texticles, 310, 282);
 		
-		var texticles= "Daily Income: about tree fiddy.";
+		var texticles= "Daily Income: "+this.dailyIncome;
         canvas.fillText(texticles, 310, 322);
         
 
     };
 }
-
 
 
 var armies=new Array (2);
@@ -2771,14 +2774,25 @@ function time(){
     this.seconds=0;
     this.days=0;
 }
-time.prototype.update=function(){
+time.prototype.update=function(twns,arm){
     this.seconds++;
     if(this.seconds>60){
         this.seconds=0;
         this.minutes++;
         if (this.minutes>60){
             this.hours++;
-            if(this.hours>24) {this.hours=0; this.days++;projectionCount=projectionLength//todo
+            if(this.hours>24) {
+				this.hours=0; 
+				this.days++;
+				projectionCount=projectionLength;//todo
+				arm.dailyIncome=0;
+				for(var i=0;i<maps[mapSelected].numTowns;i++)
+				{
+					if(twns[i].team==0){
+						arm.dailyIncome+=twns[i].getIncome();
+					}
+				}
+				arm.gold+=arm.dailyIncome;
 			} 
             this.minutes=0;
             this.seconds=0;
@@ -3199,12 +3213,12 @@ var menukey=new akey("esc");
 var fleekey=new akey("f");
 var aikey=new akey("a");
 var addkey=aikey;
-var removekey="d";
+
 var unitinfokey=new akey("u");
 var cardkey=new akey("c");
 var cardcyclekey=new akey("v");
 var deploykey=new akey("d");
-var removekey=deploykey;
+var removekey=new akey("r");
 var newkey=new akey("n");
 var createkey=new akey("j");
 var optkey=new akey("o");
@@ -3932,13 +3946,13 @@ function battleDraw()
 	
 	//update console
 	bConsoleBox.msg[0]=bConsoleStr[bConsoleStr.length-4-bConsoleBox.scroll];
-	bConsoleBox.colors[0]=bConsoleClr[bConsoleStr.length-4-bConsoleBox.scroll];
+	//bConsoleBox.colors[0]=bConsoleClr[bConsoleStr.length-4-bConsoleBox.scroll];
 	bConsoleBox.msg[1]=bConsoleStr[bConsoleStr.length-3-bConsoleBox.scroll];
-	bConsoleBox.colors[1]=bConsoleClr[bConsoleStr.length-3-bConsoleBox.scroll];
+	//bConsoleBox.colors[1]=bConsoleClr[bConsoleStr.length-3-bConsoleBox.scroll];
 	bConsoleBox.msg[2]=bConsoleStr[bConsoleStr.length-2-bConsoleBox.scroll];
-	bConsoleBox.colors[2]=bConsoleClr[bConsoleStr.length-2-bConsoleBox.scroll];
+	//bConsoleBox.colors[2]=bConsoleClr[bConsoleStr.length-2-bConsoleBox.scroll];
 	bConsoleBox.msg[3]=bConsoleStr[bConsoleStr.length-1-bConsoleBox.scroll];
-	bConsoleBox.colors[3]=bConsoleClr[bConsoleStr.length-1-bConsoleBox.scroll];
+	//bConsoleBox.colors[3]=bConsoleClr[bConsoleStr.length-1-bConsoleBox.scroll];
 	battleCanvas.globalAlpha=1;
     for(var i=0;i<combatants[0].numUnits;i++)
     {
@@ -4045,6 +4059,7 @@ function battleDraw()
 	bmenuBox.draw(battleCanvas);
 	if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
 }
+
 initArmies();
 //document.getElementById("myAudio").play(); //starts music
 
@@ -4058,16 +4073,7 @@ function mainMenuDraw(){
 	canvas.fillText("  New Game",415,550);
 	canvas.fillStyle = "grey";
 	canvas.fillText("  Load Game",415,575);
-	if(projectionCount>0)
-	{
-		projectionCount--;
-		if (projectionCount==0)
-		{
-			//???!
-		
-		}
-		
-	}
+
 	if(mmcur){
 		canvas.fillText("-",400,550);
 	}else	{
@@ -4171,6 +4177,9 @@ worldmapsprite.draw(canvas,0,0);
 		return;
 	}
 };
+
+
+
 
 function worldMapUpdate(){
 	var tick=0;
@@ -4581,6 +4590,19 @@ function mapDraw() {
 	}
 
 	armyInfo();
+	if(projectionCount>0)
+	{
+		projectionCount--;
+		armies[0].drawProjections();
+		paused=true;
+		if (projectionCount==0)
+		{
+			paused=false;
+			
+		
+		}
+		
+	}
    
 };
 //------------MAIN LOOP-----------------------------------------
@@ -4588,7 +4610,7 @@ function mapUpdate()
 {
 	if(!gamestart) return;
 	if((!isBattle) &&(!preBattle)&&(isMenu==0)&&(!paused)&&(!battleReport)) {
-        theTime.update();
+        theTime.update(towns,armies[0]);
     }
 	var tick=0;	
     lasttime=milliseconds;
@@ -4875,7 +4897,7 @@ function mapUpdate()
 
 	//camera controls
     //if(curMap.zoom<3){
-	if((!isBattle) &&(!preBattle))
+	if((!isBattle) &&(!preBattle) &&(!isMenu))
 	{
 		if(keydown.left)
 		{
