@@ -1445,7 +1445,7 @@ function unit() {
             if (this.gender===1) {this.sprite = Sprite("witch");}
             this.def=20;
             this.mdef=15;
-            this.mag=17;
+            this.mag=12;
             this.cost=310;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Magical;
@@ -2526,15 +2526,11 @@ squad.prototype.flee= function(c)
         flagsprite.draw(canvas, ((this.dx * 16 - cam.x * 16)+8) / Math.pow(2, curMap.zoom-1), ((this.dy * 16 - cam.y * 16)+8) / Math.pow(2, curMap.zoom-1));
     };
     
-    squad.prototype.checkcollision= function() {
+    squad.prototype.checkCollision= function() {
 
         if (this.team==0) {
             for(var i=0;i<armies[1].numSquads;i++){
-                if ((this.isViable()) &&(armies[1].squads[i].isViable())&& (armies[1].squads[i].x-2<this.x) && (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<=this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
-            }
-        }else if(this.team==1) {
-            for(var i=0;i<armies[0].numSquads;i++){
-                if ((this.isViable()) &&(armies[0].squads[i].isViable())&&(armies[0].squads[i].x+2>this.x) && (armies[0].squads[i].x-2<this.x) && (armies[0].squads[i].y+2>this.y) && (armies[0].squads[i].y-2<=this.y)) {return armies[0].squads[i];}
+                if ((this.isViable()) &&(armies[1].squads[i].isViable())&& (armies[1].squads[i].x-2<this.x) &&(armies[1].squads[i].x+2>this.x)&& (armies[1].squads[i].y+2>this.y) && (armies[1].squads[i].y-2<this.y)) {return armies[1].squads[i];} //TODO:START BATTLE
             }
         }
 
@@ -2547,7 +2543,7 @@ squad.prototype.flee= function(c)
         if ((paused) || (!this.alive) ||(!this.deployed)|| (battleReport) || (isBattle) ||(preBattle)) {return;}
 		var targ=null;
         if(this.team==0){
-			targ=this.checkcollision();
+			targ=this.checkCollision();
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
 			console.log(targ);
@@ -3748,7 +3744,7 @@ function initArmies(){
 	}
 
 
-	armies[1].leader.maxhp+=100;
+	armies[1].leader.maxhp+=40;
 	armies[1].leader.hp=armies[1].leader.maxhp
 	armies[1].leader.equipment[0]=swords[2];
 	armies[1].leader.equipment[1]=breastplate;
