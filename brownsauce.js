@@ -2717,7 +2717,7 @@ squad.prototype.flee= function(c)
         return this.path != null;
     };
     squad.prototype.clearDestination=function(){
-        this.path=null; this.dx = 0; this.dy = 0; this.nextMove = null;
+        this.path=null; this.dx = this.x; this.dy = this.y; this.nextMove = null;
     };
     squad.prototype.setDestination = function(x, y, map) {
 		if(!map.walkable(x,y,this)) {return;}
@@ -3522,8 +3522,18 @@ function Map(I) { //map object
 		if((isBattle) ||(preBattle)||(battleReport)){return;}
         cam.zoom=I.zoom;
         cam.check();
-        for (i=cam.x;i<cam.x+cam.width*Math.pow(2, I.zoom-1); i+=I.zoom){
-            for (j=cam.y;j<cam.y+cam.height*Math.pow(2, I.zoom-1); j+=I.zoom){
+		var poopx=cam.x+cam.width*Math.pow(2, I.zoom-1);
+		var poopy=cam.y+cam.height*Math.pow(2, I.zoom-1);
+		if(poopx>MAP_WIDTH)
+		{
+			//poopx=MAP_WIDTH-(cam.x+cam.width);
+		}
+		if(poopy>MAP_HEIGHT)
+		{
+			poopy=MAP_HEIGHT-(cam.y+cam.height);
+		}
+        for (i=cam.x;i<poopx; i+=I.zoom){
+            for (j=cam.y;j<poopy; j+=I.zoom){
                 var tileTypes = {};
                 for( var ii=0; ii<I.zoom; ii+=1 ) {
                     if ((i+ii>=MAP_WIDTH)) { continue;}
@@ -3607,7 +3617,9 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Lava);
 		  } else if (( rgba[0]<10) && (rgba[1]>245) && (rgba[2]==64)){
 			I.setTile(xPos, yPos, TileType.Swamp);
-		  } else {
+		  }else if (( rgba[0]<10) && (rgba[1]<10) && (rgba[2]<10)){
+			I.setTile(xPos, yPos, TileType.Snow);
+		  }else {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
@@ -4473,10 +4485,10 @@ function mapDraw() {
 				{
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!curMap.walkable(cx,cy,armies[0].squads[i])){
+					while(!curMap.walkable(cx,cy,armies[0].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}*/
+					}
                     armies[0].squads[i].setDestination(cx,cy,curMap); 
 				}
             }else if(armies[0].fieldAI==AITypes.Rush)
@@ -4493,13 +4505,13 @@ function mapDraw() {
             armies[1].squads[i].update(curMap);
 			if(armies[1].squads[i].path!=null) {continue;}
             if(armies[1].fieldAI==AITypes.Random){
-                if( (!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
+                if((armies[1].squads[i].isViable())&&(!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
 					var cx=Math.floor(Math.random()*(MAP_WIDTH));
 					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					/*while(!curMap.walkable(cx,cy,armies[1].squads[i])){
+					while(!curMap.walkable(cx,cy,armies[1].squads[i])){
 						cx=Math.floor(Math.random()*(MAP_WIDTH));
 						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}*/
+					}
                     armies[1].squads[i].setDestination(cx,cy,curMap); };
             }else if(armies[1].fieldAI==AITypes.Rush){
                 if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
@@ -4608,6 +4620,19 @@ function mapDraw() {
 		
 		}
 		
+	}
+	
+	if(victory)
+	{
+		canvas.fillStyle = "white";
+		armies[0].drawResults();
+		victoryCount++;
+		if(victoryCount>victoryLap)
+		{
+			victoryCount=0;
+			endGame(0);
+			victory=false;
+		}
 	}
    
 };
@@ -5070,17 +5095,6 @@ function mapUpdate()
 
 	
     checkEndGame();
-	if(victory)
-	{
-		canvas.fillStyle = "white";
-		armies[0].drawResults();
-		victoryCount++;
-		if(victoryCount>victoryLap)
-		{
-			victoryCount=0;
-			endGame(0);
-			victory=false;
-		}
-	}
+
 }
 merp();
