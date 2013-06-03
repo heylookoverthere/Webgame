@@ -3616,7 +3616,7 @@ function Map(I) { //map object
 		  var sandrgb =[255,255,0,0];
 		  var roadrgb =[195,195,195,0];
 		  var swamprgb =[0,255,64,0];
-		  var plainsrgb =[128,128,64,0];
+		  var plainsrgb =[128,64,64,0];
 		  var snowrgb =[230,230,230,0];
 		  var waterrgb =[0,100,255,0];
 		  var lavargb =[255,0,0,0];
@@ -3643,7 +3643,7 @@ function Map(I) { //map object
 			I.setTile(xPos, yPos, TileType.Swamp);
 		  }else if (closeEnough(rgba,snowrgb)){
 			I.setTile(xPos, yPos, TileType.Snow);
-		  }else if (closeEnough(rgba,grassrgb)) {
+		  }else{ //if (closeEnough(rgba,grassrgb)) {
 			I.setTile(xPos, yPos, TileType.Grass);
 		  }
 		}
