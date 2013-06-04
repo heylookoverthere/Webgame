@@ -45,7 +45,6 @@ damage numbers drawn on sprites in battle. -meh
 -menus, arrow keys move around grid of items.
 
  -knockback
- fog of war/view range
  
  maybe we could pre-plot the enemy squads intial movement assignment and lump that hang in with the map load
  
@@ -154,8 +153,6 @@ different weapon for front/back row
 
 -PHYSICAL ATTACK PENELTY BACK ROW?
 
-prevent constant capture/liberation! -HOW FUCKING HARD IS IT
-	-better town colision detection
 	
 cardbug! - still there!!
  
@@ -163,9 +160,7 @@ cardbug! - still there!!
 knockback both on tie? - right now tie goes to the player
  
 -revive at towns for money?
--town greeting first time, boss greeting, dish out cards
--EDIT SET DESTINATION TO CHECK THERE'S NO ROCKS FIRST.
--preset towns for each map?
+- dish out cards
 -angel ring?
 
 narf: this.getshit = function(property) { return this[property]; }
@@ -174,7 +169,6 @@ narf: so var stuff = "shit"; foo[stuff]
 narf: and then you'd call your thing like
 narf: whatever.getshit("hp")
 
-get spreadsheet style list of all untis each team health, attack etc, sortable.
 
 ["Brotherhood Without Banners","Second Sons","Golden Company","Company of the Cat","Brave Companions","The Unsullied","The Nights Watch","The Kingsguard","The Windblown","The Long Lances","Stormcrows"];
 
@@ -194,3 +188,78 @@ riverlands "Fairmarket","Riverrun","High Heart","Acorn hall","Pinkmaiden","Harre
 vale: "Eyrie","Longbow Hall","Old Anchor","Runestone","Coldwater","Snakewoods","Saltpans"
 crownlands: "King's Landing","Maidenpool","Rosby","Duskendale","Dragonstone", "Crackclaw Point"
 Dorne:"Starfell","Blackmont","Kingsgrave","Wyl","Yornwood","Godsgrace","SunSpear",Saltshore","Lemonwood"
+
+-save game:
+-loose units
+-squads
+-maps beaten
+-items
+reached destination replot!
+
+//seasons!?
+
+-finish victory screen
+-take exspenses
+night faster?
+-unique items
+
+wrong people fleeing?
+
+-prereqs for classes
+-level, other classes level,sex,hp,str,mag, etc
+
+ Characters with high alignment fight better during the day while those with low alignment fight better at night.
+shops at towns
+-JSON arrays
+
+-REVIVE UNITS BETWEEN SQUADS FOR NOW?
+
+Upon liberation, a random tarot card is drawn which can affect either the liberating unit's statistics, the statistics of all units on the battlefield or the reputation parameter.
+
+-OPTIONS
+	-sound
+	-controls!
+	-
+
+-Editor
+	-squad
+	-units 
+	-amry
+
+-change all countdown delays to time delays.
+-game over
+unit.turns?
+
+-bearastan boss of KL, can join
+-retreating future boss at start of stage
+-stage start dialouge/speaker
+
+knockback!
+
+-stannis bearatheon
+-Strong Bearwas
+-Bearon Greyjoy
+-Bearjen Stark
+-Bearnerys
+-Thoros of Bear
+(9:45:19 PM) heylookoverthere: BEARTHUR DAYNE
+(9:45:23 PM) heylookoverthere: THE SWORD OF THE MORNIGN
+SER BEARYS OAKHEART
+
+-ambrose
+Andar
+Anders
+Andrew
+Andrey
+Andrik
+Androw
+Anguy
+Anarra
+-Bennet
+-Bennis
+-Beqqo
+-Beren
+_Berena
+-Berenarr
+Bennard
+Benfrey

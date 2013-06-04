@@ -3068,13 +3068,13 @@ function mouseClick(e) {  //represents the mouse
 				tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
 				ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
 
-				if((mX>174) && (mX<250) &&(mY>440) &&(mY<452)) 
+				if((mX>174) && (mX<275) &&(mY>440) &&(mY<452)) 
 				{
 					mmcur=true;175,475175,450
 					mode=1;
 					
 				}
-				if((mX>174) && (mX<250) &&(mY>464) &&(mY<576)) 
+				if((mX>174) && (mX<275) &&(mY>464) &&(mY<576)) 
 				{
 					mmcur=false;
 				}
