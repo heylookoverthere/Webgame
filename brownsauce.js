@@ -2069,6 +2069,7 @@ function army() {
     canvas.font = "14pt Calibri";
     canvas.textAlign = "left";
     canvas.textBaseline = "middle";
+	canvas.fillStyle =  "white";
 		for(var i=0;i<this.numItems;i++)
 		{
 		
@@ -2093,7 +2094,6 @@ function army() {
 				xp+=200;
 				yp=130+(i-32)*32;
 			}
-			canvas.fillStyle("white");
 			canvas.fillText(g, xp+140, yp);
 			canvas.fillText(texticles, xp, yp);
 			
