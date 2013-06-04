@@ -3068,13 +3068,13 @@ function mouseClick(e) {  //represents the mouse
 				tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
 				ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
 
-				if((mX>434) && (mX<550) &&(mY>534) &&(mY<551)) 
+				if((mX>174) && (mX<250) &&(mY>440) &&(mY<452)) 
 				{
-					mmcur=true;
+					mmcur=true;175,475175,450
 					mode=1;
 					
 				}
-				if((mX>434) && (mX<550) &&(mY>561) &&(mY<576)) 
+				if((mX>174) && (mX<250) &&(mY>464) &&(mY<576)) 
 				{
 					mmcur=false;
 				}
@@ -4108,18 +4108,18 @@ initArmies();
 function mainMenuDraw(){
 	canvas.fillStyle = "black";
 	canvas.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-	titlesprite.draw(canvas,150,50);
+	titlesprite.draw(canvas,0,0);
 	canvas.fillStyle = "white";
 	canvas.font = "16pt Calibri";
-	canvas.fillText("Press Enter",400,500);
-	canvas.fillText("  New Game",415,550);
+	//canvas.fillText("Press Enter",200,500);
+	canvas.fillText("  New Game",175,450);
 	canvas.fillStyle = "grey";
-	canvas.fillText("  Load Game",415,575);
+	canvas.fillText("  Load Game",175,475);
 
 	if(mmcur){
-		canvas.fillText("-",400,550);
+		canvas.fillText("-",160,450);
 	}else	{
-		canvas.fillText("-",400,575);
+		canvas.fillText("-",160,475);
 
 	}
 };
