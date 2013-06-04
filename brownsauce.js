@@ -1791,7 +1791,8 @@ function army() {
 		
 	}
 	this.getVisible=function(enemyarmy){
-		//this.visibleEnemies=null;
+		this.visibleEnemies=null;
+		this.visibleEnemies=new Array();
 		for(var i=0;i<enemyarmy.numSquads;i++)
 		{
 			if(enemyarmy.squads[i].isViable())
