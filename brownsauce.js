@@ -3988,10 +3988,10 @@ requestAnimationFrame(merp,canvas);
 
 
 
-document.getElementById("myAudio").addEventListener('ended', function() { //loops music
+/*document.getElementById("myAudio").addEventListener('ended', function() { //loops music
     this.currentTime = 0;
     this.play();
-}, false);
+}, false);*/
 
 function menuDraw()
 {
@@ -4248,7 +4248,7 @@ function battleDraw()
 }
 
 initArmies();
-//document.getElementById("myAudio").play(); //starts music
+document.getElementById("myAudio").play(); //starts music
 
 function mainMenuDraw(){
 	canvas.fillStyle = "black";
