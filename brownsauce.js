@@ -313,6 +313,17 @@ function unit() {
     this.name=names[this.gender][nami];
     namesused[this.gender][nami]=true;
     
+	this.stringifyUnit=function(){
+		var smurf={'name':this.name,'class':this.class,'gender':this.gender,'def':this.def,'mdef':this.mdef,'ali':this.ali,'speed':this.speed,'evade':this.evade,'team':this.team,
+		'alive':this.alive,'attack':this.attack,'mag':this.mag,'luck':this.luck,'level':this.level,'nextlevel':this.nextLevel,'exp': this.exp,'cost':this.cost,'canlead':this.canlead,
+		'viewrange':this.viewRange,'kills':this.kills,'damagetaken':this.damagetaken,'damagedelt':this.damagedelt,'battlefought':this.battlesfought,'battleswon':this.battleswon,
+		'battlelost':this.battlelost,'religion':this.religion,'faith':this.faith,'flightHeight':this.flightheight,'swimcarry':this.swimCarry,'maxhp':this.maxhp,'maxmp':this.maxmp,
+		'undead':this.undead}
+		var tempstring = JSON.stringify(smurf);
+		//deal with equipment, attack type, status
+		return tempstring;
+	}
+	
     this.getAttack= function(){
         //if status==beserek attack harder
 		var nightBoost=0;
@@ -1678,6 +1689,7 @@ function endGame(win){
 			armies[0].squads[i].by=8;
 			armies[0].squads[i].alive=true;
 		}
+		resetEnemyArmy();
 		for( i=0; i<armies[1].numSquads;i++)
 		{
 			armies[1].squads[i].healStatus();
@@ -2061,6 +2073,7 @@ function army() {
 				xp+=200;
 				yp=130+(i-32)*32;
 			}
+			canvas.fillStyle("white");
 			canvas.fillText(g, xp+140, yp);
 			canvas.fillText(texticles, xp, yp);
 			
@@ -2188,6 +2201,17 @@ function squad() {
     this.encounterCounter=0;
     this.encounterPoint=Math.floor(Math.random()*400)+200;
 }
+
+squad.prototype.stringifySquad=function(){
+   var tempunits=new Array();
+    for (i=0;i<this.numUnits; i++){
+		tempunits.push(this.units[i].stringifyUnit());
+    }
+	var tempobj = {'numUnits': this.numUnits, 'units':tempunits};
+    var tempstring = JSON.stringify(tempobj);
+    return tempstring;
+};
+
 
 squad.prototype.classFromTerrain=function(map){
 		if(map.tiles[this.x][this.y].data==TileType.Swamp) {return SEEAss.Frog;}
@@ -3719,6 +3743,28 @@ function Map(I) { //map object
     return I;
 }
 
+function resetEnemyArmy()
+{
+	armies[1].squads=null;
+	armies[1].numSquads=0;
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+
+	for (var i=0;i<armies[1].numSquads;i++){
+		armies[1].squads[i].leader.class=SEEAss.HulkBear;
+		armies[1].squads[i].leader.setClass();
+		armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
+		armies[1].squads[i].team=1;
+		for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
+		{
+			armies[1].squads[i].addUnit(new unit());
+		}
+		armies[1].squads[i].smartRow();
+	}
+};
 
 function initArmies(){
 	armies[0].init(0);
@@ -3764,13 +3810,14 @@ function initArmies(){
 		armies[1].squads[i].team=1;
 		//armies[1].squads[i].x=armies[1].squads[i].basex;
 		//armies[1].squads[i].y=armies[1].squads[i].basey;
-		armies[1].squads[i].smartRow();
+
 		//armies[1].squads[i].deploy();//TODO delay between deployment 
 		//armies[1].lastDeployed++;
 		for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
 		{
 			armies[1].squads[i].addUnit(new unit());
 		}
+		armies[1].squads[i].smartRow();
 	}
 	armies[0].leader.name="Bearistan";
 	armies[0].leader.class=SEEAss.Bear;
@@ -3794,9 +3841,9 @@ function initArmies(){
 	}
 
 
-	armies[1].leader.maxhp+=40;
+	armies[1].leader.maxhp+=20;
 	armies[1].leader.hp=armies[1].leader.maxhp
-	armies[1].leader.equipment[0]=swords[2];
+	armies[1].leader.equipment[0]=swords[1];
 	armies[1].leader.equipment[1]=breastplate;
 	//armies[1].leader.equipment[2]=cape;
 	armies[1].squads[0].units[1].name="Reek";
