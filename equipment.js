@@ -60,7 +60,27 @@ TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
 
-
+var selBox=[];
+selBox.point1=[];
+selBox.point2=[];
+selBox.p1=false;
+selBox.p2=false;
+selBox.width=0;
+selBox.height=0;
+function drawSelBox(can){
+	if(!selBox.p2) {return;}
+	var w =selBox.point1.x-selBox.point2.x;
+	var h =selBox.point1.x-selBox.point2.x;
+	can.strokeStyle="#FFFF00";
+	can.beginPath();
+	can.moveTo(selBox.point1.x,selBox.point1.y);
+    can.lineTo(selBox.point2.x,selBox.point1.y);
+	can.lineTo(selBox.point2.x,selBox.point2.y);
+	can.lineTo(selBox.point1.x,selBox.point2.y);
+	can.lineTo(selBox.point1.x,selBox.point1.y);
+    can.stroke();
+	can.closePath();
+};
 
 var numMapPoints=6;
 var mmcur=false;

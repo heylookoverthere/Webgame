@@ -2,6 +2,28 @@ $(document).bind("contextmenu",function(e){
 	if(mode==1){
 		mode=0;
 		mmcur=true;
+	}else if(mode==2)
+	{
+		mX = e.pageX - canvasElement.get(0).offsetLeft;
+		mY = e.pageY - canvasElement.get(0).offsetTop;
+		if(!selBox.p1){
+			selBox.point1=[];
+			selBox.point1.x=mX;
+			selBox.point1.y=mY;
+			selBox.p1=true
+			//alert("p1");
+		}else if(!selBox.p2)
+		{
+			selBox.point2=[];
+			selBox.point2.x=mX;
+			selBox.point2.y=mY;
+			selBox.p2=true;
+			//alert("p2");
+		}else
+		{
+			selBox.p1=false;
+			selBox.p2=false;
+		}
 	}
     return false;
 });
@@ -11,8 +33,6 @@ requestAnimationFrame = window.requestAnimationFrame ||
                         window.webkitRequestAnimationFrame || 
                         window.msRequestAnimationFrame || 
                         setTimeout; 
-
-
 
 
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas");
@@ -2585,7 +2605,7 @@ squad.prototype.flee= function(c)
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
 			console.log(targ);
-             preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ combatants[0]=this; combatants[1]=targ; camera.center(this); SELECTED=this.ID;
+             preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ combatants[0]=this; combatants[1]=targ; camera.center(this); mapDirty=true; SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
 			battleBox.msg[0]=tmpstr;
@@ -3073,9 +3093,9 @@ function mouseWheel(e){
 
 					curMap.minusZoom(camera);
 					var blob=[];
-					blob.x=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
-					blob.y=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
-					//camera.center(blob);
+					blob.x=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1)+camera.x;
+					blob.y=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1)+camera.y;
+					camera.center(blob);
 					camera.check();
 				}
 				if(curMap.zoom>3) {curMap.zoom=3;}
@@ -3187,7 +3207,20 @@ function mouseClick(e) {  //represents the mouse
 					break;
 					}
 			case 2:
-				alert('Middle mouse button pressed');
+				if(mode==2)
+				{
+					mX = e.pageX - canvasElement.get(0).offsetLeft;
+					mY = e.pageY - canvasElement.get(0).offsetTop;
+
+					tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+					ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
+					var bot=[];
+					bot.x=camera.x+tx;
+					bot.y=camera.y+ty;
+					camera.center(bot);
+					camera.check();
+					mapDirty=true;
+				}
 				break;
 			case 3:
 				alert('Right mouse button pressed');
@@ -3463,6 +3496,52 @@ function Map(I) { //map object
     };
     I.zoom = 1;
 	
+	I.minusScrollZoom = function(cam) {
+        if (I.zoom == 1)
+		{
+			//I.zoom=3;cam.x-=20;cam.y-=13;
+			
+		} else if (I.zoom==2) 
+		{
+			I.zoom=1;cam.x+=30*Math.pow(2, I.zoom-1);cam.y+=20*Math.pow(2, I.zoom-1);
+
+		} else 
+		{
+			I.zoom=2;cam.x+=30*Math.pow(2, I.zoom-1);cam.y+=20*Math.pow(2, I.zoom-1);			
+		}
+		if(cam.x<0)
+		{
+			cam.x=0;
+		}
+		if(cam.y<0)
+		{
+			cam.y=0;
+		}
+		if(I.zoom==0)
+		{
+			if(cam.x>MAP_WIDTH-60)
+			{
+				cam.x=MAP_WIDTH-60;
+			}
+			if(cam.y>MAP_HEIGHT-40)
+			{
+				cam.y=MAP_HEIGHT-40;
+			}
+		}else if(I.zoom==2)
+		{
+			if(cam.x>MAP_WIDTH-30)
+			{
+				cam.x=MAP_WIDTH-30;
+			}
+			if(cam.y>MAP_HEIGHT-20)
+			{
+				cam.y=MAP_HEIGHT-20;
+			}
+		}
+        cam.zoom=I.zoom;
+		cam.check();
+		mapDirty=true;
+    };
 	
 	I.minusZoom = function(cam) {
         if (I.zoom == 1)
@@ -4706,6 +4785,8 @@ function mapDraw() {
 		}
 		
 	}
+	
+	drawSelBox(canvas);
 	
 	if(victory)
 	{
