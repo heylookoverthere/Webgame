@@ -32,6 +32,7 @@ var mapCanvas = mapCanvasElement.get(0).getContext("2d");
 
 canvasElement.css("position", "absolute").css("z-index", "1");
 canvasElement.appendTo('body');
+canvasElement.css("position", "absolute").css("z-index", "1").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
 sillycanvasElement.css("position", "absolute").css("z-index", "0").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
 battleCanvasElement.css("position", "absolute").css("z-index", "2").css("top", canvasElement.position().top).css("left", canvasElement.position().left);
 sillycanvasElement.appendTo('body');
@@ -2505,18 +2506,28 @@ squad.prototype.flee= function(c)
 	    if(curMap.tiles[this.x][this.y+2].data==TileType.Forest) {
 			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
 			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
-			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, curMap.zoom-1)-1));
-			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, curMap.zoom-1)-1));//todo
+			var plop=this.by;
+			if(curMap.zoom>2) { 
+				gy-=8;
+				plop=0;
+			}//todo
+			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, curMap.zoom-1)-1)+plop);
+			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, curMap.zoom-1)-1)+plop);//todo
 	
 		}else if((curMap.tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
 			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
 			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
 			//canvas.save();
+			/*plop=this.by;
+			if(curMap.zoom>2) { 
+				gy-=8;
+				plop=0;
+			}//todo*/
 			canvas.globalAlpha=0.80;
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(curMap.zoom-1));
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(curMap.zoom-1));//todo
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(curMap.zoom-1));
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(curMap.zoom-1));//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(curMap.zoom-1)+plop);
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(curMap.zoom-1)+plop);//todo
+			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(curMap.zoom-1)+plop);
+			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(curMap.zoom-1)+plop);//todo
 			//canvas.restore();
 			canvas.globalAlpha=1;
 		}
