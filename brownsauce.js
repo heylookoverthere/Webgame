@@ -1676,6 +1676,7 @@ function endGame(win){
 			armies[0].squads[i].clearDestination();
 			armies[0].squads[i].bx=8;
 			armies[0].squads[i].by=8;
+			armies[0].squads[i].alive=true;
 		}
 		for( i=0; i<armies[1].numSquads;i++)
 		{
@@ -1685,6 +1686,7 @@ function endGame(win){
 			armies[1].squads[i].clearDestination();
 			armies[1].squads[i].bx=8;
 			armies[1].squads[i].by=8;
+			armies[1].squads[i].alive=true;
 		}
 		sillycanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 		armies[0].lastDeployed=1;//1?
