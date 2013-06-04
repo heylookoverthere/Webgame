@@ -676,12 +676,14 @@ function unit() {
                         console.log(tmpstr);
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
+						usqd.turns++;
                     }else  if (this.class==SEEAss.Angel) 
                     {
                         var tmpstr=this.name + " healed the party" ;
                         console.log(tmpstr);
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
+						usqd.turns++;
                         for(var i=0;i<usqd.numUnits;i++){
                             if (usqd.units[i].alive) {
                                 usqd.units[i].heal(20);
@@ -698,6 +700,7 @@ function unit() {
                         console.log(tmpstr);
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
+						usqd.turns++;
                     }
                 }else 
                 {
@@ -709,6 +712,7 @@ function unit() {
                     console.log(tmpstr);
 					bConsoleStr.push(tmpstr);
 					bConsoleClr.push("white");
+					usqd.turns++;
                 }
             }else if(this.getAttackType()==AttackTypes.GiveStatus){
 				targe=usqd.units[this.statusTrack];
@@ -732,6 +736,7 @@ function unit() {
 				console.log(tmpstr);
 				bConsoleStr.push(tmpstr);
 				bConsoleClr.push("white");
+				usqd.turns++;
 				this.statusTrack++;//todo: change
 				if (this.statusTrack>usqd.numUnits-1) 
 				{
@@ -742,6 +747,7 @@ function unit() {
 				
 			}else if(this.getAttackType()==AttackTypes.HealStatus){
 				esqd.healStatus();
+				usqd.turns++;
 				//esqd.esuna();
 			}else
             {
