@@ -2611,7 +2611,13 @@ squad.prototype.flee= function(c)
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
 			console.log(targ);
-             preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ combatants[0]=this; combatants[1]=targ; camera.center(this); mapDirty=true; SELECTED=this.ID;
+             preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ 
+			 combatants[0]=this;
+			 combatants[1]=targ;
+			 //camera.center(this);
+			 camera.pan(this.x,this.y);
+			 mapDirty=true; 
+			 SELECTED=this.ID;
             var tmpstr=this.leader.name + "'s squad encountered an enemy!";
 
 			battleBox.msg[0]=tmpstr;
@@ -2633,6 +2639,8 @@ squad.prototype.flee= function(c)
 					{
 						armies[0].opinion+=5;
 						var tmpstr=this.leader.name+"'s unit liberated " + towns[i].name;
+						lastEventX=towns[i].x;
+						lastEventY=towns[i].y;
 						console.log(tmpstr); 
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
@@ -2659,6 +2667,8 @@ squad.prototype.flee= function(c)
 					{
 						armies[0].opinion-=10; 
 						var tmpstr=this.leader.name+"'s unit captured " + towns[i].name; console.warn(tmpstr); 
+						lastEventX=towns[i].x;
+						lastEventY=towns[i].y;
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
 					
@@ -3309,7 +3319,7 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 	panning: false,
 	panX: 0,
 	panY: 0,
-	panSpeed: 1,
+	panSpeed: 3,
 	pan: function(x,y) {
 		this.panning=true;
 		        if(this.zoom==1)
@@ -3724,7 +3734,7 @@ function Map(I) { //map object
 
     I.draw = function(cam) {
 		if(!mapDirty) {return;}
-		if((isBattle) ||(preBattle)||(battleReport)){return;}
+		if((isBattle) /*||(preBattle)*/||(battleReport)){return;}
         cam.zoom=I.zoom;
         cam.check();
 		var poopx=cam.x+cam.width*Math.pow(2, I.zoom-1);
@@ -4574,6 +4584,9 @@ function worldMapUpdate(){
 				starting=false;
 				mapDirty=true;
 				armies[1].leader.name=towns[1].speaker;
+				
+				lastEventX=armies[0].basex;
+				lastEventY=armies[0].basey;
 			})
 		
 		var bot=[];
@@ -5160,6 +5173,7 @@ function mapUpdate()
 
 	if((preBattle) &&(!paused)&&(!isMenu))
 	{
+			camera.update();
             preBattle--; 
             if (preBattle<1){
 				preBattle=0;
@@ -5325,7 +5339,7 @@ function mapUpdate()
     }
     if(statuskey.check())
 	{
-		camera.pan(towns[1].x,towns[1].y);
+		camera.pan(lastEventX,lastEventY);
     }
 	
 	if ((tick>gamespeed) && (!isBattle)&&(!preBattle))

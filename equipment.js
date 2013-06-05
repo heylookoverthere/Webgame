@@ -60,6 +60,9 @@ TileType.Forest=3;
 TileType.Road=8;
 TileType.Sand=9;
 
+var lastEventX=0;
+var lastEventY=0;
+
 var selBox=[];
 selBox.point1=[];
 selBox.point2=[];
