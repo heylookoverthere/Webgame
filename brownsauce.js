@@ -263,6 +263,20 @@ function randomItem(){
 	return itm;
 };
 
+isBlokemon=function(cla){
+	if ((cla==SEEAss.RumHam) ||(cla==SEEAss.Tiger) ||(cla==SEEAss.Shoe) ||(cla==SEEAss.Bear) ||(cla==SEEAss.PolarBear) || (cla==SEEAss.Creeper) || (cla==SEEAss.Skeleton)||(cla==SEEAss.EarthBound) || (cla==SEEAss.Octopus)) {return true;}
+	return false;
+	};
+
+	getClass=function(bloke){
+		var p=Math.floor(Math.random()*29);
+		if(!bloke){
+			while(isBlokemon(p)){
+				p=Math.floor(Math.random()*29);
+			}
+		}
+		return p;
+	};
 
 function unit() {
     this.hp=40;
@@ -294,7 +308,8 @@ function unit() {
     this.status[4]=false;
     this.status[5]=false;
     this.status[6]=false;
-    this.class=Math.floor(Math.random()*29);
+
+    this.class=getClass(false);
     this.row=Math.floor(Math.random()*2);
     this.viewRange=5;
     this.level=1;
@@ -343,6 +358,8 @@ function unit() {
 		//deal with equipment, attack type, status
 		return tempstring;
 	}
+	
+
 	
     this.getAttack= function(){
         //if status==beserek attack harder
@@ -889,6 +906,7 @@ function unit() {
             this.speed=1;
             this.luck=5;
             this.ali=50;
+			this.blokemon=true;
             this.viewRange=5;
             this.def=15;
             this.mdef=3;
@@ -912,6 +930,7 @@ function unit() {
             this.def=12;
             this.mdef=5;
             this.cost=10;
+			this.blokemon=true;
             this.canlead=true;
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Ranged;
@@ -952,6 +971,7 @@ function unit() {
             this.mdef=5;
             this.cost=10;
             this.canlead=false;
+			this.blokemon=true;
             this.sprite = Sprite("shoe");
             this.attackType[0]=AttackTypes.Physical;
             this.attackType[1]=AttackTypes.Physical;
@@ -1167,6 +1187,7 @@ function unit() {
             this.speed=2;
             this.luck=9;
             this.ali=90;
+			this.blokemon=true;
             this.viewRange=5;
             this.sprite = Sprite("polarbear");
             this.equipment[0]=claws;
@@ -1250,6 +1271,7 @@ function unit() {
             this.luck=7;
             this.ali=1;
             this.viewRange=5;
+			this.blokemon=true;
             this.sprite = Sprite("rumham");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
@@ -1295,6 +1317,7 @@ function unit() {
             this.sprite = Sprite("creeper");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
+			this.blokemon=true;
             if (this.gender===1) {this.sprite = Sprite("creeper");}
             this.def=20;
             this.mdef=15;
@@ -1315,6 +1338,7 @@ function unit() {
             this.sprite = Sprite("ebound");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
+			this.blokemon=true;
             if (this.gender===1) {this.sprite = Sprite("ebound");}
             this.def=20;
             this.mdef=15;
@@ -1335,6 +1359,7 @@ function unit() {
             this.sprite = Sprite("skeleton");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
+			this.blokemon=true;
             if (this.gender===1) {this.sprite = Sprite("skeleton");}
             this.def=20;
             this.mdef=15;
@@ -1458,6 +1483,7 @@ function unit() {
             this.sprite = Sprite("tiger");
             //this.equipment[0]=claws;
             this.equipment[1]=shirt;
+			this.blokemon=true;
             if (this.gender===1) {this.sprite = Sprite("tiger");}
             this.def=20;
             this.mdef=15;
@@ -1472,7 +1498,7 @@ function unit() {
             this.attack=4;
             this.maxmp=80;
 			this.gender=1;
-            this.speed=2;
+            this.speed=1;
             this.luck=17;
 			this.name="Deneb";
             this.ali=1;
@@ -1481,7 +1507,7 @@ function unit() {
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
             if (this.gender===1) {this.sprite = Sprite("witch");}
-            this.def=20;
+            this.def=18;
             this.mdef=15;
             this.mag=12;
             this.cost=310;
@@ -1501,6 +1527,7 @@ function unit() {
             this.sprite = Sprite("pumpkinhead");
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
+			this.blokemon=true;
             if (this.gender===1) {this.sprite = Sprite("pumpkinhead");}
             this.def=18;
             this.mdef=15;
@@ -1541,6 +1568,7 @@ function unit() {
 			this.ali=10;
             this.viewRange=5;
 			this.swimCarry=3;
+			this.blokemon=true;
             this.sprite = Sprite("octopus");
             this.equipment[0]=icemagic[3];
             this.equipment[1]=robe;
