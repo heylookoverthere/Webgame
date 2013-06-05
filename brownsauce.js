@@ -3306,7 +3306,50 @@ var camera = {  //represents the camera, aka what part of the map is on screen
     width: 60,
     height: 40,
     zoom: 1,
+	panning: false,
+	panX: 0,
+	panY: 0,
+	panSpeed: 1,
+	pan: function(x,y) {
+		this.panning=true;
+		        if(this.zoom==1)
+		{
+			this.panX=x-26;
+			this.panY=y-20;
+		}
+		else if(this.zoom==2){
+			this.panX=x-46;
+			this.panY=y-40;
+		}else if(this.zoom==3){
+			this.panX=x-78;
+			this.panY=y-60;
+		}
+		
+	},
+	centerX: function() {
+        if(this.zoom==1)
+		{
+			return this.x+26;// * Math.pow(2, curMap.zoom-1);
+		}
+		else if(this.zoom==2){
+			return this.x+46;// * Math.pow(2, curMap.zoom-1);
+		}else if(this.zoom==3){
+			 return this.x+78;// * Math.pow(2, curMap.zoom-1);
+		}
 
+    },
+	centerY: function() {
+        if(this.zoom==1)
+		{
+			return this.y+20;// * Math.pow(2, curMap.zoom-1);
+		}
+		else if(this.zoom==2){
+			return this.y+40;
+		}else if(this.zoom==3){
+			return this.y+60;
+		}
+
+    },
     center: function(targ) {
         //if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
 		mapDirty=true;
@@ -3330,6 +3373,45 @@ var camera = {  //represents the camera, aka what part of the map is on screen
         this.x=tx;
         this.y=ty;
     },
+	update: function() {
+		if(this.panning){
+			mapDirty=true;
+			if(this.x<this.panX) 
+			{
+				this.x+=this.panSpeed;
+				if(this.x>this.panX)
+				{
+					this.x=this.panX;
+				}
+			}else if(this.x>this.panX) 
+			{
+				this.x-=this.panSpeed;
+				if(this.x<this.panX)
+				{
+					this.x=this.panX;
+				}
+			}
+			if(this.y<this.panY) 
+			{
+				this.y+=this.panSpeed;
+				if(this.y>this.panY)
+				{
+					this.y=this.panY;
+				}
+			}else if(this.y>this.panY) 
+			{
+				this.y-=this.panSpeed;
+				if(this.y<this.panY)
+				{
+					this.y=this.panY;
+				}
+			}
+			if((this.x==this.panX) && (this.y==this.panY))
+			{
+				this.panning=false;
+			}
+		}
+	},
     check: function() {
         this.x.clamp(0, MAP_WIDTH-60);
         this.y.clamp(0, MAP_HEIGHT-40);
@@ -5243,13 +5325,12 @@ function mapUpdate()
     }
     if(statuskey.check())
 	{
-        var texticle = "Units:" + armies[0].squads[SELECTED].numSquadUnits() + " / " + armies[0].squads[SELECTED].numUnits;
-        alert(texticle);
+		camera.pan(towns[1].x,towns[1].y);
     }
 	
 	if ((tick>gamespeed) && (!isBattle)&&(!preBattle))
 	{
-	
+		camera.update();
         tick=0;
         if(battleReport)
 		{
