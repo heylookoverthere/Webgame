@@ -6,23 +6,44 @@ $(document).bind("contextmenu",function(e){
 	{
 		mX = e.pageX - canvasElement.get(0).offsetLeft;
 		mY = e.pageY - canvasElement.get(0).offsetTop;
+		tx=Math.floor(mX/16) * Math.pow(2, curMap.zoom-1);
+		ty=Math.floor(mY/16) * Math.pow(2, curMap.zoom-1);
 		if(!selBox.p1){
-			selBox.point1=[];
+			selBox.exists=true;
+			selBox.p2=false;
+			//selBox.point1=[];
 			selBox.point1.x=mX;
 			selBox.point1.y=mY;
+			selBox.point1.tX=tx+camera.x;//Math.floor(mX) * Math.pow(2, curMap.zoom-1);
+			selBox.point1.tY=ty+camera.y;//Math.floor(mY) * Math.pow(2, curMap.zoom-1);
 			selBox.p1=true
-			//alert("p1");
-		}else if(!selBox.p2)
+		}else if ((!selBox.p2) && (selBox.exists))
 		{
-			selBox.point2=[];
+			//selBox.point2=[];
 			selBox.point2.x=mX;
 			selBox.point2.y=mY;
+			selBox.point2.tX=tx+camera.x;//Math.floor(mX) * Math.pow(2, curMap.zoom-1);
+			selBox.point2.tY=ty+camera.y;//Math.floor(mY) * Math.pow(2, curMap.zoom-1);
+
+
+			for(var i=0;i<armies[0].numSquads;i++)
+			{
+				if(armies[0].squads[i].isViable())
+				{
+					if((armies[0].squads[i].x>selBox.point1.tX) && (armies[0].squads[i].x<selBox.point2.tX) && (armies[0].squads[i].y>selBox.point1.tY) && (armies[0].squads[i].y<selBox.point2.tY)) //todo box for squad (rects overlappign)
+					{
+						armies[0].squads[i].selected=true;
+									
+					}else
+					{
+						if(!keydown["shift"]){
+						armies[0].squads[i].selected=false;
+						}
+					}
+				}
+			}
 			selBox.p2=true;
-			//alert("p2");
-		}else
-		{
 			selBox.p1=false;
-			selBox.p2=false;
 		}
 	}
     return false;
@@ -1849,12 +1870,20 @@ function army() {
 	
 	this.toggleSelected=function()
 	{
+		for (var i=0;i<this.numSquads;i++)
+		{
+			this.squads[i].selected=false;
+		}
 		SELECTED++; 
 		if(SELECTED>this.numSquads-1) 
 		{
 			SELECTED=0;
 		}
-		if(this.squads[SELECTED].isViable()) {	camera.center(this.squads[SELECTED]);return true;}
+		if(this.squads[SELECTED].isViable()) {	
+			//this.squads[SELECTED].selected=true;
+			camera.center(this.squads[SELECTED]);
+			return true;
+		}
 		return false;
 
 		
@@ -2212,6 +2241,7 @@ function squad() {
     //AI 
     //target
     //waypoints?
+	this.selected=false;
     this.flightHeight=0;
     this.swimCarry=0;
     this.x = 12;
@@ -3222,6 +3252,13 @@ function mouseClick(e) {  //represents the mouse
 		switch (e.which)
 		{
 			case 1:
+					if(selBox.exists)
+					{
+						selBox.exists=false;
+						selBox.p1=false;
+						selBox.p2=false;
+						break;
+					}
 					if(isBattle)
 					{ break;
 					
@@ -3232,7 +3269,18 @@ function mouseClick(e) {  //represents the mouse
 						onSomething=null;
 						for(var i=0;i<armies[0].numSquads;i++)
 						{
-							if ((armies[0].squads[i].isViable())&&(isOver(armies[0].squads[i],camera))) {onSomething=armies[0].squads[i];SELECTED=i;}
+							if ((armies[0].squads[i].isViable())&&(isOver(armies[0].squads[i],camera))) {
+								onSomething=armies[0].squads[i];
+								armies[0].squads[i].selected=true;
+								SELECTED=i;
+								
+							}else
+							{
+								if(!keydown["shift"])
+								{
+									armies[0].squads[i].selected=false;
+								}
+							}
 						}
 						if (onSomething==null){
 							if( armies[0].squads[SELECTED].path ) { armies[0].squads[SELECTED].clearDestination(); return; }
@@ -3243,9 +3291,23 @@ function mouseClick(e) {  //represents the mouse
 							}
 							if(onTown==null)
 							{
+								for(var i=0;i<armies[0].numSquads;i++) //todo numSelected
+								{
+									if(armies[0].squads[i].selected)
+									{
+										armies[0].squads[i].setDestination(tx + camera.x, ty + camera.y,curMap); 
+									}
+								}
 								armies[0].squads[SELECTED].setDestination(tx + camera.x, ty + camera.y,curMap); 
 							}else{
 								//armies[0].squads[SELECTED].setDestination(onTown.getTileX(camera), onTown.getTileY(camera),curMap); 
+								for(var i=0;i<armies[0].numSquads;i++) //todo numSelected
+								{
+									if(armies[0].squads[i].selected)
+									{
+										armies[0].squads[i].setDestination(onTown.x, onTown.y,curMap); 
+									}
+								}
 								armies[0].squads[SELECTED].setDestination(onTown.x, onTown.y,curMap); 
 							}
 						}
@@ -3394,23 +3456,23 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 		mapDirty=true;
         if(this.zoom==1)
 		{
-			tx=targ.x-26;// * Math.pow(2, curMap.zoom-1);
-			ty=targ.y-20;// * Math.pow(2, curMap.zoom-1);
+			tax=targ.x-26;// * Math.pow(2, curMap.zoom-1);
+			tay=targ.y-20;// * Math.pow(2, curMap.zoom-1);
 		}
 		else if(this.zoom==2){
-			 tx=targ.x-46;// * Math.pow(2, curMap.zoom-1);
-			ty=targ.y-40;
+			 tax=targ.x-46;// * Math.pow(2, curMap.zoom-1);
+			tay=targ.y-40;
 		}else if(this.zoom==3){
-			 tx=targ.x-78;// * Math.pow(2, curMap.zoom-1);
-			ty=targ.y-60;
+			 tax=targ.x-78;// * Math.pow(2, curMap.zoom-1);
+			tay=targ.y-60;
 		}
-        if (tx<0) {tx=0;}
-        if (ty<0) {ty=0;}
-        if (tx>MAP_WIDTH-this.width) {tx=MAP_WIDTH-this.width;}
-        if (ty>MAP_HEIGHT-this.height) {ty=MAP_HEIGHT-this.height;}
+        if (tax<0) {tax=0;}
+        if (tay<0) {tay=0;}
+        if (tax>MAP_WIDTH-this.width) {tax=MAP_WIDTH-this.width;}
+        if (tay>MAP_HEIGHT-this.height) {tay=MAP_HEIGHT-this.height;}
 
-        this.x=tx;
-        this.y=ty;
+        this.x=tax;
+        this.y=tay;
     },
 	update: function() {
 		if(this.panning){
@@ -4184,7 +4246,9 @@ function battleDo()
 		{
 			console.log("Monster bit you!");
 			//todo hurt tamer?
-			var turtle=Math.floor(Math.random()*combatants[0].numUnits)
+			var turtle=Math.floor(Math.random()*combatants[0].numUnits);
+			bConsoleStr.push("Monster bit "+combatants[0].units[turtle].name);
+
 
 			combatants[0].units[turtle].hurt(combatants[1].units[0].attack*2);
 			if((combatants[0].units[turtle]==combatants[0].leader) &&(!combatants[0].units[turtle].alive)) {combatants[0].pickNewLeader();}
@@ -4758,7 +4822,7 @@ function mapDraw() {
 	{
 		armies[0].drawEquipScreen();
 		return;
-	}
+	}//non-menu drawing
 	for(var i=0;i<maps[mapSelected].numTowns;i++)
     {
         towns[i].draw(camera);
@@ -4772,51 +4836,7 @@ function mapDraw() {
 		}
     }
 
-	 for (var i=0;i<armies[0].numSquads;i++) 
-		{
-			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
-            armies[0].squads[i].update(curMap);
-			if(armies[0].squads[i].path!=null) {continue;}
-            if(armies[0].fieldAI==AITypes.Random)
-			{
-                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
-				{
-					var cx=Math.floor(Math.random()*(MAP_WIDTH));
-					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					while(!curMap.walkable(cx,cy,armies[0].squads[i])){
-						cx=Math.floor(Math.random()*(MAP_WIDTH));
-						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}
-                    armies[0].squads[i].setDestination(cx,cy,curMap); 
-				}
-            }else if(armies[0].fieldAI==AITypes.Rush)
-			{
-                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
-				{
-                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
-                }
-            }
-        }
-        
-        for(var i=0;i<armies[1].numSquads;i++){ 
-			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
-            armies[1].squads[i].update(curMap);
-			if(armies[1].squads[i].path!=null) {continue;}
-            if(armies[1].fieldAI==AITypes.Random){
-                if((armies[1].squads[i].isViable())&&(!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
-					var cx=Math.floor(Math.random()*(MAP_WIDTH));
-					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					while(!curMap.walkable(cx,cy,armies[1].squads[i])){
-						cx=Math.floor(Math.random()*(MAP_WIDTH));
-						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}
-                    armies[1].squads[i].setDestination(cx,cy,curMap); };
-            }else if(armies[1].fieldAI==AITypes.Rush){
-                if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
-                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
-            }
-        }
-    
+
 
     for (var i=0;i<armies[0].numSquads;i++) {
         //armies[0].squads[i].draw(camera);
@@ -4843,6 +4863,11 @@ function mapDraw() {
 	for (var i=0;i<armies[0].numSquads;i++) {
         armies[0].squads[i].draw(camera);
 		if ((i==SELECTED)&&(armies[0].squads[i].path!=null)) {armies[0].squads[i].drawdest(camera);}
+		if(armies[0].squads[i].selected)
+		{
+			selector2.draw(canvas, (armies[0].squads[i].x * 16 + (Math.round(armies[0].squads[i].bx) - 8) - camera.x * 16) / Math.pow(2, curMap.zoom-1), (armies[0].squads[i].y * 16 + (Math.round(armies[0].squads[i].by) - 8) - camera.y * 16) / Math.pow(2, curMap.zoom-1));
+
+		}
     }
 	if(armies[0].squads[SELECTED])//TODO: fuck selected.
 	{
@@ -5199,10 +5224,56 @@ function mapUpdate()
         }
 		return;
 	}
+	//main map doing stuff
     if(zoomkey.check()) {
         curMap.setZoom(camera);
     }
 
+	for (var i=0;i<armies[0].numSquads;i++) //path setting
+		{
+			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
+            armies[0].squads[i].update(curMap);
+			if(armies[0].squads[i].path!=null) {continue;}
+            if(armies[0].fieldAI==AITypes.Random)
+			{
+                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
+				{
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					while(!curMap.walkable(cx,cy,armies[0].squads[i])){
+						cx=Math.floor(Math.random()*(MAP_WIDTH));
+						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					}
+                    armies[0].squads[i].setDestination(cx,cy,curMap); 
+				}
+            }else if(armies[0].fieldAI==AITypes.Rush)
+			{
+                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
+				{
+                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
+                }
+            }
+        }
+        
+        for(var i=0;i<armies[1].numSquads;i++){ 
+			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
+            armies[1].squads[i].update(curMap);
+			if(armies[1].squads[i].path!=null) {continue;}
+            if(armies[1].fieldAI==AITypes.Random){
+                if((armies[1].squads[i].isViable())&&(!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
+					var cx=Math.floor(Math.random()*(MAP_WIDTH));
+					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					while(!curMap.walkable(cx,cy,armies[1].squads[i])){
+						cx=Math.floor(Math.random()*(MAP_WIDTH));
+						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					}
+                    armies[1].squads[i].setDestination(cx,cy,curMap); };
+            }else if(armies[1].fieldAI==AITypes.Rush){
+                if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
+                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
+            }
+        }
+    
 
 	if((preBattle) &&(!paused)&&(!isMenu))
 	{

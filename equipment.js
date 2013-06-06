@@ -66,21 +66,37 @@ var lastEventY=0;
 var selBox=[];
 selBox.point1=[];
 selBox.point2=[];
+selBox.tX=0;
+selBox.tY=0;
+selBox.exists=false;
 selBox.p1=false;
 selBox.p2=false;
 selBox.width=0;
 selBox.height=0;
 function drawSelBox(can){
-	if(!selBox.p2) {return;}
+	if(!selBox.exists) {return;}
+	if(selBox.p1) {flagsprite.draw(can,selBox.point1.x,selBox.point1.y);}
 	var w =selBox.point1.x-selBox.point2.x;
 	var h =selBox.point1.x-selBox.point2.x;
-	can.strokeStyle="#FFFF00";
-	can.beginPath();
-	can.moveTo(selBox.point1.x,selBox.point1.y);
-    can.lineTo(selBox.point2.x,selBox.point1.y);
-	can.lineTo(selBox.point2.x,selBox.point2.y);
-	can.lineTo(selBox.point1.x,selBox.point2.y);
-	can.lineTo(selBox.point1.x,selBox.point1.y);
+			can.strokeStyle="#FFFF00";
+		can.beginPath();
+	if(!selBox.p2)
+	{
+
+		can.moveTo(selBox.point1.x,selBox.point1.y);
+		console.log(mX,mY);
+		can.lineTo(mX,selBox.point1.y);
+		can.lineTo(mX,mY);
+		can.lineTo(selBox.point1.x,mY);
+		can.lineTo(selBox.point1.x,selBox.point1.y);
+	}else
+	{
+		can.moveTo(selBox.point1.x,selBox.point1.y);
+		can.lineTo(selBox.point2.x,selBox.point1.y);
+		can.lineTo(selBox.point2.x,selBox.point2.y);
+		can.lineTo(selBox.point1.x,selBox.point2.y);
+		can.lineTo(selBox.point1.x,selBox.point1.y);
+	}
     can.stroke();
 	can.closePath();
 };
@@ -226,6 +242,7 @@ var bluelocationsprite = Sprite("bluelocation");
 var redlocationsprite = Sprite("redlocation");
 var regensprite = Sprite("regen");
 var selector = Sprite("cursor");
+var selector2 = Sprite("newcursor");
 var noleader= Sprite("noleader");
 var flagsprite = Sprite("flag");
 var thingysprite = Sprite("thingy");

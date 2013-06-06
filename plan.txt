@@ -212,8 +212,6 @@ wrong people fleeing?
 shops at towns
 -JSON arrays
 
--REVIVE UNITS BETWEEN SQUADS FOR NOW?
-
 Upon liberation, a random tarot card is drawn which can affect either the liberating unit's statistics, the statistics of all units on the battlefield or the reputation parameter.
 
 -OPTIONS
@@ -221,6 +219,8 @@ Upon liberation, a random tarot card is drawn which can affect either the libera
 	-controls!
 	-
 
+-single combat for some bosses?	
+	
 -Editor
 	-squad
 	-units 
@@ -263,3 +263,19 @@ _Berena
 -Berenarr
 Bennard
 Benfrey
+-The Red Lamb
+
+-Dawn
+-Lightbringer
+-Just Maid - ignores armor/sword block/parry
+-Needle
+-Lions Paw
+-
+
+Race?:
+-Andal
+-First Men
+-Wildling
+-Dothraki
+-summer islander
+-
