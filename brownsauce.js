@@ -340,6 +340,8 @@ function unit() {
     this.mag=5;
     this.alive=true;
     this.attacking=0;
+	this.attackStage=0;
+	this.attackAni=0;
     this.hurting=0;
     this.atb=0;
     this.canlead = true;
@@ -682,7 +684,29 @@ function unit() {
         if(battleReport) {return;}
         if(battlePause) {return;}//todo for now
 		this.team=usqd.team;
-        if (this.attacking>0) {this.attacking--; return;}
+       /* if (this.attackStage>0) //doing this esewhere for now
+		{
+			if(this.attackStage==2)
+			{
+				this.attacking--; 
+				if(this.attacking<1)
+				{
+					this.attackStage=0;
+				}
+				return;	
+			}else if(this.attackStage==1)
+			{
+				this.attacking++; 
+				if(this.attacking>10)
+				{
+					this.attackStage=2;
+				}
+				return;	
+			}
+		}*/
+		if (this.attackStage>0) //no ATB when attackign
+		{ return;
+		}
         if (this.hurting>0) {this.hurting--; return;}
         if (this.atb>battlespeed) {
             //gambits, attack
@@ -825,7 +849,7 @@ function unit() {
                                     if(targe.ali<this.ali-5){this.giveAli(2);}
                                 }
                                 if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
-                                this.attacking=10;
+                                this.attackStage=1; 
                                 targe.hurting=20;
                                 usqd.turns++;
                                 usqd.damaged+=delt;
@@ -873,14 +897,14 @@ function unit() {
                                 if(targe.ali<this.ali-5){this.giveAli(2);}
                             }
                             if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
-                            this.attacking=10;
+							this.attackStage=1; 
                             targe.hurting=20;
                             usqd.turns++;
                             usqd.damaged+=delt;
                         } else {
-			    this.attacking=10; 
+			    
 			    usqd.turns++;
-			    this.attacking=10; 
+			    this.attackStage=1; 
 			    var tmpstr = this.name + " missed "+ targe.name; 
 			    console.log(tmpstr);
 				bConsoleStr.push(tmpstr);
@@ -3014,12 +3038,16 @@ function endBattle(usqd,esqd){
     {
         usqd.units[i].atb=0;
         usqd.units[i].attacking=0;
+		usqd.units[i].attackStage=0;
+		usqd.units[i].attackAni=0;
         usqd.units[i].hurting=0;
     }
     for(var i=0;i<esqd.numUnits;i++)
     {
         esqd.units[i].atb=0;
         esqd.units[i].attacking=0;
+		esqd.units[i].attackStage=0;
+		esqd.units[i].attackAni=0;
         esqd.units[i].hurting=0;
     }
     paused=battlePause;
@@ -4258,7 +4286,24 @@ function battleDo()
     {
 		if(!combatants[0].units[i].alive) {continue;}
 		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
-		if(combatants[0].units[i].attacking>0) {combatants[0].units[i].attacking--;}
+		if (combatants[0].units[i].attackStage>0) 
+		{
+			if(combatants[0].units[i].attackStage==2)
+			{
+				combatants[0].units[i].attacking--; 
+				if(combatants[0].units[i].attacking<1)
+				{
+					combatants[0].units[i].attackStage=0;
+				}
+			}else if(combatants[0].units[i].attackStage==1)
+			{
+				combatants[0].units[i].attacking++; 
+				if(combatants[0].units[i].attacking>10)
+				{
+					combatants[0].units[i].attackStage=2;
+				}
+			}
+		}
         if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
 	}
 
@@ -4267,7 +4312,24 @@ function battleDo()
     {
 		if(!combatants[1].units[i].alive) {continue;}
 		if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
-		if(combatants[1].units[i].attacking>0) {combatants[1].units[i].attacking--;}
+		if (combatants[1].units[i].attackStage>0) 
+		{
+			if(combatants[1].units[i].attackStage==2)
+			{
+				combatants[1].units[i].attacking--; 
+				if(combatants[1].units[i].attacking<1)
+				{
+					combatants[1].units[i].attackStage=0;
+				}
+			}else if(combatants[1].units[i].attackStage==1)
+			{
+				combatants[1].units[i].attacking++; 
+				if(combatants[1].units[i].attacking>10)
+				{
+					combatants[1].units[i].attackStage=2;
+				}
+			}
+		}
         if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
 	}
 	if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
@@ -4473,6 +4535,7 @@ function battleDraw()
 
 	bmenuBox.draw(battleCanvas);
 	if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
+	if(battleReport) {battleCanvas.fillText(won, 430, 370);}
 }
 
 initArmies();
@@ -4924,8 +4987,7 @@ function mapDraw() {
         //battleDraw();
         //if (escapekey.check()) {isBattle=false;}
     }
-	    if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
-    if(battleReport) {battleCanvas.fillText(won, 430, 370);}
+
     if(unitinfo) {
         if((isBattle) || (battleReport)){
             armies[0].squads[SELECTED].units[BSELECTED].drawInfo();
@@ -4984,7 +5046,10 @@ function mapDraw() {
 		
 	}
 	
-	drawSelBox(canvas);
+	drawSelBox(canvas); //not during battle?
+	canvas.fillStyle="white";
+	if((paused) && (!battleReport)) {canvas.fillText("P A U S E D", 450, 370);}
+
 	
 	if(victory)
 	{

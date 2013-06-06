@@ -78,8 +78,9 @@ function drawSelBox(can){
 	if(selBox.p1) {flagsprite.draw(can,selBox.point1.x,selBox.point1.y);}
 	var w =selBox.point1.x-selBox.point2.x;
 	var h =selBox.point1.x-selBox.point2.x;
-			can.strokeStyle="#FFFF00";
-		can.beginPath();
+	can.strokeStyle="#FFFF00";
+	can.lineWidth=1;
+	can.beginPath();
 	if(!selBox.p2)
 	{
 
