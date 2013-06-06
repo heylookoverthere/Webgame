@@ -73,6 +73,8 @@ selBox.p1=false;
 selBox.p2=false;
 selBox.width=0;
 selBox.height=0;
+
+var someoneAttacking=false;
 function drawSelBox(can){
 	if(!selBox.exists) {return;}
 	if(selBox.p1) {flagsprite.draw(can,selBox.point1.x,selBox.point1.y);}
@@ -110,6 +112,10 @@ function rectOverlap(r1,r2){
 
 	return true;
 };
+var phsAttackSprite=new Array(3);
+phsAttackSprite[0]=Sprite("ironsword");
+phsAttackSprite[1]=Sprite("ironsword1");
+phsAttackSprite[2]=Sprite("ironsword2");
 var numMapPoints=6;
 var mmcur=false;
 var bConsoleStr=new Array();
@@ -131,6 +137,7 @@ var sideBar=false;
 var textPause=false;
 var won="";
 var textText="";
+var ATTACK_ANI_LENGTH=9;
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
 var wind=Math.floor(Math.random()*2)+1;
@@ -299,7 +306,7 @@ function cloud(){
 	}
 }
 cloud.prototype.update = function() {
-    this.y-=this.layer*wind;
+    this.y-=this.layer*wind/2;
     if (this.y<-200) {
 	this.y=Math.floor(Math.random()*300)+4480;
 	this.x=Math.floor(Math.random()*3420)+100;

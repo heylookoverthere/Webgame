@@ -374,6 +374,7 @@ function unit() {
     this.attacking=0;
 	this.attackStage=0;
 	this.attackAni=0;
+	this.attackAniStage=0;
     this.hurting=0;
     this.atb=0;
     this.canlead = true;
@@ -882,6 +883,7 @@ function unit() {
                                 }
                                 if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
                                 this.attackStage=1; 
+								this.attackAniStage=1;
                                 targe.hurting=20;
                                 usqd.turns++;
                                 usqd.damaged+=delt;
@@ -929,7 +931,8 @@ function unit() {
                                 if(targe.ali<this.ali-5){this.giveAli(2);}
                             }
                             if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
-							this.attackStage=1; 
+							this.attackStage=1;
+							this.attackAniStage=1;
                             targe.hurting=20;
                             usqd.turns++;
                             usqd.damaged+=delt;
@@ -937,6 +940,7 @@ function unit() {
 			    
 			    usqd.turns++;
 			    this.attackStage=1; 
+				this.attackAniStage=1;
 			    var tmpstr = this.name + " missed "+ targe.name; 
 			    console.log(tmpstr);
 				bConsoleStr.push(tmpstr);
@@ -959,13 +963,14 @@ function unit() {
 
 
 
-        if(this.hasStatus(Status.Haste)){
+		if(this.hasStatus(Status.Haste)){
             this.atb+=(this.speed*2*battleRate);
         }else if(this.hasStatus(Status.Slow)){
             this.atb+=(this.speed/2*battleRate);
         }else {
             this.atb+=this.speed*battleRate;
         }
+
     };
     
     this.rowswap=function(){
@@ -3035,6 +3040,7 @@ function endBattle(usqd,esqd){
         for(var i=0;i<esqd.numUnits;i++)
         {
             esqd.units[i].battleslost++;
+			
         }
         for(var i=0;i<usqd.numUnits;i++)
         {
@@ -3073,6 +3079,7 @@ function endBattle(usqd,esqd){
         usqd.units[i].attacking=0;
 		usqd.units[i].attackStage=0;
 		usqd.units[i].attackAni=0;
+		usqd.units[i].attackAniStage=0;
         usqd.units[i].hurting=0;
     }
     for(var i=0;i<esqd.numUnits;i++)
@@ -3081,6 +3088,7 @@ function endBattle(usqd,esqd){
         esqd.units[i].attacking=0;
 		esqd.units[i].attackStage=0;
 		esqd.units[i].attackAni=0;
+		esqd.units[i].attackAniStage=0;
         esqd.units[i].hurting=0;
     }
     paused=battlePause;
@@ -3599,6 +3607,10 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 				this.panning=false;
 			}
 			if((this.x>MAP_WIDTH-((this.width+this.zoom)* this.zoom)) && (this.y>MAP_HEIGHT-((this.height+this.zoom)* this.zoom)))
+			{
+				this.panning=false;
+			}
+			if((this.x<2) && (this.y<2))
 			{
 				this.panning=false;
 			}
@@ -4321,12 +4333,15 @@ function battleDo()
 		if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
 		if (combatants[0].units[i].attackStage>0) 
 		{
+			someoneAttacking=true;
 			if(combatants[0].units[i].attackStage==2)
 			{
 				combatants[0].units[i].attacking--; 
 				if(combatants[0].units[i].attacking<1)
 				{
 					combatants[0].units[i].attackStage=0;
+					combatants[0].units[i].attackAniStage=0;
+					someoneAttacking=false;
 				}
 			}else if(combatants[0].units[i].attackStage==1)
 			{
@@ -4337,6 +4352,25 @@ function battleDo()
 				}
 			}
 		}
+		if (combatants[0].units[i].attackAniStage>0) 
+			{
+				
+				if(combatants[0].units[i].attackAniStage==2)
+				{
+					combatants[0].units[i].attackAni--; 
+					if(combatants[0].units[i].attackAni<1)
+					{
+						combatants[0].units[i].attackAniStage=0;
+					}
+				}else if(combatants[0].units[i].attackStage==1)
+				{
+					combatants[0].units[i].attackAni++; 
+					if(combatants[0].units[i].attackAni>ATTACK_ANI_LENGTH)
+					{
+						combatants[0].units[i].attackAniStage=2;
+					}
+				}
+			}
         if(combatants[0].units[i].hurting>0) {combatants[0].units[i].hurting--;}
 	}
 
@@ -4347,12 +4381,15 @@ function battleDo()
 		if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
 		if (combatants[1].units[i].attackStage>0) 
 		{
+			someoneAttacking=true;
 			if(combatants[1].units[i].attackStage==2)
 			{
 				combatants[1].units[i].attacking--; 
 				if(combatants[1].units[i].attacking<1)
 				{
 					combatants[1].units[i].attackStage=0;
+					combatants[1].units[i].attackAniStage=0;
+					someoneAttacking=false;
 				}
 			}else if(combatants[1].units[i].attackStage==1)
 			{
@@ -4363,6 +4400,26 @@ function battleDo()
 				}
 			}
 		}
+		if (combatants[1].units[i].attackAniStage>0) 
+			{
+				
+				if(combatants[1].units[i].attackAniStage==2)
+				{
+					combatants[1].units[i].attackAni--; 
+					if(combatants[1].units[i].attackAni<1)
+					{
+						combatants[1].units[i].attackAniStage=0;
+					}
+				}else if(combatants[1].units[i].attackStage==1)
+				{
+					combatants[1].units[i].attackAni++; 
+					if(combatants[1].units[i].attackAni>ATTACK_ANI_LENGTH)
+					{
+						combatants[1].units[i].attackAniStage=2;
+					}
+				}
+			}
+
         if(combatants[1].units[i].hurting>0) {combatants[1].units[i].hurting--;}
 	}
 	if(combatants[0].turns+combatants[1].turns>=battlelength) {endBattle(combatants[0],combatants[1]);}
@@ -4396,6 +4453,7 @@ function battleDo()
 		bConsoleClr.push("red");
         combatants[0].damaged=0;
         combatants[1].damaged=10;
+		combatants[1].turns=10;
         endBattle(combatants[0],combatants[1]);
 		armies[0].removeSquad(combatants[0].ID);
     }
@@ -4405,6 +4463,7 @@ function battleDo()
         console.log(tmpstr); 
 		bConsoleStr.push(tmpstr);
 		bConsoleClr.push("green");
+		combatants[1].turns=10;
 		var ods=combatants[0].getLuck()+30;
 		if((usqd.getLuck()*2)>(Math.random()*99))
 		{
@@ -4504,6 +4563,8 @@ function battleDraw()
         }
         //if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
 		//battleCanvas.save();
+		//if(combatants[0].units[i].attackStage>0){
+		phsAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
 		battleCanvas.globalAlpha=0.60;
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		if(combatants[0].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
@@ -4960,7 +5021,7 @@ function mapDraw() {
 	}//non-menu drawing
 	for(var i=0;i<maps[mapSelected].numTowns;i++)
     {
-        towns[i].draw(camera);
+		towns[i].draw(camera);
     }
 	armies[0].getVisible(armies[1]);
 	if(armies[0].visibleEnemies!=null){
