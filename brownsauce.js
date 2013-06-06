@@ -20,17 +20,49 @@ $(document).bind("contextmenu",function(e){
 		}else if ((!selBox.p2) && (selBox.exists))
 		{
 			//selBox.point2=[];
+
 			selBox.point2.x=mX;
 			selBox.point2.y=mY;
 			selBox.point2.tX=tx+camera.x;//Math.floor(mX) * Math.pow(2, curMap.zoom-1);
 			selBox.point2.tY=ty+camera.y;//Math.floor(mY) * Math.pow(2, curMap.zoom-1);
-
+		
 
 			for(var i=0;i<armies[0].numSquads;i++)
 			{
 				if(armies[0].squads[i].isViable())
 				{
-					if((armies[0].squads[i].x>selBox.point1.tX) && (armies[0].squads[i].x<selBox.point2.tX) && (armies[0].squads[i].y>selBox.point1.tY) && (armies[0].squads[i].y<selBox.point2.tY)) //todo box for squad (rects overlappign)
+					//if((armies[0].squads[i].x>selBox.point1.tX) && (armies[0].squads[i].x<selBox.point2.tX) && (armies[0].squads[i].y>selBox.point1.tY) && (armies[0].squads[i].y<selBox.point2.tY)) //todo box for squad (rects overlappign)
+					var w =Math.abs(selBox.point1.tX-selBox.point2.tX);
+					var h =Math.abs(selBox.point1.tY-selBox.point2.tY);
+					var rect1=[];
+					if(selBox.point1.tX>selBox.point2.tX)
+					{
+						rect1.x=selBox.point2.tX;
+						rect1.width=selBox.point1.tX-selBox.point2.tX;
+					}else
+					{
+						rect1.x=selBox.point1.tX;
+						rect1.width=selBox.point2.tX-selBox.point1.tX;
+					}
+					if(selBox.point1.tY>selBox.point2.tY)
+					{
+						rect1.y=selBox.point2.tY;
+						rect1.height=selBox.point1.tY-selBox.point2.tY;
+					}else
+					{
+						rect1.y=selBox.point1.tY;
+						rect1.height=selBox.point2.tY-selBox.point1.tY;
+					}						
+					/*rect1.y1=selBox.point1.tY;
+					rect1.x2=selBox.point2.tX;
+					rect1.y2=selBox.point2.tY;*/
+					var rect2=[];
+					rect2.x=armies[0].squads[i].x;
+					rect2.y=armies[0].squads[i].y;
+					rect2.width=2;
+					rect2.height=2;
+					console.log(rect1,rect2);
+					if(rectOverlap(rect1,rect2))
 					{
 						armies[0].squads[i].selected=true;
 									
@@ -2492,6 +2524,7 @@ squad.prototype.flee= function(c)
         if(Math.floor(Math.random()*30) > (15)) {
             this.turns=20;
             this.damaged=-1;
+			this.cohesion-=2;
         }else
         {
             console.log("Couldn't escape!");

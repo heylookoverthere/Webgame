@@ -77,7 +77,7 @@ function drawSelBox(can){
 	if(!selBox.exists) {return;}
 	if(selBox.p1) {flagsprite.draw(can,selBox.point1.x,selBox.point1.y);}
 	var w =selBox.point1.x-selBox.point2.x;
-	var h =selBox.point1.x-selBox.point2.x;
+	var h =selBox.point1.y-selBox.point2.y;
 	can.strokeStyle="#FFFF00";
 	can.lineWidth=1;
 	can.beginPath();
@@ -101,7 +101,15 @@ function drawSelBox(can){
     can.stroke();
 	can.closePath();
 };
+function rectOverlap(r1,r2){
+	
+	if(r1.x> r2.x+2) {return false;}
+	if(r1.x+r1.width< r2.x) {return false;}
+	if(r1.y> r2.y+2) {return false;}
+	if(r1.y+r1.height< r2.y) {return false;}
 
+	return true;
+};
 var numMapPoints=6;
 var mmcur=false;
 var bConsoleStr=new Array();
