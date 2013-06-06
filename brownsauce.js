@@ -2497,7 +2497,7 @@ squad.prototype.flee= function(c)
         {
             for(var j=0;j<this.numUnits;j++)
             {
-                if(this.units[j].alive) {count++;}
+                if(this.units[j].alive) {count++;} //PROBLEM
             }
         }
         return count;
@@ -2776,7 +2776,8 @@ squad.prototype.flee= function(c)
 			combatants[0]=this;
 			combatants[1]=blokeSquad;
 			preBattle=preBattleLength;
-			camera.center(this);
+			//camera.center(this);
+			camera.pan(this.x,this.y);
 			battleBox.msg[0]=tmpstr;
 			battleBox.exists=true;
             console.log(tmpstr);//todo MONSOLEreturn;
@@ -3950,7 +3951,11 @@ function Map(I) { //map object
 
 function resetEnemyArmy()
 {
-	armies[1].squads=null;
+	//armies[1].squads=null;
+	for (var i=0;i<armies[1].numSquads;i++){
+		armies[1].removeSquad(i);
+	}
+	//alert(armies[1].numSquads);
 	armies[1].numSquads=0;
 	armies[1].addSquad(new unit());
 	armies[1].addSquad(new unit());
@@ -4612,7 +4617,7 @@ function worldMapUpdate(){
 				starting=false;
 				mapDirty=true;
 				armies[1].leader.name=towns[1].speaker;
-				
+				document.getElementById("myAudio").pause();
 				lastEventX=armies[0].basex;
 				lastEventY=armies[0].basey;
 			})
