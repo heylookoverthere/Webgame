@@ -1868,26 +1868,49 @@ function army() {
         return this.opinion;
     };
 	
-	this.toggleSelected=function()
+	this.toggleSelected=function() //todo problem
 	{
-		for (var i=0;i<this.numSquads;i++)
+		if(!keydown["shift"])
 		{
-			this.squads[i].selected=false;
+			for (var i=0;i<this.numSquads;i++)
+			{
+				this.squads[i].selected=false;
+			}
 		}
-		SELECTED++; 
-		if(SELECTED>this.numSquads-1) 
+		var nerp=false;
+		if(SELECTED<this.numSquads-1)
 		{
-			SELECTED=0;
+			for(var i=SELECTED+1;i<this.numSquads;i++)
+			{
+				if(this.squads[i].isViable())
+				{
+					SELECTED=i;
+					nerp=true;
+					break;
+				}
+			}
+			if(!nerp)
+			{
+				for(var i=0;i<this.numSquads;i++)
+				{
+					if(this.squads[i].isViable())
+					{
+						SELECTED=i;
+						nerp=true;
+						break;
+					}
+				}
+			}
+		}else
+		{
+			if(this.squads[0].isViable()){
+				SELECTED=0;
+				nerp=true;
+			}
 		}
-		if(this.squads[SELECTED].isViable()) {	
-			//this.squads[SELECTED].selected=true;
-			camera.center(this.squads[SELECTED]);
-			return true;
-		}
-		return false;
-
-		
-	}
+		camera.center(this.squads[SELECTED]);
+		return nerp;
+	};
 	this.getVisible=function(enemyarmy){
 		this.visibleEnemies=null;
 		this.visibleEnemies=new Array();
@@ -3475,31 +3498,34 @@ var camera = {  //represents the camera, aka what part of the map is on screen
         this.y=tay;
     },
 	update: function() {
+
 		if(this.panning){
 			mapDirty=true;
-			if(this.x<this.panX) 
+			if((this.x<this.panX)  && (this.x<MAP_WIDTH-(this.width* this.zoom)))
 			{
 				this.x+=this.panSpeed;
 				if(this.x>this.panX)
 				{
 					this.x=this.panX;
 				}
-			}else if(this.x>this.panX) 
+			}else if((this.x>this.panX)  && (this.x>1))
 			{
+
 				this.x-=this.panSpeed;
 				if(this.x<this.panX)
 				{
 					this.x=this.panX;
 				}
 			}
-			if(this.y<this.panY) 
+			if((this.y<this.panY) && (this.y<MAP_HEIGHT-(this.height* this.zoom))) //todo
 			{
+				
 				this.y+=this.panSpeed;
 				if(this.y>this.panY)
 				{
 					this.y=this.panY;
 				}
-			}else if(this.y>this.panY) 
+			}else if((this.y>this.panY) && (this.y>1))
 			{
 				this.y-=this.panSpeed;
 				if(this.y<this.panY)
@@ -3511,11 +3537,24 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 			{
 				this.panning=false;
 			}
+			if((this.x>MAP_WIDTH-((this.width+this.zoom)* this.zoom)) && (this.y>MAP_HEIGHT-((this.height+this.zoom)* this.zoom)))
+			{
+				this.panning=false;
+			}
 		}
+		this.check();
 	},
     check: function() {
-        this.x.clamp(0, MAP_WIDTH-60);
-        this.y.clamp(0, MAP_HEIGHT-40);
+		if(this.zoom==1){
+			this.x.clamp(0, MAP_WIDTH-60);
+			this.y.clamp(0, MAP_HEIGHT-40);
+		}else if(this.zoom==2){
+		     this.x.clamp(0, MAP_WIDTH-60);
+			 this.y.clamp(0, MAP_HEIGHT-40);
+		}else if(this.zoom==3){
+			this.x.clamp(0, MAP_WIDTH-60);
+			this.y.clamp(0, MAP_HEIGHT-40);//todo
+		}
         //if(this.zoom>1) {tx=0;ty=0;x=0;y=0;return;}
     },
     rX: function(fx) {
@@ -3914,7 +3953,7 @@ function Map(I) { //map object
 				MAP_WIDTH=imageObj.width;
 				MAP_HEIGHT=imageObj.height;				
 				mapBitmap = mapCanvas.getImageData(0, 0, MAP_WIDTH, MAP_HEIGHT);
-		for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {
+		for( var i=0; i<MAP_WIDTH * MAP_HEIGHT * 4; i+=4 ) {//TODO/PROBLEMMAPWIDTH?
 		  var rgba = [mapBitmap.data[i], mapBitmap.data[i+1], mapBitmap.data[i+2], mapBitmap.data[i+3]];
 		  var mountainrgb =[0,0,0,0];
 		  var oceanrgb =[0,0,255,0];
@@ -4682,8 +4721,8 @@ function worldMapUpdate(){
 				mapDirty=true;
 				armies[1].leader.name=towns[1].speaker;
 				document.getElementById("myAudio").pause();
-				lastEventX=armies[0].basex;
-				lastEventY=armies[0].basey;
+				lastEventX=armies[1].basex;
+				lastEventY=armies[1].basey;
 			})
 		
 		var bot=[];
@@ -5311,24 +5350,32 @@ function mapUpdate()
 			camera.x -= cspd*curMap.zoom;
 			if (camera.x<0) {camera.x=0;}
 			mapDirty=true;
+			if(selBox.p2)
+			selBox.exists=false;
 		}
 		
 		if(keydown.right) {
 			camera.x += cspd*curMap.zoom;
 			if (camera.x>(MAP_WIDTH-(camera.width*curMap.zoom))) {camera.x=MAP_WIDTH-(camera.width*curMap.zoom);}
 			mapDirty=true;
+			if(selBox.p2)
+			selBox.exists=false;
 		}
 		
 		if(keydown.up) {
 			camera.y -= cspd*curMap.zoom;
 			if (camera.y<0) {camera.y=0;}
 			mapDirty=true;
+			if(selBox.p2)
+			selBox.exists=false;
 		}
 		
 		if(keydown.down) {
 			camera.y += cspd*curMap.zoom;
 			if (camera.y>(MAP_HEIGHT-(camera.height*curMap.zoom))) {(camera.y=MAP_HEIGHT-(camera.height*curMap.zoom));}
 			mapDirty=true;
+			if(selBox.p2)
+			selBox.exists=false;
 		}
     }
     if (ksavekey.check()) {randomwalk=!randomwalk;}
@@ -5336,11 +5383,11 @@ function mapUpdate()
     if(isBattle)
 	{
         if (tabkey.check()) {BSELECTED++; if(BSELECTED>armies[0].squads[SELECTED].numUnits-1) {BSELECTED=0;}}
-    }else{
+    }else if (!preBattle){
         if (tabkey.check()) {armies[0].toggleSelected();}
     }
 
-    if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {SELECTED++; if(SELECTED>armies[0].numSquads-1) {SELECTED=0;camera.center(armies[0].squads[SELECTED]);} camera.center(armies[0].squads[SELECTED]);}
+    if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {armies[0].toggleselected(); camera.center(armies[0].squads[SELECTED]);}
 
 	 if(debugkey.check()) {victory=true;}//endGame(0);}
 	
