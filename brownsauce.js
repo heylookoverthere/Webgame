@@ -5384,10 +5384,14 @@ function mapUpdate()
 	{
         if (tabkey.check()) {BSELECTED++; if(BSELECTED>armies[0].squads[SELECTED].numUnits-1) {BSELECTED=0;}}
     }else if (!preBattle){
-        if (tabkey.check()) {armies[0].toggleSelected();}
+        if (tabkey.check()) {
+			armies[0].toggleSelected();
+		}
     }
 
-    if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {armies[0].toggleselected(); camera.center(armies[0].squads[SELECTED]);}
+    if ((armies[0].squads[SELECTED]) && ((!armies[0].squads[SELECTED].alive) || (!armies[0].squads[SELECTED].deployed))) {
+		if(!armies[0].toggleSelected()) {alert("you lose");endGame(0);}
+	}
 
 	 if(debugkey.check()) {victory=true;}//endGame(0);}
 	
