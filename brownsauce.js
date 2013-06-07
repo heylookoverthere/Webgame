@@ -831,6 +831,8 @@ function unit() {
 				console.log(tmpstr);
 				bConsoleStr.push(tmpstr);
 				bConsoleClr.push("white");
+				this.attackStage=1;
+				this.attackAniStage=1;
 				usqd.turns++;
 				this.statusTrack++;//todo: change
 				if (this.statusTrack>usqd.numUnits-1) 
@@ -1370,7 +1372,7 @@ function unit() {
             this.hp=45;
             this.attack=1;
             this.maxmp=80;
-            this.speed=1;
+            this.speed=2;
             this.luck=7;
             this.ali=1;
 			this.evade=2;
@@ -1814,7 +1816,7 @@ function endGame(win){
 		mode=1;
 		maps[mapSelected].team=0;
 		//comeback
-	
+		townbox.exists=false;
 		for(var i=0; i<armies[0].numSquads;i++)
 		{
 			armies[0].squads[i].healStatus();
@@ -1826,7 +1828,7 @@ function endGame(win){
 			armies[0].squads[i].alive=true;
 		}
 		resetEnemyArmy();
-		for( i=0; i<armies[1].numSquads;i++)
+		/*for( i=0; i<armies[1].numSquads;i++)
 		{
 			armies[1].squads[i].healStatus();
 			armies[1].squads[i].refresh();
@@ -1835,11 +1837,11 @@ function endGame(win){
 			armies[1].squads[i].bx=8;
 			armies[1].squads[i].by=8;
 			armies[1].squads[i].alive=true;
-		}
+		}*/
 		sillycanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 		armies[0].lastDeployed=1;//1?
 		//armies[0].
-		armies[1].lastDeployed=1;
+		armies[1].squads[0].deploy();
 		isBattle=false;
 		preBattle=0;
 		battletick=0;
@@ -2188,7 +2190,7 @@ function army() {
         //this.numSquads=8;
         this.team=side;
         this.gold=6000;
-        this.name="Fighting Mongooses"
+        this.name="Fighting Mongooses";
         for(var i=0;i<this.numSquads;i++){
             //if(i=0) { this.squads[i].numUnits=5;}
             this.squads[i]=new squad();
@@ -2197,7 +2199,7 @@ function army() {
         this.leader=this.squads[0].leader;
         if (side==1) {
             this.leader=this.squads[0].leader;
-            this.leader.hp+=100
+            this.leader.hp+=100;
             this.leader.equipment[1]=breastplate;
         }
         
@@ -4125,7 +4127,7 @@ function Map(I) { //map object
 
 function resetEnemyArmy()
 {
-	//armies[1].squads=null;
+	/*//armies[1].squads=null;
 	for (var i=0;i<armies[1].numSquads;i++){
 		armies[1].removeSquad(i);
 	}
@@ -4147,7 +4149,26 @@ function resetEnemyArmy()
 			armies[1].squads[i].addUnit(new unit());
 		}
 		armies[1].squads[i].smartRow();
-	}
+	}*/
+	armies[1]=new army();
+	armies[1].init(1);
+	/*armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());
+	armies[1].addSquad(new unit());*/
+
+	/*for (var i=0;i<armies[1].numSquads;i++){
+		armies[1].squads[i].leader.class=SEEAss.HulkBear;
+		armies[1].squads[i].leader.setClass();
+		armies[1].squads[i].sprite=armies[1].squads[i].leader.sprite;
+		armies[1].squads[i].team=1;
+		for(var j=0;j<Math.floor(Math.random()*2)+3;j++)
+		{
+			armies[1].squads[i].addUnit(new unit());
+		}
+		armies[1].squads[i].smartRow();
+	}*/
 };
 
 function initArmies(){
@@ -4554,23 +4575,31 @@ function battleDraw()
         battleCanvas.fillText(combatants[0].units[i].name, xp+52, 172+i*2*45);
         battleCanvas.fillText(closs, xp, 158+i*2*45);
 
-        if(combatants[0].units[i].attacking>0) {combatants[0].units[i].sprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
+        if((combatants[0].units[i].attacking>0) && (combatants[0].units[i].class!=SEEAss.Dancer)) {combatants[0].units[i].sprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
         if(i==BSELECTED) {selector.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 
 				
         if((combatants[0].units[i].hurting<1) || (combatants[0].units[i].hurting%2==0)) {
-            sevenup.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
+			if((combatants[0].units[i].class==SEEAss.Dancer) && (combatants[0].units[i].attackStage>0))
+			{
+				//alert("po");
+			}else{
+				sevenup.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);
+			}
         }
         //if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
 		//battleCanvas.save();
 		if(combatants[0].units[i].attackStage>0){
-			if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Physical)
+			if(combatants[0].units[i].class==SEEAss.Dancer)//(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.GiveStatus) //todo and dancer
+			{
+				danceAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Physical)
 			{
 				phsAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
 			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Ranged)
 			{
 				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
-			}
+			} 
 		}
 		battleCanvas.globalAlpha=0.60;
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
