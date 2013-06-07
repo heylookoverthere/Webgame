@@ -4563,8 +4563,15 @@ function battleDraw()
         }
         //if(battletick>battledelay) { combatants[0].units[i].update(combatants[0],combatants[1]);}
 		//battleCanvas.save();
-		//if(combatants[0].units[i].attackStage>0){
-		phsAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+		if(combatants[0].units[i].attackStage>0){
+			if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Physical)
+			{
+				phsAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Ranged)
+			{
+				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+			}
+		}
 		battleCanvas.globalAlpha=0.60;
         if(combatants[0].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 		if(combatants[0].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
