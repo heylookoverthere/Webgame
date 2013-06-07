@@ -772,6 +772,8 @@ function unit() {
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
 						usqd.turns++;
+						this.attackStage=1;
+						this.attackAniStage=1;
                     }else  if (this.class==SEEAss.Angel) 
                     {
                         var tmpstr=this.name + " healed the party" ;
@@ -779,6 +781,8 @@ function unit() {
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
 						usqd.turns++;
+						this.attackStage=1;
+						this.attackAniStage=1;
                         for(var i=0;i<usqd.numUnits;i++){
                             if (usqd.units[i].alive) {
                                 usqd.units[i].heal(20);
@@ -796,6 +800,8 @@ function unit() {
 						bConsoleStr.push(tmpstr);
 						bConsoleClr.push("white");
 						usqd.turns++;
+						this.attackStage=1;
+						this.attackAniStage=1;
                     }
                 }else 
                 {
@@ -808,6 +814,8 @@ function unit() {
 					bConsoleStr.push(tmpstr);
 					bConsoleClr.push("white");
 					usqd.turns++;
+					this.attackStage=1;
+					this.attackAniStage=1;
                 }
             }else if(this.getAttackType()==AttackTypes.GiveStatus){
 				targe=usqd.units[this.statusTrack];
@@ -4599,6 +4607,12 @@ function battleDraw()
 			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Ranged)
 			{
 				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Heal)
+			{
+				healAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+			} else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Magical)
+			{
+				magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
 			} 
 		}
 		battleCanvas.globalAlpha=0.60;
@@ -4798,6 +4812,12 @@ function worldMapUpdate(){
 	
 	//check for clicks on maps, move there or close as possible.
 	//check for key for menu
+	if(debugkey.check()){
+		for(var i=0;i<numMapPoints;i++)
+		{
+			maps[i].team=0;
+		}
+	}
 	if(tabkey.check()){
 		//if(maps(mapSelected+1).team==0){ todo
 		if((true/*mapSelected<1*/) && (reqsMet(mapSelected+1)))

@@ -128,6 +128,10 @@ var danceAttackSprite=new Array(3);
 danceAttackSprite[0]=Sprite("dancer1");
 danceAttackSprite[1]=Sprite("dancer2");
 danceAttackSprite[2]=Sprite("dancer");
+var healAttackSprite=new Array(3);
+healAttackSprite[0]=Sprite("heal0");
+healAttackSprite[1]=Sprite("heal1");
+healAttackSprite[2]=Sprite("heal2");
 
 var numMapPoints=6;
 var mmcur=false;
