@@ -2765,6 +2765,9 @@ squad.prototype.flee= function(c)
         if ((targ!=null) && (targ.alive)) {
 			console.log(targ);
              preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ 
+			 document.getElementById("mapAudio").pause();
+			 document.getElementById("battleAudio").currentTime = 4;
+			 document.getElementById("battleAudio").play();
 			 combatants[0]=this;
 			 combatants[1]=targ;
 			 //camera.center(this);
@@ -2901,6 +2904,10 @@ squad.prototype.flee= function(c)
 			combatants[0]=this;
 			combatants[1]=blokeSquad;
 			preBattle=preBattleLength;
+			//todo different song
+			document.getElementById("mapAudio").pause();
+			document.getElementById("battleAudio").currentTime = 4;
+			document.getElementById("battleAudio").play();
 			//camera.center(this);
 			camera.pan(this.x,this.y);
 			battleBox.msg[0]=tmpstr;
@@ -4683,7 +4690,7 @@ function battleDraw()
 }
 
 initArmies();
-document.getElementById("myAudio").play(); //starts music
+document.getElementById("titleAudio").play(); //starts music
 
 function mainMenuDraw(){
 	canvas.fillStyle = "black";
@@ -4933,9 +4940,11 @@ function worldMapUpdate(){
 				starting=false;
 				mapDirty=true;
 				armies[1].leader.name=towns[1].speaker;
-				document.getElementById("myAudio").pause();
+				document.getElementById("titleAudio").pause();
+				document.getElementById("mapAudio").play();
 				lastEventX=armies[1].basex;
 				lastEventY=armies[1].basey;
+
 			})
 		
 		var bot=[];
@@ -5724,6 +5733,10 @@ function mapUpdate()
                 battleReport=false;
                 //paused=true;
 				//battleCanvas.hide();
+				document.getElementById("battleAudio").pause();
+				//document.getElementById("mapAudio").currentTime = 0;
+				document.getElementById("mapAudio").play();
+
 				battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
                 battleendtick=0;
             }
