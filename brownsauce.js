@@ -2143,10 +2143,26 @@ function army() {
 		}
 	};
 	
-	this.buildSquad=function(){
-		//if loooseunuts<1 return false
-		//if not add up to five loose units to new squad
-		//return squad
+	this.buildSquad=function()
+	{
+		if (this.numLooseUnits<1) return false;
+		if (this.numSquads>TEAM_SIZE) return false;
+		//this.numSquads++;
+		this.addSquad(this.looseUnits[0]);
+		this.removeLoose(0);
+		var p=1;
+		while((this.numLooseUnits>0) && (p<5))
+		{
+			this.squads[this.numSquads-1].numUnits++;
+			this.squads[this.numSquads-1].units[p]=this.looseUnits[0];
+			this.removeLoose(0);
+			p++;
+		}
+		this.squads[this.numSquads-1].leader=this.squads[this.numSquads-1].units[0];
+		this.squads[this.numSquads-1].team=this.team;
+		this.squads[this.numSquads-1].ID=this.numSquads-1;
+        this.squads[this.numSquads-1].deployed=false;
+		return true;
 	};
 	
     this.numSquadsAlive=function()
@@ -4734,7 +4750,10 @@ function mainMenuUpdate(){
     timestamp = new Date();
     milliseconds = timestamp.getTime();
     tick++;
-
+	 if(debugkey.check()) {
+		MUSIC_ON=!MUSIC_ON;
+		document.getElementById("titleAudio").pause();
+	 }
 	if(startkey.check()){
 		mode=1;
 		//titlesprite=null;
@@ -5636,7 +5655,15 @@ function mapUpdate()
 		if(!armies[0].toggleSelected()) {alert("you lose");endGame(0);}
 	}
 
-	 if(debugkey.check()) {victory=true;}//endGame(0);}
+	 if(debugkey.check()) {
+		if(isMenu==0)
+		{
+			victory=true;
+		}else
+		{
+			armies[0].buildSquad();
+		}
+	}
 	
     if(pausekey.check()) 
 	{
