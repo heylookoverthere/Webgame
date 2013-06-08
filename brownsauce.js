@@ -1857,6 +1857,12 @@ function endGame(win){
 		looseY=0;
 		SELECTED=0;
 		MSELECTED=0;
+		if(MUSIC_ON){
+		    document.getElementById("titleAudio").currentTime = 0;
+			document.getElementById("titleAudio").play();
+			document.getElementById("mapAudio").pause();
+			document.getElementById("mapAudio").currentTime = 0;
+		}
 		//heal all squads and units
 	}
 };
@@ -2135,6 +2141,12 @@ function army() {
 			this.addItem(unknit.equipment[2]);
 			uknit.equipment[2]=noaccessory;
 		}
+	};
+	
+	this.buildSquad=function(){
+		//if loooseunuts<1 return false
+		//if not add up to five loose units to new squad
+		//return squad
 	};
 	
     this.numSquadsAlive=function()
@@ -2765,9 +2777,11 @@ squad.prototype.flee= function(c)
         if ((targ!=null) && (targ.alive)) {
 			console.log(targ);
              preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ 
-			 document.getElementById("mapAudio").pause();
-			 document.getElementById("battleAudio").currentTime = 4;
-			 document.getElementById("battleAudio").play();
+			 if(MUSIC_ON){
+				 document.getElementById("mapAudio").pause();
+				 document.getElementById("battleAudio").currentTime = 4;
+				 document.getElementById("battleAudio").play();
+			 }
 			 combatants[0]=this;
 			 combatants[1]=targ;
 			 //camera.center(this);
@@ -2905,10 +2919,11 @@ squad.prototype.flee= function(c)
 			combatants[1]=blokeSquad;
 			preBattle=preBattleLength;
 			//todo different song
-			document.getElementById("mapAudio").pause();
-			document.getElementById("battleAudio").currentTime = 4;
-			document.getElementById("battleAudio").play();
-			//camera.center(this);
+			if(MUSIC_ON){
+				document.getElementById("mapAudio").pause();
+				document.getElementById("battleAudio").currentTime = 4;
+				document.getElementById("battleAudio").play();
+			}//camera.center(this);
 			camera.pan(this.x,this.y);
 			battleBox.msg[0]=tmpstr;
 			battleBox.exists=true;
@@ -4472,7 +4487,7 @@ function battleDo()
 		}else
 		{
 			console.log("Monster bit you!");
-			//todo hurt tamer?
+			//todo monster name?
 			var turtle=Math.floor(Math.random()*combatants[0].numUnits);
 			bConsoleStr.push("Monster bit "+combatants[0].units[turtle].name);
 
@@ -4690,7 +4705,9 @@ function battleDraw()
 }
 
 initArmies();
-document.getElementById("titleAudio").play(); //starts music
+if(MUSIC_ON){
+	document.getElementById("titleAudio").play(); //starts music
+}
 
 function mainMenuDraw(){
 	canvas.fillStyle = "black";
@@ -4940,8 +4957,10 @@ function worldMapUpdate(){
 				starting=false;
 				mapDirty=true;
 				armies[1].leader.name=towns[1].speaker;
-				document.getElementById("titleAudio").pause();
-				document.getElementById("mapAudio").play();
+				if(MUSIC_ON){
+					document.getElementById("titleAudio").pause();
+					document.getElementById("mapAudio").play();
+				}	
 				lastEventX=armies[1].basex;
 				lastEventY=armies[1].basey;
 
@@ -5733,9 +5752,11 @@ function mapUpdate()
                 battleReport=false;
                 //paused=true;
 				//battleCanvas.hide();
-				document.getElementById("battleAudio").pause();
-				//document.getElementById("mapAudio").currentTime = 0;
-				document.getElementById("mapAudio").play();
+				if(MUSIC_ON){
+					document.getElementById("battleAudio").pause();
+					//document.getElementById("mapAudio").currentTime = 0;
+					document.getElementById("mapAudio").play();
+				}
 
 				battleCanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
                 battleendtick=0;

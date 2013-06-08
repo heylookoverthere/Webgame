@@ -157,6 +157,7 @@ var textText="";
 var ATTACK_ANI_LENGTH=9;
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
+var MUSIC_ON=true;
 var wind=Math.floor(Math.random()*2)+1;
 var MAP_WIDTH = 999;
 var MAP_HEIGHT = 999;
