@@ -350,6 +350,7 @@ function unit() {
 	this.team=0;
     this.luck=5;
     this.ali=50;
+	this.element=Math.floor(Math.random()*3);
     this.attackType=new Array(2);
     this.attackType[0]=AttackTypes.Physical;
     this.attackType[1]=AttackTypes.Physical;
@@ -4650,7 +4651,16 @@ function battleDraw()
 				healAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
 			} else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Magical)
 			{
-				magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+				if(combatants[0].units[i].element==Element.Fire)
+				{
+					magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+				}else if(combatants[0].units[i].element==Element.Ice)
+				{
+					icemagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+				}else if(combatants[0].units[i].element==Element.Wind)
+				{
+					windmagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+				}
 			} 
 		}
 		battleCanvas.globalAlpha=0.60;
