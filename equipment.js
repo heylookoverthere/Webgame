@@ -48,20 +48,30 @@ function particle(){
 	this.xv=0;
 	this.yv=0;
 	this.size=6;
+	this.updateRate=40;
+	this.lastUpdateTime=0;
+	this.startTime=0;
+	this.durTime=2000;
 	this.smoker=false;
 	//this.startTime=
 	//this.curTime=
 	//this.durTime=2;
 	this.update=function(){
+		var stamp = new Date();
+		var tim=stamp.getTime();
+		if(tim-this.startTime>this.durTime) {this.alive=false;}
+		if(tim-this.lastUpdateTime<this.updateRate) { return;}
 		this.x+=this.xv;
 		this.y+=this.yv;
 		if(this.gravity)
 		{
 			this.y-=1;
 		}
-		this.counter--;
+		//this.counter--;
 		//time stuff
-		if (this.counter<1) this.alive=false;
+		//if (this.counter<1) this.alive=false;
+
+
 	};
 };
 
@@ -78,6 +88,9 @@ function particleSystem(){
 		tod.alive=true;
 		tod.counter=dur;
 		tod.color=color;
+		var stamp = new Date();
+		tod.startTime=stamp.getTime();
+		tod.durTime=dur;
 		this.particles.push(tod);
 	};
 	this.draw=function(can,cam){
@@ -108,7 +121,7 @@ function particleSystem(){
 		for( var i = 0; i < num;i++) {
 			var ang = Math.random()*360;
 			var vel = Math.random() * 15 + 8;
-			this.start(200, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)]);
+			this.start(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)]);
 		}
 	};
 };
