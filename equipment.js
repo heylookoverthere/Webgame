@@ -38,6 +38,68 @@ SEEAss.Octopus=27;
 SEEAss.BeastTamer=28;
 var starting=false;
 
+function classLevel()
+{
+    var ted=[];
+	//if this.class==SEEAss.
+	ted.maxhp=3+Math.floor(Math.random()*4);
+    ted.maxmp=4+Math.floor(Math.random()*4);
+    ted.speed=0+Math.floor(Math.random()*1);
+    ted.evade=1+Math.floor(Math.random()*4);
+    ted.luck=1+Math.floor(Math.random()*4);
+    ted.def=1+Math.floor(Math.random()*4);
+    ted.mdef=1+Math.floor(Math.random()*4);
+    ted.attack=1+Math.floor(Math.random()*5);
+    ted.mag=2+Math.floor(Math.random()*4);
+	if (this.class==SEEAss.Knight)
+	{
+		ted.maxhp=3+Math.floor(Math.random()*4);
+		ted.maxmp=4+Math.floor(Math.random()*4);
+		ted.speed=0+Math.floor(Math.random()*1);
+		ted.evade=1+Math.floor(Math.random()*4);
+		ted.luck=1+Math.floor(Math.random()*4);
+		ted.def=3+Math.floor(Math.random()*4);
+		ted.mdef=1+Math.floor(Math.random()*4);
+		ted.attack=4+Math.floor(Math.random()*5);
+		ted.mag=1+Math.floor(Math.random()*4);
+	}else if (this.class==SEEAss.Wizard)
+	{
+		ted.maxhp=3+Math.floor(Math.random()*4);
+		ted.maxmp=4+Math.floor(Math.random()*4);
+		ted.speed=0+Math.floor(Math.random()*1);
+		ted.evade=1+Math.floor(Math.random()*4);
+		ted.luck=1+Math.floor(Math.random()*4);
+		ted.def=1+Math.floor(Math.random()*4);
+		ted.mdef=1+Math.floor(Math.random()*4);
+		ted.attack=1+Math.floor(Math.random()*5);
+		ted.mag=4+Math.floor(Math.random()*4);
+	}else if (this.class==SEEAss.Sage)
+	{
+		ted.maxhp=3+Math.floor(Math.random()*4);
+		ted.maxmp=4+Math.floor(Math.random()*4);
+		ted.speed=0+Math.floor(Math.random()*1);
+		ted.evade=1+Math.floor(Math.random()*4);
+		ted.luck=1+Math.floor(Math.random()*4);
+		ted.def=1+Math.floor(Math.random()*4);
+		ted.mdef=3+Math.floor(Math.random()*4);
+		ted.attack=1+Math.floor(Math.random()*5);
+		ted.mag=5+Math.floor(Math.random()*4);
+	}else if (this.class==SEEAss.Ninja)
+	{
+		ted.maxhp=3+Math.floor(Math.random()*4);
+		ted.maxmp=4+Math.floor(Math.random()*4);
+		ted.speed=0+Math.floor(Math.random()*1);
+		ted.evade=3+Math.floor(Math.random()*4);
+		ted.luck=1+Math.floor(Math.random()*4);
+		ted.def=1+Math.floor(Math.random()*4);
+		ted.mdef=1+Math.floor(Math.random()*4);
+		ted.attack=2+Math.floor(Math.random()*5);
+		ted.mag=2+Math.floor(Math.random()*4);
+	}
+	return ted;
+};
+
+
 var Element={};
 Element.Fire=0;
 Element.Ice=1;
@@ -169,7 +231,8 @@ var sideBar=false;
 var textPause=false;
 var won="";
 var textText="";
-var ATTACK_ANI_LENGTH=9;
+var ATTACK_LEN=15;
+var ATTACK_ANI_LENGTH=12;
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
 var MUSIC_ON=true;

@@ -598,15 +598,16 @@ function unit() {
     this.levelUp=function(){
         this.level++;
         this.nextLevel=20+(5*this.level);
-        this.maxhp+=4;
-        this.hp+=4;
-        this.maxmp+=4;
-        this.mp+=4;
-        this.speed+=0.2;
-        this.evade+=1;
-        this.def+=1;
-        this.mdef+=1;
-        this.attack+=1;
+		var ted=classLevel();
+        this.maxhp+=ted.maxhp;
+        this.hp+=ted.maxhp;
+        this.maxmp+=ted.maxmp;
+        this.mp+=ted.mp;
+        //this.speed+=ted.speed;
+        this.evade+=ted.evade;
+        this.def+=ted.def;
+        this.mdef+=ted.mdef;
+        this.attack+=ted.attack;
         var tmpstr=this.name+ " gained a level!";
         console.log(tmpstr);
 		bConsoleStr.push(tmpstr);
@@ -614,6 +615,13 @@ function unit() {
         //playSound("level");
     };
     
+    this.levelTo=function(tg){
+		while(this.level<tg)
+		{
+			this.levelUp();
+		}
+    };
+	
     this.getAttackType=function(){
         return this.attackType[this.row];
     };
@@ -4294,7 +4302,7 @@ function initArmies(){
 
 
 	armies[1].leader.maxhp+=20;
-	armies[1].leader.hp=armies[1].leader.maxhp
+	armies[1].leader.hp=armies[1].leader.maxhp;
 	armies[1].leader.equipment[0]=swords[1];
 	armies[1].leader.equipment[1]=breastplate;
 	//armies[1].leader.equipment[2]=cape;
@@ -4314,12 +4322,24 @@ function mapInitArmies(){
 			armies[0].squads[i].basey=armies[0].basey;
 			armies[0].squads[i].x=armies[0].basex;
 			armies[0].squads[i].y=armies[0].basey;
+			for(var j=0;j<armies[0].squads[i].numUnits;j++)
+			{
+				armies[0].squads[i].units[j].levelTo(3);
+			}
+	}
+	for(var j=0;j<armies[0].numLooseUnits;j++)
+	{
+		armies[0].looseUnits[j].levelTo(3);
 	}
 	for (var i=0;i<armies[1].numSquads;i++){
 			armies[1].squads[i].basex=armies[1].basex;
 			armies[1].squads[i].basey=armies[1].basey;
 			armies[1].squads[i].x=armies[1].basex;
 			armies[1].squads[i].y=armies[1].basey;
+			for(var j=0;j<armies[1].squads[i].numUnits;j++)
+			{
+				armies[1].squads[i].units[j].levelTo(5);
+			}
 	}
 
 	//armies[0].name = "Lannisters";
@@ -4414,7 +4434,7 @@ function battleDo()
 			}else if(combatants[0].units[i].attackStage==1)
 			{
 				combatants[0].units[i].attacking++; 
-				if(combatants[0].units[i].attacking>10)
+				if(combatants[0].units[i].attacking>ATTACK_LEN)
 				{
 					combatants[0].units[i].attackStage=2;
 				}
@@ -4462,7 +4482,7 @@ function battleDo()
 			}else if(combatants[1].units[i].attackStage==1)
 			{
 				combatants[1].units[i].attacking++; 
-				if(combatants[1].units[i].attacking>10)
+				if(combatants[1].units[i].attacking>ATTACK_LEN)
 				{
 					combatants[1].units[i].attackStage=2;
 				}
@@ -4651,16 +4671,38 @@ function battleDraw()
 				healAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
 			} else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Magical)
 			{
-				if(combatants[0].units[i].element==Element.Fire)
+				
+				if(combatants[0].units[i].equipment[0].hitAll)
 				{
-					magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
-				}else if(combatants[0].units[i].element==Element.Ice)
-				{
-					icemagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
-				}else if(combatants[0].units[i].element==Element.Wind)
-				{
-					windmagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
-				}
+					if(combatants[0].units[i].element==Element.Fire)
+					{
+						magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 150);
+						magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 300);
+						magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 450);
+					}else if(combatants[0].units[i].element==Element.Ice)
+					{
+						icemagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 150);
+						icemagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 300);
+						icemagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 450);
+					}else if(combatants[0].units[i].element==Element.Wind)
+					{
+						windmagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 150);
+						windmagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 300);
+						windmagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-60-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 450);
+					}
+				}else
+					{
+					if(combatants[0].units[i].element==Element.Fire)
+					{
+						magAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+					}else if(combatants[0].units[i].element==Element.Ice)
+					{
+						icemagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+					}else if(combatants[0].units[i].element==Element.Wind)
+					{
+						windmagAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-(25*(combatants[0].units[i].attackStage+1))-combatants[0].units[i].attacking/2, 135+i*2*45);
+					}
+				}	
 			} 
 		}
 		battleCanvas.globalAlpha=0.60;
