@@ -3703,7 +3703,6 @@ var camera = {  //represents the camera, aka what part of the map is on screen
 
 
 
-var bColors = ["#008000","#006400", "#FF4500", "#000080", "#696969", "#800080", "#808000", "#A52A2A", "#8B4513", "#FFDEAD", "#FFFF40","#000080" , "#FFFF80"]; //list of colors for radar/a few other things
 
 function Tile() { //the Map is made of a 2D array of tiles.
     this.x = 0;
@@ -4801,6 +4800,8 @@ function mainMenuDraw(){
 		canvas.fillText("-",160,475);
 
 	}
+	monsta.draw(canvas,camera);
+	canvas.fillText("Particles: "+ monsta.particles.length,460,550);
 };
 
 function mainMenuUpdate(){
@@ -4809,9 +4810,11 @@ function mainMenuUpdate(){
     timestamp = new Date();
     milliseconds = timestamp.getTime();
     tick++;
+	monsta.update();
 	 if(debugkey.check()) {
-		MUSIC_ON=!MUSIC_ON;
-		document.getElementById("titleAudio").pause();
+		//MUSIC_ON=!MUSIC_ON;
+		//document.getElementById("titleAudio").pause();
+		monsta.explosion(50,Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT),4);
 	 }
 	if(startkey.check()){
 		mode=1;

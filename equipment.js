@@ -37,6 +37,83 @@ SEEAss.Mermaid=26;
 SEEAss.Octopus=27;
 SEEAss.BeastTamer=28;
 var starting=false;
+var bColors = ["#008000","#006400", "#FF4500", "#000080", "#696969", "#800080", "#808000", "#A52A2A", "#8B4513", "#FFDEAD", "#FFFF40","#000080" , "#FFFF80"]; //list of colors for radar/a few other things
+
+function particle(){
+	this.alive=false;
+	this.x=0;
+	this.y=0;
+	this.color=bColors[Math.floor(Math.random()*8)];
+	this.gravity=false;
+	this.xv=0;
+	this.yv=0;
+	this.size=6;
+	this.smoker=false;
+	//this.startTime=
+	//this.curTime=
+	//this.durTime=2;
+	this.update=function(){
+		this.x+=this.xv;
+		this.y+=this.yv;
+		if(this.gravity)
+		{
+			this.y-=1;
+		}
+		this.counter--;
+		//time stuff
+		if (this.counter<1) this.alive=false;
+	};
+};
+
+function particleSystem(){
+	this.particles = new Array();
+	this.updateRate=1;
+	this.lastUpdate=0;
+	this.start=function(dur,x,y,xv,yv,color){
+		var tod=new particle();
+		tod.x=x;
+		tod.y=y;
+		tod.xv=xv;
+		tod.yv=yv;
+		tod.alive=true;
+		tod.counter=dur;
+		tod.color=color;
+		this.particles.push(tod);
+	};
+	this.draw=function(can,cam){
+		var c=1;
+		for(var i=0;i<this.particles.length;i++)
+		{
+			if(this.particles[i].alive)
+			{
+				if (true){//this.particles[i].color!=c){
+					can.fillStyle = this.particles[i].color;
+					c= this.particles[i].color;
+				}	
+				can.fillRect(this.particles[i].x+cam.x, this.particles[i].y+cam.y, this.particles[i].size*cam.zoom, this.particles[i].size*cam.zoom);
+			}
+		}
+	};
+	this.update=function(){
+		for(var i=0;i<this.particles.length;i++)
+		{
+			this.particles[i].update();
+			if(!this.particles[i].alive)
+			{
+				this.particles.splice(i,1);
+			}
+		}
+	};
+	this.explosion=function(num,x,y,force){
+		for( var i = 0; i < num;i++) {
+			var ang = Math.random()*360;
+			var vel = Math.random() * 15 + 8;
+			this.start(200, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)]);
+		}
+	};
+};
+
+var monsta= new particleSystem();
 
 function classLevel()
 {
@@ -235,7 +312,7 @@ var ATTACK_LEN=15;
 var ATTACK_ANI_LENGTH=12;
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
-var MUSIC_ON=true;
+var MUSIC_ON=false;
 var wind=Math.floor(Math.random()*2)+1;
 var MAP_WIDTH = 999;
 var MAP_HEIGHT = 999;
