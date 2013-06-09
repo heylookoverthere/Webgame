@@ -608,11 +608,14 @@ function unit() {
         this.def+=ted.def;
         this.mdef+=ted.mdef;
         this.attack+=ted.attack;
+		if(this.team==0){
         var tmpstr=this.name+ " gained a level!";
         console.log(tmpstr);
 		bConsoleStr.push(tmpstr);
 		bConsoleClr.push("white");
         //playSound("level");
+		}
+		
     };
     
     this.levelTo=function(tg){
@@ -1834,6 +1837,7 @@ function endGame(win){
 		maps[mapSelected].team=0;
 		//comeback
 		townbox.exists=false;
+		armies[0].gold+=2500;
 		for(var i=0; i<armies[0].numSquads;i++)
 		{
 			armies[0].squads[i].healStatus();
@@ -1844,8 +1848,8 @@ function endGame(win){
 			armies[0].squads[i].by=8;
 			armies[0].squads[i].alive=true;
 		}
-		resetEnemyArmy();
-		/*for( i=0; i<armies[1].numSquads;i++)
+		//resetEnemyArmy();
+		for( i=0; i<armies[1].numSquads;i++)
 		{
 			armies[1].squads[i].healStatus();
 			armies[1].squads[i].refresh();
@@ -1854,11 +1858,12 @@ function endGame(win){
 			armies[1].squads[i].bx=8;
 			armies[1].squads[i].by=8;
 			armies[1].squads[i].alive=true;
-		}*/
+		}
 		sillycanvas.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-		armies[0].lastDeployed=1;//1?
+		//armies[0].squads[0].deploy();
+		//armies[0].lastDeployed=1;//1?
 		//armies[0].
-		armies[1].squads[0].deploy();
+		//armies[1].squads[0].deploy();
 		isBattle=false;
 		preBattle=0;
 		battletick=0;
@@ -4338,7 +4343,7 @@ function mapInitArmies(){
 			armies[1].squads[i].y=armies[1].basey;
 			for(var j=0;j<armies[1].squads[i].numUnits;j++)
 			{
-				armies[1].squads[i].units[j].levelTo(5);
+				armies[1].squads[i].units[j].levelTo(4*(mapSelected+1));
 			}
 	}
 
@@ -4348,6 +4353,8 @@ function mapInitArmies(){
 	//armies[1].leader.name="Roose";
 	armies[0].squads[0].deploy();
 	armies[1].squads[0].deploy();
+	armies[0].lastDeployed=1;
+	armies[1].lastDeployed=1;
 
 };
 function merp() {
