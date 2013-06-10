@@ -4899,6 +4899,7 @@ function mainMenuUpdate(){
 	 if(debugkey.check()) {
 		//MUSIC_ON=!MUSIC_ON;
 		//document.getElementById("titleAudio").pause();
+		
 		var jim=Math.floor(Math.random()*9);
 		if(jim==1){
 			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"frozen");
@@ -4927,6 +4928,7 @@ function mainMenuUpdate(){
 		{
 			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"ironsword");
 		}
+		monsta.startOrbit(40000,Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT),60);
 	 }
 	if(startkey.check()){
 		mode=1;
