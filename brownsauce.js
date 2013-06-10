@@ -1,5 +1,38 @@
 $(document).bind("contextmenu",function(e){
-	if(mode==1){
+	
+	if(mode==0)
+	{
+		mX = e.pageX - canvasElement.get(0).offsetLeft;
+		mY = e.pageY - canvasElement.get(0).offsetTop;
+		var jim=Math.floor(Math.random()*9);
+		if(jim==1){
+			monsta.explosionTextured(100,mX,mY,4,"frozen");
+		}else if (jim==2)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"gold");
+		}else if (jim==3)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"explosion0");
+		}else if (jim==4)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"gold");
+		}else if (jim==5)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"feather");
+		}else if (jim==6)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"girl");
+		}else if (jim==7)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"heal0");
+		}else if (jim==8)
+		{
+			monsta.explosionTextured(100,mX,mY,4,"octopus");
+		}else 
+		{
+			monsta.explosionTextured(100,mX,mY,4,"ironsword");
+		}
+	}else if(mode==1){
 		mode=0;
 		mmcur=true;
 	}else if(mode==2)
@@ -3380,7 +3413,16 @@ function mouseClick(e) {  //represents the mouse
 				{
 					mmcur=false;
 				}
+				monsta.swarm(mX,mY);
 			break;
+			case 2:
+
+				for (var p=0;p<400;p++)
+				{
+					monsta.startOrbit(40000,Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT),60);
+				}
+				break;
+
 		}
 	}else if (mode==1)
 	{
@@ -4900,34 +4942,7 @@ function mainMenuUpdate(){
 		//MUSIC_ON=!MUSIC_ON;
 		//document.getElementById("titleAudio").pause();
 		
-		var jim=Math.floor(Math.random()*9);
-		if(jim==1){
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"frozen");
-		}else if (jim==2)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"gold");
-		}else if (jim==3)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"explosion0");
-		}else if (jim==4)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"gold");
-		}else if (jim==5)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"feather");
-		}else if (jim==6)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"girl");
-		}else if (jim==7)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"heal0");
-		}else if (jim==8)
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"octopus");
-		}else 
-		{
-			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"ironsword");
-		}
+		
 		monsta.startOrbit(40000,Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT),60);
 	 }
 	if(startkey.check()){

@@ -50,6 +50,7 @@ function particle(){
 	this.textured=false;
 	//this.texture=
 	this.size=6;
+	this.speed=(Math.random()*4)+1;
 	this.orbiting=false;
 	this.orbx=0;
 	this.orby=0;
@@ -57,6 +58,9 @@ function particle(){
 	this.orbitTrack=0;
 	this.orbitSpeed=1;
 	this.updateRate=40;
+	this.destx=0;
+	this.desty=0;
+	this.gotoDest=false;
 	this.lastUpdateTime=0;
 	this.startTime=0;
 	this.durTime=2000;
@@ -79,7 +83,14 @@ function particle(){
 			if (this.orbitTrack>360){ this.orbitTrack=0;}
 			this.x=this.orbx+Math.cos(this.orbitTrack* (Math.PI / 180))*this.orbitDiameter;
 			this.y=this.orby+Math.sin(this.orbitTrack*(Math.PI / 180))*this.orbitDiameter;
-			
+			if(this.gotoDest)
+			{
+				if(this.orbx<this.destx) {this.orbx+=this.speed;}
+				if(this.orbx>this.destx) {this.orbx-=this.speed;}
+				if(this.orby<this.desty) {this.orby+=this.speed;}
+				if(this.orby>this.desty) {this.orby-=this.speed;}
+				if((Math.abs(this.orbx-this.destx)<5) && (Math.abs(this.orby-this.desty)<5)) {this.gotoDest=false;}
+			}
 		}else
 		{
 			this.x+=this.xv;
@@ -169,7 +180,7 @@ function particleSystem(){
 			{
 				if(this.particles[i].exploader)
 				{
-					this.explosion(50,this.particles[i].x,this.particles[i].y,4);
+					this.explosion(6,this.particles[i].x,this.particles[i].y,4);
 				}	
 				this.particles.splice(i,1);
 			}
@@ -222,6 +233,21 @@ function particleSystem(){
 		tod.durTime=dur;
 		this.particles.push(tod);
 	};
+	this.swarm=function(x,y){
+		for(var i=0;i<this.particles.length;i++)
+		{
+			if(this.particles[i].orbiting)
+			{
+				var dx=(Math.random()*64)-32;
+				var dy=(Math.random()*64)-32;
+				/*this.particles[i].orbx=x+dx;
+				this.particles[i].orby=y+dy;*/
+				this.particles[i].gotoDest=true;
+				this.particles[i].destx=x+dx;
+				this.particles[i].desty=y+dy;
+			}
+		}
+	}
 };
 
 var monsta= new particleSystem();
