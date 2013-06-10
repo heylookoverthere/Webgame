@@ -2817,6 +2817,7 @@ squad.prototype.flee= function(c)
              preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ 
 			 if(MUSIC_ON){
 				 document.getElementById("mapAudio").pause();
+				 document.getElementById("battleAudio").volume=MUSIC_VOL;
 				 document.getElementById("battleAudio").currentTime = 4;
 				 document.getElementById("battleAudio").play();
 			 }
@@ -2960,6 +2961,7 @@ squad.prototype.flee= function(c)
 			//todo different song
 			if(MUSIC_ON){
 				document.getElementById("mapAudio").pause();
+				document.getElementById("battleAudio").volume=MUSIC_VOL;
 				document.getElementById("battleAudio").currentTime = 4;
 				document.getElementById("battleAudio").play();
 			}//camera.center(this);
@@ -3126,6 +3128,11 @@ function endBattle(usqd,esqd){
 		bConsoleClr.push("red");
         usqd.cohesion--;
         won="Defeat!"
+		document.getElementById("defeatAudio").volume=MUSIC_VOL;
+		document.getElementById("battleAudio").pause();
+		document.getElementById("battleAudio").currentTime = 4;
+		document.getElementById("defeatAudio").currentTime = 110;
+		document.getElementById("defeatAudio").play();
         armies[0].losses++;
         armies[1].wins++;
         for(var i=0;i<esqd.numUnits;i++)
@@ -4682,9 +4689,9 @@ function battleDraw()
 			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Ranged)
 			{
 				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
-				if(combatants[0].units[i].attackAniStage==0)
+				if((combatants[0].units[i].attackAniStage==0) && (combatants[0].units[i].attacking<2))
 				{	
-					monsta.shoot(xp-70-combatants[0].units[i].attacking/2, 135+i*2*45,180,4);
+					monsta.shootTextured(xp-70-combatants[0].units[i].attacking/2, i*2*45,180,8,"arrow");
 					//monsta.shoot(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4);
 					console.log("shot");
 				}
@@ -4798,6 +4805,7 @@ function battleDraw()
 
 initArmies();
 if(MUSIC_ON){
+	document.getElementById("titleAudio").volume=MUSIC_VOL;
 	document.getElementById("titleAudio").play(); //starts music
 }
 
@@ -4832,7 +4840,7 @@ function mainMenuUpdate(){
 	 if(debugkey.check()) {
 		//MUSIC_ON=!MUSIC_ON;
 		//document.getElementById("titleAudio").pause();
-		monsta.shoot(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4);
+		monsta.shootTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"arrow");
 	 }
 	if(startkey.check()){
 		mode=1;
@@ -5058,7 +5066,9 @@ function worldMapUpdate(){
 				armies[1].leader.name=towns[1].speaker;
 				if(MUSIC_ON){
 					document.getElementById("titleAudio").pause();
+					document.getElementById("mapAudio").volume=MUSIC_VOL;
 					document.getElementById("mapAudio").play();
+					
 				}	
 				lastEventX=armies[1].basex;
 				lastEventY=armies[1].basey;
@@ -5630,52 +5640,53 @@ function mapUpdate()
     if(zoomkey.check()) {
         curMap.setZoom(camera);
     }
-
-	for (var i=0;i<armies[0].numSquads;i++) //path setting
-		{
-			if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
-            armies[0].squads[i].update(curMap);
-			if(armies[0].squads[i].path!=null) {continue;}
-            if(armies[0].fieldAI==AITypes.Random)
+	if(!victory)
+	{
+		for (var i=0;i<armies[0].numSquads;i++) //path setting
 			{
-                if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
+				if((!armies[0].squads[i].alive) || (!armies[0].squads[i].deployed)) {continue;}
+				armies[0].squads[i].update(curMap);
+				if(armies[0].squads[i].path!=null) {continue;}
+				if(armies[0].fieldAI==AITypes.Random)
 				{
-					var cx=Math.floor(Math.random()*(MAP_WIDTH));
-					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					while(!curMap.walkable(cx,cy,armies[0].squads[i])){
-						cx=Math.floor(Math.random()*(MAP_WIDTH));
-						cy=Math.floor(Math.random()*(MAP_HEIGHT));
+					if( (!armies[0].squads[i].path) && (randomwalk) && (i != SELECTED) ) 
+					{
+						var cx=Math.floor(Math.random()*(MAP_WIDTH));
+						var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+						while(!curMap.walkable(cx,cy,armies[0].squads[i])){
+							cx=Math.floor(Math.random()*(MAP_WIDTH));
+							cy=Math.floor(Math.random()*(MAP_HEIGHT));
+						}
+						armies[0].squads[i].setDestination(cx,cy,curMap); 
 					}
-                    armies[0].squads[i].setDestination(cx,cy,curMap); 
+				}else if(armies[0].fieldAI==AITypes.Rush)
+				{
+					if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
+					{
+						armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
+					}
 				}
-            }else if(armies[0].fieldAI==AITypes.Rush)
-			{
-                if( (!armies[0].squads[i].path) && (!((armies[0].squads[i].x==armies[1].basex) &&(armies[0].squads[i].y==armies[1].basey))))
-				{
-                    armies[0].squads[i].setDestination(armies[1].basex,armies[1].basey,curMap); 
-                }
-            }
-        }
-        
-        for(var i=0;i<armies[1].numSquads;i++){ 
-			if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
-            armies[1].squads[i].update(curMap);
-			if(armies[1].squads[i].path!=null) {continue;}
-            if(armies[1].fieldAI==AITypes.Random){
-                if((armies[1].squads[i].isViable())&&(!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
-					var cx=Math.floor(Math.random()*(MAP_WIDTH));
-					var cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					while(!curMap.walkable(cx,cy,armies[1].squads[i])){
-						cx=Math.floor(Math.random()*(MAP_WIDTH));
-						cy=Math.floor(Math.random()*(MAP_HEIGHT));
-					}
-                    armies[1].squads[i].setDestination(cx,cy,curMap); };
-            }else if(armies[1].fieldAI==AITypes.Rush){
-                if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
-                    armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
-            }
-        }
-    
+			}
+			
+			for(var i=0;i<armies[1].numSquads;i++){ 
+				if((!armies[1].squads[i].alive) || (!armies[1].squads[i].deployed)) {continue;}
+				armies[1].squads[i].update(curMap);
+				if(armies[1].squads[i].path!=null) {continue;}
+				if(armies[1].fieldAI==AITypes.Random){
+					if((armies[1].squads[i].isViable())&&(!armies[1].squads[i].path) && (gamestart)&&(i != 0 )) {
+						var cx=Math.floor(Math.random()*(MAP_WIDTH));
+						var cy=Math.floor(Math.random()*(MAP_HEIGHT));
+						while(!curMap.walkable(cx,cy,armies[1].squads[i])){
+							cx=Math.floor(Math.random()*(MAP_WIDTH));
+							cy=Math.floor(Math.random()*(MAP_HEIGHT));
+						}
+						armies[1].squads[i].setDestination(cx,cy,curMap); };
+				}else if(armies[1].fieldAI==AITypes.Rush){
+					if( (!armies[1].squads[i].path)&& (i != 0 ) && (!((armies[1].squads[i].x==armies[0].basex) &&(armies[1].squads[i].y==armies[0].basey)))) {
+						armies[1].squads[i].setDestination(armies[0].basex,armies[0].basey,curMap); };
+				}
+			}
+    }
 
 	if((preBattle) &&(!paused)&&(!isMenu))
 	{
@@ -5875,13 +5886,14 @@ function mapUpdate()
         if(battleReport)
 		{
             battleendtick++; 
-            if (battleendtick>200)
+            if (battleendtick>BATTLE_REPORT_LENGTH)
 			{
                 battleReport=false;
                 //paused=true;
 				//battleCanvas.hide();
 				if(MUSIC_ON){
-					document.getElementById("battleAudio").pause();
+					//document.getElementById("battleAudio").pause();
+					document.getElementById("defeatAudio").pause();
 					//document.getElementById("mapAudio").currentTime = 0;
 					document.getElementById("mapAudio").play();
 				}

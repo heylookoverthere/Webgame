@@ -105,6 +105,25 @@ function particleSystem(){
 		tod.durTime=dur;
 		this.particles.push(tod);
 	};
+	this.startTextured=function(dur,x,y,xv,yv,color,gravity,exploader,spt){
+		var tod=new particle();
+		if(!exploader) {exploader=false;}
+		tod.x=x;
+		tod.y=y;
+		tod.xv=xv;
+		tod.yv=yv;
+		tod.alive=true;
+		tod.textured=true;
+		tod.sprite=Sprite(spt);
+		tod.counter=dur;
+		tod.color=color;
+		tod.gravity=gravity
+		tod.exploader=exploader;
+		var stamp = new Date();
+		tod.startTime=stamp.getTime();
+		tod.durTime=dur;
+		this.particles.push(tod);
+	};
 	this.draw=function(can,cam){
 		var c=1;
 		for(var i=0;i<this.particles.length;i++)
@@ -114,8 +133,14 @@ function particleSystem(){
 				if (true){//this.particles[i].color!=c){
 					can.fillStyle = this.particles[i].color;
 					c= this.particles[i].color;
-				}	
-				can.fillRect(this.particles[i].x+cam.x, this.particles[i].y+cam.y, this.particles[i].size*cam.zoom, this.particles[i].size*cam.zoom);
+				}
+				if(this.particles[i].textured)
+				{
+					this.particles[i].sprite.draw(can, this.particles[i].x+cam.x,this.particles[i].y+cam.y);
+				}else
+				{
+					can.fillRect(this.particles[i].x+cam.x, this.particles[i].y+cam.y, this.particles[i].size*cam.zoom, this.particles[i].size*cam.zoom);
+				}
 			}
 		}
 	};
@@ -141,7 +166,11 @@ function particleSystem(){
 		}
 	};
 	this.shoot=function(x,y,ang,vel){
-		this.start(2000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],false);
+		this.start(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],false);
+
+	};
+	this.shootTextured=function(x,y,ang,vel,tex){
+		this.startTextured(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],false,false,tex);
 
 	};
 };
@@ -347,7 +376,8 @@ var ATTACK_LEN=15;
 var ATTACK_ANI_LENGTH=12;
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
-var MUSIC_ON=true
+var MUSIC_ON=true;
+var MUSIC_VOL=0.1;
 var wind=Math.floor(Math.random()*2)+1;
 var MAP_WIDTH = 999;
 var MAP_HEIGHT = 999;
@@ -533,6 +563,7 @@ var anicount=0;
 var anirate=4000;
 var lastani=0;
 var gotall=false;
+var BATTLE_REPORT_LENGTH=400;
 var numsounds=0;
 var soundsplaying ="";
 var timestamp = new Date(); 
