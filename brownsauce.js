@@ -4311,7 +4311,7 @@ function initArmies(){
 	armies[1].squads[0].leader.setClass();
 	armies[1].squads[0].sprite=armies[1].squads[0].leader.sprite;
 
-	armies[1].squads[1].leader.class=SEEAss.Witch;
+	/*armies[1].squads[1].leader.class=SEEAss.Witch;
 	armies[1].squads[1].leader.setClass();
 	armies[1].squads[1].leader.name="Deneb";
 	for(i=1;i<armies[1].squads[1].numUnits;i++)
@@ -4324,7 +4324,7 @@ function initArmies(){
 	armies[1].leader.maxhp+=20;
 	armies[1].leader.hp=armies[1].leader.maxhp;
 	armies[1].leader.equipment[0]=swords[1];
-	armies[1].leader.equipment[1]=breastplate;
+	armies[1].leader.equipment[1]=breastplate;*/
 	//armies[1].leader.equipment[2]=cape;
 	armies[1].squads[0].units[1].name="Reek";
 	armies[1].squads[0].units[1].class=SEEAss.Cleric;
@@ -4691,8 +4691,7 @@ function battleDraw()
 				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
 				if((combatants[0].units[i].attackAniStage==0) && (combatants[0].units[i].attacking<2))
 				{	
-					monsta.shootTextured(xp-100-combatants[0].units[i].attacking/2, i*2*45,210,18,"arrow");
-					//monsta.shoot(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4);
+					monsta.shootTextured(xp-100-combatants[0].units[i].attacking/2, (i*2*45)-32,210,15,"arrow");
 					console.log("shot");
 				}
 			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Heal)
@@ -4743,7 +4742,7 @@ function battleDraw()
 		//battleCanvas.restore();
 
     }
-
+//other side
     battleCanvas.fillStyle = "red";
     if (combatants[1].battleAI==0) {texticles="Weakest";}
     if (combatants[1].battleAI==1) {texticles="Strongest";}
@@ -4772,13 +4771,73 @@ function battleDraw()
         battleCanvas.fillText("Name:", xp, 172+i*2*45);
         battleCanvas.fillText(combatants[1].units[i].name, xp+80, 172+i*2*45);
 
-        if((combatants[1].units[i].attacking>0) && (combatants[1].units[i].hurting<1)) {combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);}
+		if((combatants[1].units[i].attacking>0) && (combatants[1].units[i].hurting<1)&& (combatants[1].units[i].class!=SEEAss.Dancer)) {combatants[1].units[i].sprite.draw(canvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);}
         
         if((combatants[1].units[i].hurting<1) || (combatants[1].units[i].hurting%2==0)) {
-           sevenup.draw(battleCanvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
+			if((combatants[1].units[i].class==SEEAss.Dancer) && (combatants[1].units[i].attackStage>0))
+			{
+			
+			}else
+			{
+			   sevenup.draw(battleCanvas, xp-40+combatants[1].units[i].attacking/2, 135+i*2*45);
+			}
         }
         //if(battletick>battledelay) {combatants[1].units[i].update(combatants[1],combatants[0]);}
 		//battleCanvas.save();
+		if(combatants[1].units[i].attackStage>0){
+			if(combatants[1].units[i].class==SEEAss.Dancer)//(combatants[1].units[i].attackType[combatants[1].units[i].row]==AttackTypes.GiveStatus) //todo and dancer
+			{
+				danceAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+combatants[1].units[i].attacking/2, 135+i*2*45);
+			}else if(combatants[1].units[i].attackType[combatants[1].units[i].row]==AttackTypes.Physical)
+			{
+				phsAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+combatants[1].units[i].attacking/2, 135+i*2*45);
+			}else if(combatants[1].units[i].attackType[combatants[1].units[i].row]==AttackTypes.Ranged)
+			{
+				rangedAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+combatants[1].units[i].attacking/2, 135+i*2*45);
+				if((combatants[1].units[i].attackAniStage==0) && (combatants[1].units[i].attacking<2))
+				{	
+					monsta.shootTextured(xp+combatants[1].units[i].attacking/2, (i*2*45)-32,330,15,"arrow");
+					console.log("shot");
+				}
+			}else if(combatants[1].units[i].attackType[combatants[1].units[i].row]==AttackTypes.Heal)
+			{
+				healAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+combatants[1].units[i].attacking/2, 135+i*2*45);
+			} else if(combatants[1].units[i].attackType[combatants[1].units[i].row]==AttackTypes.Magical)
+			{
+				
+				if(combatants[1].units[i].equipment[0].hitAll)
+				{
+					if(combatants[1].units[i].element==Element.Fire)
+					{
+						magAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 150);
+						magAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 300);
+						magAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 450);
+					}else if(combatants[1].units[i].element==Element.Ice)
+					{
+						icemagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 150);
+						icemagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 300);
+						icemagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 450);
+					}else if(combatants[1].units[i].element==Element.Wind)
+					{
+						windmagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 150);
+						windmagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 300);
+						windmagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+60+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 450);
+					}
+				}else
+					{
+					if(combatants[1].units[i].element==Element.Fire)
+					{
+						magAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+50+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 135+i*2*45);
+					}else if(combatants[1].units[i].element==Element.Ice)
+					{
+						icemagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+50+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 135+i*2*45);
+					}else if(combatants[1].units[i].element==Element.Wind)
+					{
+						windmagAttackSprite[combatants[1].units[i].attackAniStage].draw(battleCanvas, xp+50+(25*(combatants[1].units[i].attackStage+1))-combatants[1].units[i].attacking/2, 135+i*2*45);
+					}
+				}	
+			} 
+		}
 		battleCanvas.globalAlpha=0.60;
         if(combatants[1].units[i].hasStatus(Status.Poison)) {poisonsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
 	    if(combatants[1].units[i].hasStatus(Status.Protect)) {protectsprite.draw(battleCanvas, xp-40-combatants[0].units[i].attacking/2, 135+i*2*45);}
