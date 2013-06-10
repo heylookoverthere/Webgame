@@ -47,12 +47,17 @@ function particle(){
 	this.gravity=false;
 	this.xv=0;
 	this.yv=0;
+	this.textured=false;
+	//this.texture=
 	this.size=6;
 	this.updateRate=40;
 	this.lastUpdateTime=0;
 	this.startTime=0;
 	this.durTime=2000;
+	this.gravity=true;
 	this.smoker=false;
+	this.flicker=true;
+	this.exploader=false;
 	//this.startTime=
 	//this.curTime=
 	//this.durTime=2;
@@ -63,9 +68,13 @@ function particle(){
 		if(tim-this.lastUpdateTime<this.updateRate) { return;}
 		this.x+=this.xv;
 		this.y+=this.yv;
+		if(this.flicker)
+		{
+			this.color=bColors[Math.floor(Math.random()*8)];
+		}
 		if(this.gravity)
 		{
-			this.y-=1;
+			this.yv+=1;
 		}
 		//this.counter--;
 		//time stuff
@@ -79,8 +88,9 @@ function particleSystem(){
 	this.particles = new Array();
 	this.updateRate=1;
 	this.lastUpdate=0;
-	this.start=function(dur,x,y,xv,yv,color){
+	this.start=function(dur,x,y,xv,yv,color,gravity,exploader){
 		var tod=new particle();
+		if(!exploader) {exploader=false;}
 		tod.x=x;
 		tod.y=y;
 		tod.xv=xv;
@@ -88,6 +98,8 @@ function particleSystem(){
 		tod.alive=true;
 		tod.counter=dur;
 		tod.color=color;
+		tod.gravity=gravity
+		tod.exploader=exploader;
 		var stamp = new Date();
 		tod.startTime=stamp.getTime();
 		tod.durTime=dur;
@@ -113,6 +125,10 @@ function particleSystem(){
 			this.particles[i].update();
 			if(!this.particles[i].alive)
 			{
+				if(this.particles[i].exploader)
+				{
+					this.explosion(50,this.particles[i].x,this.particles[i].y,4);
+				}	
 				this.particles.splice(i,1);
 			}
 		}
@@ -121,8 +137,12 @@ function particleSystem(){
 		for( var i = 0; i < num;i++) {
 			var ang = Math.random()*360;
 			var vel = Math.random() * 15 + 8;
-			this.start(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)]);
+			this.start(700, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],true);
 		}
+	};
+	this.shoot=function(x,y,ang,vel){
+		this.start(2000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],false);
+
 	};
 };
 
@@ -306,6 +326,8 @@ var bConsoleStr=new Array();
 var bConsoleClr=new Array();
 var bConsoleBox;
 var bMenuBox;
+var lastExplosion=0;
+var EXPLOSION_RATE=500;
 bConsoleStr.push("");
 bConsoleStr.push("");
 bConsoleStr.push("");
@@ -325,7 +347,7 @@ var ATTACK_LEN=15;
 var ATTACK_ANI_LENGTH=12;
 var CANVAS_WIDTH = 900;
 var CANVAS_HEIGHT = 640;
-var MUSIC_ON=false;
+var MUSIC_ON=true
 var wind=Math.floor(Math.random()*2)+1;
 var MAP_WIDTH = 999;
 var MAP_HEIGHT = 999;
@@ -371,6 +393,8 @@ var mapDirty=true;
 var mmcur=true;
 var victoryCount=0;
 var victoryLap=200;
+var victoryReport=200;
+var victoryReporting=false;
 var victory=false;
 var projectionCount=0;
 var projectionLength=200;

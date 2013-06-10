@@ -363,7 +363,7 @@ function unit() {
     this.status[5]=false;
     this.status[6]=false;
 
-    this.class=getClass(false);
+    this.class=SEEAss.Archer//getClass(false);
     this.row=Math.floor(Math.random()*2);
     this.viewRange=5;
     this.level=1;
@@ -906,6 +906,11 @@ function unit() {
                                 if((targe==esqd.leader) &&(!targe.alive)) {esqd.pickNewLeader();}
                                 this.attackStage=1; 
 								this.attackAniStage=1;
+								if(this.attackType[this.row]==AttackTypes.Ranged)
+								{
+									//monsta.shoot(xp-50-this.attacking/2, 135+i*2*45,90,3);
+									
+								}
                                 targe.hurting=20;
                                 usqd.turns++;
                                 usqd.damaged+=delt;
@@ -2805,13 +2810,17 @@ squad.prototype.flee= function(c)
 			targ=this.checkCollision();
 		}else if(this.team==1) {targ=null;} 
         if ((targ!=null) && (targ.alive)) {
-			console.log(targ);
+			if(targ.leader==armies[0].leader)
+			 {
+				console.log("boo");
+			 }
              preBattle=preBattleLength; /*isBattle=true;*/ /*battleCanvas.show();*/ 
 			 if(MUSIC_ON){
 				 document.getElementById("mapAudio").pause();
 				 document.getElementById("battleAudio").currentTime = 4;
 				 document.getElementById("battleAudio").play();
 			 }
+
 			 combatants[0]=this;
 			 combatants[1]=targ;
 			 //camera.center(this);
@@ -2852,7 +2861,7 @@ squad.prototype.flee= function(c)
 							bConsoleClr.push("white");
 						}
 						
-						if((this.team==0)&& (!towns[i].spouted)){
+						if((this.team==0)&& (!towns[i].spouted) && (i!=maps[mapSelected].numTowns-1)){
 							towns[i].spouted=true;
 							townbox.lines=4;
 							townbox.msg[0]=towns[i].speaker;
@@ -4421,6 +4430,7 @@ function menuDraw()
 	
 function battleDo()
 {
+	monsta.update();
 	for(var i=0;i<combatants[0].numUnits;i++)
     {
 		if(!combatants[0].units[i].alive) {continue;}
@@ -4672,6 +4682,12 @@ function battleDraw()
 			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Ranged)
 			{
 				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
+				if(combatants[0].units[i].attackAniStage==0)
+				{	
+					monsta.shoot(xp-70-combatants[0].units[i].attacking/2, 135+i*2*45,180,4);
+					//monsta.shoot(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4);
+					console.log("shot");
+				}
 			}else if(combatants[0].units[i].attackType[combatants[0].units[i].row]==AttackTypes.Heal)
 			{
 				healAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
@@ -4773,9 +4789,11 @@ function battleDraw()
     }
    
 
+
 	bmenuBox.draw(battleCanvas);
 	if(isBattle){armies[0].cards[CSELECTED].sprite.draw(battleCanvas,760, 560);}
 	if(battleReport) {battleCanvas.fillText(won, 430, 370);}
+	   monsta.draw(battleCanvas,camera);
 }
 
 initArmies();
@@ -4801,7 +4819,7 @@ function mainMenuDraw(){
 
 	}
 	monsta.draw(canvas,camera);
-	canvas.fillText("Particles: "+ monsta.particles.length,460,550);
+	//canvas.fillText("Particles: "+ monsta.particles.length,460,550);
 };
 
 function mainMenuUpdate(){
@@ -4814,7 +4832,7 @@ function mainMenuUpdate(){
 	 if(debugkey.check()) {
 		//MUSIC_ON=!MUSIC_ON;
 		//document.getElementById("titleAudio").pause();
-		monsta.explosion(50,Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT),4);
+		monsta.shoot(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4);
 	 }
 	if(startkey.check()){
 		mode=1;
@@ -5312,15 +5330,36 @@ function mapDraw() {
 	
 	if(victory)
 	{
-		canvas.fillStyle = "white";
-		armies[0].drawResults();
-		victoryCount++;
-		if(victoryCount>victoryLap)
-		{
-			victoryCount=0;
-			endGame(0);
-			victory=false;
+		canvas.font = "19pt Algerian";
+		canvas.fillText("CONGRADULATIONS",380,310);
+		monsta.update();
+		monsta.draw(canvas,camera);
+		victoryReport--;
+		if(victoryReport<1)
+		{ 
+			victoryReport=200;
+			victoryReporting=true;
 		}
+		if(victoryReporting)
+		{
+			canvas.fillStyle = "white";
+			armies[0].drawResults();
+			victoryCount++;
+			if(victoryCount>victoryLap)
+			{
+				victoryCount=0;
+				endGame(0);
+				victory=false;
+				victoryReporting=false;
+			}
+		}	
+		var stamp=new Date();
+		gil=stamp.getTime();
+		if(gil-lastExplosion>EXPLOSION_RATE){
+			monsta.explosion(150,Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),4);
+			lastExplosion=gil;
+		}
+		
 	}
    
 };

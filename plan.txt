@@ -168,6 +168,7 @@ narf: so var stuff = "shit"; foo[stuff]
 narf: and then you'd call your thing like
 narf: whatever.getshit("hp")
 
+90=down
 
 ["Brotherhood Without Banners","Second Sons","Golden Company","Company of the Cat","Brave Companions","The Unsullied","The Nights Watch","The Kingsguard","The Windblown","The Long Lances","Stormcrows"];
 
