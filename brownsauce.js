@@ -4691,7 +4691,7 @@ function battleDraw()
 				rangedAttackSprite[combatants[0].units[i].attackAniStage].draw(battleCanvas, xp-50-combatants[0].units[i].attacking/2, 135+i*2*45);
 				if((combatants[0].units[i].attackAniStage==0) && (combatants[0].units[i].attacking<2))
 				{	
-					monsta.shootTextured(xp-70-combatants[0].units[i].attacking/2, i*2*45,180,8,"arrow");
+					monsta.shootTextured(xp-100-combatants[0].units[i].attacking/2, i*2*45,210,18,"arrow");
 					//monsta.shoot(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4);
 					console.log("shot");
 				}
@@ -4840,7 +4840,34 @@ function mainMenuUpdate(){
 	 if(debugkey.check()) {
 		//MUSIC_ON=!MUSIC_ON;
 		//document.getElementById("titleAudio").pause();
-		monsta.shootTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"arrow");
+		var jim=Math.floor(Math.random()*9);
+		if(jim==1){
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"frozen");
+		}else if (jim==2)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"gold");
+		}else if (jim==3)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"explosion0");
+		}else if (jim==4)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"gold");
+		}else if (jim==5)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"feather");
+		}else if (jim==6)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"girl");
+		}else if (jim==7)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"heal0");
+		}else if (jim==8)
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"octopus");
+		}else 
+		{
+			monsta.explosionTextured(Math.floor(Math.random()*CANVAS_WIDTH),Math.floor(Math.random()*CANVAS_HEIGHT/2),180,4,"ironsword");
+		}
 	 }
 	if(startkey.check()){
 		mode=1;

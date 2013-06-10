@@ -74,7 +74,7 @@ function particle(){
 		}
 		if(this.gravity)
 		{
-			this.yv+=1;
+			this.yv+=0.5;
 		}
 		//this.counter--;
 		//time stuff
@@ -165,12 +165,19 @@ function particleSystem(){
 			this.start(700, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],true);
 		}
 	};
+	this.explosionTextured=function(num,x,y,force,txt){
+		for( var i = 0; i < num;i++) {
+			var ang = Math.random()*360;
+			var vel = Math.random() * 15 + 8;
+			this.startTextured(700, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],true,false,txt);
+		}
+	};
 	this.shoot=function(x,y,ang,vel){
 		this.start(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],false);
 
 	};
 	this.shootTextured=function(x,y,ang,vel,tex){
-		this.startTextured(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],false,false,tex);
+		this.startTextured(1000, x, y, Math.cos(ang* (Math.PI / 180))*vel, Math.sin(ang*(Math.PI / 180))*vel,bColors[Math.floor(Math.random()*8)],true,false,tex);
 
 	};
 };
