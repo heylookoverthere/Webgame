@@ -39,6 +39,56 @@ SEEAss.BeastTamer=28;
 var starting=false;
 var bColors = ["#008000","#006400", "#FF4500", "#000080", "#696969", "#800080", "#808000", "#A52A2A", "#8B4513", "#FFDEAD", "#FFFF40","#000080" , "#FFFF80"]; //list of colors for radar/a few other things
 
+function textbox() 
+ {  //draws a text box
+	this.exists=false;
+	this.x=140;
+	this.y=370;
+	this.lines=1;
+	this.scroll=0;
+	this.width=600;
+	this.height=55;
+	this.colors=new Array(5);
+	this.msg=new Array(5);
+	this.msg[0]="Msg";
+	this.msg[1]="msg";
+	this.colors[0]="white";
+	this.colors[1]="white";
+	this.colors[2]="white";
+	this.colors[3]="white";
+	this.draw=function(can)
+	{
+		can.save();
+		can.globalAlpha=0.80;
+		can.fillStyle = "#DCDCDC";
+		can.fillRect(this.x-10,this.y-10,this.width+10,this.height+10);
+		
+		can.fillStyle = "#483D8B ";
+		can.fillRect(this.x,this.y,this.width-10,this.height-10);
+		
+		can.font = "16pt Calibri";
+		can.textAlign = "left";
+		can.textBaseline = "middle";
+		can.fillStyle = "white";
+		if(this.lines==1){
+			can.fillStyle=this.colors[i];
+			can.fillText(this.msg[0], this.x+10,this.y+8+(14));
+		}else
+		{
+			for(var i=0;i<this.lines;i++){
+				//if (i>bConsoleStr.length) {break;}
+				can.fillStyle=this.colors[i];
+				can.fillText(this.msg[i], this.x+10,this.y+4+(15*(i+1)));
+			}	
+		}
+		can.restore();
+	};
+};
+
+var battleBox=new textbox();
+var townbox=new textbox();
+var bmenuBox=new textbox();
+var bossSpouted=false;
 function particle(){
 	this.alive=false;
 	this.x=0;
@@ -83,6 +133,7 @@ function particle(){
 			if (this.orbitTrack>360){ this.orbitTrack=0;}
 			this.x=this.orbx+Math.cos(this.orbitTrack* (Math.PI / 180))*this.orbitDiameter;
 			this.y=this.orby+Math.sin(this.orbitTrack*(Math.PI / 180))*this.orbitDiameter;
+			this.y+=this.yv;
 			if(this.gotoDest)
 			{
 				if(this.orbx<this.destx) {this.orbx+=this.speed;}
@@ -99,10 +150,11 @@ function particle(){
 			{
 				this.color=bColors[Math.floor(Math.random()*8)];
 			}
-			if(this.gravity)
-			{
+
+		}
+		if(this.gravity)
+		{
 				this.yv+=0.5;
-			}
 		}
 		//this.counter--;
 		//time stuff
@@ -245,6 +297,26 @@ function particleSystem(){
 				this.particles[i].gotoDest=true;
 				this.particles[i].destx=x+dx;
 				this.particles[i].desty=y+dy;
+			}
+		}
+	}
+	this.unSwarm=function(){
+		for(var i=0;i<this.particles.length;i++)
+		{
+			if(this.particles[i].orbiting)
+			{
+				this.particles[i].gotoDest=true;
+				this.particles[i].destx=Math.floor(Math.random()*CANVAS_WIDTH);
+				this.particles[i].desty=Math.floor(Math.random()*CANVAS_HEIGHT);
+			}
+		}
+	}
+	this.colonyCollapse=function(){
+		for(var i=0;i<this.particles.length;i++)
+		{
+			if(this.particles[i].orbiting)
+			{
+				this.particles[i].gravity=true;
 			}
 		}
 	}
@@ -472,7 +544,7 @@ var MUSELECTED=0;
 var BSELECTED=0;
 var NUM_STATUS=5;
 var NUM_CLASSES=19;
-var ENCOUNTER_RATE=6000;
+var ENCOUNTER_RATE=25000;
 var TAME_CHANCE=40;
 var preBattle=0;
 var preBattleLength=100;
@@ -634,6 +706,13 @@ for(var i=0;i<numClouds;i++)
 }
 var tileani=0;
   
+ 
+
+
+townbox.x=100;
+townbox.width=600;
+townbox.y=300;
+townbox.height=200;
 var anicount=0;
 var anirate=4000;
 var lastani=0;
