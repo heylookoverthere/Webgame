@@ -5094,10 +5094,10 @@ function worldMapUpdate(){
 				towns[5].plotText[2]=data.town5.text3;
 				towns[5].plotText[3]=data.town5.text4;
 				towns[5].itemChance=data.town5.itemchance;
-				//initTowns();
+
 				curMap.buildMap(MAPNAME);
 				mapInitArmies();
-				//curMap.buildRadar();
+
 				mode=2;
 				camera.center(armies[0].squads[0]);
 				gamestart=true;
@@ -5411,14 +5411,14 @@ function mapUpdate()
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
-		/*if(enemyDeployCount>deployRate)
+		if(enemyDeployCount>deployRate)
 		{
 			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
             armies[1].lastDeployed++; 
-		}*/
+		}
 	}
 	if((deploykey.check())&&(isMenu==0))
 	{ 
