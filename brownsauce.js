@@ -2442,7 +2442,15 @@ squad.prototype.stringifySquad=function(){
     return tempstring;
 };
 
-
+squad.prototype.isInTown=function(twns){
+	for(var i=0;i<maps[mapSelected].numTowns;i++)
+	{
+		if(twns[i].checkCollision(this)){
+			return i;
+		}
+	}	
+	return false;
+};
 squad.prototype.classFromTerrain=function(map){
 		if(map.tiles[this.x][this.y].data==TileType.Swamp) {return SEEAss.Frog;}
 		if(map.tiles[this.x][this.y].data==TileType.Water) {return SEEAss.Octopus;}
@@ -2760,33 +2768,36 @@ squad.prototype.flee= function(c)
                           (this.x * 16 + (Math.round(this.bx) - 8) - cam.x * 16) / Math.pow(2, curMap.zoom-1)-xm, 
                           (this.y * 16 + (Math.round(this.by) - 8) - cam.y * 16) / Math.pow(2, curMap.zoom-1)-ym);
         }
-	    if(curMap.tiles[this.x][this.y+2].data==TileType.Forest) {
-			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
-			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
-			var plop=this.by;
-			if(curMap.zoom>2) { 
-				gy-=8;
-				plop=0;
-			}//todo
-			tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, curMap.zoom-1)-1)+plop);
-			tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, curMap.zoom-1)-1)+plop);//todo
-	
-		}else if((curMap.tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
-			var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
-			var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
-			//canvas.save();
-			/*plop=this.by;
-			if(curMap.zoom>2) { 
-				gy-=8;
-				plop=0;
-			}//todo*/
-			canvas.globalAlpha=0.80;
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(curMap.zoom-1)+plop);
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(curMap.zoom-1)+plop);//todo
-			tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(curMap.zoom-1)+plop);
-			tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(curMap.zoom-1)+plop);//todo
-			//canvas.restore();
-			canvas.globalAlpha=1;
+		if(this.isInTown(towns)==false)
+		{
+			if(curMap.tiles[this.x][this.y+2].data==TileType.Forest) {
+				var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
+				var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
+				var plop=this.by;
+				if(curMap.zoom>2) { 
+					gy-=8;
+					plop=0;
+				}//todo
+				tileSprite[TileType.Forest].draw(canvas, gx, gy+8*(Math.pow(2, curMap.zoom-1)-1)+plop);
+				tileSprite[TileType.Forest].draw(canvas, gx+16, gy+8*(Math.pow(2, curMap.zoom-1)-1)+plop);//todo
+		
+			}else if((curMap.tiles[this.x][this.y+2].data==TileType.Water) &&(this.getFlightHeight()<1)) {
+				var gx=(this.x-cam.x)*16/Math.pow(2, curMap.zoom-1);
+				var gy=(this.y-cam.y+1)*16/Math.pow(2, curMap.zoom-1);
+				//canvas.save();
+				/*plop=this.by;
+				if(curMap.zoom>2) { 
+					gy-=8;
+					plop=0;
+				}//todo*/
+				canvas.globalAlpha=0.80;
+				tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+8*(curMap.zoom-1)+plop);
+				tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+8*(curMap.zoom-1)+plop);//todo
+				tileSprite[TileType.Water+tileani].draw(canvas, gx, gy+16+8*(curMap.zoom-1)+plop);
+				tileSprite[TileType.Water+tileani].draw(canvas, gx+16, gy+16+8*(curMap.zoom-1)+plop);//todo
+				//canvas.restore();
+				canvas.globalAlpha=1;
+			}
 		}
     };
 
@@ -5400,14 +5411,14 @@ function mapUpdate()
 	if(armies[1].lastDeployed<armies[1].numSquads-1)
 	{
 		enemyDeployCount++;
-		if(enemyDeployCount>deployRate)
+		/*if(enemyDeployCount>deployRate)
 		{
 			enemyDeployCount=0;
 			armies[1].squads[armies[1].lastDeployed].deploy();
 			armies[1].squads[armies[1].lastDeployed].x=armies[1].basex;
 			armies[1].squads[armies[1].lastDeployed].y=armies[1].basey;
             armies[1].lastDeployed++; 
-		}
+		}*/
 	}
 	if((deploykey.check())&&(isMenu==0))
 	{ 
